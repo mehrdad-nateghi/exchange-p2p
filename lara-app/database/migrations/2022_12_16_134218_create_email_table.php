@@ -13,12 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('bank_account_attribute', function (Blueprint $table) {
+        Schema::create('email', function (Blueprint $table) {
             $table->id();
             $table->string('value');
-            $table->unsignedBigInteger('attribute_id');
-            $table->unsignedBigInteger('account_id');
-
+            $table->string('reference_type');
+            $table->unsignedBigInteger('reference_id');
+            $table->unsignedBigInteger('template_id');
+            $table->timestamp('created_at');
+            $table->foreign('template_id')->references('id')->on('email_template')->onDelete('cascade');
         });
     }
 
@@ -29,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('bank_account_attribute');
+        Schema::dropIfExists('email');
     }
 };

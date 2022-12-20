@@ -13,17 +13,18 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('payment', function (Blueprint $table) {
+        Schema::create('bid', function (Blueprint $table) {
             $table->id();
             $table->string('type');
+            $table->integer('bid_rate');
+            $table->boolean('status');
+            $table->unsignedBigInteger('request_id');
             $table->unsignedBigInteger('applicant_id');
-            $table->integer('currency_count');
-            $table->integer('lower_bound_feasibility');
-            $table->integer('upper_bound_feasibility');
-            $table->integer('acceptance_threshold');
-            $table->string('status');
-            $table->boolean('is_removed');
             $table->timestamp('created_at');
+            $table->foreign('applicant_id')->references('id')->on('user')->onDelete('cascade');
+            $table->foreign('request_id')->references('id')->on('request')->onDelete('cascade');
+
+
         });
     }
 
@@ -34,6 +35,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('payment');
+        Schema::dropIfExists('bid');
     }
 };

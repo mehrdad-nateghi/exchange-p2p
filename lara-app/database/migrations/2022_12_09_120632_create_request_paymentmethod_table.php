@@ -1,5 +1,4 @@
 <?php
-
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,16 +12,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('trade', function (Blueprint $table) {
+        Schema::create('request_paymentmethod', function (Blueprint $table) {
             $table->id();
-            $table->integer('currency_count');
-            $table->integer('currency_amount');
-            $table->integer('system_commission_amount');
-            $table->string('request_type');
-            $table->string('status');
-            $table->timestamp('created_at');
             $table->unsignedBigInteger('request_id');
-            $table->unsignedBigInteger('bid_id');
+            $table->unsignedBigInteger('payment_method_id');
+            $table->foreign('payment_method_id')->references('id')->on('payment_method')->onDelete('cascade');
+            $table->foreign('request_id')->references('id')->on('request')->onDelete('cascade');
+
         });
     }
 
@@ -33,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('trade');
+        Schema::dropIfExists('request_paymentmethod');
     }
 };
