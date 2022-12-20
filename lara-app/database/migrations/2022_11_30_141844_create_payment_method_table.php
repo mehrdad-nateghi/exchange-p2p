@@ -13,13 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('email', function (Blueprint $table) {
+        Schema::create('payment_method', function (Blueprint $table) {
             $table->id();
-            $table->string('value');
-            $table->unsignedBigInteger('template_id');
-            $table->string('reference_type');
-            $table->unsignedBigInteger('reference_id');
-            $table->timestamp('created_at');
+            $table->string('name');
+            $table->unsignedBigInteger('country_id');
+            $table->foreign('country_id')->references('id')->on('country')->onDelete('cascade');
         });
     }
 
@@ -30,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('email');
+        Schema::dropIfExists('payment_method');
     }
 };

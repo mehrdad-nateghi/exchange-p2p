@@ -13,13 +13,16 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('notification', function (Blueprint $table) {
+        Schema::create('trade', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->text('body');
-            $table->boolean('status');
+            $table->integer('trade_fee');
+            $table->string('status');
+            $table->unsignedBigInteger('request_id');
+            $table->unsignedBigInteger('bid_id');
             $table->timestamp('created_at');
-            $table->unsignedBigInteger('user_id');
+            $table->foreign('request_id')->references('id')->on('request')->onDelete('cascade');
+            $table->foreign('bid_id')->references('id')->on('bid')->onDelete('cascade');
+
         });
     }
 
@@ -30,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('notification');
+        Schema::dropIfExists('trade');
     }
 };

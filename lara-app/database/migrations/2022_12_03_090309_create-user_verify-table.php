@@ -13,10 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('payment_method', function (Blueprint $table) {
+        Schema::create('user_verify', function(Blueprint $table){
             $table->id();
-            $table->string('name');
-            $table->unsignedBigInteger('country_id');
+            $table->string('token');
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('user')->onDelete('cascade');
+
         });
     }
 
@@ -27,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('payment_method');
+        //
     }
 };

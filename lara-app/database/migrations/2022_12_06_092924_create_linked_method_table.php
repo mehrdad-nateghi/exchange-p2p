@@ -13,14 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('bid', function (Blueprint $table) {
+        Schema::create('linked_method', function (Blueprint $table) {
             $table->id();
-            $table->string('type');
-            $table->integer('offer_currency_amount');
-            $table->boolean('status');
-            $table->timestamp('created_at');
-            $table->unsignedBigInteger('request_id');
             $table->unsignedBigInteger('applicant_id');
+            $table->unsignedBigInteger('method_type_id');
+            $table->timestamp('created_at');
+            $table->foreign('method_type_id')->references('id')->on('payment_method')->onDelete('cascade');
+            $table->foreign('applicant_id')->references('id')->on('user')->onDelete('cascade');
         });
     }
 
@@ -31,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('bid');
+        Schema::dropIfExists('linked_method');
     }
 };

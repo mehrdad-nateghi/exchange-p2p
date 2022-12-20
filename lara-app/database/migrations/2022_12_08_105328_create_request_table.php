@@ -16,14 +16,15 @@ return new class extends Migration
         Schema::create('request', function (Blueprint $table) {
             $table->id();
             $table->string('type');
-            $table->integer('currency_count');
-            $table->integer('lower_bound_feasibility');
-            $table->integer('upper_bound_feasibility');
-            $table->integer('acceptance_threshold');
+            $table->decimal('trade_volume',13,2);
+            $table->decimal('lower_bound_feasibility',13,2);
+            $table->decimal('upper_bound_feasibility',13,2);
+            $table->decimal('acceptance_threshold',13,2);
             $table->string('status');
             $table->boolean('is_removed');
-            $table->timestamp('created_at');
             $table->unsignedBigInteger('applicant_id');
+            $table->timestamp('created_at');
+            $table->foreign('applicant_id')->references('id')->on('user')->onDelete('cascade');
         });
     }
 

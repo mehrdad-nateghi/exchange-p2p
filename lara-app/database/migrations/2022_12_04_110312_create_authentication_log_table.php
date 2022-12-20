@@ -13,10 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('user_verify', function(Blueprint $table){
+        Schema::create('authentication_log', function(Blueprint $table){
             $table->id();
-            $table->string('token');
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('applicant_id');
+            $table->timestamp('created_at');
+            $table->foreign('applicant_id')->references('id')->on('user')->onDelete('cascade');
         });
     }
 
@@ -27,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('authentication_log');
     }
 };

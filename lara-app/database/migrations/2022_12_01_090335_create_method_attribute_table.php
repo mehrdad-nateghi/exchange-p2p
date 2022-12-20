@@ -13,12 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('social_network', function (Blueprint $table) {
+        Schema::create('method_attribute', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('url');
-            $table->boolean('status');
-            $table->unsignedBigInteger('logo_id');
+            $table->unsignedBigInteger('payment_method_id');
+            $table->foreign('payment_method_id')->references('id')->on('payment_method')->onDelete('cascade');
+
         });
     }
 
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('social_network');
+        Schema::dropIfExists('method_attribute');
     }
 };
