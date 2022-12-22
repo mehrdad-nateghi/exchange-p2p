@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('request', function (Blueprint $table) {
+        Schema::create('requests', function (Blueprint $table) {
             $table->id();
             $table->string('type');
             $table->decimal('trade_volume',13,2);
@@ -24,7 +24,7 @@ return new class extends Migration
             $table->boolean('is_removed');
             $table->unsignedBigInteger('applicant_id');
             $table->timestamp('created_at');
-            $table->foreign('applicant_id')->references('id')->on('user')->onDelete('cascade');
+            $table->foreign('applicant_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

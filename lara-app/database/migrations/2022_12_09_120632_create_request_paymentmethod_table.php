@@ -16,8 +16,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('request_id');
             $table->unsignedBigInteger('payment_method_id');
-            $table->foreign('payment_method_id')->references('id')->on('payment_method')->onDelete('cascade');
-            $table->foreign('request_id')->references('id')->on('request')->onDelete('cascade');
+            $table->foreign('payment_method_id')->references('id')->on('payment_methods')->onDelete('cascade');
+            $table->foreign('request_id')->references('id')->on('requests')->onDelete('cascade');
 
         });
     }

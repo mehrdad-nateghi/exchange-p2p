@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('bid', function (Blueprint $table) {
+        Schema::create('bids', function (Blueprint $table) {
             $table->id();
             $table->string('type');
             $table->integer('bid_rate');
@@ -21,8 +21,8 @@ return new class extends Migration
             $table->unsignedBigInteger('request_id');
             $table->unsignedBigInteger('applicant_id');
             $table->timestamp('created_at');
-            $table->foreign('applicant_id')->references('id')->on('user')->onDelete('cascade');
-            $table->foreign('request_id')->references('id')->on('request')->onDelete('cascade');
+            $table->foreign('applicant_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('request_id')->references('id')->on('requests')->onDelete('cascade');
 
 
         });

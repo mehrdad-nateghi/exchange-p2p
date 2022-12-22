@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('payment', function (Blueprint $table) {
+        Schema::create('payments', function (Blueprint $table) {
             $table->id();
             $table->string('trade_stage');
             $table->decimal('trade_net_value',13,2);
@@ -24,9 +24,9 @@ return new class extends Migration
             $table->unsignedBigInteger('trade_id');
             $table->unsignedBigInteger('target_account_id');
             $table->timestamp('created_at');
-            $table->foreign('target_account_id')->references('id')->on('linked_method')->onDelete('cascade');
-            $table->foreign('applicant_id')->references('id')->on('user')->onDelete('cascade');
-            $table->foreign('trade_id')->references('id')->on('trade')->onDelete('cascade');
+            $table->foreign('target_account_id')->references('id')->on('linked_methods')->onDelete('cascade');
+            $table->foreign('applicant_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('trade_id')->references('id')->on('trades')->onDelete('cascade');
         });
     }
 

@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('trade_constraint', function (Blueprint $table) {
+        Schema::create('trade_constraints', function (Blueprint $table) {
             $table->id();
             $table->integer('payment_rial_time_constraint');
             $table->integer('payment_currency_time_constraint');

@@ -13,13 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('social_network', function (Blueprint $table) {
+        Schema::create('social_networks', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('url');
             $table->boolean('status');
             $table->unsignedBigInteger('logo_id');
-            $table->foreign('logo_id')->references('id')->on('file')->onDelete('cascade');
+            $table->foreign('logo_id')->references('id')->on('files')->onDelete('cascade');
         });
     }
 

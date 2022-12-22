@@ -13,13 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('linked_method', function (Blueprint $table) {
+        Schema::create('linked_methods', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('applicant_id');
             $table->unsignedBigInteger('method_type_id');
             $table->timestamp('created_at');
-            $table->foreign('method_type_id')->references('id')->on('payment_method')->onDelete('cascade');
-            $table->foreign('applicant_id')->references('id')->on('user')->onDelete('cascade');
+            $table->foreign('method_type_id')->references('id')->on('payment_methods')->onDelete('cascade');
+            $table->foreign('applicant_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

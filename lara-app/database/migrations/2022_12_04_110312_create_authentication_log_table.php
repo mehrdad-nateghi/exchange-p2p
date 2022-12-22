@@ -13,11 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('authentication_log', function(Blueprint $table){
+        Schema::create('authentication_logs', function(Blueprint $table){
             $table->id();
             $table->unsignedBigInteger('applicant_id');
             $table->timestamp('created_at');
-            $table->foreign('applicant_id')->references('id')->on('user')->onDelete('cascade');
+            $table->foreign('applicant_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

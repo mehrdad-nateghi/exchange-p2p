@@ -13,11 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('method_attribute', function (Blueprint $table) {
+        Schema::create('method_attributes', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->unsignedBigInteger('payment_method_id');
-            $table->foreign('payment_method_id')->references('id')->on('payment_method')->onDelete('cascade');
+            $table->foreign('payment_method_id')->references('id')->on('payment_methods')->onDelete('cascade');
 
         });
     }

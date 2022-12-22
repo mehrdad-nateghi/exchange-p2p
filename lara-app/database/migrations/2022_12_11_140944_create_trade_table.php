@@ -13,15 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('trade', function (Blueprint $table) {
+        Schema::create('trades', function (Blueprint $table) {
             $table->id();
             $table->integer('trade_fee');
             $table->string('status');
             $table->unsignedBigInteger('request_id');
             $table->unsignedBigInteger('bid_id');
             $table->timestamp('created_at');
-            $table->foreign('request_id')->references('id')->on('request')->onDelete('cascade');
-            $table->foreign('bid_id')->references('id')->on('bid')->onDelete('cascade');
+            $table->foreign('request_id')->references('id')->on('requests')->onDelete('cascade');
+            $table->foreign('bid_id')->references('id')->on('bids')->onDelete('cascade');
 
         });
     }

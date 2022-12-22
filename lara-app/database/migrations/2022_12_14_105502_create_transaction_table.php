@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('transaction', function (Blueprint $table) {
+        Schema::create('transactions', function (Blueprint $table) {
             $table->id();
             $table->decimal('amount',13,2);
             $table->string('description');
@@ -22,10 +22,9 @@ return new class extends Migration
             $table->unsignedBigInteger('transaction_method_id');
             $table->unsignedBigInteger('reception_image_id');
             $table->timestamp('created_at');
-            $table->foreign('payment_id')->references('id')->on('payment')->onDelete('cascade');
-            $table->foreign('transaction_method_id')->references('id')->on('transaction_method')->onDelete('cascade');
-            $table->foreign('reception_image_id')->references('id')->on('file')->onDelete('cascade');
-
+            $table->foreign('payment_id')->references('id')->on('payments')->onDelete('cascade');
+            $table->foreign('transaction_method_id')->references('id')->on('transaction_methods')->onDelete('cascade');
+            $table->foreign('reception_image_id')->references('id')->on('files')->onDelete('cascade');
         });
     }
 

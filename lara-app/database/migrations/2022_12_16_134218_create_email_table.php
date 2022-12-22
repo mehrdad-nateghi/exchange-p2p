@@ -13,14 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('email', function (Blueprint $table) {
+        Schema::create('emails', function (Blueprint $table) {
             $table->id();
             $table->string('value');
             $table->string('reference_type');
             $table->unsignedBigInteger('reference_id');
             $table->unsignedBigInteger('template_id');
             $table->timestamp('created_at');
-            $table->foreign('template_id')->references('id')->on('email_template')->onDelete('cascade');
+            $table->foreign('template_id')->references('id')->on('email_templates')->onDelete('cascade');
         });
     }
 
