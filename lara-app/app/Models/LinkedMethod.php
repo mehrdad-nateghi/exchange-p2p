@@ -5,16 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class User extends Model
+class LinkedMethod extends Model
 {
     use HasFactory;
 
-    protected $table = 'users';
+    protected $table = 'linked_methods';
 
     protected $fillable = [
-        'first_name',
-        'last_name',
-        'email',
+        'method_type_id',
+        'applicant_id',
         'created_at'
     ];
 }

@@ -5,16 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class User extends Model
+class Payment extends Model
 {
     use HasFactory;
 
-    protected $table = 'users';
+    protected $table = 'payments';
 
     protected $fillable = [
-        'first_name',
-        'last_name',
-        'email',
+        'applicant_id',
+        'trade_id',
+        'trade_net_value',
+        'target_account_id',
         'created_at'
     ];
 }
