@@ -5,16 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class User extends Model
+class Email extends Model
 {
     use HasFactory;
 
-    protected $table = 'users';
+    protected $table = 'emails';
 
     protected $fillable = [
-        'first_name',
-        'last_name',
-        'email',
+        'template_id',
+        'values',
+        'reference_type',
+        'reference_id',
         'created_at'
     ];
 }

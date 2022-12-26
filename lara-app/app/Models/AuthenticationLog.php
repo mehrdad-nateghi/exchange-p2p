@@ -5,16 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class User extends Model
+class AuthenticationLog extends Model
 {
     use HasFactory;
 
-    protected $table = 'users';
+    protected $table = 'authentication_logs';
 
     protected $fillable = [
-        'first_name',
-        'last_name',
-        'email',
+        'applicant_id',
         'created_at'
     ];
 }
