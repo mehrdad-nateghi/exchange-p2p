@@ -18,8 +18,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('url');
             $table->boolean('status');
-            $table->unsignedBigInteger('logo_id');
-            $table->foreign('logo_id')->references('id')->on('files')->onDelete('cascade');
+            $table->string('logo_url');
         });
     }
 

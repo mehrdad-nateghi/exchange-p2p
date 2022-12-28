@@ -15,7 +15,6 @@ class Transaction extends Model
         'payment_id',
         'transaction_method_id',
         'amount',
-        'reception_image_id',
         'description',
         'created_at'
     ];

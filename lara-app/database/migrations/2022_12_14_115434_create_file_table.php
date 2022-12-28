@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('url');
             $table->string('alt');
             $table->string('type');
+            $table->unsignedBigInteger('transaction_id');
+            $table->foreign('transaction_id')->references('id')->on('transactions')->onDelete('cascade');
         });
     }
 

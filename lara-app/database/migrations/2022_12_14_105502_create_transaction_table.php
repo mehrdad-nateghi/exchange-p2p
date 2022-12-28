@@ -20,11 +20,9 @@ return new class extends Migration
             $table->string('status');
             $table->unsignedBigInteger('payment_id');
             $table->unsignedBigInteger('transaction_method_id');
-            $table->unsignedBigInteger('reception_image_id');
             $table->timestamp('created_at');
             $table->foreign('payment_id')->references('id')->on('payments')->onDelete('cascade');
             $table->foreign('transaction_method_id')->references('id')->on('transaction_methods')->onDelete('cascade');
-            $table->foreign('reception_image_id')->references('id')->on('files')->onDelete('cascade');
         });
     }
 

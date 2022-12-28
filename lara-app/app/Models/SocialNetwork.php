@@ -12,9 +12,9 @@ class SocialNetwork extends Model
     protected $table = 'social_networks';
 
     protected $fillable = [
-        'logo_id',
         'name',
         'url',
-        'status'
+        'status',
+        'logo_url'
     ];
 }
