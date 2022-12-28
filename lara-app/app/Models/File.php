@@ -14,6 +14,7 @@ class File extends Model
     protected $fillable = [
         'url',
         'alt',
-        'type'
+        'type',
+        'transaction_id'
     ];
 }
