@@ -20,4 +20,7 @@ class Request extends Model
         'acceptance_threshold',
         'created_at'
     ];
+
+    public $timestamps = false;
+
 }

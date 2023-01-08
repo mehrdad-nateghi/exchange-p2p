@@ -17,5 +17,8 @@ class Trade extends Model
         'trade_fee',
         'created_at'
     ];
+
+    public $timestamps = false;
+
 }
 

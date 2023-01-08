@@ -15,4 +15,7 @@ class FrequentQuestion extends Model
         'question',
         'answer'
     ];
+
+    public $timestamps = false;
+
 }

@@ -18,4 +18,7 @@ class UserVerify extends Model
     protected $hidden = [
         'token'
     ];
+
+    public $timestamps = false;
+
 }

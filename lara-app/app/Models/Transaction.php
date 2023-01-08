@@ -18,4 +18,7 @@ class Transaction extends Model
         'description',
         'created_at'
     ];
+
+    public $timestamps = false;
+
 }

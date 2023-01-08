@@ -15,4 +15,7 @@ class Request_PaymentMethod extends Model
         'payment_method_id',
         'request_id'
     ];
+
+    public $timestamps = false;
+
 }

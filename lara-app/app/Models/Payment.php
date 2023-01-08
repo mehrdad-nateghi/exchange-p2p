@@ -18,4 +18,7 @@ class Payment extends Model
         'target_account_id',
         'created_at'
     ];
+
+    public $timestamps = false;
+
 }

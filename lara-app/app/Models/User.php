@@ -17,4 +17,7 @@ class User extends Model
         'email',
         'created_at'
     ];
+
+    public $timestamps = false;
+
 }

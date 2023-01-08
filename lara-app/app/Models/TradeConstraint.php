@@ -18,5 +18,8 @@ class TradeConstraint extends Model
         'system_payment_time_constraint',
         'updated_at'
     ];
+
+    public $timestamps = false;
+
 }
 

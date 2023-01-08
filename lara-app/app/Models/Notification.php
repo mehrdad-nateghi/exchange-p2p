@@ -18,4 +18,7 @@ class Notification extends Model
         'status',
         'created_at'
     ];
+
+    public $timestamps = false;
+
 }

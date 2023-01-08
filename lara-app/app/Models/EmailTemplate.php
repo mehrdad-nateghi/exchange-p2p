@@ -16,4 +16,7 @@ class EmailTemplate extends Model
         'body',
         'attributes'
     ];
+
+    public $timestamps = false;
+
 }

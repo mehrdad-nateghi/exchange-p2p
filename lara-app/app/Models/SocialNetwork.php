@@ -17,4 +17,7 @@ class SocialNetwork extends Model
         'status',
         'logo_url'
     ];
+
+    public $timestamps = false;
+
 }

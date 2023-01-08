@@ -15,4 +15,14 @@ class MethodAttribute extends Model
         'payment_method_id',
         'name'
     ];
+
+    public $timestamps = false;
+
+    /*
+    * Get the payment-method that owns the attribute
+    */
+    public function paymentMethod(){
+        return $this->belongsTo(PaymentMethod::class, 'payment_method_id');
+    }
+
 }
