@@ -16,4 +16,7 @@ class LinkedMethod_Methodattribute extends Model
         'linked_method_id',
         'value'
     ];
+
+    public $timestamps = false;
+
 }

@@ -17,4 +17,7 @@ class Bid extends Model
         'bid_rate',
         'created_at'
     ];
+
+    public $timestamps = false;
+
 }

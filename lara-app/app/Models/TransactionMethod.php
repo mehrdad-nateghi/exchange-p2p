@@ -15,4 +15,7 @@ class TransactionMethod extends Model
         'name',
         'is_active'
     ];
+
+    public $timestamps = false;
+
 }

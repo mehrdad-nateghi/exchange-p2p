@@ -15,4 +15,7 @@ class AuthenticationLog extends Model
         'applicant_id',
         'created_at'
     ];
+
+    public $timestamps = false;
+
 }

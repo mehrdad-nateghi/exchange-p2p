@@ -17,4 +17,7 @@ class File extends Model
         'type',
         'transaction_id'
     ];
+
+    public $timestamps = false;
+
 }

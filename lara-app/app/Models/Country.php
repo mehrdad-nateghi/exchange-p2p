@@ -14,4 +14,13 @@ class Country extends Model
     protected $fillable = [
         'name'
     ];
+
+    public $timestamps = false;
+
+    /**
+     * Get the payment-methods for the country.
+     */
+    public function paymentMethods(){
+        return $this->hasMany(PaymentMethod::class);
+    }
 }

@@ -20,4 +20,7 @@ class Financial extends Model
         'feasibility_band_percentage',
         'updated_at'
     ];
+
+    public $timestamps = false;
+
 }

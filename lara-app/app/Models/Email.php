@@ -18,4 +18,7 @@ class Email extends Model
         'reference_id',
         'created_at'
     ];
+
+    public $timestamps = false;
+
 }
