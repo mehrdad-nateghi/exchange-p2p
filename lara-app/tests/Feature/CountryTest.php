@@ -1,19 +1,18 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Feature;
 
 use App\Models\Country;
 use App\Models\PaymentMethod;
-use Tests\TestCase;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Tests\TestCase;
 
 class CountryTest extends TestCase
 {
     use RefreshDatabase, WithFaker;
 
-    /** @test */
+    /** @test for the 1 to n Country - PaymentMethod relation*/
     public function a_country_has_many_paymentmethods()
     {
         $country = Country::factory()->create();
