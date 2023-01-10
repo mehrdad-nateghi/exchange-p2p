@@ -19,4 +19,10 @@ class LinkedMethod extends Model
 
     public $timestamps = false;
 
+    /**
+    * Get the paymentMetod that owns the linkedMethod.
+    */
+    public function paymentMethod(){
+        return $this->belongsTo(PaymentMethod::class,'method_type_id');
+    }
 }

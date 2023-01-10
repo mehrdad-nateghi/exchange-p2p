@@ -19,16 +19,24 @@ class PaymentMethod extends Model
     public $timestamps = false;
 
     /**
-     * Get the country that owns the payment-metod.
+     * Get the country that owns the paymentMetod.
      */
     public function country(){
-        return $this->belongsTo(Country::class,'country_id');
+        return $this->belongsTo(Country::class);
     }
 
     /*
-    * Get the attributes for the payment-method.
+    * Get the attributes for the paymentMethod.
     */
     public function attributes(){
         return $this->hasMany(MethodAttribute::class);
     }
+
+    /*
+    * Get the linkedMethods for the paymentMethod.
+    */
+    public function linkedMethods(){
+        return $this->hasMany(LinkedMethod::class, 'method_type_id');
+    }
+
 }
