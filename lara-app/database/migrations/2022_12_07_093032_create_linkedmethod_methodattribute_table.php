@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('linked_method_id');
             $table->unsignedBigInteger('method_attribute_id');
+            $table->string('value');
             $table->foreign('method_attribute_id')->references('id')->on('method_attributes')->onDelete('cascade');
             $table->foreign('linked_method_id')->references('id')->on('linked_methods')->onDelete('cascade');
         });

@@ -25,4 +25,13 @@ class LinkedMethod extends Model
     public function paymentMethod(){
         return $this->belongsTo(PaymentMethod::class,'method_type_id');
     }
+
+    /*
+    * Get the attributes for the linkedMethod.
+    */
+    public function attributes(){
+        return $this->belongsToMany(MethodAttribute::class, 'LinkedMethod_MethodAttribute', 'linked_method_id', 'method_attribute_id')
+            ->withPivot('value');
+    }
+
 }
