@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class User extends Model
 {
@@ -32,5 +33,12 @@ class User extends Model
     */
     public function userVerify(){
         return $this->hasOne(UserVerify::class);
+    }
+
+    /*
+    * Get the AuthenticationLogs for the User.
+    */
+    public function authenticationLogs(){
+        return $this->hasMany(AuthenticationLog::class, 'applicant_id');
     }
 }

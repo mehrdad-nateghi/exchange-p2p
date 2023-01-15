@@ -10,6 +10,8 @@ use Tests\TestCase;
 
 class UserVerifyTest extends TestCase
 {
+    /* use RefreshDatabase, WithFaker; */
+
     /** @test for the 1 to 1 User - UserVerify relation*/
     public function a_userverify_belongs_to_a_user()
     {

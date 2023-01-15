@@ -18,4 +18,11 @@ class AuthenticationLog extends Model
 
     public $timestamps = false;
 
+    /**
+    * Get the User that owns the AuthenticationLog.
+    */
+    public function user(){
+        return $this->belongsTo(User::class,'applicant_id');
+    }
+
 }
