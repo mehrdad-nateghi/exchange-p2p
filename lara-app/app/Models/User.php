@@ -20,4 +20,17 @@ class User extends Model
 
     public $timestamps = false;
 
+    /*
+    * Get the Notifications for the User.
+    */
+    public function notifications(){
+        return $this->hasMany(Notification::class);
+    }
+
+    /*
+    * Get the UserVerify for the User.
+    */
+    public function userVerify(){
+        return $this->hasOne(UserVerify::class);
+    }
 }

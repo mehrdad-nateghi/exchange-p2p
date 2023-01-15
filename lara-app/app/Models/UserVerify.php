@@ -21,4 +21,12 @@ class UserVerify extends Model
 
     public $timestamps = false;
 
+    /*
+    * Get the User that owns the UserVerify
+    */
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
+
+
 }
