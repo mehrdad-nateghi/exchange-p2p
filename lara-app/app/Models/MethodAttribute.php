@@ -19,14 +19,14 @@ class MethodAttribute extends Model
     public $timestamps = false;
 
     /*
-    * Get the payment-method that owns the attribute
+    * Get the PaymentMethod that owns the Attribute
     */
     public function paymentMethod(){
         return $this->belongsTo(PaymentMethod::class);
     }
 
     /*
-    * Get the linkedMethods for the attribute.
+    * Get the linkedMethods for the Attribute.
     */
     public function linkedMethods(){
         return $this->belongsToMany(LinkedMethod::class, 'LinkedMethod_MethodAttribute', 'method_attribute_id', 'linked_method_id');
