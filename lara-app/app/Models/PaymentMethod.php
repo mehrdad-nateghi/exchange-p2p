@@ -39,4 +39,11 @@ class PaymentMethod extends Model
         return $this->hasMany(LinkedMethod::class, 'method_type_id');
     }
 
+    /*
+    * Get the Requests for the PaymentMethod.
+    */
+    public function requests(){
+        return $this->belongsToMany(Request::class, 'request_paymentmethod', 'payment_method_id', 'request_id');
+    }
+
 }
