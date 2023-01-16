@@ -15,12 +15,12 @@ return new class extends Migration
     {
         Schema::create('requests', function (Blueprint $table) {
             $table->id();
-            $table->string('type');
+            $table->integer('type');
             $table->decimal('trade_volume',13,2);
-            $table->decimal('lower_bound_feasibility',13,2);
-            $table->decimal('upper_bound_feasibility',13,2);
+            $table->decimal('lower_bound_feasibility_threshold',13,2);
+            $table->decimal('upper_bound_feasibility_threshold',13,2);
             $table->decimal('acceptance_threshold',13,2);
-            $table->string('status');
+            $table->integer('status');
             $table->boolean('is_removed');
             $table->unsignedBigInteger('applicant_id');
             $table->timestamp('created_at');
