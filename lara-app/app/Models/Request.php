@@ -30,4 +30,11 @@ class Request extends Model
         return $this->belongsToMany(PaymentMethod::class, 'request_paymentmethod', 'request_id', 'payment_method_id');
     }
 
+    /*
+    * Get the User owns the Request.
+    */
+    public function user(){
+        return $this->belongsTo(User::class, 'applicant_id');
+    }
+
 }
