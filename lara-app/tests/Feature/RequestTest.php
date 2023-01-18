@@ -12,6 +12,7 @@ use Tests\TestCase;
 
 class RequestTest extends TestCase
 {
+    use RefreshDatabase, WithFaker;
 
     /** @test for the m to n Request - PaymentMethod relation*/
     public function a_request_belongs_to_many_paymentmethod()
@@ -23,5 +24,14 @@ class RequestTest extends TestCase
         $request->paymentMethods()->attach($paymentMethod);
 
         $this->assertInstanceOf('Illuminate\Database\Eloquent\Collection', $request->paymentMethods);
+    }
+
+    /** @test for the 1 to 1 User - Request relation*/
+    public function a_request_belongs_to_a_user()
+    {
+        $user = User::factory()->create(['type'=>'1']);
+        $request = Request::factory()->create(['applicant_id' => $user->id]);
+
+        $this->assertInstanceOf(User::class, $request->user);
     }
 }

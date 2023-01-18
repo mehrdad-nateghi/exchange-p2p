@@ -21,9 +21,9 @@ class LinkedMethodTest extends TestCase
     public function a_linkedmethod_belongs_to_a_paymentmethod()
     {
         $country = Country::factory()->create();
-        $applicant = User::factory()->create(['type'=>'1']);
+        $user = User::factory()->create(['type'=>'1']);
         $paymentMethod = PaymentMethod::factory()->create(['country_id' => $country->id]);
-        $linkedMethod = LinkedMethod::factory()->create(['method_type_id'=>$paymentMethod->id, 'applicant_id'=>$applicant->id]);
+        $linkedMethod = LinkedMethod::factory()->create(['method_type_id'=>$paymentMethod->id, 'applicant_id'=>$user->id]);
 
         $this->assertInstanceOf(PaymentMethod::class, $linkedMethod->paymentMethod);
     }
@@ -32,13 +32,24 @@ class LinkedMethodTest extends TestCase
     public function a_linkedmethod_belongs_to_many_methodattributes()
     {
         $country = Country::factory()->create();
-        $applicant = User::factory()->create(['type'=>'1']);
+        $user = User::factory()->create(['type'=>'1']);
         $paymentMethod = PaymentMethod::factory()->create(['country_id' => $country->id]);
         $attribute = MethodAttribute::factory()->create(['payment_method_id'=>$paymentMethod->id]);
-        $linkedMethod = LinkedMethod::factory()->create(['method_type_id'=>$paymentMethod->id, 'applicant_id'=>$applicant->id]);
+        $linkedMethod = LinkedMethod::factory()->create(['method_type_id'=>$paymentMethod->id, 'applicant_id'=>$user->id]);
         $linkedMethod->attributes()->attach($attribute, ['value'=> Str::random(7) ]);
 
         $this->assertInstanceOf('Illuminate\Database\Eloquent\Collection', $linkedMethod->attributes);
+    }
+
+    /** @test for the 1 to n User - LinkedMethod relation*/
+    public function a_linkedmethod_belongs_to_a_user()
+    {
+        $country = Country::factory()->create();
+        $user = User::factory()->create(['type'=>'1']);
+        $paymentMethod = PaymentMethod::factory()->create(['country_id' => $country->id]);
+        $linkedMethod = LinkedMethod::factory()->create(['method_type_id'=>$paymentMethod->id, 'applicant_id'=>$user->id]);
+
+        $this->assertInstanceOf(User::class, $linkedMethod->user);
     }
 
 }

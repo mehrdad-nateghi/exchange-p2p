@@ -3,7 +3,11 @@
 namespace Tests\Feature;
 
 use App\Models\AuthenticationLog;
+use App\Models\Country;
+use App\Models\LinkedMethod;
 use App\Models\Notification;
+use App\Models\PaymentMethod;
+use App\Models\Request;
 use App\Models\User;
 use App\Models\UserVerify;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -41,4 +45,23 @@ class UserTest extends TestCase
         $this->assertTrue($user->authenticationLogs->contains($authenticationLog));
     }
 
+    /** @test for the 1 to n User - LinkedMethod relation*/
+    public function a_user_has_many_linkedmethods()
+    {
+        $country = Country::factory()->create();
+        $user = User::factory()->create(['type'=>'1']);
+        $paymentMethod = PaymentMethod::factory()->create(['country_id' => $country->id]);
+        $linkedMethod = LinkedMethod::factory()->create(['method_type_id'=>$paymentMethod->id, 'applicant_id'=>$user->id]);
+
+        $this->assertTrue($user->linkedMethods->contains($linkedMethod));
+    }
+
+    /** @test for the 1 to n User - Request relation*/
+    public function a_user_has_many_requests()
+    {
+        $user = User::factory()->create(['type'=>'1']);
+        $request = Request::factory()->create(['applicant_id' => $user->id]);
+
+        $this->assertTrue($user->requests->contains($request));
+    }
 }
