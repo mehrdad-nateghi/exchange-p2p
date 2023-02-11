@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\NotificationStatusEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -27,4 +28,12 @@ class Notification extends Model
     public function user(){
         return $this->belongsTo(User::class);
     }
+
+    /*
+    * Enum casting for the status field
+    */
+    protected $casts = [
+        'status' => NotificationStatusEnum::class
+    ];
+
 }

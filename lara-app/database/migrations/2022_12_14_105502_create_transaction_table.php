@@ -18,10 +18,10 @@ return new class extends Migration
             $table->decimal('amount',13,2);
             $table->string('description');
             $table->string('status');
-            $table->unsignedBigInteger('payment_id');
+            $table->unsignedBigInteger('invoice_id');
             $table->unsignedBigInteger('transaction_method_id');
             $table->timestamp('created_at');
-            $table->foreign('payment_id')->references('id')->on('payments')->onDelete('cascade');
+            $table->foreign('invoice_id')->references('id')->on('invoices')->onDelete('cascade');
             $table->foreign('transaction_method_id')->references('id')->on('transaction_methods')->onDelete('cascade');
         });
     }
