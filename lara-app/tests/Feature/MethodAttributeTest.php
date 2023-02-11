@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Enums\UserTypeEnum;
 use App\Models\Country;
 use App\Models\LinkedMethod;
 use App\Models\MethodAttribute;
@@ -30,10 +31,10 @@ class MethodAttributeTest extends TestCase
     public function a_methodattribute_belongs_to_many_linkedmethods()
     {
         $country = Country::factory()->create();
-        $applicant = User::factory()->create(['type'=>'1']);
+        $user = User::factory()->create(['type'=>UserTypeEnum::Applicant]);
         $paymentMethod = PaymentMethod::factory()->create(['country_id' => $country->id]);
         $attribute = MethodAttribute::factory()->create(['payment_method_id'=>$paymentMethod->id]);
-        $linkedMethod = LinkedMethod::factory()->create(['method_type_id'=>$paymentMethod->id, 'applicant_id'=>$applicant->id]);
+        $linkedMethod = LinkedMethod::factory()->create(['method_type_id'=>$paymentMethod->id, 'applicant_id'=>$user->id]);
         $linkedMethod->attributes()->attach($attribute, ['value'=> Str::random(7) ]);
 
         $this->assertInstanceOf('Illuminate\Database\Eloquent\Collection', $attribute->linkedMethods);
