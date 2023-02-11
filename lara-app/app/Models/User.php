@@ -55,4 +55,11 @@ class User extends Model
     public function requests(){
         return $this->hasMany(Request::class, 'applicant_id');
     }
+
+    /*
+    * Get the Bids for the User.
+    */
+    public function bids(){
+        return $this->hasMany(Bid::class, 'applicant_id');
+    }
 }
