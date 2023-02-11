@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Enums\UserTypeEnum;
 use App\Models\Country;
 use App\Models\LinkedMethod;
 use App\Models\MethodAttribute;
@@ -21,7 +22,7 @@ class LinkedMethodTest extends TestCase
     public function a_linkedmethod_belongs_to_a_paymentmethod()
     {
         $country = Country::factory()->create();
-        $user = User::factory()->create(['type'=>'1']);
+        $user = User::factory()->create(['type'=>UserTypeEnum::Applicant]);
         $paymentMethod = PaymentMethod::factory()->create(['country_id' => $country->id]);
         $linkedMethod = LinkedMethod::factory()->create(['method_type_id'=>$paymentMethod->id, 'applicant_id'=>$user->id]);
 
@@ -32,7 +33,7 @@ class LinkedMethodTest extends TestCase
     public function a_linkedmethod_belongs_to_many_methodattributes()
     {
         $country = Country::factory()->create();
-        $user = User::factory()->create(['type'=>'1']);
+        $user = User::factory()->create(['type'=>UserTypeEnum::Applicant]);
         $paymentMethod = PaymentMethod::factory()->create(['country_id' => $country->id]);
         $attribute = MethodAttribute::factory()->create(['payment_method_id'=>$paymentMethod->id]);
         $linkedMethod = LinkedMethod::factory()->create(['method_type_id'=>$paymentMethod->id, 'applicant_id'=>$user->id]);
@@ -45,7 +46,7 @@ class LinkedMethodTest extends TestCase
     public function a_linkedmethod_belongs_to_a_user()
     {
         $country = Country::factory()->create();
-        $user = User::factory()->create(['type'=>'1']);
+        $user = User::factory()->create(['type'=>UserTypeEnum::Applicant]);
         $paymentMethod = PaymentMethod::factory()->create(['country_id' => $country->id]);
         $linkedMethod = LinkedMethod::factory()->create(['method_type_id'=>$paymentMethod->id, 'applicant_id'=>$user->id]);
 

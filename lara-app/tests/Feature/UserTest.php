@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Enums\UserTypeEnum;
 use App\Models\AuthenticationLog;
 use App\Models\Country;
 use App\Models\LinkedMethod;
@@ -21,7 +22,7 @@ class UserTest extends TestCase
     /** @test for the 1 to n User - Notification relation*/
     public function a_user_has_many_notifications()
     {
-        $user = User::factory()->create(['type'=>'1']);
+        $user = User::factory()->create(['type'=>UserTypeEnum::Applicant]);
         $notification = Notification::factory()->create(['user_id'=> $user->id]);
 
         $this->assertTrue($user->notifications->contains($notification));
@@ -30,7 +31,7 @@ class UserTest extends TestCase
     /** @test for the 1 to 1 User - UserVerify relation*/
     public function a_user_has_a_userverify()
     {
-        $user = User::factory()->create(['type'=>'1']);
+        $user = User::factory()->create(['type'=>UserTypeEnum::Applicant]);
         $userVerify = UserVerify::factory()->create(['user_id'=> $user->id]);
 
         $this->assertInstanceOf(UserVerify::class, $user->userVerify);
@@ -39,7 +40,7 @@ class UserTest extends TestCase
     /** @test for the 1 to n User - AuthenticationLog relation*/
     public function a_user_has_many_authenticationlogs()
     {
-        $user = User::factory()->create(['type'=>'1']);
+        $user = User::factory()->create(['type'=>UserTypeEnum::Applicant]);
         $authenticationLog = AuthenticationLog::factory()->create(['applicant_id'=> $user->id]);
 
         $this->assertTrue($user->authenticationLogs->contains($authenticationLog));
@@ -49,7 +50,7 @@ class UserTest extends TestCase
     public function a_user_has_many_linkedmethods()
     {
         $country = Country::factory()->create();
-        $user = User::factory()->create(['type'=>'1']);
+        $user = User::factory()->create(['type'=>UserTypeEnum::Applicant]);
         $paymentMethod = PaymentMethod::factory()->create(['country_id' => $country->id]);
         $linkedMethod = LinkedMethod::factory()->create(['method_type_id'=>$paymentMethod->id, 'applicant_id'=>$user->id]);
 
@@ -59,7 +60,7 @@ class UserTest extends TestCase
     /** @test for the 1 to n User - Request relation*/
     public function a_user_has_many_requests()
     {
-        $user = User::factory()->create(['type'=>'1']);
+        $user = User::factory()->create(['type'=>UserTypeEnum::Applicant]);
         $request = Request::factory()->create(['applicant_id' => $user->id]);
 
         $this->assertTrue($user->requests->contains($request));

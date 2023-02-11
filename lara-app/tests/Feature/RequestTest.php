@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Enums\UserTypeEnum;
 use App\Models\Country;
 use App\Models\PaymentMethod;
 use App\Models\Request;
@@ -17,7 +18,7 @@ class RequestTest extends TestCase
     /** @test for the m to n Request - PaymentMethod relation*/
     public function a_request_belongs_to_many_paymentmethod()
     {
-        $user = User::factory()->create(['type'=>'1']);
+        $user = User::factory()->create(['type'=>UserTypeEnum::Applicant]);
         $country = Country::factory()->create();
         $paymentMethod = PaymentMethod::factory()->create(['country_id' => $country->id]);
         $request = Request::factory()->create(['applicant_id' => $user->id]);
@@ -29,7 +30,7 @@ class RequestTest extends TestCase
     /** @test for the 1 to 1 User - Request relation*/
     public function a_request_belongs_to_a_user()
     {
-        $user = User::factory()->create(['type'=>'1']);
+        $user = User::factory()->create(['type'=>UserTypeEnum::Applicant]);
         $request = Request::factory()->create(['applicant_id' => $user->id]);
 
         $this->assertInstanceOf(User::class, $request->user);

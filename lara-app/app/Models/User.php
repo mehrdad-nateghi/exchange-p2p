@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Enums\UserStatusEnum;
+use App\Enums\UserTypeEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
@@ -62,4 +64,13 @@ class User extends Model
     public function bids(){
         return $this->hasMany(Bid::class, 'applicant_id');
     }
+
+    /*
+    * Enum casting for the status and type fields
+    */
+    protected $casts = [
+        'status' => UserStatusEnum::class,
+        'type' => UserTypeEnum::class
+    ];
+
 }

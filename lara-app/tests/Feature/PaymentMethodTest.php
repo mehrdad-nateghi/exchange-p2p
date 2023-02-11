@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Enums\UserTypeEnum;
 use App\Models\Country;
 use App\Models\LinkedMethod;
 use App\Models\MethodAttribute;
@@ -39,9 +40,9 @@ class PaymentMethodTest extends TestCase
     public function a_paymentmethod_has_many_linkedmethods()
     {
         $country = Country::factory()->create();
-        $applicant = User::factory()->create(['type'=>'1']);
+        $user = User::factory()->create(['type'=>UserTypeEnum::Applicant]);
         $paymentMethod = PaymentMethod::factory()->create(['country_id' => $country->id]);
-        $linkedMethod = LinkedMethod::factory()->create(['method_type_id'=>$paymentMethod->id, 'applicant_id'=>$applicant->id]);
+        $linkedMethod = LinkedMethod::factory()->create(['method_type_id'=>$paymentMethod->id, 'applicant_id'=>$user->id]);
 
         $this->assertTrue($paymentMethod->linkedMethods->contains($linkedMethod));
     }
@@ -49,7 +50,7 @@ class PaymentMethodTest extends TestCase
     /** @test for the m to n Request - PaymentMethod relation*/
     public function a_paymentmethod_belongs_to_many_requests()
     {
-        $user = User::factory()->create(['type'=>'1']);
+        $user = User::factory()->create(['type'=>UserTypeEnum::Applicant]);
         $country = Country::factory()->create();
         $paymentMethod = PaymentMethod::factory()->create(['country_id' => $country->id]);
         $request = Request::factory()->create(['applicant_id' => $user->id]);
