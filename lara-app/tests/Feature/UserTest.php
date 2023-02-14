@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Enums\UserTypeEnum;
 use App\Models\AuthenticationLog;
+use App\Models\Bid;
 use App\Models\Country;
 use App\Models\LinkedMethod;
 use App\Models\Notification;
@@ -64,5 +65,15 @@ class UserTest extends TestCase
         $request = Request::factory()->create(['applicant_id' => $user->id]);
 
         $this->assertTrue($user->requests->contains($request));
+    }
+
+    /** @test for the 1 to n User - Bid relation*/
+    public function a_user_has_many_bids()
+    {
+        $user = User::factory()->create(['type'=>UserTypeEnum::Applicant]);
+        $request = Request::factory()->create(['applicant_id' => $user->id]);
+        $bid = Bid::factory()->create(['applicant_id'=>$user->id, 'request_id'=>$request->id]);
+
+        $this->assertTrue($user->bids->contains($bid));
     }
 }

@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Enums\BidStatusEnum;
+use App\Enums\BidTypeEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -27,5 +29,15 @@ class Bid extends Model
     public function user(){
         return $this->belongsTo(User::class, 'applicant_id');
     }
+
+
+    /*
+    * Enum casting for the status and type fields
+    */
+    protected $casts = [
+        'status' => BidStatusEnum::class,
+        'type' => BidTypeEnum::class
+    ];
+
 
 }
