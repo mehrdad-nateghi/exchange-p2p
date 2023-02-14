@@ -15,9 +15,9 @@ return new class extends Migration
     {
         Schema::create('bids', function (Blueprint $table) {
             $table->id();
-            $table->string('type');
+            $table->tinyInteger('type');
             $table->integer('bid_rate');
-            $table->boolean('status');
+            $table->tinyInteger('status');
             $table->unsignedBigInteger('request_id');
             $table->unsignedBigInteger('applicant_id');
             $table->timestamp('created_at');

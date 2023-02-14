@@ -39,7 +39,6 @@ class Request extends Model
         return $this->belongsTo(User::class, 'applicant_id');
     }
 
-
     /*
     * Enum casting for the status and type fields
     */

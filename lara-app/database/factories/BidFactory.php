@@ -17,7 +17,12 @@ class BidFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'type' => \App\Enums\BidTypeEnum::Sell ,
+            'bid_rate' => fake()->randomFloat($nbMaxDecimals = 2 , $min = 0, $max = 99,999,999,999.99),
+            'status' => \App\Enums\BidStatusEnum::Registered,
+            'request_id' => '1' ,
+            'applicant_id' => '1' ,
+            'created_at' => fake()->dateTime(),
         ];
     }
 }
