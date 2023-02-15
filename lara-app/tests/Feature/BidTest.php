@@ -14,7 +14,7 @@ class BidTest extends TestCase
 {
 /*     use RefreshDatabase, WithFaker;
  */
-    /** @test for the 1 to n Country - PaymentMethod relation*/
+    /** @test for the 1 to n User - Bid relation*/
     public function a_bid_belongs_to_a_user()
     {
         $user = User::factory()->create(['type'=>UserTypeEnum::Applicant]);
@@ -22,5 +22,15 @@ class BidTest extends TestCase
         $bid = Bid::factory()->create(['applicant_id'=>$user->id, 'request_id'=>$request->id]);
 
         $this->assertInstanceOf(User::class, $bid->user);
+    }
+
+    /** @test for the 1 to n Request - Bid relation*/
+    public function a_bid_belongs_to_a_request()
+    {
+        $user = User::factory()->create(['type'=>UserTypeEnum::Applicant]);
+        $request = Request::factory()->create(['applicant_id' => $user->id]);
+        $bid = Bid::factory()->create(['applicant_id'=>$user->id, 'request_id'=>$request->id]);
+
+        $this->assertInstanceOf(Request::class, $bid->request);
     }
 }
