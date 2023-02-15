@@ -40,6 +40,13 @@ class Request extends Model
     }
 
     /*
+    * Get the Bids for the Request.
+    */
+    public function bids(){
+        return $this->hasMany(Bid::class, 'request_id');
+    }
+
+    /*
     * Enum casting for the status and type fields
     */
     protected $casts = [

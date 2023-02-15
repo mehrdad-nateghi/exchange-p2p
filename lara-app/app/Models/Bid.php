@@ -31,6 +31,14 @@ class Bid extends Model
     }
 
 
+    /**
+     * Get the Request that owns the Bid.
+     */
+    public function request(){
+        return $this->belongsTo(Request::class, 'request_id');
+    }
+
+
     /*
     * Enum casting for the status and type fields
     */
