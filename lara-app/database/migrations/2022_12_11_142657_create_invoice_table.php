@@ -19,7 +19,7 @@ return new class extends Migration
             $table->decimal('trade_net_value',13,2);
             $table->decimal('trade_fee',13,2);
             $table->decimal('trade_gross_value',13,2);
-            $table->string('status');
+            $table->tinyInteger('status');
             $table->unsignedBigInteger('applicant_id');
             $table->unsignedBigInteger('trade_id');
             $table->unsignedBigInteger('target_account_id');

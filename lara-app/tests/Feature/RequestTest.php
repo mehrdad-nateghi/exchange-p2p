@@ -7,6 +7,7 @@ use App\Models\Bid;
 use App\Models\Country;
 use App\Models\PaymentMethod;
 use App\Models\Request;
+use App\Models\Trade;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;

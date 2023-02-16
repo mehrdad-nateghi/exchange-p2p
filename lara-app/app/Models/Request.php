@@ -47,6 +47,13 @@ class Request extends Model
     }
 
     /*
+    * Get the Trades for the Request.
+    */
+    public function trades(){
+        return $this->hasMany(Trade::class, 'request_id');
+    }
+
+    /*
     * Enum casting for the status and type fields
     */
     protected $casts = [
