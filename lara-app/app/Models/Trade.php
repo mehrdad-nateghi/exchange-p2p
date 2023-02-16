@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\TradeStatusEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -20,5 +21,18 @@ class Trade extends Model
 
     public $timestamps = false;
 
+    /*
+    * Get the Request owns the Trade.
+    */
+    public function request(){
+        return $this->belongsTo(Request::class, 'request_id');
+    }
+
+    /*
+    * Enum casting for the status field
+    */
+    protected $casts = [
+        'status' => TradeStatusEnum::class
+    ];
 }
 

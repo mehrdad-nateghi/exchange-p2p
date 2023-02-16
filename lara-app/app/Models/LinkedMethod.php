@@ -40,4 +40,11 @@ class LinkedMethod extends Model
     public function user(){
         return $this->belongsTo(User::class,'applicant_id');
     }
+
+    /*
+    * Get the Invoices for the LinkedMethod.
+    */
+    public function invoices(){
+        return $this->hasMany(Invoice::class, 'target_account_id');
+    }
 }

@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('trades', function (Blueprint $table) {
             $table->id();
-            $table->integer('trade_fee');
-            $table->string('status');
+            $table->decimal('trade_fee',13,2);
+            $table->tinyInteger('status');
             $table->unsignedBigInteger('request_id');
             $table->unsignedBigInteger('bid_id');
             $table->timestamp('created_at');

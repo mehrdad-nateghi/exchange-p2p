@@ -66,6 +66,14 @@ class User extends Model
     }
 
     /*
+    * Get the Invoices for the User.
+    */
+    public function invoices(){
+        return $this->hasMany(Invoice::class, 'applicant_id');
+    }
+
+
+    /*
     * Enum casting for the status and type fields
     */
     protected $casts = [
