@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->text('body');
+            $table->tinyInteger('class')->default(0);
             $table->tinyInteger('status')->default(0);
             $table->unsignedBigInteger('user_id');
             $table->timestamp('created_at');
