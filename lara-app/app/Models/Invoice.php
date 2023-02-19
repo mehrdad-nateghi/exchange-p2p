@@ -24,17 +24,24 @@ class Invoice extends Model
     public $timestamps = false;
 
     /**
-    * Get the LinkedMethod that owns the Invoice.
+    * Get the LinkedMethod that owns the Invoice
     */
     public function linkedMethod(){
         return $this->belongsTo(LinkedMethod::class,'target_account_id');
     }
 
     /*
-    * Get the User owns the Invoice.
+    * Get the User owns the Invoice
     */
     public function user(){
         return $this->belongsTo(User::class, 'applicant_id');
+    }
+
+    /*
+    * Get the Trade owns the Invoice
+    */
+    public function trade(){
+        return $this->belongsTo(Trade::class, 'trade_id');
     }
 
     /*

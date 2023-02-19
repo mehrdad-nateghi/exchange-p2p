@@ -22,17 +22,24 @@ class Trade extends Model
     public $timestamps = false;
 
     /*
-    * Get the Request owns the Trade.
+    * Get the Request owns the Trade
     */
     public function request(){
         return $this->belongsTo(Request::class, 'request_id');
     }
 
     /*
-    * Get the Bid for the Trade.
+    * Get the Bid for the Trade
     */
     public function bid(){
         return $this->belongsTo(Bid::class);
+    }
+
+    /*
+    * Get the Invoices for the Trade
+    */
+    public function invoices(){
+        return $this->hasMany(Invoice::class, 'trade_id');
     }
 
     /*
