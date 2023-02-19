@@ -18,4 +18,10 @@ class TransactionMethod extends Model
 
     public $timestamps = false;
 
+    /*
+    * Get the Transactions for the TransactionMethod
+    */
+    public function transactions(){
+        return $this->hasMany(Transaction::class, 'transaction_method_id');
+    }
 }

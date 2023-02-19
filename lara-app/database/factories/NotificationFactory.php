@@ -21,8 +21,8 @@ class NotificationFactory extends Factory
             'body' => fake()->text($maxNbChars = 50) ,
             'class' => \App\Enums\NotificationClassEnum:: Information,
             'status' => \App\Enums\NotificationStatusEnum:: Unseen,
-            'created_at' => fake()->dateTime(),
-            'user_id' => '1'
+            'user_id' => '1',
+            'created_at' => fake()->dateTime()
         ];
     }
 }

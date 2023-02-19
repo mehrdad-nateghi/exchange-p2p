@@ -17,12 +17,12 @@ return new class extends Migration
             $table->id();
             $table->decimal('amount',13,2);
             $table->string('description');
-            $table->string('status');
+            $table->tinyInteger('status');
             $table->unsignedBigInteger('invoice_id');
             $table->unsignedBigInteger('transaction_method_id');
-            $table->timestamp('created_at');
             $table->foreign('invoice_id')->references('id')->on('invoices')->onDelete('cascade');
             $table->foreign('transaction_method_id')->references('id')->on('transaction_methods')->onDelete('cascade');
+            $table->timestamp('created_at');
         });
     }
 
