@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Enums\UserTypeEnum;
 use App\Models\Bid;
 use App\Models\Request;
+use App\Models\Trade;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -32,5 +33,16 @@ class BidTest extends TestCase
         $bid = Bid::factory()->create(['applicant_id'=>$user->id, 'request_id'=>$request->id]);
 
         $this->assertInstanceOf(Request::class, $bid->request);
+    }
+
+    /** @test for the 1 to 1 Bid - Trade relation*/
+    public function a_bid_has_a_trade()
+    {
+        $user = User::factory()->create(['type'=>UserTypeEnum::Applicant]);
+        $request = Request::factory()->create(['applicant_id' => $user->id]);
+        $bid = Bid::factory()->create(['applicant_id'=>$user->id, 'request_id'=>$request->id]);
+        $trade = Trade::factory()->create(['request_id' => $request->id, 'bid_id' => $bid->id]);
+
+        $this->assertInstanceOf(Trade::class, $bid->trade);
     }
 }

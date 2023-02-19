@@ -29,6 +29,13 @@ class Trade extends Model
     }
 
     /*
+    * Get the Bid for the Trade.
+    */
+    public function bid(){
+        return $this->belongsTo(Bid::class);
+    }
+
+    /*
     * Enum casting for the status field
     */
     protected $casts = [

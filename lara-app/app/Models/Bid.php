@@ -38,6 +38,12 @@ class Bid extends Model
         return $this->belongsTo(Request::class, 'request_id');
     }
 
+    /*
+    * Get the Trade for the Bid.
+    */
+    public function trade(){
+        return $this->hasOne(Trade::class);
+    }
 
     /*
     * Enum casting for the status and type fields
