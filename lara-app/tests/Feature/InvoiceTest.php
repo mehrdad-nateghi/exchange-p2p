@@ -48,4 +48,19 @@ class InvoiceTest extends TestCase
 
         $this->assertInstanceOf(LinkedMethod::class, $invoice->linkedMethod);
     }
+
+    /** @test for the 1 to n Trade - Invoice relation*/
+    public function a_invoice_belongs_to_a_trade()
+    {
+        $country = Country::factory()->create();
+        $paymentMethod = PaymentMethod::factory()->create(['country_id' => $country->id]);
+        $user = User::factory()->create(['type'=>UserTypeEnum::Applicant]);
+        $linkedMethod = LinkedMethod::factory()->create(['method_type_id'=>$paymentMethod->id, 'applicant_id'=>$user->id]);
+        $request = Request::factory()->create(['applicant_id' => $user->id]);
+        $bid = Bid::factory()->create(['applicant_id'=>$user->id, 'request_id'=>$request->id]);
+        $trade = Trade::factory()->create(['request_id'=>$request->id, 'bid_id'=>$bid->id]);
+        $invoice = Invoice::factory()->create(['applicant_id'=>$user->id, 'trade_id'=>$trade->id, 'target_account_id'=>$linkedMethod->id]);
+
+        $this->assertInstanceOf(Trade::class, $invoice->trade);
+    }
 }
