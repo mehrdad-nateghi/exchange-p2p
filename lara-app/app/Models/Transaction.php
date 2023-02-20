@@ -30,6 +30,13 @@ class Transaction extends Model
     }
 
     /*
+    * Get the Invoice owns the Transaction
+    */
+    public function invoice(){
+        return $this->belongsTo(Invoice::class, 'invoice_id');
+    }
+
+    /*
     * Enum casting for the status field
     */
     protected $casts = [

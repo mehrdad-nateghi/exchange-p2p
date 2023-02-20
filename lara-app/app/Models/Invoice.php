@@ -45,6 +45,13 @@ class Invoice extends Model
     }
 
     /*
+    * Get the Transactions for the Invoice.
+    */
+    public function transactions(){
+        return $this->hasMany(Transaction::class, 'invoice_id');
+    }
+
+    /*
     * Enum casting for the status and trade_stage fields
     */
     protected $casts = [
