@@ -37,6 +37,13 @@ class Transaction extends Model
     }
 
     /*
+    * Get the File for the Transaction
+    */
+    public function file(){
+        return $this->hasOne(File::class);
+    }
+
+    /*
     * Enum casting for the status field
     */
     protected $casts = [
