@@ -20,4 +20,11 @@ class File extends Model
 
     public $timestamps = false;
 
+
+    /*
+    * Get the Transaction that owns the File
+    */
+    public function transaction(){
+        return $this->belongsTo(Transaction::class);
+    }
 }
