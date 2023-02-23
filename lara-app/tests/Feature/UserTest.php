@@ -6,6 +6,8 @@ use App\Enums\UserTypeEnum;
 use App\Models\AuthenticationLog;
 use App\Models\Bid;
 use App\Models\Country;
+use App\Models\Email;
+use App\Models\EmailTemplate;
 use App\Models\Invoice;
 use App\Models\LinkedMethod;
 use App\Models\Notification;
@@ -93,4 +95,15 @@ class UserTest extends TestCase
 
         $this->assertTrue($user->invoices->contains($invoice));
     }
+
+    /** @test for the 1 to n User - Email relation*/
+    public function a_user_has_many_emails()
+    {
+        $user = User::factory()->create(['type'=>UserTypeEnum::Applicant]);
+        $emaiTemplate = EmailTemplate::factory()->create();
+        $email = Email::factory()->create(['user_id'=> $user->id, 'template_id'=>$emaiTemplate->id, 'emailable_type' => "App\Models\User", 'emailable_id' => $user->id]);
+
+        $this->assertTrue($user->emails->contains($email));
+    }
+
 }

@@ -54,6 +54,13 @@ class Request extends Model
     }
 
     /*
+    * Get the Emails related to the Request.
+    */
+   public function emails(){
+       return $this->morphMany(Email::class, 'emailable');
+   }
+
+    /*
     * Enum casting for the status and type fields
     */
     protected $casts = [
