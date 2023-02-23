@@ -24,7 +24,7 @@ class Bid extends Model
 
 
     /**
-     * Get the User that owns the Bid.
+     * Get the User that owns the Bid
      */
     public function user(){
         return $this->belongsTo(User::class, 'applicant_id');
@@ -32,18 +32,26 @@ class Bid extends Model
 
 
     /**
-     * Get the Request that owns the Bid.
+     * Get the Request that owns the Bid
      */
     public function request(){
         return $this->belongsTo(Request::class, 'request_id');
     }
 
     /*
-    * Get the Trade for the Bid.
+    * Get the Trade for the Bid
     */
     public function trade(){
         return $this->hasOne(Trade::class);
     }
+
+    /*
+    * Get the Emails related to the Bid
+    */
+    public function emails(){
+        return $this->morphMany(Email::class, 'emailable');
+    }
+
 
     /*
     * Enum casting for the status and type fields

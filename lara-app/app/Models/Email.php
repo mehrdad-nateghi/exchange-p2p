@@ -21,4 +21,25 @@ class Email extends Model
 
     public $timestamps = false;
 
+    /*
+    * Get the EmailTemplate owns the Email
+    */
+    public function emailTemplate(){
+        return $this->belongsTo(EmailTemplate::class, 'template_id');
+    }
+
+    /*
+    * Get the User for the Email
+    */
+    public function user(){
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    /*
+    * Set up polymorphic relationship
+    */
+    public function emailable(){
+        return $this->morphTo();
+    }
+
 }

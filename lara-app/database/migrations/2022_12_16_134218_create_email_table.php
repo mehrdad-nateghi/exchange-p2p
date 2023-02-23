@@ -15,12 +15,14 @@ return new class extends Migration
     {
         Schema::create('emails', function (Blueprint $table) {
             $table->id();
-            $table->string('value');
-            $table->string('reference_type');
-            $table->unsignedBigInteger('reference_id');
+            $table->string('values');
+            $table->string('emailable_type');
+            $table->unsignedBigInteger('emailable_id');
             $table->unsignedBigInteger('template_id');
+            $table->unsignedBigInteger('user_id');
             $table->timestamp('created_at');
             $table->foreign('template_id')->references('id')->on('email_templates')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

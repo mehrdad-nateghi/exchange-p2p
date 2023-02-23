@@ -19,4 +19,11 @@ class EmailTemplate extends Model
 
     public $timestamps = false;
 
+
+    /*
+    * Get the Emails for the EmailTemplate
+    */
+    public function emails(){
+        return $this->hasMany(Email::class, 'template_id');
+    }
 }

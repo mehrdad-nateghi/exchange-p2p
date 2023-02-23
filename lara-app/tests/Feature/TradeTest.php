@@ -5,6 +5,8 @@ namespace Tests\Feature;
 use App\Enums\UserTypeEnum;
 use App\Models\Bid;
 use App\Models\Country;
+use App\Models\Email;
+use App\Models\EmailTemplate;
 use App\Models\Invoice;
 use App\Models\LinkedMethod;
 use App\Models\PaymentMethod;
@@ -54,6 +56,19 @@ class TradeTest extends TestCase
         $invoice = Invoice::factory()->create(['applicant_id'=>$user->id, 'trade_id'=>$trade->id, 'target_account_id'=>$linkedMethod->id]);
 
         $this->assertTrue($trade->invoices->contains($invoice));
+    }
+
+
+    /** @test for the 1 to n polymorph Email - Trade relation*/
+    public function a_trade_morphs_many_emails(){
+        $user = User::factory()->create(['type'=>UserTypeEnum::Applicant]);
+        $request = Request::factory()->create(['applicant_id' => $user->id]);
+        $bid = Bid::factory()->create(['applicant_id'=>$user->id, 'request_id'=>$request->id]);
+        $trade = Trade::factory()->create(['request_id'=>$request->id, 'bid_id'=>$bid->id]);
+        $emaiTemplate = EmailTemplate::factory()->create();
+        $email = Email::factory()->create(['user_id'=>$user->id, 'template_id'=>$emaiTemplate->id, 'emailable_id' => $trade->id, 'emailable_type' => "App\Models\Trade"]);
+
+        $this->assertInstanceOf('Illuminate\Database\Eloquent\Collection', $trade->emails);
     }
 
 }

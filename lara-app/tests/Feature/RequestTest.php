@@ -5,6 +5,8 @@ namespace Tests\Feature;
 use App\Enums\UserTypeEnum;
 use App\Models\Bid;
 use App\Models\Country;
+use App\Models\Email;
+use App\Models\EmailTemplate;
 use App\Models\PaymentMethod;
 use App\Models\Request;
 use App\Models\Trade;
@@ -46,5 +48,15 @@ class RequestTest extends TestCase
         $bid = Bid::factory()->create(['applicant_id'=>$user->id, 'request_id'=>$request->id]);
 
         $this->assertTrue($request->bids->contains($bid));
+    }
+
+    /** @test for the 1 to n polymorph Email - Request relation*/
+    public function a_request_morphs_many_emails(){
+        $user = User::factory()->create(['type'=>UserTypeEnum::Applicant]);
+        $request = Request::factory()->create(['applicant_id' => $user->id]);
+        $emaiTemplate = EmailTemplate::factory()->create();
+        $email = Email::factory()->create(['user_id'=>$user->id, 'template_id'=>$emaiTemplate->id, 'emailable_id' => $user->id, 'emailable_type' => "App\Models\Request"]);
+
+        $this->assertInstanceOf('Illuminate\Database\Eloquent\Collection', $request->emails);
     }
 }

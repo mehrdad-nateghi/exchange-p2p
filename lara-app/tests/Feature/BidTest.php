@@ -4,6 +4,8 @@ namespace Tests\Feature;
 
 use App\Enums\UserTypeEnum;
 use App\Models\Bid;
+use App\Models\Email;
+use App\Models\EmailTemplate;
 use App\Models\Request;
 use App\Models\Trade;
 use App\Models\User;
@@ -44,5 +46,16 @@ class BidTest extends TestCase
         $trade = Trade::factory()->create(['request_id' => $request->id, 'bid_id' => $bid->id]);
 
         $this->assertInstanceOf(Trade::class, $bid->trade);
+    }
+
+    /** @test for the 1 to n polymorph Email - Bid relation*/
+    public function a_bid_morphs_many_emails(){
+        $user = User::factory()->create(['type'=>UserTypeEnum::Applicant]);
+        $request = Request::factory()->create(['applicant_id' => $user->id]);
+        $bid = Bid::factory()->create(['applicant_id'=>$user->id, 'request_id'=>$request->id]);
+        $emaiTemplate = EmailTemplate::factory()->create();
+        $email = Email::factory()->create(['user_id'=>$user->id, 'template_id'=>$emaiTemplate->id, 'emailable_id' => $bid->id, 'emailable_type' => "App\Models\Bid"]);
+
+        $this->assertInstanceOf('Illuminate\Database\Eloquent\Collection', $bid->emails);
     }
 }
