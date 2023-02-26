@@ -31,6 +31,16 @@ class EmailTest extends TestCase
         $this->assertInstanceOf(User::class, $email->user);
     }
 
+    /** @test for the 1 to n EmailTemplate - Email relation*/
+    public function an_email_belongs_to_an_emailtemplate()
+    {
+        $user = User::factory()->create(['type'=>UserTypeEnum::Applicant]);
+        $emaiTemplate = EmailTemplate::factory()->create();
+        $email = Email::factory()->create(['user_id'=> $user->id, 'template_id'=>$emaiTemplate->id, 'emailable_type' => "App\Models\User", 'emailable_id' => $user->id]);
+
+        $this->assertInstanceOf(EmailTemplate::class, $email->emailTemplate);
+    }
+
     /** @test for the 1 to n polymorph Email - User relation*/
     public function an_email_can_be_morphed_to_a_user_model()
     {
