@@ -9,6 +9,7 @@ use App\Models\Email;
 use App\Models\EmailTemplate;
 use App\Models\Invoice;
 use App\Models\LinkedMethod;
+use App\Models\Notification;
 use App\Models\PaymentMethod;
 use App\Models\Request;
 use App\Models\Trade;
@@ -58,7 +59,6 @@ class TradeTest extends TestCase
         $this->assertTrue($trade->invoices->contains($invoice));
     }
 
-
     /** @test for the 1 to n polymorph Email - Trade relation*/
     public function a_trade_morphs_many_emails(){
         $user = User::factory()->create(['type'=>UserTypeEnum::Applicant]);
@@ -71,4 +71,14 @@ class TradeTest extends TestCase
         $this->assertInstanceOf('Illuminate\Database\Eloquent\Collection', $trade->emails);
     }
 
+    /** @test for the 1 to n polymorph Notification - Trade relation*/
+    public function a_trade_morphs_many_notifications(){
+        $user = User::factory()->create(['type'=>UserTypeEnum::Applicant]);
+        $request = Request::factory()->create(['applicant_id' => $user->id]);
+        $bid = Bid::factory()->create(['applicant_id'=>$user->id, 'request_id'=>$request->id]);
+        $trade = Trade::factory()->create(['request_id'=>$request->id, 'bid_id'=>$bid->id]);
+        $notification = Notification::factory()->create(['user_id'=> $user->id, 'notifiable_id' => $trade->id, 'notifiable_type' => "App\Models\Trade"]);
+
+        $this->assertInstanceOf('Illuminate\Database\Eloquent\Collection', $trade->notifications);
+    }
 }

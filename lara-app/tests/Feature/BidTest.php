@@ -6,6 +6,7 @@ use App\Enums\UserTypeEnum;
 use App\Models\Bid;
 use App\Models\Email;
 use App\Models\EmailTemplate;
+use App\Models\Notification;
 use App\Models\Request;
 use App\Models\Trade;
 use App\Models\User;
@@ -57,5 +58,15 @@ class BidTest extends TestCase
         $email = Email::factory()->create(['user_id'=>$user->id, 'template_id'=>$emaiTemplate->id, 'emailable_id' => $bid->id, 'emailable_type' => "App\Models\Bid"]);
 
         $this->assertInstanceOf('Illuminate\Database\Eloquent\Collection', $bid->emails);
+    }
+
+    /** @test for the 1 to n polymorph Notification - Bid relation*/
+    public function a_bid_morphs_many_notifications(){
+        $user = User::factory()->create(['type'=>UserTypeEnum::Applicant]);
+        $request = Request::factory()->create(['applicant_id' => $user->id]);
+        $bid = Bid::factory()->create(['applicant_id'=>$user->id, 'request_id'=>$request->id]);
+        $notification = Notification::factory()->create(['user_id'=> $user->id, 'notifiable_id' => $bid->id, 'notifiable_type' => "App\Models\Bid"]);
+
+        $this->assertInstanceOf('Illuminate\Database\Eloquent\Collection', $bid->notifications);
     }
 }

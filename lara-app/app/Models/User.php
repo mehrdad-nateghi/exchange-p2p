@@ -87,6 +87,13 @@ class User extends Model
          return $this->morphMany(Email::class, 'emailable');
      }
 
+        /*
+    * Get the Notifications related the User (1 to n user-notification polymorphic relation)
+    */
+    public function relatedNotifications(){
+        return $this->morphMany(Notification::class, 'notifiable');
+    }
+
     /*
     * Enum casting for the status and type fields
     */

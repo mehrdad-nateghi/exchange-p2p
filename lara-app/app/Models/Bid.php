@@ -52,6 +52,13 @@ class Bid extends Model
         return $this->morphMany(Email::class, 'emailable');
     }
 
+    /*
+    * Get the Notifications related to the Bid
+    */
+    public function notifications(){
+        return $this->morphMany(Notification::class, 'notifiable');
+    }
+
 
     /*
     * Enum casting for the status and type fields

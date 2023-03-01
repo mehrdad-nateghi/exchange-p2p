@@ -7,6 +7,7 @@ use App\Models\Bid;
 use App\Models\Country;
 use App\Models\Email;
 use App\Models\EmailTemplate;
+use App\Models\Notification;
 use App\Models\PaymentMethod;
 use App\Models\Request;
 use App\Models\Trade;
@@ -58,5 +59,14 @@ class RequestTest extends TestCase
         $email = Email::factory()->create(['user_id'=>$user->id, 'template_id'=>$emaiTemplate->id, 'emailable_id' => $user->id, 'emailable_type' => "App\Models\Request"]);
 
         $this->assertInstanceOf('Illuminate\Database\Eloquent\Collection', $request->emails);
+    }
+
+    /** @test for the 1 to n polymorph Notification - Request relation*/
+    public function a_request_morphs_many_notifications(){
+        $user = User::factory()->create(['type'=>UserTypeEnum::Applicant]);
+        $request = Request::factory()->create(['applicant_id' => $user->id]);
+        $notification = Notification::factory()->create(['user_id'=> $user->id, 'notifiable_id' => $request->id, 'notifiable_type' => "App\Models\Request"]);
+
+        $this->assertInstanceOf('Illuminate\Database\Eloquent\Collection', $request->notifications);
     }
 }

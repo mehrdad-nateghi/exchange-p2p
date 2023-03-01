@@ -22,6 +22,8 @@ class NotificationFactory extends Factory
             'class' => \App\Enums\NotificationClassEnum:: Information,
             'status' => \App\Enums\NotificationStatusEnum:: Unseen,
             'user_id' => '1',
+            'notifiable_type' => 'App\Models\User' ,
+            'notifiable_id' => 1,
             'created_at' => fake()->dateTime()
         ];
     }
