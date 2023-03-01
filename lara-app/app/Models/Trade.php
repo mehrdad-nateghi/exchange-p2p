@@ -50,6 +50,13 @@ class Trade extends Model
     }
 
     /*
+    * Get the Notifications related to the Trade
+    */
+    public function notifications(){
+        return $this->morphMany(Notification::class, 'notifiable');
+    }
+
+    /*
     * Enum casting for the status field
     */
     protected $casts = [

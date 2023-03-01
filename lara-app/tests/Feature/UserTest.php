@@ -106,4 +106,13 @@ class UserTest extends TestCase
         $this->assertTrue($user->emails->contains($email));
     }
 
+    /** @test for the 1 to n polymorph Notification - User relation*/
+    public function a_user_morphs_many_notifications(){
+        $user = User::factory()->create(['type'=>UserTypeEnum::Applicant]);
+        $request = Request::factory()->create(['applicant_id' => $user->id]);
+        $notification = Notification::factory()->create(['user_id'=> $user->id, 'notifiable_id' => $user->id, 'notifiable_type' => "App\Models\User"]);
+
+        $this->assertInstanceOf('Illuminate\Database\Eloquent\Collection', $user->relatedNotifications);
+    }
+
 }

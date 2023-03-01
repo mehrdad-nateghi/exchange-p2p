@@ -31,6 +31,13 @@ class Notification extends Model
     }
 
     /*
+    * Set up polymorphic relationship
+    */
+    public function notifiable(){
+        return $this->morphTo();
+    }
+
+    /*
     * Enum casting for the status field
     */
     protected $casts = [

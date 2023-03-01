@@ -20,6 +20,8 @@ return new class extends Migration
             $table->tinyInteger('class')->default(0);
             $table->tinyInteger('status')->default(0);
             $table->unsignedBigInteger('user_id');
+            $table->string('notifiable_type');
+            $table->unsignedBigInteger('notifiable_id');
             $table->timestamp('created_at');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
