@@ -21,6 +21,8 @@ return new class extends Migration
             $table->decimal('upper_bound_feasibility_threshold',13,2);
             $table->decimal('acceptance_threshold',13,2);
             $table->tinyInteger('status');
+            $table->string('description');
+            $table->string('payment_reason');
             $table->boolean('is_removed');
             $table->unsignedBigInteger('applicant_id');
             $table->timestamp('created_at');

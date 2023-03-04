@@ -20,6 +20,7 @@ class BidFactory extends Factory
             'type' => \App\Enums\BidTypeEnum::Sell ,
             'bid_rate' => fake()->randomFloat($nbMaxDecimals = 2 , $min = 0, $max = 99,999,999,999.99),
             'status' => \App\Enums\BidStatusEnum::Registered,
+            'description' => fake()->text($maxNbChars = 50),
             'request_id' => '1' ,
             'applicant_id' => '1' ,
             'created_at' => fake()->dateTime(),
