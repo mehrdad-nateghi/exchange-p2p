@@ -18,13 +18,12 @@ return new class extends Migration
             $table->tinyInteger('type');
             $table->integer('bid_rate');
             $table->tinyInteger('status');
+            $table->string('description');
             $table->unsignedBigInteger('request_id');
             $table->unsignedBigInteger('applicant_id');
             $table->timestamp('created_at');
             $table->foreign('applicant_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('request_id')->references('id')->on('requests')->onDelete('cascade');
-
-
         });
     }
 
