@@ -20,8 +20,8 @@ use Tests\TestCase;
 
 class TradeTest extends TestCase
 {
-    /*     use RefreshDatabase, WithFaker;
- */
+    use RefreshDatabase, WithFaker;
+
     /** @test for the 1 to n Request - Trade relation*/
     public function a_trade_belongs_to_a_request()
     {

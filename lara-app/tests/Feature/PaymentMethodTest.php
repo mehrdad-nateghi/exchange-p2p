@@ -15,8 +15,8 @@ use Tests\TestCase;
 
 class PaymentMethodTest extends TestCase
 {
-/*     use RefreshDatabase, WithFaker;
- */
+    use RefreshDatabase, WithFaker;
+
     /** @test for the 1 to n Country - PaymentMethod relation*/
     public function a_paymentmethod_belongs_to_a_country()
     {

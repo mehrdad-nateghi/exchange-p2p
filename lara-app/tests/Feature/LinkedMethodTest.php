@@ -20,8 +20,8 @@ use Tests\TestCase;
 
 class LinkedMethodTest extends TestCase
 {
-/*     use RefreshDatabase, WithFaker;
- */
+    use RefreshDatabase, WithFaker;
+
     /** @test for the 1 to n PaymentMethod - LinkedMethod relation*/
     public function a_linkedmethod_belongs_to_a_paymentmethod()
     {

@@ -19,8 +19,7 @@ use Tests\TestCase;
 
 class TransactionMethodTest extends TestCase
 {
-        /*     use RefreshDatabase, WithFaker;
- */
+    use RefreshDatabase, WithFaker;
 
     /** @test for the 1 to n TransactionMethod - Transaction relation*/
     public function a_transactionmethod_has_many_transactions()

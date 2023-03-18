@@ -14,8 +14,8 @@ use Tests\TestCase;
 
 class NotificationTest extends TestCase
 {
-/*     use RefreshDatabase, WithFaker;
- */
+    use RefreshDatabase, WithFaker;
+
     /** @test for the 1 to n User - Notification relation*/
     public function a_notification_belongs_to_a_user()
     {

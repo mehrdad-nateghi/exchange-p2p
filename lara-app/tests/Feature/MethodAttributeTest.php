@@ -15,8 +15,8 @@ use Tests\TestCase;
 
 class MethodAttributeTest extends TestCase
 {
-/*     use RefreshDatabase, WithFaker;
- */
+    use RefreshDatabase, WithFaker;
+
     /** @test for the 1 to n paymentmethod - methodattribute relation*/
     public function a_methodattribute_belongs_to_a_paymentmethod()
     {

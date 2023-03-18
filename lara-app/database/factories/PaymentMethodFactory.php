@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Country;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,7 +19,7 @@ class PaymentMethodFactory extends Factory
     {
         return [
             'name' => fake()->word,
-            'country_id' => '1'
+            'country_id' => Country::factory()
         ];
     }
 }

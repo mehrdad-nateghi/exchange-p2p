@@ -2,6 +2,9 @@
 
 namespace Database\Factories;
 
+use App\Models\EmailTemplate;
+use App\Models\Request;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,10 +20,11 @@ class EmailFactory extends Factory
     public function definition()
     {
         return [
+            'user_id' => User::factory(),
             'values' => fake()->text($maxNbChars = 50),
-            'template_id' => 1 ,
-            'emailable_type' => 'App\Models\User' ,
-            'emailable_id' => 1,
+            'template_id' => EmailTemplate::factory(),
+            'emailable_type' => 'App\Models\Request',
+            'emailable_id' => Request::factory(),
             'created_at' => fake()->dateTime()
         ];
     }

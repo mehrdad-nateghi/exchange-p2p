@@ -2,13 +2,12 @@
 
 namespace Database\Factories;
 
-use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\AuthenticationLog>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\FrequentQuestion>
  */
-class AuthenticationLogFactory extends Factory
+class FrequentQuestionFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -18,8 +17,8 @@ class AuthenticationLogFactory extends Factory
     public function definition()
     {
         return [
-            'applicant_id' => User::factory(),
-            'created_at' => fake()->dateTime()
+            'question' => fake()->text($maxNbChars = 50),
+            'answer' => fake()->text($maxNbChars = 50)
         ];
     }
 }
