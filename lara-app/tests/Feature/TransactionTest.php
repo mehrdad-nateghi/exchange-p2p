@@ -20,6 +20,7 @@ use Tests\TestCase;
 
 class TransactionTest extends TestCase
 {
+    use RefreshDatabase, WithFaker;
 
     /** @test for the 1 to n TransactionMethod - Transaction relation*/
     public function a_transaction_belongs_to_a_transactionmethod()

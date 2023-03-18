@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -27,7 +28,7 @@ class RequestFactory extends Factory
             'payment_reason' => fake()->text($maxNbChars = 50),
             'is_removed' => '0' ,
             'created_at' => fake()->dateTime(),
-            'applicant_id' => '1' ,
+            'applicant_id' => User::factory(),
         ];
     }
 }

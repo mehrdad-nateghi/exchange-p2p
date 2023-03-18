@@ -18,8 +18,8 @@ use Tests\TestCase;
 
 class RequestTest extends TestCase
 {
-/*     use RefreshDatabase, WithFaker;
- */
+    use RefreshDatabase, WithFaker;
+
     /** @test for the m to n Request - PaymentMethod relation*/
     public function a_request_belongs_to_many_paymentmethod()
     {

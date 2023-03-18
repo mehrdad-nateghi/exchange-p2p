@@ -19,8 +19,8 @@ use Tests\TestCase;
 
 class InvoiceTest extends TestCase
 {
-    /*     use RefreshDatabase, WithFaker;
- */
+    use RefreshDatabase, WithFaker;
+
     /** @test for the 1 to n User - Invoice relation*/
     public function a_invoice_belongs_to_a_user()
     {

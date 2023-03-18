@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Request;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -20,9 +22,9 @@ class NotificationFactory extends Factory
             'title' => fake()->word,
             'body' => fake()->text($maxNbChars = 50) ,
             'status' => \App\Enums\NotificationStatusEnum:: Unseen,
-            'user_id' => '1',
-            'notifiable_type' => 'App\Models\User' ,
-            'notifiable_id' => 1,
+            'user_id' => User::factory(),
+            'notifiable_type' => 'App\Models\Request',
+            'notifiable_id' => Request::factory(),
             'created_at' => fake()->dateTime()
         ];
     }

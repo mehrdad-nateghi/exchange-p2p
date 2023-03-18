@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\PaymentMethod;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,8 +19,8 @@ class LinkedMethodFactory extends Factory
     public function definition()
     {
         return [
-            'applicant_id' => "1",
-            'method_type_id' => "1",
+            'applicant_id' => User::factory(),
+            'method_type_id' => PaymentMethod::factory(),
             'created_at' => fake()->dateTime()
         ];
     }

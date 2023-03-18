@@ -11,6 +11,8 @@ use Tests\TestCase;
 
 class AuthenticationLogTest extends TestCase
 {
+    use RefreshDatabase, WithFaker;
+
     /** @test for the 1 to n User - AuthenticationLog relation*/
     public function an_authenticationlog_belongs_to_a_user()
     {

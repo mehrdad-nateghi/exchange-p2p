@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Request;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -21,8 +23,8 @@ class BidFactory extends Factory
             'bid_rate' => fake()->randomFloat($nbMaxDecimals = 2 , $min = 0, $max = 99,999,999,999.99),
             'status' => \App\Enums\BidStatusEnum::Registered,
             'description' => fake()->text($maxNbChars = 50),
-            'request_id' => '1' ,
-            'applicant_id' => '1' ,
+            'request_id' => Request::factory(),
+            'applicant_id' => User::factory(),
             'created_at' => fake()->dateTime(),
         ];
     }

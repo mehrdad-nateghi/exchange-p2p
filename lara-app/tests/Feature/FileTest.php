@@ -20,6 +20,8 @@ use Tests\TestCase;
 
 class FileTest extends TestCase
 {
+    use RefreshDatabase, WithFaker;
+
     /** @test for the 1 to 1 Transaction - File relation*/
     public function a_file_blongs_to_a_transaction()
     {

@@ -2,6 +2,9 @@
 
 namespace Database\Factories;
 
+use App\Models\LinkedMethod;
+use App\Models\Trade;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -22,9 +25,9 @@ class InvoiceFactory extends Factory
             'trade_fee' => fake()->randomFloat($nbMaxDecimals = 2 , $min = 0, $max = 99,999,999,999.99),
             'trade_gross_value' => fake()->randomFloat($nbMaxDecimals = 2 , $min = 0, $max = 99,999,999,999.99),
             'status' => \App\Enums\InvoiceStatusEnum::Open,
-            'applicant_id' => '1',
-            'trade_id' => '1',
-            'target_account_id' => '1',
+            'applicant_id' => User::factory(),
+            'trade_id' => Trade::factory(),
+            'target_account_id' => LinkedMethod::factory(),
             'created_at' => fake()->dateTime(),
         ];
     }

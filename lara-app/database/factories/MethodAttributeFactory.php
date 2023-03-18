@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\PaymentMethod;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,7 +19,7 @@ class MethodAttributeFactory extends Factory
     {
         return [
             'name' => fake()->word,
-            'payment_method_id'=> '1'
+            'payment_method_id' => PaymentMethod::factory()
         ];
     }
 }

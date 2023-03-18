@@ -12,8 +12,7 @@ use Tests\TestCase;
 
 class EmailTemplateTest extends TestCase
 {
-    /*     use RefreshDatabase, WithFaker;
- */
+    use RefreshDatabase, WithFaker;
 
     /** @test for the 1 to n EmailTemplate - Email relation*/
     public function a_emailtemplate_has_many_emails()

@@ -18,8 +18,7 @@ use Tests\TestCase;
 
 class EmailTest extends TestCase
 {
-    /*     use RefreshDatabase, WithFaker;
- */
+    use RefreshDatabase, WithFaker;
 
     /** @test for the 1 to n User - Email relation*/
     public function an_email_belongs_to_a_user()

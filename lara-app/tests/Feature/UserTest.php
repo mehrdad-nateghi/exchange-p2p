@@ -22,7 +22,7 @@ use Tests\TestCase;
 
 class UserTest extends TestCase
 {
-/*     use RefreshDatabase, WithFaker; */
+    use RefreshDatabase, WithFaker;
 
     /** @test for the 1 to n User - Notification relation*/
     public function a_user_has_many_notifications()

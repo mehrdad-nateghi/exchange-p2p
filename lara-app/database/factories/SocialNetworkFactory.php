@@ -2,13 +2,12 @@
 
 namespace Database\Factories;
 
-use App\Models\Transaction;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\File>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\SocialNetwork>
  */
-class FileFactory extends Factory
+class SocialNetworkFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -18,10 +17,10 @@ class FileFactory extends Factory
     public function definition()
     {
         return [
+            'name' => fake()->word ,
             'url' => fake()->text($maxNbChars = 50) ,
-            'alt' => fake()->word() ,
-            'type' => fake()->word() ,
-            'transaction_id' => Transaction::factory()
+            'status' => true ,
+            'logo_url' => fake()->text($maxNbChars = 50)
         ];
     }
 }
