@@ -10,52 +10,52 @@ use App\Models\PaymentMethod;
 use App\Models\Request;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class PaymentMethodTest extends TestCase
 {
-    use RefreshDatabase, WithFaker;
+    use RefreshDatabase;
+
+    protected $country;
+    protected $paymentMethod;
+    protected $user;
+    protected $request;
+    protected $methodAttribute;
+    protected $linkedMethod;
+
+    protected function setUp(): void
+    {
+        Parent::setUp();
+
+        $this->user = User::factory()->create(['type'=>UserTypeEnum::Applicant]);
+        $this->country = Country::factory()->create();
+        $this->paymentMethod = PaymentMethod::factory()->create(['country_id' => $this->country->id]);
+        $this->request = Request::factory()->create(['applicant_id' => $this->user->id]);
+        $this->methodAttribute = MethodAttribute::factory()->create(['payment_method_id'=>$this->paymentMethod->id]);
+        $this->linkedMethod = LinkedMethod::factory()->create(['method_type_id'=>$this->paymentMethod->id, 'applicant_id'=>$this->user->id]);
+    }
 
     /** @test for the 1 to n Country - PaymentMethod relation*/
     public function a_paymentmethod_belongs_to_a_country()
     {
-        $country = Country::factory()->create();
-        $paymentMethod = PaymentMethod::factory()->create(['country_id' => $country->id]);
-
-        $this->assertInstanceOf(Country::class, $paymentMethod->country);
+        $this->assertInstanceOf(Country::class, $this->paymentMethod->country);
     }
 
     /** @test for the 1 to n PaymentMethod - MethodAttribute relation*/
     public function a_paymentmethod_has_many_methodattributes()
     {
-        $country = Country::factory()->create();
-        $paymentMethod = PaymentMethod::factory()->create(['country_id' => $country->id]);
-        $methodAttribute = MethodAttribute::factory()->create(['payment_method_id'=>$paymentMethod->id]);
-
-        $this->assertTrue($paymentMethod->attributes->contains($methodAttribute));
+        $this->assertTrue($this->paymentMethod->attributes->contains($this->methodAttribute));
     }
 
     /** @test for the 1 to n PaymentMethod - LinkedMethod relation*/
     public function a_paymentmethod_has_many_linkedmethods()
     {
-        $country = Country::factory()->create();
-        $user = User::factory()->create(['type'=>UserTypeEnum::Applicant]);
-        $paymentMethod = PaymentMethod::factory()->create(['country_id' => $country->id]);
-        $linkedMethod = LinkedMethod::factory()->create(['method_type_id'=>$paymentMethod->id, 'applicant_id'=>$user->id]);
-
-        $this->assertTrue($paymentMethod->linkedMethods->contains($linkedMethod));
+        $this->assertTrue($this->paymentMethod->linkedMethods->contains($this->linkedMethod));
     }
 
     /** @test for the m to n Request - PaymentMethod relation*/
     public function a_paymentmethod_belongs_to_many_requests()
     {
-        $user = User::factory()->create(['type'=>UserTypeEnum::Applicant]);
-        $country = Country::factory()->create();
-        $paymentMethod = PaymentMethod::factory()->create(['country_id' => $country->id]);
-        $request = Request::factory()->create(['applicant_id' => $user->id]);
-        $request->paymentMethods()->attach($paymentMethod);
-
-        $this->assertInstanceOf('Illuminate\Database\Eloquent\Collection', $paymentMethod->requests);
+        $this->assertInstanceOf('Illuminate\Database\Eloquent\Collection', $this->paymentMethod->requests);
     }
 }

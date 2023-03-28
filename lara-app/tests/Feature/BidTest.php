@@ -16,57 +16,57 @@ use Tests\TestCase;
 
 class BidTest extends TestCase
 {
-    use RefreshDatabase, WithFaker;
+    use RefreshDatabase;
+
+    protected $user;
+    protected $request;
+    protected $bid;
+    protected $trade;
+    protected $emaiTemplate;
+    protected $email;
+    protected $notification;
+
+
+    protected function setUp() :void
+    {
+        parent::setUp();
+
+        $this->user = User::factory()->create(['type'=>UserTypeEnum::Applicant]);
+        $this->request = Request::factory()->create(['applicant_id' => $this->user->id]);
+        $this->bid = Bid::factory()->create(['applicant_id'=>$this->user->id, 'request_id'=>$this->request->id]);
+        $this->trade = Trade::factory()->create(['request_id' => $this->request->id, 'bid_id' => $this->bid->id]);
+        $this->emaiTemplate = EmailTemplate::factory()->create();
+        $this->email = Email::factory()->create(['user_id'=>$this->user->id, 'template_id'=>$this->emaiTemplate->id, 'emailable_id' => $this->bid->id, 'emailable_type' => "App\Models\Bid"]);
+        $this->notification = Notification::factory()->create(['user_id'=> $this->user->id, 'notifiable_id' => $this->bid->id, 'notifiable_type' => "App\Models\Bid"]);
+    }
 
     /** @test for the 1 to n User - Bid relation*/
     public function a_bid_belongs_to_a_user()
     {
-        $user = User::factory()->create(['type'=>UserTypeEnum::Applicant]);
-        $request = Request::factory()->create(['applicant_id' => $user->id]);
-        $bid = Bid::factory()->create(['applicant_id'=>$user->id, 'request_id'=>$request->id]);
-
-        $this->assertInstanceOf(User::class, $bid->user);
+        $this->assertInstanceOf(User::class, $this->bid->user);
     }
 
     /** @test for the 1 to n Request - Bid relation*/
     public function a_bid_belongs_to_a_request()
     {
-        $user = User::factory()->create(['type'=>UserTypeEnum::Applicant]);
-        $request = Request::factory()->create(['applicant_id' => $user->id]);
-        $bid = Bid::factory()->create(['applicant_id'=>$user->id, 'request_id'=>$request->id]);
-
-        $this->assertInstanceOf(Request::class, $bid->request);
+        $this->assertInstanceOf(Request::class, $this->bid->request);
     }
 
     /** @test for the 1 to 1 Bid - Trade relation*/
     public function a_bid_has_a_trade()
     {
-        $user = User::factory()->create(['type'=>UserTypeEnum::Applicant]);
-        $request = Request::factory()->create(['applicant_id' => $user->id]);
-        $bid = Bid::factory()->create(['applicant_id'=>$user->id, 'request_id'=>$request->id]);
-        $trade = Trade::factory()->create(['request_id' => $request->id, 'bid_id' => $bid->id]);
-
-        $this->assertInstanceOf(Trade::class, $bid->trade);
+        $this->assertInstanceOf(Trade::class, $this->bid->trade);
     }
 
     /** @test for the 1 to n polymorph Email - Bid relation*/
-    public function a_bid_morphs_many_emails(){
-        $user = User::factory()->create(['type'=>UserTypeEnum::Applicant]);
-        $request = Request::factory()->create(['applicant_id' => $user->id]);
-        $bid = Bid::factory()->create(['applicant_id'=>$user->id, 'request_id'=>$request->id]);
-        $emaiTemplate = EmailTemplate::factory()->create();
-        $email = Email::factory()->create(['user_id'=>$user->id, 'template_id'=>$emaiTemplate->id, 'emailable_id' => $bid->id, 'emailable_type' => "App\Models\Bid"]);
-
-        $this->assertInstanceOf('Illuminate\Database\Eloquent\Collection', $bid->emails);
+    public function a_bid_morphs_many_emails()
+    {
+        $this->assertInstanceOf('Illuminate\Database\Eloquent\Collection', $this->bid->emails);
     }
 
     /** @test for the 1 to n polymorph Notification - Bid relation*/
-    public function a_bid_morphs_many_notifications(){
-        $user = User::factory()->create(['type'=>UserTypeEnum::Applicant]);
-        $request = Request::factory()->create(['applicant_id' => $user->id]);
-        $bid = Bid::factory()->create(['applicant_id'=>$user->id, 'request_id'=>$request->id]);
-        $notification = Notification::factory()->create(['user_id'=> $user->id, 'notifiable_id' => $bid->id, 'notifiable_type' => "App\Models\Bid"]);
-
-        $this->assertInstanceOf('Illuminate\Database\Eloquent\Collection', $bid->notifications);
+    public function a_bid_morphs_many_notifications()
+    {
+        $this->assertInstanceOf('Illuminate\Database\Eloquent\Collection', $this->bid->notifications);
     }
 }

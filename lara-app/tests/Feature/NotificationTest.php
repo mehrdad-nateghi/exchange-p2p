@@ -9,63 +9,65 @@ use App\Models\Request;
 use App\Models\Trade;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class NotificationTest extends TestCase
 {
-    use RefreshDatabase, WithFaker;
+    use RefreshDatabase;
+
+    protected $user;
+    protected $request;
+    protected $bid;
+    protected $trade;
+    protected $notification;
+
+    protected function setUp(): void
+    {
+        Parent::setUp();
+
+        $this->user = User::factory()->create(['type'=>UserTypeEnum::Applicant]);
+        $this->request = Request::factory()->create(['applicant_id' => $this->user->id]);
+        $this->bid = Bid::factory()->create(['applicant_id'=>$this->user->id, 'request_id'=>$this->request->id]);
+        $this->trade = Trade::factory()->create(['request_id'=>$this->request->id, 'bid_id'=>$this->bid->id]);
+        $this->notification = Notification::factory()->create(['user_id'=> $this->user->id, 'notifiable_id' => $this->trade->id, 'notifiable_type' => "App\Models\Trade"]);
+    }
 
     /** @test for the 1 to n User - Notification relation*/
     public function a_notification_belongs_to_a_user()
     {
-        $user = User::factory()->create(['type'=>UserTypeEnum::Applicant]);
-        $notification = Notification::factory()->create(['user_id'=> $user->id]);
-
-        $this->assertInstanceOf(User::class, $notification->user);
+        $this->assertInstanceOf(User::class, $this->notification->user);
     }
 
     /** @test for the 1 to n polymorph Notification - Request relation*/
     public function a_notification_can_be_morphed_to_a_request_model()
     {
-        $user = User::factory()->create(['type'=>UserTypeEnum::Applicant]);
-        $request = Request::factory()->create(['applicant_id' => $user->id]);
-        $notification = Notification::factory()->create(['user_id'=> $user->id, 'notifiable_id' => $request->id, 'notifiable_type' => "App\Models\Request"]);
+        $this->notification = Notification::factory()->create(['user_id'=> $this->user->id, 'notifiable_id' => $this->request->id, 'notifiable_type' => "App\Models\Request"]);
 
-        $this->assertInstanceOf(Request::class, $notification->notifiable);
+        $this->assertInstanceOf(Request::class, $this->notification->notifiable);
     }
 
     /** @test for the 1 to n polymorph Notification - User relation*/
     public function a_notification_can_be_morphed_to_a_user_model()
     {
-        $user = User::factory()->create(['type'=>UserTypeEnum::Applicant]);
-        $request = Request::factory()->create(['applicant_id' => $user->id]);
-        $notification = Notification::factory()->create(['user_id'=> $user->id, 'notifiable_id' => $user->id, 'notifiable_type' => "App\Models\User"]);
+        $this->notification = Notification::factory()->create(['user_id'=> $this->user->id, 'notifiable_id' => $this->user->id, 'notifiable_type' => "App\Models\User"]);
 
-        $this->assertInstanceOf(User::class, $notification->notifiable);
+        $this->assertInstanceOf(User::class, $this->notification->notifiable);
     }
 
     /** @test for the 1 to n polymorph Notification - Bid relation*/
     public function a_notification_can_be_morphed_to_a_bid_model()
     {
-        $user = User::factory()->create(['type'=>UserTypeEnum::Applicant]);
-        $request = Request::factory()->create(['applicant_id' => $user->id]);
-        $bid = Bid::factory()->create(['applicant_id'=>$user->id, 'request_id'=>$request->id]);
-        $notification = Notification::factory()->create(['user_id'=> $user->id, 'notifiable_id' => $bid->id, 'notifiable_type' => "App\Models\Bid"]);
+        $this->notification = Notification::factory()->create(['user_id'=> $this->user->id, 'notifiable_id' => $this->bid->id, 'notifiable_type' => "App\Models\Bid"]);
 
-        $this->assertInstanceOf(Bid::class, $notification->notifiable);
+        $this->assertInstanceOf(Bid::class, $this->notification->notifiable);
     }
 
     /** @test for the 1 to n polymorph Notification - Trade relation*/
     public function a_notification_can_be_morphed_to_a_trade_model()
     {
-        $user = User::factory()->create(['type'=>UserTypeEnum::Applicant]);
-        $request = Request::factory()->create(['applicant_id' => $user->id]);
-        $bid = Bid::factory()->create(['applicant_id'=>$user->id, 'request_id'=>$request->id]);
-        $trade = Trade::factory()->create(['request_id'=>$request->id, 'bid_id'=>$bid->id]);
-        $notification = Notification::factory()->create(['user_id'=> $user->id, 'notifiable_id' => $trade->id, 'notifiable_type' => "App\Models\Trade"]);
+        $this->notification = Notification::factory()->create(['user_id'=> $this->user->id, 'notifiable_id' => $this->trade->id, 'notifiable_type' => "App\Models\Trade"]);
 
-        $this->assertInstanceOf(Trade::class, $notification->notifiable);
+        $this->assertInstanceOf(Trade::class, $this->notification->notifiable);
     }
 
 }
