@@ -20,23 +20,40 @@ use Tests\TestCase;
 
 class FileTest extends TestCase
 {
-    use RefreshDatabase, WithFaker;
+    use RefreshDatabase;
+
+    protected $country;
+    protected $paymentMethod;
+    protected $user;
+    protected $linkedMethod;
+    protected $request;
+    protected $bid;
+    protected $trade;
+    protected $invoice;
+    protected $transactionMethod;
+    protected $transaction;
+    protected $file;
+
+    protected function setUp(): void
+    {
+        Parent::setup();
+
+        $this->country = Country::factory()->create();
+        $this->paymentMethod = PaymentMethod::factory()->create(['country_id' => $this->country->id]);
+        $this->user = User::factory()->create(['type'=>UserTypeEnum::Applicant]);
+        $this->linkedMethod = LinkedMethod::factory()->create(['method_type_id'=>$this->paymentMethod->id, 'applicant_id'=>$this->user->id]);
+        $this->request = Request::factory()->create(['applicant_id' => $this->user->id]);
+        $this->bid = Bid::factory()->create(['applicant_id'=>$this->user->id, 'request_id'=>$this->request->id]);
+        $this->trade = Trade::factory()->create(['request_id'=>$this->request->id, 'bid_id'=>$this->bid->id]);
+        $this->invoice = Invoice::factory()->create(['applicant_id'=>$this->user->id, 'trade_id'=>$this->trade->id, 'target_account_id'=>$this->linkedMethod->id]);
+        $this->transactionMethod = TransactionMethod::factory()->create();
+        $this->transaction = Transaction::factory()->create(['invoice_id'=>$this->invoice->id, 'transaction_method_id'=>$this->transactionMethod->id]);
+        $this->file = File::factory()->create(['transaction_id' => $this->transaction->id]);
+    }
 
     /** @test for the 1 to 1 Transaction - File relation*/
     public function a_file_blongs_to_a_transaction()
     {
-        $country = Country::factory()->create();
-        $paymentMethod = PaymentMethod::factory()->create(['country_id' => $country->id]);
-        $user = User::factory()->create(['type'=>UserTypeEnum::Applicant]);
-        $linkedMethod = LinkedMethod::factory()->create(['method_type_id'=>$paymentMethod->id, 'applicant_id'=>$user->id]);
-        $request = Request::factory()->create(['applicant_id' => $user->id]);
-        $bid = Bid::factory()->create(['applicant_id'=>$user->id, 'request_id'=>$request->id]);
-        $trade = Trade::factory()->create(['request_id'=>$request->id, 'bid_id'=>$bid->id]);
-        $invoice = Invoice::factory()->create(['applicant_id'=>$user->id, 'trade_id'=>$trade->id, 'target_account_id'=>$linkedMethod->id]);
-        $transactionMethod = TransactionMethod::factory()->create();
-        $transaction = Transaction::factory()->create(['invoice_id'=>$invoice->id, 'transaction_method_id'=>$transactionMethod->id]);
-        $file = File::factory()->create(['transaction_id' => $transaction->id]);
-
-        $this->assertInstanceOf(Transaction::class, $file->transaction);
+        $this->assertInstanceOf(Transaction::class, $this->file->transaction);
     }
 }

@@ -6,19 +6,26 @@ use App\Enums\UserTypeEnum;
 use App\Models\AuthenticationLog;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class AuthenticationLogTest extends TestCase
 {
-    use RefreshDatabase, WithFaker;
+    use RefreshDatabase;
+
+    protected $user;
+    protected $authenticationLog;
+
+    protected function setUp(): void
+    {
+        Parent::setUp();
+
+        $this->user = User::factory()->create(['type'=>UserTypeEnum::Applicant]);
+        $this->authenticationLog = AuthenticationLog::factory()->create(['applicant_id'=> $this->user->id]);
+    }
 
     /** @test for the 1 to n User - AuthenticationLog relation*/
     public function an_authenticationlog_belongs_to_a_user()
     {
-        $user = User::factory()->create(['type'=>UserTypeEnum::Applicant]);
-        $authenticationLog = AuthenticationLog::factory()->create(['applicant_id'=> $user->id]);
-
-        $this->assertInstanceOf(User::class, $authenticationLog->user);
+        $this->assertInstanceOf(User::class, $this->authenticationLog->user);
     }
 }
