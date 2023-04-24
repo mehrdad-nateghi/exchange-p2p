@@ -31,7 +31,7 @@ class RequestController extends Controller
      *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="Successful operation / List of requests by filter",
+     *         description="Successful operation",
      *         )
      *     )
      * )
