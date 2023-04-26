@@ -72,6 +72,35 @@
                     }
                 }
             }
+        },
+        "/api/requests/applicant/{applicantId}": {
+            "get": {
+                "tags": [
+                    "Requests"
+                ],
+                "summary": "Get all requests of the specific applicant",
+                "operationId": "467afa787f86a68259727db7727a50fe",
+                "parameters": [
+                    {
+                        "name": "applicantId",
+                        "in": "path",
+                        "description": "ID of the applicant to fetch its requests",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "Applicant not found"
+                    }
+                }
+            }
         }
     },
     "tags": [
