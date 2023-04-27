@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Route;
 /* Request Routes */
 Route::get('/requests', [RequestController::class,'index'])->name('requests.index');
 Route::get('/requests/applicant/{applicantId}', [RequestController::class,'getApplicantAllRequests'])->name('requests.applicant.getRequests');
+Route::get('/requests/applicant/{applicantId}/{requestId}', [RequestController::class,'getApplicantRequest'])->name('requests.applicant.getApplicantRequest');
 
 /* Bid Routes */
 Route::get('/bids/request/{requestId}', [BidController::class,'getBids'])->name('bids.request.getBids');

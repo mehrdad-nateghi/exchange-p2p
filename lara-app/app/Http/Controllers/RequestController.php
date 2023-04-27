@@ -89,4 +89,57 @@ class RequestController extends Controller
 
         return $response;
     }
+
+    /**
+     * @OA\Get(
+     *     path="/api/requests/applicant/{applicantId}/{requestId}",
+     *     summary="Get specific request of the specific applicant",
+     *     tags={"Requests"},
+     *     @OA\Parameter(
+     *         name="applicantId",
+     *         in="path",
+     *         description="ID of the applicant to fetch its request",
+     *         required=true,
+     *         @OA\Schema(type="integer", format="int64")
+     *     ),
+     *     @OA\Parameter(
+     *         name="requestId",
+     *         in="path",
+     *         description="ID of the request",
+     *         required=true,
+     *         @OA\Schema(type="integer", format="int64")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation"
+     *      ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Applicant not found or Request not found"
+     *     )
+     *     )
+     * )
+     */
+    public function getApplicantRequest($applicantId, $requestId)
+    {
+        $response = '';
+
+        $user = UserModel::find($applicantId);
+        if($user instanceof UserModel && $user->type == \App\Enums\UserTypeEnum::Applicant ) {
+            $request = $user->requests()->where('id',$requestId)->first();
+
+            if($request instanceof RequestModel) {
+                $response = response()->json(['request' => new RequestResource($request)], 200);
+            }
+            else {
+                $response = response()->json(['message' => 'Request not found.'], 404);
+            }
+        }
+        else {
+            $response = response()->json(['message' => 'Applicant not found.'], 404);
+        }
+
+        return $response;
+    }
+
 }
