@@ -6,6 +6,7 @@ use App\Http\Resources\RequestResource;
 use App\Models\Request as RequestModel;
 use App\Models\User as UserModel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 /**
  * @OA\Tag(
@@ -140,6 +141,99 @@ class RequestController extends Controller
         }
 
         return $response;
+    }
+
+
+
+    /**
+     * @OA\Get(
+     *     path="/api/requests/filter-requests",
+     *     summary="Get all requests by filter",
+     *     tags={"Requests"},
+     *     @OA\Parameter(
+     *         name="payment_methods[]",
+     *         in="query",
+     *         description="Filter requests by payment methods",
+     *         @OA\Schema(
+     *             type="array",
+     *             @OA\Items(type="integer")
+     *         ),
+     *         style="form"
+     *     ),
+     *     @OA\Parameter(
+     *         name="request_status",
+     *         in="query",
+     *         description="Filter requests by status",
+     *         @OA\Schema(type="string"),
+     *         style="form"
+     *     ),
+     *     @OA\Parameter(
+     *         name="trade_volume_min",
+     *         in="query",
+     *         description="Filter requests by minimum trade volume",
+     *         @OA\Schema(type="number"),
+     *         style="form"
+     *     ),
+     *     @OA\Parameter(
+     *         name="trade_volume_max",
+     *         in="query",
+     *         description="Filter requests by maximum trade volume",
+     *         @OA\Schema(type="number"),
+     *         style="form"
+     *     ),
+     *     @OA\Parameter(
+     *         name="order",
+     *         in="query",
+     *         description="Sort requests by order",
+     *         @OA\Schema(type="string", enum={"asc", "desc"}),
+     *         style="form"
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation"
+     *     )
+     * )
+     */
+    public function getAllRequestsByFilter(Request $request)
+    {
+        Log::debug($request->all());
+
+        $query = RequestModel::with('paymentMethods');
+
+        // Filter requests by PaymentMethods
+        if ($request->has('payment_methods')) {
+            $paymentMethods = $request->input('payment_methods');
+            $query->whereHas('paymentMethods', function ($q) use ($paymentMethods) {
+                $q->whereIn('payment_methods.id', $paymentMethods);
+            });
+        }
+
+        // Filter requests by status
+        if ($request->has('request_status')) {
+            $status = $request->input('request_status');
+            $query->where('status', $status);
+        }
+
+        // Filter requests by trade_volume
+        if ($request->has('trade_volume_min')) {
+            $min = $request->input('trade_volume_min');
+            $query->where('trade_volume', '>=', $min);
+        }
+
+        if ($request->has('trade_volume_max')) {
+            $max = $request->input('trade_volume_max');
+            $query->where('trade_volume', '<=', $max);
+        }
+
+        // Sort requests by order
+        if ($request->has('order')) {
+            $order = $request->input('order');
+            $query->orderBy('created_at', $order);
+        }
+
+        $requests = $query->get();
+
+        return response()->json(['requests' =>  RequestResource::collection($requests)], 200);
     }
 
 }

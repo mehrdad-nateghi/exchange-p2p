@@ -140,6 +140,74 @@
                     }
                 }
             }
+        },
+        "/api/requests/filter-requests": {
+            "get": {
+                "tags": [
+                    "Requests"
+                ],
+                "summary": "Get all requests by filter",
+                "operationId": "12ca952f0c8dce6e881dd50937dc0fd5",
+                "parameters": [
+                    {
+                        "name": "payment_methods[]",
+                        "in": "query",
+                        "description": "Filter requests by payment methods",
+                        "style": "form",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "integer"
+                            }
+                        }
+                    },
+                    {
+                        "name": "request_status",
+                        "in": "query",
+                        "description": "Filter requests by status",
+                        "style": "form",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "trade_volume_min",
+                        "in": "query",
+                        "description": "Filter requests by minimum trade volume",
+                        "style": "form",
+                        "schema": {
+                            "type": "number"
+                        }
+                    },
+                    {
+                        "name": "trade_volume_max",
+                        "in": "query",
+                        "description": "Filter requests by maximum trade volume",
+                        "style": "form",
+                        "schema": {
+                            "type": "number"
+                        }
+                    },
+                    {
+                        "name": "order",
+                        "in": "query",
+                        "description": "Sort requests by order",
+                        "style": "form",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "asc",
+                                "desc"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    }
+                }
+            }
         }
     },
     "tags": [
