@@ -21,6 +21,7 @@ class Request extends Model
         'lower_bound_feasibility_treshold',
         'upper_bound_feasibility_threshold',
         'acceptance_threshold',
+        'request_rate',
         'created_at'
     ];
 

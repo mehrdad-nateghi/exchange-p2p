@@ -20,6 +20,7 @@ return new class extends Migration
             $table->decimal('lower_bound_feasibility_threshold',13,2);
             $table->decimal('upper_bound_feasibility_threshold',13,2);
             $table->decimal('acceptance_threshold',13,2);
+            $table->decimal('request_rate',13,2);
             $table->tinyInteger('status');
             $table->string('description');
             $table->string('payment_reason');
