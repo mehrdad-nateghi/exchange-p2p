@@ -196,7 +196,7 @@ class RequestController extends Controller
      */
     public function getAllRequestsByFilter(Request $request)
     {
-        Log::debug($request->all());
+        // Log::debug($request->all());
 
         $query = RequestModel::with('paymentMethods');
 
@@ -234,6 +234,21 @@ class RequestController extends Controller
         $requests = $query->get();
 
         return response()->json(['requests' =>  RequestResource::collection($requests)], 200);
+    }
+
+
+    public function create(Request $request){
+
+        // For Sell Request: 1) The Requester must have Rial Linked Payment Method & 2) The Requester must define Request Payment Methods List
+
+
+        // For Buy Request: 1) The Requester must define Request Payment Methods List
+
+        $euro_daily_rate = config('constants.Euro_Daily_Rate');
+
+        return response()->json(['euro_daily_rate' =>  $euro_daily_rate], 200);
+
+
     }
 
 }
