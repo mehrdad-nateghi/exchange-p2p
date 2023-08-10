@@ -23,6 +23,7 @@ class RequestFactory extends Factory
             'lower_bound_feasibility_threshold' => fake()->randomFloat($nbMaxDecimals = 2 , $min = 0, $max = 99,999,999,999.99),
             'upper_bound_feasibility_threshold' => fake()->randomFloat($nbMaxDecimals = 2 , $min = 0, $max = 99,999,999,999.99),
             'acceptance_threshold' => fake()->randomFloat($nbMaxDecimals = 2 , $min = 0, $max = 99,999,999,999.99),
+            'request_rate' => fake()->randomFloat($nbMaxDecimals = 2 , $min = 0, $max = 99,999,999,999.99),
             'status' => \App\Enums\RequestStatusEnum::Pending ,
             'description' => fake()->text($maxNbChars = 50),
             'payment_reason' => fake()->text($maxNbChars = 50),
