@@ -2,8 +2,10 @@
 
 namespace Database\Factories;
 
+use App\Models\Request;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Request>
@@ -18,6 +20,7 @@ class RequestFactory extends Factory
     public function definition()
     {
         return [
+            'support_id' => 'RE-'. Str::uuid(),
             'type' => \App\Enums\RequestTypeEnum::Sell ,
             'trade_volume' => fake()->randomNumber($nbDigits = NULL, $strict = false),
             'lower_bound_feasibility_threshold' => fake()->randomFloat($nbMaxDecimals = 2 , $min = 0, $max = 99,999,999,999.99),

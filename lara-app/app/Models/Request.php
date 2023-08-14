@@ -15,6 +15,7 @@ class Request extends Model
     protected $table = 'requests';
 
     protected $fillable = [
+        'support_id',
         'type',
         'applicant_id',
         'trade_volume',
