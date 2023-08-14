@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('requests', function (Blueprint $table) {
             $table->id();
+            $table->string('support_id')->unique();
             $table->tinyInteger('type');
             $table->decimal('trade_volume',13,2);
             $table->decimal('lower_bound_feasibility_threshold',13,2);
