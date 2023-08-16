@@ -18,6 +18,7 @@ class Invoice extends Model
         'trade_id',
         'trade_net_value',
         'target_account_id',
+        'payment_reason',
         'created_at'
     ];
 
