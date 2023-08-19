@@ -6,7 +6,9 @@ use App\Enums\UserTypeEnum;
 use App\Models\Bid;
 use App\Models\Email;
 use App\Models\EmailTemplate;
+use App\Models\LinkedMethod;
 use App\Models\Notification;
+use App\Models\PaymentMethod;
 use App\Models\Request;
 use App\Models\Trade;
 use App\Models\User;
@@ -18,7 +20,9 @@ class BidTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected $paymentMethod;
     protected $user;
+    protected $linkedMethod;
     protected $request;
     protected $bid;
     protected $trade;
@@ -31,9 +35,11 @@ class BidTest extends TestCase
     {
         parent::setUp();
 
+        $this->paymentMethod = PaymentMethod::factory()->create();
         $this->user = User::factory()->create(['type'=>UserTypeEnum::Applicant]);
+        $this->linkedMethod = LinkedMethod::factory()->create(['method_type_id'=>$this->paymentMethod->id, 'applicant_id'=>$this->user->id]);
         $this->request = Request::factory()->create(['applicant_id' => $this->user->id]);
-        $this->bid = Bid::factory()->create(['applicant_id'=>$this->user->id, 'request_id'=>$this->request->id]);
+        $this->bid = Bid::factory()->create(['applicant_id'=>$this->user->id, 'request_id'=>$this->request->id, 'target_account_id'=>$this->linkedMethod->id]);
         $this->trade = Trade::factory()->create(['request_id' => $this->request->id, 'bid_id' => $this->bid->id]);
         $this->emaiTemplate = EmailTemplate::factory()->create();
         $this->email = Email::factory()->create(['user_id'=>$this->user->id, 'template_id'=>$this->emaiTemplate->id, 'emailable_id' => $this->bid->id, 'emailable_type' => "App\Models\Bid"]);
@@ -68,5 +74,11 @@ class BidTest extends TestCase
     public function a_bid_morphs_many_notifications()
     {
         $this->assertInstanceOf('Illuminate\Database\Eloquent\Collection', $this->bid->notifications);
+    }
+
+    /** @test for the 1 to n LinkedMethod - Bid relation*/
+    public function a_bid_belongs_to_a_linkedmethod()
+    {
+        $this->assertInstanceOf(LinkedMethod::class, $this->bid->linkedMethod);
     }
 }

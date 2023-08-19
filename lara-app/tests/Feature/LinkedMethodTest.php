@@ -37,7 +37,7 @@ class LinkedMethodTest extends TestCase
         $this->user = User::factory()->create(['type'=>UserTypeEnum::Applicant]);
         $this->linkedMethod = LinkedMethod::factory()->create(['method_type_id'=>$this->paymentMethod->id, 'applicant_id'=>$this->user->id]);
         $this->request = Request::factory()->create(['applicant_id' => $this->user->id]);
-        $this->bid = Bid::factory()->create(['applicant_id'=>$this->user->id, 'request_id'=>$this->request->id]);
+        $this->bid = Bid::factory()->create(['applicant_id'=>$this->user->id, 'request_id'=>$this->request->id, 'target_account_id'=>$this->linkedMethod->id]);
         $this->trade = Trade::factory()->create(['request_id'=>$this->request->id, 'bid_id'=>$this->bid->id]);
         $this->invoice = Invoice::factory()->create(['applicant_id'=>$this->user->id, 'trade_id'=>$this->trade->id, 'target_account_id'=>$this->linkedMethod->id]);
     }
@@ -64,5 +64,11 @@ class LinkedMethodTest extends TestCase
     public function a_linkedmethod_has_many_invoices()
     {
         $this->assertTrue($this->linkedMethod->invoices->contains($this->invoice));
+    }
+
+    /** @test for the 1 to n LinkedMethod - Invoice relation*/
+    public function a_linkedmethod_has_many_bids()
+    {
+        $this->assertTrue($this->linkedMethod->bids->contains($this->bid));
     }
 }

@@ -21,9 +21,11 @@ return new class extends Migration
             $table->string('description');
             $table->unsignedBigInteger('request_id');
             $table->unsignedBigInteger('applicant_id');
+            $table->unsignedBigInteger('target_account_id');
             $table->timestamp('created_at');
             $table->foreign('applicant_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('request_id')->references('id')->on('requests')->onDelete('cascade');
+            $table->foreign('target_account_id')->references('id')->on('linked_methods')->onDelete('cascade');
         });
     }
 

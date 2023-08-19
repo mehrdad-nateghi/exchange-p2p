@@ -16,6 +16,7 @@ class Bid extends Model
     protected $fillable = [
         'request_id',
         'applicant_id',
+        'target_account_id',
         'bid_rate',
         'created_at'
     ];
@@ -59,6 +60,12 @@ class Bid extends Model
         return $this->morphMany(Notification::class, 'notifiable');
     }
 
+    /*
+    * Get the LinkedMethod belongs to the Bid
+    */
+    public function linkedMethod(){
+        return $this->belongsTo(LinkedMethod::class, 'target_account_id');
+    }
 
     /*
     * Enum casting for the status and type fields

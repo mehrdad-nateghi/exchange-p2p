@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\LinkedMethod;
 use App\Models\Request;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -25,6 +26,7 @@ class BidFactory extends Factory
             'description' => fake()->text($maxNbChars = 50),
             'request_id' => Request::factory(),
             'applicant_id' => User::factory(),
+            'target_account_id' => LinkedMethod::factory(),
             'created_at' => fake()->dateTime(),
         ];
     }
