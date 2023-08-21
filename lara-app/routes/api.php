@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BidController;
+use App\Http\Controllers\FinancialController;
 use App\Http\Controllers\RequestController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -16,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-/* Request Routes */
+/* Requests Management Routes */
 Route::get('/requests', [RequestController::class,'index'])->name('requests.getByTypeFilter');
 Route::get('/requests/filter-requests', [RequestController::class,'getAllRequestsByFilter'])->name('requests.getByFilter');
 Route::get('/requests/applicant/{applicantId}', [RequestController::class,'getApplicantAllRequests'])->name('requests.getApplicantAllRequests');
@@ -24,10 +25,9 @@ Route::get('/requests/applicant/{applicantId}/{requestId}', [RequestController::
 Route::get('/requests/create', [RequestController::class,'create'])->name('requests.create');
 
 
-/* Bid Routes */
+/* Bid Management Routes */
 Route::get('/bids/request/{requestId}', [BidController::class,'getBids'])->name('bids.request.getBids');
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-
