@@ -16,14 +16,15 @@ class RequestResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'support_id' => $this->support_id,
             'type' => $this->type,
             'trade_volume' => $this->trade_volume,
             'lower_bound_feasibility_threshold' => (string) $this->lower_bound_feasibility_threshold,
             'upper_bound_feasibility_threshold' => (string) $this->upper_bound_feasibility_threshold,
             'acceptance_threshold' => $this->acceptance_threshold,
+            'request_rate' => $this->request_rate,
             'status' => $this->status,
             'description' => $this->description,
-            'payment_reason' => $this->payment_reason,
             'is_removed' => $this->is_removed,
             'created_at' => $this->created_at,
             'applicant_id' => $this->applicant_id

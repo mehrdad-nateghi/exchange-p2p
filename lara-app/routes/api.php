@@ -22,7 +22,8 @@ Route::get('/requests', [RequestController::class,'index'])->name('requests.getB
 Route::get('/requests/filter-requests', [RequestController::class,'getAllRequestsByFilter'])->name('requests.getByFilter');
 Route::get('/requests/applicant/{applicantId}', [RequestController::class,'getApplicantAllRequests'])->name('requests.getApplicantAllRequests');
 Route::get('/requests/applicant/{applicantId}/{requestId}', [RequestController::class,'getApplicantRequest'])->name('requests.getApplicantSpecificRequest');
-Route::get('/requests/create', [RequestController::class,'create'])->name('requests.create');
+
+Route::post('/requests/create/buy', [RequestController::class,'createBuyRequest'])->name('requests.buy.create');
 
 
 /* Bid Management Routes */

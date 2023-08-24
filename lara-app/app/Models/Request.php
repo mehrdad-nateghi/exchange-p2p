@@ -17,12 +17,16 @@ class Request extends Model
     protected $fillable = [
         'support_id',
         'type',
-        'applicant_id',
+        'status',
+        'description',
         'trade_volume',
-        'lower_bound_feasibility_treshold',
+        'lower_bound_feasibility_threshold',
         'upper_bound_feasibility_threshold',
         'acceptance_threshold',
         'request_rate',
+        'payment_reason',
+        'applicant_id',
+        'is_removed',
         'created_at'
     ];
 
