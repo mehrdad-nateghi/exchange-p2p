@@ -208,6 +208,68 @@
                     }
                 }
             }
+        },
+        "/api/requests/create/buy": {
+            "post": {
+                "tags": [
+                    "Requests"
+                ],
+                "summary": "Create new request",
+                "operationId": "266c9e42b23e797f5a9dd8bac9d2decc",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "applicant_id": {
+                                        "type": "number"
+                                    },
+                                    "trade_volume": {
+                                        "type": "number"
+                                    },
+                                    "lower_bound_feasibility_threshold": {
+                                        "type": "number"
+                                    },
+                                    "upper_bound_feasibility_threshold": {
+                                        "type": "number"
+                                    },
+                                    "acceptance_threshold": {
+                                        "type": "number"
+                                    },
+                                    "request_rate": {
+                                        "type": "number"
+                                    },
+                                    "request_payment_methods": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "integer"
+                                        }
+                                    },
+                                    "description": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Request created successfully"
+                    },
+                    "422": {
+                        "description": "Unprocessable request - Invalid input data"
+                    },
+                    "404": {
+                        "description": "Applicant not found or One or more selected payment methods are not available for this applicant"
+                    },
+                    "500": {
+                        "description": "Internal Server Error - An error occurred while creating the request"
+                    }
+                }
+            }
         }
     },
     "tags": [

@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Resources\RequestResource;
 use App\Models\Request as RequestModel;
 use App\Models\User as UserModel;
+use App\Rules\FeasibilityThresholdRange;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
 
 /**
  * @OA\Tag(
@@ -237,18 +239,136 @@ class RequestController extends Controller
     }
 
 
-    public function create(Request $request){
+    public function requestInputsValidation(Request $request){
 
-        // For Sell Request: 1) The Requester must have Rial Linked Payment Method & 2) The Requester must define Request Payment Methods List
+        return $this->validate($request, [
+            'trade_volume' => 'required|numeric',
+            'lower_bound_feasibility_threshold' => 'required|numeric',
+            'upper_bound_feasibility_threshold' => 'required|numeric',
+            'description' => 'string',
+            'acceptance_threshold' => ['required', new FeasibilityThresholdRange],
+            'request_rate' => ['required', new FeasibilityThresholdRange],
+            'request_payment_methods' => 'required|array|min:1',
+            'applicant_id' => 'required'
+        ]);
+    }
+
+    /**
+     * @OA\Post(
+     *     path="/api/requests/create/buy",
+     *     summary="Create new request",
+     *     tags={"Requests"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             @OA\Property(property="applicant_id", type="number"),
+     *             @OA\Property(property="trade_volume", type="number"),
+     *             @OA\Property(property="lower_bound_feasibility_threshold", type="number"),
+     *             @OA\Property(property="upper_bound_feasibility_threshold", type="number"),
+     *             @OA\Property(property="acceptance_threshold", type="number"),
+     *             @OA\Property(property="request_rate", type="number"),
+     *             @OA\Property(property="request_payment_methods", type="array", @OA\Items(type="integer")),
+     *             @OA\Property(property="description", type="string"),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Request created successfully",
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Unprocessable request - Invalid input data",
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Applicant not found or One or more selected payment methods are not available for this applicant",
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal Server Error - An error occurred while creating the request",
+     *     )
+     * )
+     */
+    public function createBuyRequest(Request $request){
+
+        // Validate inputs
+        try {
+            $validated_data = $this->requestInputsValidation($request);
+        }
+        catch (ValidationException $e) {
+            return response()->json(['errors' => $e->errors()], 422); // 422 Unprocessable Request
+        }
+
+        // Check if the applicant exists
+        $applicant = UserModel::find($validated_data['applicant_id']);
+        if(!($applicant instanceof UserModel)) {
+            return $response = response()->json(['message' => 'Applicant not found.'], 404);
+        }
+
+        // Check if the request payment methods exist and associated with applicant
+        $applicant_linked_methods = $applicant->linkedMethods;
+        $request_payment_methods = $validated_data['request_payment_methods'];
+
+        $applicant_payment_methods = [];
+
+        foreach($applicant_linked_methods as $lm){
+            $payment_method = $lm->paymentMethod;
+            array_push($applicant_payment_methods, $payment_method->id);
+        }
+
+        $difference = array_diff($request_payment_methods, $applicant_payment_methods); // Check all items of request_payment_methods list exist in $applicant_payment_methods
+        if(!empty($difference)) {
+            return $response = response()->json(['message' => 'One or more selected payment methods are not available for this applicant.'], 404);
+        }
+
+        // Create request on database
+        $new_request = RequestModel::create([
+            'support_id' => 'RE',
+            'type' => \App\Enums\RequestTypeEnum::Buy ,
+            'trade_volume' => $validated_data['trade_volume'],
+            'lower_bound_feasibility_threshold' => $validated_data['lower_bound_feasibility_threshold'],
+            'upper_bound_feasibility_threshold' => $validated_data['upper_bound_feasibility_threshold'],
+            'acceptance_threshold' => $validated_data['acceptance_threshold'],
+            'request_rate' => $validated_data['request_rate'],
+            'description' => $validated_data['description'],
+            'status' => \App\Enums\RequestStatusEnum::Pending ,
+            'is_removed' => False,
+            'applicant_id' => $applicant->id
+        ]);
+
+        if($new_request instanceof RequestModel) {
+
+            // Set the support_id using the pattern 'RE' + id
+            $new_request->update(['support_id' => 'RE-' . $new_request->id]);
+
+            // Attach payment methods to the request using the relationship
+            $new_request->paymentMethods()->attach($request_payment_methods);
+
+            // Refresh the object to ensure attributes like created_at are up-to-date
+            $new_request->refresh();
+
+            return response()->json(['message' => 'Request created successfully.', 'request' => new RequestResource($new_request)], 200);
+        }
+        else {
+            return response()->json(['message' => 'An error occurred while creating the request.'], 500); // 500 Internal Server Error
+        }
 
 
-        // For Buy Request: 1) The Requester must define Request Payment Methods List
 
-        $euro_daily_rate = config('constants.Euro_Daily_Rate');
 
-        return response()->json(['euro_daily_rate' =>  $euro_daily_rate], 200);
+
+        //eritr swagger code and test it
+
+
+
+
+        //$euro_daily_rate = config('constants.Euro_Daily_Rate');
+
+        //return response()->json(['euro_daily_rate' =>  $euro_daily_rate], 200);
 
 
     }
+
+
 
 }

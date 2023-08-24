@@ -23,8 +23,7 @@ return new class extends Migration
             $table->decimal('acceptance_threshold',13,2);
             $table->decimal('request_rate',13,2);
             $table->tinyInteger('status');
-            $table->string('description');
-            $table->string('payment_reason');
+            $table->string('description')->nullable();
             $table->boolean('is_removed');
             $table->unsignedBigInteger('applicant_id');
             $table->timestamp('created_at');
