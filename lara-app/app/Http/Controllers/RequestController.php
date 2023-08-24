@@ -308,14 +308,11 @@ class RequestController extends Controller
         // Check if the request payment methods exist and associated with applicant
         $applicant_linked_methods = $applicant->linkedMethods;
         $request_payment_methods = $validated_data['request_payment_methods'];
-
         $applicant_payment_methods = [];
-
         foreach($applicant_linked_methods as $lm){
             $payment_method = $lm->paymentMethod;
             array_push($applicant_payment_methods, $payment_method->id);
         }
-
         $difference = array_diff($request_payment_methods, $applicant_payment_methods); // Check all items of request_payment_methods list exist in $applicant_payment_methods
         if(!empty($difference)) {
             return $response = response()->json(['message' => 'One or more selected payment methods are not available for this applicant.'], 404);
@@ -350,23 +347,8 @@ class RequestController extends Controller
             return response()->json(['message' => 'Request created successfully.', 'request' => new RequestResource($new_request)], 200);
         }
         else {
-            return response()->json(['message' => 'An error occurred while creating the request.'], 500); // 500 Internal Server Error
+            return response()->json(['message' => 'An error occurred while creating the request.'], 500);
         }
-
-
-
-
-
-        //eritr swagger code and test it
-
-
-
-
-        //$euro_daily_rate = config('constants.Euro_Daily_Rate');
-
-        //return response()->json(['euro_daily_rate' =>  $euro_daily_rate], 200);
-
-
     }
 
 
