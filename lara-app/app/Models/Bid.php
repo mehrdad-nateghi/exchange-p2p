@@ -18,7 +18,8 @@ class Bid extends Model
         'applicant_id',
         'target_account_id',
         'bid_rate',
-        'created_at'
+        'created_at',
+        'support_id'
     ];
 
     public $timestamps = false;

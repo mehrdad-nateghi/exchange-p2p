@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Models\Invoice;
 use App\Models\TransactionMethod;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Transaction>
@@ -19,6 +20,7 @@ class TransactionFactory extends Factory
     public function definition()
     {
         return [
+            'support_id' => 'TS-'. Str::uuid(),
             'amount' => fake()->randomFloat($nbMaxDecimals = 2 , $min = 0, $max = 99,999,999,999.99),
             'description' => fake()->text($maxNbChars = 50),
             'status' => \App\Enums\TransactionStatusEnum::Successful,

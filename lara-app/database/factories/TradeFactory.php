@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Models\Bid;
 use App\Models\Request;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Request>
@@ -19,6 +20,7 @@ class TradeFactory extends Factory
     public function definition()
     {
         return [
+            'support_id' => 'TR-'. Str::uuid(),
             'trade_fee' => fake()->randomFloat($nbMaxDecimals = 2 , $min = 0, $max = 99,999,999,999.99),
             'status' => \App\Enums\TradeStatusEnum::RialPending,
             'request_id' => Request::factory(),

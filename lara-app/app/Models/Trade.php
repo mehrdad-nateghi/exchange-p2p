@@ -13,6 +13,7 @@ class Trade extends Model
     protected $table = 'trades';
 
     protected $fillable = [
+        'support_id',
         'request_id',
         'bid_id',
         'trade_fee',
