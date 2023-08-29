@@ -22,7 +22,6 @@ class InvoiceFactory extends Factory
     {
         return [
             'support_id' => 'IN-'. Str::uuid(),
-            'trade_stage' => \App\Enums\InvoiceTypeEnum::RialPending,
             'trade_net_value' => fake()->randomFloat($nbMaxDecimals = 2 , $min = 0, $max = 99,999,999,999.99),
             'trade_fee' => fake()->randomFloat($nbMaxDecimals = 2 , $min = 0, $max = 99,999,999,999.99),
             'trade_gross_value' => fake()->randomFloat($nbMaxDecimals = 2 , $min = 0, $max = 99,999,999,999.99),
@@ -30,7 +29,7 @@ class InvoiceFactory extends Factory
             'payment_reason' => fake()->text(),
             'applicant_id' => User::factory(),
             'trade_id' => Trade::factory(),
-            'target_account_id' => LinkedMethod::factory(),
+            'target_account_snapshot' => fake()->text(),
             'created_at' => fake()->dateTime(),
         ];
     }

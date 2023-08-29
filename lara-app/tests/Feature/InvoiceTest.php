@@ -42,21 +42,15 @@ class InvoiceTest extends TestCase
         $this->request = Request::factory()->create(['applicant_id' => $this->user->id]);
         $this->bid = Bid::factory()->create(['applicant_id'=>$this->user->id, 'request_id'=>$this->request->id]);
         $this->trade = Trade::factory()->create(['request_id'=>$this->request->id, 'bid_id'=>$this->bid->id]);
-        $this->invoice = Invoice::factory()->create(['applicant_id'=>$this->user->id, 'trade_id'=>$this->trade->id, 'target_account_id'=>$this->linkedMethod->id]);
+        $this->invoice = Invoice::factory()->create(['applicant_id'=>$this->user->id, 'trade_id'=>$this->trade->id]);
         $this->transactionMethod = TransactionMethod::factory()->create();
         $this->transaction = Transaction::factory()->create(['invoice_id'=>$this->invoice->id, 'transaction_method_id'=>$this->transactionMethod->id]);
     }
 
     /** @test for the 1 to n User - Invoice relation*/
-    public function a_invoice_belongs_to_a_user()
+    public function an_invoice_belongs_to_a_user()
     {
         $this->assertInstanceOf(User::class, $this->invoice->user);
-    }
-
-    /** @test for the 1 to n LinkedMethod - Invoice relation*/
-    public function a_invoice_belongs_to_a_linkedmethod()
-    {
-        $this->assertInstanceOf(LinkedMethod::class, $this->invoice->linkedMethod);
     }
 
     /** @test for the 1 to n Trade - Invoice relation*/

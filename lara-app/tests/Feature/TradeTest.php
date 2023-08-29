@@ -47,7 +47,7 @@ class TradeTest extends TestCase
         $this->request = Request::factory()->create(['applicant_id' => $this->user->id]);
         $this->bid = Bid::factory()->create(['applicant_id'=>$this->user->id, 'request_id'=>$this->request->id]);
         $this->trade = Trade::factory()->create(['request_id'=>$this->request->id, 'bid_id'=>$this->bid->id]);
-        $this->invoice = Invoice::factory()->create(['applicant_id'=>$this->user->id, 'trade_id'=>$this->trade->id, 'target_account_id'=>$this->linkedMethod->id]);
+        $this->invoice = Invoice::factory()->create(['applicant_id'=>$this->user->id, 'trade_id'=>$this->trade->id]);
         $this->notification = Notification::factory()->create(['user_id'=> $this->user->id, 'notifiable_id' => $this->trade->id, 'notifiable_type' => "App\Models\Trade"]);
         $this->emailTemplate = EmailTemplate::factory()->create();
         $this->email = Email::factory()->create(['user_id'=>$this->user->id, 'template_id'=>$this->emailTemplate->id, 'emailable_id' => $this->trade->id, 'emailable_type' => "App\Models\Trade"]);

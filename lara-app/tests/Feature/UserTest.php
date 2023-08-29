@@ -50,7 +50,7 @@ class UserTest extends TestCase
         $this->request = Request::factory()->create(['applicant_id' => $this->user->id]);
         $this->bid = Bid::factory()->create(['applicant_id'=>$this->user->id, 'request_id'=>$this->request->id]);
         $this->trade = Trade::factory()->create(['request_id'=>$this->request->id, 'bid_id'=>$this->bid->id]);
-        $this->invoice = Invoice::factory()->create(['applicant_id'=>$this->user->id, 'trade_id'=>$this->trade->id, 'target_account_id'=>$this->linkedMethod->id]);
+        $this->invoice = Invoice::factory()->create(['applicant_id'=>$this->user->id, 'trade_id'=>$this->trade->id]);
         $this->emaiTemplate = EmailTemplate::factory()->create();
         $this->email = Email::factory()->create(['user_id'=> $this->user->id, 'template_id'=>$this->emaiTemplate->id, 'emailable_type' => "App\Models\User", 'emailable_id' => $this->user->id]);
         $this->notification = Notification::factory()->create(['user_id'=> $this->user->id]);

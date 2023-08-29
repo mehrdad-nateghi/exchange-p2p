@@ -18,7 +18,7 @@ class Invoice extends Model
         'applicant_id',
         'trade_id',
         'trade_net_value',
-        'target_account_id',
+        'target_account_snapshot',
         'payment_reason',
         'created_at'
     ];
