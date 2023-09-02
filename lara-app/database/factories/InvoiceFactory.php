@@ -21,7 +21,7 @@ class InvoiceFactory extends Factory
     public function definition()
     {
         return [
-            'support_id' => 'IN-'. Str::uuid(),
+            'support_id' => config('constants.SupportId_Prefixes.Invoice_Pr'). Str::uuid(),
             'trade_stage' => \App\Enums\InvoiceTypeEnum::RialPending,
             'trade_net_value' => fake()->randomFloat($nbMaxDecimals = 2 , $min = 0, $max = 99,999,999,999.99),
             'trade_fee' => fake()->randomFloat($nbMaxDecimals = 2 , $min = 0, $max = 99,999,999,999.99),
