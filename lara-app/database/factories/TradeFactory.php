@@ -20,7 +20,7 @@ class TradeFactory extends Factory
     public function definition()
     {
         return [
-            'support_id' => 'TR-'. Str::uuid(),
+            'support_id' => config('constants.SupportId_Prefixes.Trade_Pr'). Str::uuid(),
             'trade_fee' => fake()->randomFloat($nbMaxDecimals = 2 , $min = 0, $max = 99,999,999,999.99),
             'status' => \App\Enums\TradeStatusEnum::RialPending,
             'request_id' => Request::factory(),

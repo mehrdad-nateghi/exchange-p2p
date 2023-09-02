@@ -146,7 +146,6 @@ class RequestController extends Controller
     }
 
 
-
     /**
      * @OA\Get(
      *     path="/api/requests/filter-requests",
@@ -238,10 +237,10 @@ class RequestController extends Controller
         return response()->json(['requests' =>  RequestResource::collection($requests)], 200);
     }
 
-
-    public function requestInputsValidation(Request $request){
-
+    // Validate input fields through the request creation process
+    public function createRequestValidation(Request $request){
         return $this->validate($request, [
+            'type' => 'required|in:0,1',
             'trade_volume' => 'required|numeric',
             'lower_bound_feasibility_threshold' => 'required|numeric',
             'upper_bound_feasibility_threshold' => 'required|numeric',
@@ -255,13 +254,14 @@ class RequestController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/api/requests/create/buy",
+     *     path="/api/requests/create",
      *     summary="Create new request",
      *     tags={"Requests"},
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
      *             @OA\Property(property="applicant_id", type="number"),
+     *  *          @OA\Property(property="type", type="number", enum={0, 1}, description="0: Buy Request, 1: Sell Request"),
      *             @OA\Property(property="trade_volume", type="number"),
      *             @OA\Property(property="lower_bound_feasibility_threshold", type="number"),
      *             @OA\Property(property="upper_bound_feasibility_threshold", type="number"),
@@ -289,11 +289,11 @@ class RequestController extends Controller
      *     )
      * )
      */
-    public function createBuyRequest(Request $request){
+    public function create(Request $request){
 
         // Validate inputs
         try {
-            $validated_data = $this->requestInputsValidation($request);
+            $validated_data = $this->createRequestValidation($request);
         }
         catch (ValidationException $e) {
             return response()->json(['errors' => $e->errors()], 422); // 422 Unprocessable Request
@@ -320,8 +320,8 @@ class RequestController extends Controller
 
         // Create request on database
         $new_request = RequestModel::create([
+            'type' => $validated_data['type'],
             'support_id' => 'RE',
-            'type' => \App\Enums\RequestTypeEnum::Buy ,
             'trade_volume' => $validated_data['trade_volume'],
             'lower_bound_feasibility_threshold' => $validated_data['lower_bound_feasibility_threshold'],
             'upper_bound_feasibility_threshold' => $validated_data['upper_bound_feasibility_threshold'],
@@ -334,7 +334,6 @@ class RequestController extends Controller
         ]);
 
         if($new_request instanceof RequestModel) {
-
             // Set the support_id using the pattern 'RE' + id
             $new_request->update(['support_id' => 'RE-' . $new_request->id]);
 
@@ -350,7 +349,5 @@ class RequestController extends Controller
             return response()->json(['message' => 'An error occurred while creating the request.'], 500);
         }
     }
-
-
 
 }

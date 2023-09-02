@@ -21,7 +21,7 @@ class BidFactory extends Factory
     public function definition()
     {
         return [
-            'support_id' => 'BI-'. Str::uuid(),
+            'support_id' => config('constants.SupportId_Prefixes.Bid_Pr'). Str::uuid(),
             'type' => \App\Enums\BidTypeEnum::Sell,
             'bid_rate' => fake()->randomFloat($nbMaxDecimals = 2 , $min = 0, $max = 99,999,999,999.99),
             'status' => \App\Enums\BidStatusEnum::Registered,

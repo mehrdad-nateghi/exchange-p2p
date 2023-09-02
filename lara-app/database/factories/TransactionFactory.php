@@ -20,7 +20,7 @@ class TransactionFactory extends Factory
     public function definition()
     {
         return [
-            'support_id' => 'TS-'. Str::uuid(),
+            'support_id' => config('constants.SupportId_Prefixes.Transaction_Pr'). Str::uuid(),
             'amount' => fake()->randomFloat($nbMaxDecimals = 2 , $min = 0, $max = 99,999,999,999.99),
             'description' => fake()->text($maxNbChars = 50),
             'status' => \App\Enums\TransactionStatusEnum::Successful,

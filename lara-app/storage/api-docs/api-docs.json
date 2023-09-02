@@ -209,13 +209,13 @@
                 }
             }
         },
-        "/api/requests/create/buy": {
+        "/api/requests/create": {
             "post": {
                 "tags": [
                     "Requests"
                 ],
                 "summary": "Create new request",
-                "operationId": "266c9e42b23e797f5a9dd8bac9d2decc",
+                "operationId": "ae65f77c17a2325301023786cd6c245e",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -224,6 +224,14 @@
                                 "properties": {
                                     "applicant_id": {
                                         "type": "number"
+                                    },
+                                    "type": {
+                                        "description": "0: Buy Request, 1: Sell Request",
+                                        "type": "number",
+                                        "enum": [
+                                            0,
+                                            1
+                                        ]
                                     },
                                     "trade_volume": {
                                         "type": "number"

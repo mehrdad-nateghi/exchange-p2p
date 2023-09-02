@@ -20,7 +20,7 @@ class RequestFactory extends Factory
     public function definition()
     {
         return [
-            'support_id' => 'RE-'. Str::uuid(),
+            'support_id' => config('constants.SupportId_Prefixes.Request_Pr'). Str::uuid(),
             'type' => \App\Enums\RequestTypeEnum::Sell ,
             'trade_volume' => fake()->randomNumber($nbDigits = NULL, $strict = false),
             'lower_bound_feasibility_threshold' => fake()->randomFloat($nbMaxDecimals = 2 , $min = 0, $max = 99,999,999,999.99),
