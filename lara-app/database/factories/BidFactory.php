@@ -6,6 +6,7 @@ use App\Models\LinkedMethod;
 use App\Models\Request;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Bid>
@@ -20,7 +21,8 @@ class BidFactory extends Factory
     public function definition()
     {
         return [
-            'type' => \App\Enums\BidTypeEnum::Sell ,
+            'support_id' => config('constants.SupportId_Prefixes.Bid_Pr'). Str::uuid(),
+            'type' => \App\Enums\BidTypeEnum::Sell,
             'bid_rate' => fake()->randomFloat($nbMaxDecimals = 2 , $min = 0, $max = 99,999,999,999.99),
             'status' => \App\Enums\BidStatusEnum::Registered,
             'description' => fake()->text($maxNbChars = 50),

@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('trades', function (Blueprint $table) {
             $table->id();
+            $table->string('support_id')->unique();
             $table->decimal('trade_fee',13,2);
             $table->tinyInteger('status');
             $table->unsignedBigInteger('request_id');

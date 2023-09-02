@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
+            $table->string('support_id')->unique();
             $table->decimal('amount',13,2);
             $table->string('description');
             $table->tinyInteger('status');

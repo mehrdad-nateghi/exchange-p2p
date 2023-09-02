@@ -13,6 +13,7 @@ class Transaction extends Model
     protected $table = 'transactions';
 
     protected $fillable = [
+        'support_id',
         'payment_id',
         'transaction_method_id',
         'amount',
