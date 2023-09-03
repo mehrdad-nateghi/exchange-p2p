@@ -39,7 +39,7 @@ class LinkedMethodTest extends TestCase
         $this->request = Request::factory()->create(['applicant_id' => $this->user->id]);
         $this->bid = Bid::factory()->create(['applicant_id'=>$this->user->id, 'request_id'=>$this->request->id, 'target_account_id'=>$this->linkedMethod->id]);
         $this->trade = Trade::factory()->create(['request_id'=>$this->request->id, 'bid_id'=>$this->bid->id]);
-        $this->invoice = Invoice::factory()->create(['applicant_id'=>$this->user->id, 'trade_id'=>$this->trade->id, 'target_account_id'=>$this->linkedMethod->id]);
+        $this->invoice = Invoice::factory()->create(['applicant_id'=>$this->user->id, 'trade_id'=>$this->trade->id]);
     }
 
     /** @test for the 1 to n PaymentMethod - LinkedMethod relation*/
@@ -58,12 +58,6 @@ class LinkedMethodTest extends TestCase
     public function a_linkedmethod_belongs_to_a_user()
     {
         $this->assertInstanceOf(User::class, $this->linkedMethod->user);
-    }
-
-    /** @test for the 1 to n LinkedMethod - Invoice relation*/
-    public function a_linkedmethod_has_many_invoices()
-    {
-        $this->assertTrue($this->linkedMethod->invoices->contains($this->invoice));
     }
 
     /** @test for the 1 to n LinkedMethod - Invoice relation*/

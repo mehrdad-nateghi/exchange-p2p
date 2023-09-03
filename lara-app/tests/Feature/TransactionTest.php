@@ -45,7 +45,7 @@ class TransactionTest extends TestCase
         $this->request = Request::factory()->create(['applicant_id' => $this->user->id]);
         $this->bid = Bid::factory()->create(['applicant_id'=>$this->user->id, 'request_id'=>$this->request->id]);
         $this->trade = Trade::factory()->create(['request_id'=>$this->request->id, 'bid_id'=>$this->bid->id]);
-        $this->invoice = Invoice::factory()->create(['applicant_id'=>$this->user->id, 'trade_id'=>$this->trade->id, 'target_account_id'=>$this->linkedMethod->id]);
+        $this->invoice = Invoice::factory()->create(['applicant_id'=>$this->user->id, 'trade_id'=>$this->trade->id]);
         $this->transactionMethod = TransactionMethod::factory()->create();
         $this->transaction = Transaction::factory()->create(['invoice_id'=>$this->invoice->id, 'transaction_method_id'=>$this->transactionMethod->id]);
         $this->file = File::factory()->create(['transaction_id' => $this->transaction->id]);

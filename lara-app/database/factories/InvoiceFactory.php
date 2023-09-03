@@ -30,7 +30,7 @@ class InvoiceFactory extends Factory
             'payment_reason' => fake()->text(),
             'applicant_id' => User::factory(),
             'trade_id' => Trade::factory(),
-            'target_account_id' => LinkedMethod::factory(),
+            'target_account_snapshot' => fake()->text(),
             'created_at' => fake()->dateTime(),
         ];
     }

@@ -42,13 +42,6 @@ class LinkedMethod extends Model
     }
 
     /*
-    * Get the Invoices for the LinkedMethod.
-    */
-    public function invoices(){
-        return $this->hasMany(Invoice::class, 'target_account_id');
-    }
-
-    /*
     * Get the Bids belongs to the LinkedMethod
     */
     public function bids(){
