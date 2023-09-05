@@ -357,7 +357,7 @@ class RequestController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/requests/create/setup/{countryId}",
+     *     path="/api/requests/setup/{countryId}",
      *     summary="Get setup information for request creation and request update.",
      *     tags={"Requests"},
      *     @OA\Parameter(
@@ -373,7 +373,7 @@ class RequestController extends Controller
      *      ),
      *     @OA\Response(
      *         response=404,
-     *         description="Country/FinancialInformation/EuoroDailyRate not found"
+     *         description="Country/FinancialInformation/EuroDailyRate not found"
      *     )
      *     )
      * )

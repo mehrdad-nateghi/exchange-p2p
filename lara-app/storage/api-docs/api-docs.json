@@ -279,13 +279,13 @@
                 }
             }
         },
-        "/api/requests/create/setup/{countryId}": {
+        "/api/requests/setup/{countryId}": {
             "get": {
                 "tags": [
                     "Requests"
                 ],
                 "summary": "Get setup information for request creation and request update.",
-                "operationId": "88ab1dec56b853da04dde13db0c75c41",
+                "operationId": "a6bce06a0ec29f115167030c1710b2f0",
                 "parameters": [
                     {
                         "name": "countryId",
@@ -303,7 +303,7 @@
                         "description": "Successful operation"
                     },
                     "404": {
-                        "description": "Country/FinancialInformation/EuoroDailyRate not found"
+                        "description": "Country/FinancialInformation/EuroDailyRate not found"
                     }
                 }
             }
