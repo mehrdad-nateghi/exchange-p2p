@@ -17,7 +17,7 @@ class FinancialController extends Controller
 
         $result = [];
 
-        if($financial_info instanceof Financial){
+        if($financial_info instanceof Financial && $euro_daily_rate != Null){
             $band_percentage = $financial_info->feasibility_band_percentage;
             $lower_bound = $euro_daily_rate - ($euro_daily_rate * $band_percentage / 100);
             $upper_bound = $euro_daily_rate + ($euro_daily_rate * $band_percentage / 100);
@@ -30,7 +30,7 @@ class FinancialController extends Controller
 
         $result['feasibility_range'] = Null;
         $result['status'] = '404';
-        $result['message'] = 'Financial information not found!';
+        $result['message'] = 'Financial information or euro daily rate not found!';
 
         return $result;
     }
