@@ -18,6 +18,7 @@ use Illuminate\Validation\ValidationException;
  */
 class RequestController extends Controller
 {
+
     /**
      * @OA\Get(
      *     path="/api/requests",
@@ -145,7 +146,6 @@ class RequestController extends Controller
         return $response;
     }
 
-
     /**
      * @OA\Get(
      *     path="/api/requests/filter-requests",
@@ -237,6 +237,65 @@ class RequestController extends Controller
         return response()->json(['requests' =>  RequestResource::collection($requests)], 200);
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/requests/{requestId}",
+     *     summary="Get specific request by id",
+     *     tags={"Requests"},
+     *     @OA\Parameter(
+     *         name="requestId",
+     *         in="path",
+     *         description="ID of the request",
+     *         required=true,
+     *         @OA\Schema(type="integer", format="int64")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation"
+     *      ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Request not found"
+     *     )
+     *     )
+     * )
+     */
+    public function getSpecificRequest($requestId){
+
+        $request = RequestModel::find($requestId);
+
+        if(!($request instanceof RequestModel)) {
+            return response()->json(['message' => 'Request not found.'], 404);
+        }
+
+        $request_bids_info = $request->bids()->with('user')->get()->map(function ($bid) {
+            return [
+                'bidder_id' => $bid->user->id,
+                'bidder_name' => $bid->user->first_name,
+                'status' => $bid->status,
+                'bid_rate' => $bid->bid_rate,
+                'registered_date' => $bid->created_at,
+                'description' => $bid->description,
+            ];
+        });
+
+        $request_payment_methods = $request->paymentMethods()
+        ->select('payment_methods.id as payment_method_id', 'payment_methods.name')
+        ->get()
+        ->map(function ($item) {
+            unset($item->pivot);
+            return $item;
+        });
+
+        $data = [
+            'request_id' => $request->id,
+            'bids' => $request_bids_info,
+            'request_payment_methods' => $request_payment_methods
+        ];
+
+        return response()->json($data, 200);
+    }
+
     // Validate input fields through the request creation process
     public function createRequestValidation(Request $request){
         return $this->validate($request, [
@@ -302,7 +361,7 @@ class RequestController extends Controller
         // Check if the applicant exists
         $applicant = UserModel::find($validated_data['applicant_id']);
         if(!($applicant instanceof UserModel)) {
-            return $response = response()->json(['message' => 'Applicant not found.'], 404);
+            return response()->json(['message' => 'Applicant not found.'], 404);
         }
 
         // Check if the request payment methods exist and associated with applicant
