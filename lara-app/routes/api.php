@@ -23,6 +23,8 @@ Route::get('/requests/filter-requests', [RequestController::class,'getAllRequest
 Route::get('/requests/applicant/{applicantId}', [RequestController::class,'getApplicantAllRequests'])->name('requests.getApplicantAllRequests');
 Route::get('/requests/applicant/{applicantId}/{requestId}', [RequestController::class,'getApplicantRequest'])->name('requests.getApplicantSpecificRequest');
 
+
+Route::get('/requests/create/setup/{countryId}', [RequestController::class,'getRequestCreationInitialInformation'])->name('requests.setup');
 Route::post('/requests/create', [RequestController::class,'create'])->name('requests.create');
 
 
