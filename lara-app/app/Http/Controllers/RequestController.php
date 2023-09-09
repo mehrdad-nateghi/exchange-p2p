@@ -9,6 +9,7 @@ use App\Rules\FeasibilityThresholdRange;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Str;
 
 /**
  * @OA\Tag(
@@ -321,7 +322,7 @@ class RequestController extends Controller
         // Create request on database
         $new_request = RequestModel::create([
             'type' => $validated_data['type'],
-            'support_id' => 'RE',
+            'support_id' => Str::uuid(),
             'trade_volume' => $validated_data['trade_volume'],
             'lower_bound_feasibility_threshold' => $validated_data['lower_bound_feasibility_threshold'],
             'upper_bound_feasibility_threshold' => $validated_data['upper_bound_feasibility_threshold'],
@@ -335,7 +336,7 @@ class RequestController extends Controller
 
         if($new_request instanceof RequestModel) {
             // Set the support_id using the pattern 'RE' + id
-            $new_request->update(['support_id' => 'RE-' . $new_request->id]);
+            $new_request->update(['support_id' => config('constants.SupportId_Prefixes.Request_Pr') . $new_request->id]);
 
             // Attach payment methods to the request using the relationship
             $new_request->paymentMethods()->attach($request_payment_methods);
