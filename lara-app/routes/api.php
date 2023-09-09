@@ -24,7 +24,7 @@ Route::get('/requests/applicant/{applicantId}', [RequestController::class,'getAp
 Route::get('/requests/applicant/{applicantId}/{requestId}', [RequestController::class,'getApplicantRequest'])->name('requests.getApplicantSpecificRequest');
 
 
-Route::get('/requests/setup/{countryId}', [RequestController::class,'getRequestInitialInformation'])->name('requests.setup');
+Route::get('/requests/create/setup/{countryId}', [RequestController::class,'getRequestCreationInitialInformation'])->name('requests.setup');
 Route::post('/requests/create', [RequestController::class,'create'])->name('requests.create');
 
 
