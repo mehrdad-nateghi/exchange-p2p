@@ -26,6 +26,7 @@ Route::get('/requests/applicant/{applicantId}/{requestId}', [RequestController::
 
 Route::get('/requests/create/setup/{countryId}', [RequestController::class,'getRequestCreationInitialInformation'])->name('requests.setup');
 Route::post('/requests/create', [RequestController::class,'create'])->name('requests.create');
+Route::get('/requests/{requestId}', [RequestController::class,'getSpecificRequest'])->name('requests.get.single');
 
 
 /* Bid Management Routes */
