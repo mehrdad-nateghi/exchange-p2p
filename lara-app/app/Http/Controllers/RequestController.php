@@ -3,12 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\RequestResource;
+use App\Models\PaymentMethod;
 use App\Models\Request as RequestModel;
 use App\Models\User as UserModel;
 use App\Rules\FeasibilityThresholdRange;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
+use App\Http\Controllers\FinancialController;
+use App\Http\Resources\PaymentMethodResource;
+use App\Models\Country;
+use Illuminate\Support\Str;
 
 /**
  * @OA\Tag(
@@ -296,6 +301,55 @@ class RequestController extends Controller
         return response()->json($data, 200);
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/requests/create/setup/{countryId}",
+     *     summary="Get setup information for request creation.",
+     *     tags={"Requests"},
+     *     @OA\Parameter(
+     *         name="countryId",
+     *         in="path",
+     *         description="ID of the country to fetch its paymentMethods",
+     *         required=true,
+     *         @OA\Schema(type="integer", format="int64")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation"
+     *      ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Country/FinancialInformation/EuroDailyRate not found"
+     *     )
+     *     )
+     * )
+     */
+    public function getRequestCreationInitialInformation($countryId){
+
+        $country = Country::find($countryId);
+        if(!($country instanceof Country)) {
+            return response()->json(['message' => 'Country not found!'], 404);
+        }
+
+        $system_payment_methods = $country->paymentMethods()->get();
+
+        $euro_daily_rate = config('constants.Euro_Daily_Rate');
+
+        // get feasibility range
+        $financial_controller = new FinancialController();
+        $feasibility_range_response = $financial_controller->getFeasibilityRange();
+        if($feasibility_range_response['status'] == 200){
+            $result = [
+                'payment_methods' => PaymentMethodResource::collection($system_payment_methods),
+                'feasibility_range' => $feasibility_range_response['feasibility_range'],
+                'euoro_daily_rate' => $euro_daily_rate
+            ];
+            return response()->json(['data' => $result], 200);
+        } else{
+            return response()->json(['message' => $feasibility_range_response['message']], 404);
+        }
+    }
+
     // Validate input fields through the request creation process
     public function createRequestValidation(Request $request){
         return $this->validate($request, [
@@ -377,10 +431,11 @@ class RequestController extends Controller
             return $response = response()->json(['message' => 'One or more selected payment methods are not available for this applicant.'], 404);
         }
 
+
         // Create request on database
         $new_request = RequestModel::create([
             'type' => $validated_data['type'],
-            'support_id' => 'RE',
+            'support_id' => Str::uuid(),
             'trade_volume' => $validated_data['trade_volume'],
             'lower_bound_feasibility_threshold' => $validated_data['lower_bound_feasibility_threshold'],
             'upper_bound_feasibility_threshold' => $validated_data['upper_bound_feasibility_threshold'],
@@ -394,7 +449,7 @@ class RequestController extends Controller
 
         if($new_request instanceof RequestModel) {
             // Set the support_id using the pattern 'RE' + id
-            $new_request->update(['support_id' => 'RE-' . $new_request->id]);
+            $new_request->update(['support_id' => config('constants.SupportId_Prefixes.Request_Pr') . $new_request->id]);
 
             // Attach payment methods to the request using the relationship
             $new_request->paymentMethods()->attach($request_payment_methods);
