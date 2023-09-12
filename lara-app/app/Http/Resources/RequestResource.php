@@ -27,6 +27,7 @@ class RequestResource extends JsonResource
             'description' => $this->description,
             'is_removed' => $this->is_removed,
             'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
             'applicant_id' => $this->applicant_id
           ];
     }

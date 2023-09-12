@@ -29,8 +29,7 @@ class RequestFactory extends Factory
             'request_rate' => fake()->randomFloat($nbMaxDecimals = 2 , $min = 0, $max = 99,999,999,999.99),
             'status' => \App\Enums\RequestStatusEnum::Pending ,
             'description' => fake()->text($maxNbChars = 50),
-            'is_removed' => '0' ,
-            'created_at' => fake()->dateTime(),
+            'is_removed' => '0',
             'applicant_id' => User::factory(),
         ];
     }
