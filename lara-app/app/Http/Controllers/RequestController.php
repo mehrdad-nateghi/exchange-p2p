@@ -403,7 +403,6 @@ class RequestController extends Controller
      * )
      */
     public function create(Request $request){
-
         // Validate inputs
         try {
             $validated_data = $this->createRequestValidation($request);
@@ -430,7 +429,6 @@ class RequestController extends Controller
         if(!empty($difference)) {
             return $response = response()->json(['message' => 'One or more selected payment methods are not available for this applicant.'], 404);
         }
-
 
         // Create request on database
         $new_request = RequestModel::create([
@@ -462,6 +460,112 @@ class RequestController extends Controller
         else {
             return response()->json(['message' => 'An error occurred while creating the request.'], 500);
         }
+    }
+
+    // Validate input fields through the request update process
+    public function updateRequestValidation(Request $request){
+        return $this->validate($request,[
+            'trade_volume' => 'required|numeric',
+            'description' => 'required|string',
+            'lower_bound_feasibility_threshold' => 'required|numeric',
+            'upper_bound_feasibility_threshold' => 'required|numeric',
+            'request_rate' => ['required', new FeasibilityThresholdRange],
+            'request_payment_methods' => 'required|array|min:1',
+        ]);
+    }
+
+    /**
+     * @OA\Put(
+     *     path="/api/requests/update/{applicantId}/{requestId}",
+     *     summary="Update a request",
+     *     tags={"Requests"},
+     *     @OA\Parameter(
+     *         name="applicantId",
+     *         in="path",
+     *         description="ID of the applicant to fetch his request",
+     *         required=true,
+     *         @OA\Schema(type="integer", format="int64")
+     *     ),
+     *     @OA\Parameter(
+     *         name="requestId",
+     *         in="path",
+     *         description="ID of the request to fetch it for updating purpose",
+     *         required=true,
+     *         @OA\Schema(type="integer", format="int64")
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             @OA\Property(property="trade_volume", type="number"),
+     *             @OA\Property(property="lower_bound_feasibility_threshold", type="number"),
+     *             @OA\Property(property="upper_bound_feasibility_threshold", type="number"),
+     *             @OA\Property(property="request_rate", type="number"),
+     *             @OA\Property(property="request_payment_methods", type="array", @OA\Items(type="integer")),
+     *             @OA\Property(property="description", type="string"),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Request updated successfully",
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Unprocessable request - Invalid input data",
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Applicant/Request not found or One or more selected payment methods are not available for this applicant",
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal Server Error - An error occurred while updating the request",
+     *     )
+     * )
+     */
+    public function update(Request $requestObj, $applicantId, $requestId){
+        $applicant = UserModel::find($applicantId);
+        if(!$applicant) {
+            return response()->json(['message' => 'Applicant not found!'], 404);
+        }
+
+        $request = $applicant->requests()->where('id', $requestId)->first();
+        if (!$request) {
+            return response()->json(['message' => 'Request not found for this applicant.'], 404);
+        }
+
+        // Validate inputs
+        try {
+            $validated_data = $this->updateRequestValidation($requestObj);
+        }
+        catch (ValidationException $e) {
+            return response()->json(['errors' => $e->errors()], 422); // 422 Unprocessable Request
+        }
+
+        $request->update([
+            'trade_volume' => $validated_data['trade_volume'],
+            'request_rate' => $validated_data['request_rate'],
+            'description' => $validated_data['description']
+        ]);
+
+        // Handle payment methods
+        $applicant_linked_methods = $applicant->linkedMethods;
+
+        $applicant_payment_methods = $applicant_linked_methods->map(function ($linkedMethod) {
+            return $linkedMethod->paymentMethod->id;
+        })->toArray();
+
+        $request_payment_methods = $validated_data['request_payment_methods'];
+
+        // Check if the request payment methods exist and are associated with the applicant
+        $difference = array_diff($request_payment_methods, $applicant_payment_methods);
+        if (!empty($difference)) {
+            return response()->json(['message' => 'One or more selected payment methods are not available for this applicant.'], 404);
+        }
+
+        // Sync the payment methods for the request
+        $request->paymentMethods()->sync($validated_data['request_payment_methods']);
+
+        return response()->json(['message' => 'Request updated successfully'],200);
     }
 
 }
