@@ -27,10 +27,11 @@ class Request extends Model
         'payment_reason',
         'applicant_id',
         'is_removed',
-        'created_at'
+        'created_at',
+        'updated_at'
     ];
 
-    public $timestamps = false;
+    public $timestamps = true;
 
     /*
     * Get the PaymentMethods for the Request
