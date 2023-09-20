@@ -533,6 +533,11 @@ class RequestController extends Controller
             return response()->json(['message' => 'Request not found for this applicant.'], 404);
         }
 
+        // Check whether the request has no associated bids
+        if(!($request->bids->isEmpty())) {
+            return response()->json(['message' => 'The request has one or more associated bids.'], 422); // 422 Unprocessable Request
+        }
+
         // Validate inputs
         try {
             $validated_data = $this->updateRequestValidation($requestObj);
