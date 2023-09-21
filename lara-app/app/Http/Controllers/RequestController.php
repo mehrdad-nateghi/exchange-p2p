@@ -506,6 +506,8 @@ class RequestController extends Controller
             return response()->json(['message' => 'Request not found for this applicant.'], 404);
         }
 
+        $euro_daily_rate = config('constants.Euro_Daily_Rate');
+
         // get feasibility range
         $financial_controller = new FinancialController();
         $feasibility_range_response = $financial_controller->getFeasibilityRange();
@@ -515,6 +517,7 @@ class RequestController extends Controller
 
         $result = [
             'feasibility_range' => $feasibility_range_response['feasibility_range'],
+            'euoro_daily_rate' => $euro_daily_rate,
             'request' => [
                 'id' => $request['id'],
                 'support_id' => $request['support_id'],
