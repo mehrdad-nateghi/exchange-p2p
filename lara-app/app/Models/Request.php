@@ -26,7 +26,6 @@ class Request extends Model
         'request_rate',
         'payment_reason',
         'applicant_id',
-        'is_removed',
         'created_at',
         'updated_at'
     ];
