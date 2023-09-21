@@ -26,6 +26,7 @@ class RequestResource extends JsonResource
             'status' => $this->status,
             'description' => $this->description,
             'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
             'applicant_id' => $this->applicant_id
           ];
     }

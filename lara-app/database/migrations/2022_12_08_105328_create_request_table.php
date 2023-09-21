@@ -25,7 +25,8 @@ return new class extends Migration
             $table->tinyInteger('status');
             $table->string('description')->nullable();
             $table->unsignedBigInteger('applicant_id');
-            $table->timestamp('created_at');
+            $table->timestamp('created_at')->nullable();
+            $table->timestamp('updated_at')->nullable();
             $table->foreign('applicant_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
