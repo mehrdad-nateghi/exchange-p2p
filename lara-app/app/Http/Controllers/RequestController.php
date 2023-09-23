@@ -464,4 +464,71 @@ class RequestController extends Controller
         }
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/requests/edit/setup/{applicantId}/{requestId}",
+     *     summary="Get setup information for request update.",
+     *     tags={"Requests"},
+     *     @OA\Parameter(
+     *         name="applicantId",
+     *         in="path",
+     *         description="ID of the applicant to fetch his request",
+     *         required=true,
+     *         @OA\Schema(type="integer", format="int64")
+     *     ),
+     *     @OA\Parameter(
+     *         name="requestId",
+     *         in="path",
+     *         description="ID of the request to fetch it for editing purpose",
+     *         required=true,
+     *         @OA\Schema(type="integer", format="int64")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation"
+     *      ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Applicant/Request not found"
+     *     )
+     *     )
+     * )
+     */
+    public function getRequestUpdateInitialInformation($applicantId, $requestId){
+
+        $applicant = UserModel::find($applicantId);
+        if(!$applicant) {
+            return response()->json(['message' => 'Applicant not found!'], 404);
+        }
+
+        $request = $applicant->requests()->where('id', $requestId)->first();
+        if (!$request) {
+            return response()->json(['message' => 'Request not found for this applicant.'], 404);
+        }
+
+        $euro_daily_rate = config('constants.Euro_Daily_Rate');
+
+        // get feasibility range
+        $financial_controller = new FinancialController();
+        $feasibility_range_response = $financial_controller->getFeasibilityRange();
+        if($feasibility_range_response['status'] == 404){
+            return response()->json(['message' => $feasibility_range_response['message']], 404);
+        }
+
+        $result = [
+            'feasibility_range' => $feasibility_range_response['feasibility_range'],
+            'euoro_daily_rate' => $euro_daily_rate,
+            'request' => [
+                'id' => $request['id'],
+                'support_id' => $request['support_id'],
+                'trade_volume' => $request['trade_volume'],
+                'request_rate' => $request['request_rate'],
+                'description' => $request['description'],
+                'payment_methods' => PaymentMethodResource::collection($request->paymentMethods()->get())
+            ]
+        ];
+
+        return response()->json(['data' => $result], 200);
+    }
+
 }
