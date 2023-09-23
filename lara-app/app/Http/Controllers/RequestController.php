@@ -466,7 +466,7 @@ class RequestController extends Controller
     public function updateRequestValidation(Request $request){
         return $this->validate($request,[
             'trade_volume' => 'required|numeric',
-            'description' => 'required|string',
+            'description' => 'string',
             'lower_bound_feasibility_threshold' => 'required|numeric',
             'upper_bound_feasibility_threshold' => 'required|numeric',
             'request_rate' => ['required', new FeasibilityThresholdRange],
