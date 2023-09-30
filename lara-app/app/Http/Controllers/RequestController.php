@@ -361,6 +361,7 @@ class RequestController extends Controller
             'acceptance_threshold' => ['required', new FeasibilityThresholdRange],
             'request_rate' => ['required', new FeasibilityThresholdRange],
             'request_payment_methods' => 'required|array|min:1',
+            'request_payment_methods.*' => 'integer',
             'applicant_id' => 'required'
         ]);
     }
@@ -471,6 +472,7 @@ class RequestController extends Controller
             'upper_bound_feasibility_threshold' => 'required|numeric',
             'request_rate' => ['required', new FeasibilityThresholdRange],
             'request_payment_methods' => 'required|array|min:1',
+            'request_payment_methods.*' => 'integer'
         ]);
     }
 
