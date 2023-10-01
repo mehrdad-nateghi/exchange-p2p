@@ -18,8 +18,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 /* Requests Management Routes */
-Route::get('/requests', [RequestController::class,'index'])->name('requests.getByTypeFilter');
-Route::get('/requests/filter-requests', [RequestController::class,'getAllRequestsByFilter'])->name('requests.getByFilter');
+Route::get('/requests/filter/{count?}', [RequestController::class,'getAllRequestsByFilter'])->name('requests.getByFilter');
 Route::get('/requests/applicant/{applicantId}', [RequestController::class,'getApplicantAllRequests'])->name('requests.getApplicantAllRequests');
 Route::get('/requests/applicant/{applicantId}/{requestId}', [RequestController::class,'getApplicantRequest'])->name('requests.getApplicantSpecificRequest');
 
