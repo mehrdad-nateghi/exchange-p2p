@@ -369,6 +369,85 @@
                     }
                 }
             }
+        },
+        "/api/requests/update/{applicantId}/{requestId}": {
+            "put": {
+                "tags": [
+                    "Requests"
+                ],
+                "summary": "Update a request",
+                "operationId": "2127221ad56ae468bbc630f24f2b021e",
+                "parameters": [
+                    {
+                        "name": "applicantId",
+                        "in": "path",
+                        "description": "ID of the applicant to fetch his request",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    },
+                    {
+                        "name": "requestId",
+                        "in": "path",
+                        "description": "ID of the request to fetch it for updating purpose",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "trade_volume": {
+                                        "type": "number"
+                                    },
+                                    "lower_bound_feasibility_threshold": {
+                                        "type": "number"
+                                    },
+                                    "upper_bound_feasibility_threshold": {
+                                        "type": "number"
+                                    },
+                                    "request_rate": {
+                                        "type": "number"
+                                    },
+                                    "request_payment_methods": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "integer"
+                                        }
+                                    },
+                                    "description": {
+                                        "description": "There are three different conditions for this field: 1. When you want to update the value of description field, you have to pass the description by desired value. 2. When you don't want to update the value of description field, you have not to pass the description field by your request. 3. When you want to update the value of description field to the NULL, you have to pass the description by empty value like this: description:\" .",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Request updated successfully"
+                    },
+                    "422": {
+                        "description": "Unprocessable request - Invalid input data"
+                    },
+                    "404": {
+                        "description": "Applicant/Request not found or One or more selected payment methods are not available for this applicant"
+                    },
+                    "500": {
+                        "description": "Internal Server Error - An error occurred while updating the request"
+                    }
+                }
+            }
         }
     },
     "tags": [

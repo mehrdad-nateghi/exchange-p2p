@@ -355,6 +355,7 @@ class RequestController extends Controller
             'acceptance_threshold' => ['required', new FeasibilityThresholdRange],
             'request_rate' => ['required', new FeasibilityThresholdRange],
             'request_payment_methods' => 'required|array|min:1',
+            'request_payment_methods.*' => 'integer',
             'applicant_id' => 'required'
         ]);
     }
@@ -397,7 +398,6 @@ class RequestController extends Controller
      * )
      */
     public function create(Request $request){
-
         // Validate inputs
         try {
             $validated_data = $this->createRequestValidation($request);
@@ -424,7 +424,6 @@ class RequestController extends Controller
         if(!empty($difference)) {
             return $response = response()->json(['message' => 'One or more selected payment methods are not available for this applicant.'], 404);
         }
-
 
         // Create request on database
         $new_request = RequestModel::create([
@@ -523,6 +522,127 @@ class RequestController extends Controller
         ];
 
         return response()->json(['data' => $result], 200);
+    }
+
+    // Validate input fields through the request update process
+    public function updateRequestValidation(Request $request){
+        return $this->validate($request,[
+            'trade_volume' => 'required|numeric',
+            'description' => 'nullable',
+            'lower_bound_feasibility_threshold' => 'required|numeric',
+            'upper_bound_feasibility_threshold' => 'required|numeric',
+            'request_rate' => ['required', new FeasibilityThresholdRange],
+            'request_payment_methods' => 'required|array|min:1',
+            'request_payment_methods.*' => 'integer'
+        ]);
+    }
+
+    /**
+     * @OA\Put(
+     *     path="/api/requests/update/{applicantId}/{requestId}",
+     *     summary="Update a request",
+     *     tags={"Requests"},
+     *     @OA\Parameter(
+     *         name="applicantId",
+     *         in="path",
+     *         description="ID of the applicant to fetch his request",
+     *         required=true,
+     *         @OA\Schema(type="integer", format="int64")
+     *     ),
+     *     @OA\Parameter(
+     *         name="requestId",
+     *         in="path",
+     *         description="ID of the request to fetch it for updating purpose",
+     *         required=true,
+     *         @OA\Schema(type="integer", format="int64")
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             @OA\Property(property="trade_volume", type="number"),
+     *             @OA\Property(property="lower_bound_feasibility_threshold", type="number"),
+     *             @OA\Property(property="upper_bound_feasibility_threshold", type="number"),
+     *             @OA\Property(property="request_rate", type="number"),
+     *             @OA\Property(property="request_payment_methods", type="array", @OA\Items(type="integer")),
+     *             @OA\Property(property="description", type="string", description="There are three different conditions for this field: 1. When you want to update the value of description field, you have to pass the description by desired value. 2. When you don't want to update the value of description field, you have not to pass the description field by your request. 3. When you want to update the value of description field to the NULL, you have to pass the description by empty value like this: description:"" ."),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Request updated successfully",
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Unprocessable request - Invalid input data",
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Applicant/Request not found or One or more selected payment methods are not available for this applicant",
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal Server Error - An error occurred while updating the request",
+     *     )
+     * )
+     */
+    public function update(Request $requestObj, $applicantId, $requestId){
+
+        $applicant = UserModel::find($applicantId);
+        if(!$applicant) {
+            return response()->json(['message' => 'Applicant not found!'], 404);
+        }
+
+        $request = $applicant->requests()->where('id', $requestId)->first();
+        if (!$request) {
+            return response()->json(['message' => 'Request not found for this applicant.'], 404);
+        }
+
+        // Check whether the request has no associated bids
+        if(!($request->bids->isEmpty())) {
+            return response()->json(['message' => 'The request has one or more associated bids.'], 422); // 422 Unprocessable Request
+        }
+
+        // Validate inputs
+        try {
+            $validated_data = $this->updateRequestValidation($requestObj);
+        }
+        catch (ValidationException $e) {
+            return response()->json(['errors' => $e->errors()], 422); // 422 Unprocessable Request
+        }
+
+        $updateData = [
+            'trade_volume' => $validated_data['trade_volume'],
+            'request_rate' => $validated_data['request_rate'],
+            'acceptance_threshold' => $validated_data['request_rate'],
+            'lower_bound_feasibility_threshold' => $validated_data['lower_bound_feasibility_threshold'],
+            'upper_bound_feasibility_threshold' => $validated_data['upper_bound_feasibility_threshold'],
+        ];
+
+        if (array_key_exists('description', $validated_data)) {
+            $updateData['description'] = $validated_data['description'];
+        }
+
+        $request->update($updateData);
+
+        // Handle payment methods
+        $applicant_linked_methods = $applicant->linkedMethods;
+
+        $applicant_payment_methods = $applicant_linked_methods->map(function ($linkedMethod) {
+            return $linkedMethod->paymentMethod->id;
+        })->toArray();
+
+        $request_payment_methods = $validated_data['request_payment_methods'];
+
+        // Check if the request payment methods exist and are associated with the applicant
+        $difference = array_diff($request_payment_methods, $applicant_payment_methods);
+        if (!empty($difference)) {
+            return response()->json(['message' => 'One or more selected payment methods are not available for this applicant.'], 404);
+        }
+
+        // Sync the payment methods for the request
+        $request->paymentMethods()->sync($validated_data['request_payment_methods']);
+
+        return response()->json(['message' => 'Request updated successfully'],200);
     }
 
 }

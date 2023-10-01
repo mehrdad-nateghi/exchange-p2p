@@ -29,6 +29,9 @@ Route::get('/requests/{requestId}', [RequestController::class,'getSpecificReques
 
 Route::get('/requests/edit/setup/{applicantId}/{requestId}', [RequestController::class,'getRequestUpdateInitialInformation'])->name('requests.edit.setup');
 
+Route::get('/requests/edit/setup/{applicantId}/{requestId}', [RequestController::class,'getRequestUpdateInitialInformation'])->name('requests.edit.setup');
+
+Route::put('requests/update/{applicantId}/{requestId}', [RequestController::class, 'update'])->name('requests.update');
 
 /* Bid Management Routes */
 Route::get('/bids/request/{requestId}', [BidController::class,'getBids'])->name('bids.request.getBids');
