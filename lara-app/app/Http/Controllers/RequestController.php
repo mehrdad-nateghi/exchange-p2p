@@ -26,41 +26,6 @@ class RequestController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/requests",
-     *     summary="Get all sell requests",
-     *     tags={"Requests"},
-     *      @OA\Parameter(
-     *         name="type",
-     *         in="query",
-     *         description="Filter requests by type (sell or buy)",
-     *         required=false,
-     *         @OA\Schema(
-     *             type="string",
-     *             enum={"sell", "buy"}
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Successful operation",
-     *         )
-     *     )
-     * )
-     */
-    public function index(Request $request)
-    {
-        if ($request->has('type')){
-            $type = $request->input('type') == 'sell'? \App\Enums\RequestTypeEnum::Sell : \App\Enums\RequestTypeEnum::Buy;
-            $requests = RequestModel::where('type' , $type)->get();
-        }
-        else{
-            $requests = RequestModel::all();
-        }
-
-        return response()->json(RequestResource::collection($requests), 200);
-    }
-
-    /**
-     * @OA\Get(
      *     path="/api/requests/applicant/{applicantId}",
      *     summary="Get all requests of the specific applicant",
      *     tags={"Requests"},
@@ -153,9 +118,27 @@ class RequestController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/requests/filter-requests",
+     *     path="/api/requests/filter/{count}",
      *     summary="Get all requests by filter",
      *     tags={"Requests"},
+     *     @OA\Parameter(
+     *         name="count",
+     *         in="path",
+     *         description="Filter requests by count",
+     *         required=false,
+     *         @OA\Schema(type="integer", format="int64")
+     *     ),
+     *      @OA\Parameter(
+     *         name="type",
+     *         in="query",
+     *         description="Filter requests by type (sell or buy)",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="integer",
+     *             enum={"0", "1"}
+     *         ),
+     *        description="0: Buy, 1: Sell"
+     *     ),
      *     @OA\Parameter(
      *         name="payment_methods[]",
      *         in="query",
@@ -200,11 +183,17 @@ class RequestController extends Controller
      *     )
      * )
      */
-    public function getAllRequestsByFilter(Request $request)
+    public function getAllRequestsByFilter(Request $request, $count = null)
     {
         // Log::debug($request->all());
 
         $query = RequestModel::with('paymentMethods');
+
+        // Filter requests by type
+        if ($request->has('type')) {
+            $type = $request->input('type');
+            $query->where('type', $type);
+        }
 
         // Filter requests by PaymentMethods
         if ($request->has('payment_methods')) {
@@ -234,7 +223,12 @@ class RequestController extends Controller
         // Sort requests by order
         if ($request->has('order')) {
             $order = $request->input('order');
-            $query->orderBy('created_at', $order);
+            $query->orderBy('id', $order);
+        }
+
+        // Filter requests by count
+        if($count !== null) {
+            $query->take($count);
         }
 
         $requests = $query->get();
@@ -375,7 +369,7 @@ class RequestController extends Controller
      *         required=true,
      *         @OA\JsonContent(
      *             @OA\Property(property="applicant_id", type="number"),
-     *  *          @OA\Property(property="type", type="number", enum={0, 1}, description="0: Buy Request, 1: Sell Request"),
+     *            @OA\Property(property="type", type="number", enum={0, 1}, description="0: Buy Request, 1: Sell Request"),
      *             @OA\Property(property="trade_volume", type="number"),
      *             @OA\Property(property="lower_bound_feasibility_threshold", type="number"),
      *             @OA\Property(property="upper_bound_feasibility_threshold", type="number"),
@@ -461,6 +455,73 @@ class RequestController extends Controller
         else {
             return response()->json(['message' => 'An error occurred while creating the request.'], 500);
         }
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/api/requests/edit/setup/{applicantId}/{requestId}",
+     *     summary="Get setup information for request update.",
+     *     tags={"Requests"},
+     *     @OA\Parameter(
+     *         name="applicantId",
+     *         in="path",
+     *         description="ID of the applicant to fetch his request",
+     *         required=true,
+     *         @OA\Schema(type="integer", format="int64")
+     *     ),
+     *     @OA\Parameter(
+     *         name="requestId",
+     *         in="path",
+     *         description="ID of the request to fetch it for editing purpose",
+     *         required=true,
+     *         @OA\Schema(type="integer", format="int64")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation"
+     *      ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Applicant/Request not found"
+     *     )
+     *     )
+     * )
+     */
+    public function getRequestUpdateInitialInformation($applicantId, $requestId){
+
+        $applicant = UserModel::find($applicantId);
+        if(!$applicant) {
+            return response()->json(['message' => 'Applicant not found!'], 404);
+        }
+
+        $request = $applicant->requests()->where('id', $requestId)->first();
+        if (!$request) {
+            return response()->json(['message' => 'Request not found for this applicant.'], 404);
+        }
+
+        $euro_daily_rate = config('constants.Euro_Daily_Rate');
+
+        // get feasibility range
+        $financial_controller = new FinancialController();
+        $feasibility_range_response = $financial_controller->getFeasibilityRange();
+        if($feasibility_range_response['status'] == 404){
+            return response()->json(['message' => $feasibility_range_response['message']], 404);
+        }
+
+        $result = [
+            'feasibility_range' => $feasibility_range_response['feasibility_range'],
+            'euoro_daily_rate' => $euro_daily_rate,
+            'request' => [
+                'id' => $request['id'],
+                'support_id' => $request['support_id'],
+                'trade_volume' => $request['trade_volume'],
+                'request_rate' => $request['request_rate'],
+                'description' => $request['description'],
+                'payment_methods' => PaymentMethodResource::collection($request->paymentMethods()->get())
+            ]
+        ];
+
+        return response()->json(['data' => $result], 200);
     }
 
     // Validate input fields through the request update process

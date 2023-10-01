@@ -7,5 +7,6 @@ enum BidStatusEnum: int{
     case Top = 1;
     case Confirmed = 2;
     case Rejected = 3;
+    case Invalid = 4;
 };
 

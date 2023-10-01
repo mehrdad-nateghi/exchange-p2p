@@ -44,35 +44,6 @@
                 }
             }
         },
-        "/api/requests": {
-            "get": {
-                "tags": [
-                    "Requests"
-                ],
-                "summary": "Get all sell requests",
-                "operationId": "d8762545247b9ed012f00e992cbfa665",
-                "parameters": [
-                    {
-                        "name": "type",
-                        "in": "query",
-                        "description": "Filter requests by type (sell or buy)",
-                        "required": false,
-                        "schema": {
-                            "type": "string",
-                            "enum": [
-                                "sell",
-                                "buy"
-                            ]
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successful operation"
-                    }
-                }
-            }
-        },
         "/api/requests/applicant/{applicantId}": {
             "get": {
                 "tags": [
@@ -141,14 +112,37 @@
                 }
             }
         },
-        "/api/requests/filter-requests": {
+        "/api/requests/filter/{count}": {
             "get": {
                 "tags": [
                     "Requests"
                 ],
                 "summary": "Get all requests by filter",
-                "operationId": "12ca952f0c8dce6e881dd50937dc0fd5",
+                "operationId": "3ee9ee3ed21c42bb731c8e6dc6dd0167",
                 "parameters": [
+                    {
+                        "name": "count",
+                        "in": "path",
+                        "description": "Filter requests by count",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    },
+                    {
+                        "name": "type",
+                        "in": "query",
+                        "description": "0: Buy, 1: Sell",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "enum": [
+                                "0",
+                                "1"
+                            ]
+                        }
+                    },
                     {
                         "name": "payment_methods[]",
                         "in": "query",
@@ -333,6 +327,45 @@
                     },
                     "500": {
                         "description": "Internal Server Error - An error occurred while creating the request"
+                    }
+                }
+            }
+        },
+        "/api/requests/edit/setup/{applicantId}/{requestId}": {
+            "get": {
+                "tags": [
+                    "Requests"
+                ],
+                "summary": "Get setup information for request update.",
+                "operationId": "58086067d17f9b0b1d94fa521f8a7d40",
+                "parameters": [
+                    {
+                        "name": "applicantId",
+                        "in": "path",
+                        "description": "ID of the applicant to fetch his request",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    },
+                    {
+                        "name": "requestId",
+                        "in": "path",
+                        "description": "ID of the request to fetch it for editing purpose",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "Applicant/Request not found"
                     }
                 }
             }
