@@ -551,6 +551,9 @@ class RequestController extends Controller
         $request->update([
             'trade_volume' => $validated_data['trade_volume'],
             'request_rate' => $validated_data['request_rate'],
+            'acceptance_threshold' => $validated_data['request_rate'],
+            'lower_bound_feasibility_threshold' => $validated_data['lower_bound_feasibility_threshold'],
+            'upper_bound_feasibility_threshold' => $validated_data['upper_bound_feasibility_threshold'],
             'description' => $validated_data['description']
         ]);
 
