@@ -467,7 +467,7 @@ class RequestController extends Controller
     public function updateRequestValidation(Request $request){
         return $this->validate($request,[
             'trade_volume' => 'required|numeric',
-            'description' => 'string',
+            'description' => 'nullable',
             'lower_bound_feasibility_threshold' => 'required|numeric',
             'upper_bound_feasibility_threshold' => 'required|numeric',
             'request_rate' => ['required', new FeasibilityThresholdRange],
@@ -525,6 +525,7 @@ class RequestController extends Controller
      * )
      */
     public function update(Request $requestObj, $applicantId, $requestId){
+
         $applicant = UserModel::find($applicantId);
         if(!$applicant) {
             return response()->json(['message' => 'Applicant not found!'], 404);
@@ -556,7 +557,7 @@ class RequestController extends Controller
             'upper_bound_feasibility_threshold' => $validated_data['upper_bound_feasibility_threshold'],
         ];
 
-        if (isset($validated_data['description'])) {
+        if (array_key_exists('description', $validated_data)) {
             $updateData['description'] = $validated_data['description'];
         }
 
