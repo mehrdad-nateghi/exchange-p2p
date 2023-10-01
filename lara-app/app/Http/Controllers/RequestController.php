@@ -548,14 +548,19 @@ class RequestController extends Controller
             return response()->json(['errors' => $e->errors()], 422); // 422 Unprocessable Request
         }
 
-        $request->update([
+        $updateData = [
             'trade_volume' => $validated_data['trade_volume'],
             'request_rate' => $validated_data['request_rate'],
             'acceptance_threshold' => $validated_data['request_rate'],
             'lower_bound_feasibility_threshold' => $validated_data['lower_bound_feasibility_threshold'],
             'upper_bound_feasibility_threshold' => $validated_data['upper_bound_feasibility_threshold'],
-            'description' => $validated_data['description']
-        ]);
+        ];
+
+        if (isset($validated_data['description'])) {
+            $updateData['description'] = $validated_data['description'];
+        }
+
+        $request->update($updateData);
 
         // Handle payment methods
         $applicant_linked_methods = $applicant->linkedMethods;

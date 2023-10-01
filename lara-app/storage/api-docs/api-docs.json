@@ -391,7 +391,9 @@
                                         }
                                     },
                                     "description": {
-                                        "type": "string"
+                                        "description": "Optional field. Leave it out if not needed.",
+                                        "type": "string",
+                                        "example": ""
                                     }
                                 },
                                 "type": "object"
