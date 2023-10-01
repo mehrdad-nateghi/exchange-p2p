@@ -503,7 +503,7 @@ class RequestController extends Controller
      *             @OA\Property(property="upper_bound_feasibility_threshold", type="number"),
      *             @OA\Property(property="request_rate", type="number"),
      *             @OA\Property(property="request_payment_methods", type="array", @OA\Items(type="integer")),
-     *             @OA\Property(property="description", type="string"),
+     *             @OA\Property(property="description", type="string", description="There are three different conditions for this field: 1. When you want to update the value of description field, you have to pass the description by desired value. 2. When you don't want to update the value of description field, you have not to pass the description field by your request. 3. When you want to update the value of description field to the NULL, you have to pass the description by empty value like this: description:"" ."),
      *         )
      *     ),
      *     @OA\Response(

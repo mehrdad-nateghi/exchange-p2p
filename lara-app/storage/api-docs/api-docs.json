@@ -391,9 +391,8 @@
                                         }
                                     },
                                     "description": {
-                                        "description": "Optional field. Leave it out if not needed.",
-                                        "type": "string",
-                                        "example": ""
+                                        "description": "There are three different conditions for this field: 1. When you want to update the value of description field, you have to pass the description by desired value. 2. When you don't want to update the value of description field, you have not to pass the description field by your request. 3. When you want to update the value of description field to the NULL, you have to pass the description by empty value like this: description:\" .",
+                                        "type": "string"
                                     }
                                 },
                                 "type": "object"
