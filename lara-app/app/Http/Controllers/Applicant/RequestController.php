@@ -1,24 +1,26 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Applicant;
 
+use App\Http\Controllers\Controller;
 use App\Http\Resources\RequestResource;
-use App\Models\PaymentMethod;
 use App\Models\Request as RequestModel;
 use App\Models\User as UserModel;
 use App\Rules\FeasibilityThresholdRange;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use App\Http\Controllers\FinancialController;
+use App\Http\Requests\CreateRequestRequest;
+use App\Http\Requests\UpdateRequestRequest;
 use App\Http\Resources\PaymentMethodResource;
 use App\Models\Country;
+use App\Models\Financial;
 use Illuminate\Support\Str;
 
 /**
  * @OA\Tag(
  *     name="Requests",
- *     description="APIs for managing requests"
+ *     description="APIs for managing Requests"
  * )
  */
 class RequestController extends Controller
@@ -26,7 +28,7 @@ class RequestController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/requests/applicant/{applicantId}",
+     *     path="/api/applicant/requests/{applicantId}",
      *     summary="Get all requests of the specific applicant",
      *     tags={"Requests"},
      *     @OA\Parameter(
@@ -47,7 +49,7 @@ class RequestController extends Controller
      *     )
      * )
      */
-    public function getApplicantAllRequests($applicantId)
+    public function getAllRequests($applicantId)
     {
         $user = UserModel::find($applicantId);
 
@@ -66,7 +68,7 @@ class RequestController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/requests/applicant/{applicantId}/{requestId}",
+     *     path="/api/applicant/requests/{applicantId}/{requestId}",
      *     summary="Get specific request of the specific applicant",
      *     tags={"Requests"},
      *     @OA\Parameter(
@@ -94,7 +96,7 @@ class RequestController extends Controller
      *     )
      * )
      */
-    public function getApplicantRequest($applicantId, $requestId)
+    public function getRequest($applicantId, $requestId)
     {
         $response = '';
 
@@ -116,188 +118,36 @@ class RequestController extends Controller
         return $response;
     }
 
-    /**
-     * @OA\Get(
-     *     path="/api/requests/filter/{count}",
-     *     summary="Get all requests by filter",
-     *     tags={"Requests"},
-     *     @OA\Parameter(
-     *         name="count",
-     *         in="path",
-     *         description="Filter requests by count",
-     *         required=false,
-     *         @OA\Schema(type="integer", format="int64")
-     *     ),
-     *      @OA\Parameter(
-     *         name="type",
-     *         in="query",
-     *         description="Filter requests by type (sell or buy)",
-     *         required=false,
-     *         @OA\Schema(
-     *             type="integer",
-     *             enum={"0", "1"}
-     *         ),
-     *        description="0: Buy, 1: Sell"
-     *     ),
-     *     @OA\Parameter(
-     *         name="payment_methods[]",
-     *         in="query",
-     *         description="Filter requests by payment methods",
-     *         @OA\Schema(
-     *             type="array",
-     *             @OA\Items(type="integer")
-     *         ),
-     *         style="form"
-     *     ),
-     *     @OA\Parameter(
-     *         name="request_status",
-     *         in="query",
-     *         description="Filter requests by status",
-     *         @OA\Schema(type="string"),
-     *         style="form"
-     *     ),
-     *     @OA\Parameter(
-     *         name="trade_volume_min",
-     *         in="query",
-     *         description="Filter requests by minimum trade volume",
-     *         @OA\Schema(type="number"),
-     *         style="form"
-     *     ),
-     *     @OA\Parameter(
-     *         name="trade_volume_max",
-     *         in="query",
-     *         description="Filter requests by maximum trade volume",
-     *         @OA\Schema(type="number"),
-     *         style="form"
-     *     ),
-     *     @OA\Parameter(
-     *         name="order",
-     *         in="query",
-     *         description="Sort requests by order",
-     *         @OA\Schema(type="string", enum={"asc", "desc"}),
-     *         style="form"
-     *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Successful operation"
-     *     )
-     * )
-     */
-    public function getAllRequestsByFilter(Request $request, $count = null)
-    {
-        // Log::debug($request->all());
+    // Calculate feasibility range [Lower Bound, Upper Bound]
+    public function getFeasibilityRange(){
 
-        $query = RequestModel::with('paymentMethods');
+        $euro_daily_rate = config('constants.Euro_Daily_Rate');
 
-        // Filter requests by type
-        if ($request->has('type')) {
-            $type = $request->input('type');
-            $query->where('type', $type);
+        $financial_info = Financial::first();
+
+        $result = [];
+
+        if($financial_info instanceof Financial && $euro_daily_rate != Null){
+            $band_percentage = $financial_info->feasibility_band_percentage;
+            $lower_bound = $euro_daily_rate - ($euro_daily_rate * $band_percentage / 100);
+            $upper_bound = $euro_daily_rate + ($euro_daily_rate * $band_percentage / 100);
+
+            $result['feasibility_range'] = ['lower_bound'=>$lower_bound, 'upper_bound'=>$upper_bound];
+            $result['status'] = '200';
+
+            return $result;
         }
 
-        // Filter requests by PaymentMethods
-        if ($request->has('payment_methods')) {
-            $paymentMethods = $request->input('payment_methods');
-            $query->whereHas('paymentMethods', function ($q) use ($paymentMethods) {
-                $q->whereIn('payment_methods.id', $paymentMethods);
-            });
-        }
+        $result['feasibility_range'] = Null;
+        $result['status'] = '404';
+        $result['message'] = 'Financial information or euro daily rate not found!';
 
-        // Filter requests by status
-        if ($request->has('request_status')) {
-            $status = $request->input('request_status');
-            $query->where('status', $status);
-        }
-
-        // Filter requests by trade_volume
-        if ($request->has('trade_volume_min')) {
-            $min = $request->input('trade_volume_min');
-            $query->where('trade_volume', '>=', $min);
-        }
-
-        if ($request->has('trade_volume_max')) {
-            $max = $request->input('trade_volume_max');
-            $query->where('trade_volume', '<=', $max);
-        }
-
-        // Sort requests by order
-        if ($request->has('order')) {
-            $order = $request->input('order');
-            $query->orderBy('id', $order);
-        }
-
-        // Filter requests by count
-        if($count !== null) {
-            $query->take($count);
-        }
-
-        $requests = $query->get();
-
-        return response()->json(['requests' =>  RequestResource::collection($requests)], 200);
+        return $result;
     }
 
     /**
      * @OA\Get(
-     *     path="/api/requests/{requestId}",
-     *     summary="Get specific request by id",
-     *     tags={"Requests"},
-     *     @OA\Parameter(
-     *         name="requestId",
-     *         in="path",
-     *         description="ID of the request",
-     *         required=true,
-     *         @OA\Schema(type="integer", format="int64")
-     *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Successful operation"
-     *      ),
-     *     @OA\Response(
-     *         response=404,
-     *         description="Request not found"
-     *     )
-     *     )
-     * )
-     */
-    public function getSpecificRequest($requestId){
-
-        $request = RequestModel::find($requestId);
-
-        if(!($request instanceof RequestModel)) {
-            return response()->json(['message' => 'Request not found.'], 404);
-        }
-
-        $request_bids_info = $request->bids()->with('user')->get()->map(function ($bid) {
-            return [
-                'bidder_id' => $bid->user->id,
-                'bidder_name' => $bid->user->first_name,
-                'status' => $bid->status,
-                'bid_rate' => $bid->bid_rate,
-                'registered_date' => $bid->created_at,
-                'description' => $bid->description,
-            ];
-        });
-
-        $request_payment_methods = $request->paymentMethods()
-        ->select('payment_methods.id as payment_method_id', 'payment_methods.name')
-        ->get()
-        ->map(function ($item) {
-            unset($item->pivot);
-            return $item;
-        });
-
-        $data = [
-            'request_id' => $request->id,
-            'bids' => $request_bids_info,
-            'request_payment_methods' => $request_payment_methods
-        ];
-
-        return response()->json($data, 200);
-    }
-
-    /**
-     * @OA\Get(
-     *     path="/api/requests/create/setup/{countryId}",
+     *     path="/api/applicant/requests/create/setup/{countryId}",
      *     summary="Get setup information for request creation.",
      *     tags={"Requests"},
      *     @OA\Parameter(
@@ -344,32 +194,16 @@ class RequestController extends Controller
         }
     }
 
-    // Validate input fields through the request creation process
-    public function createRequestValidation(Request $request){
-        return $this->validate($request, [
-            'type' => 'required|in:0,1',
-            'trade_volume' => 'required|numeric',
-            'lower_bound_feasibility_threshold' => 'required|numeric',
-            'upper_bound_feasibility_threshold' => 'required|numeric',
-            'description' => 'string',
-            'acceptance_threshold' => ['required', new FeasibilityThresholdRange],
-            'request_rate' => ['required', new FeasibilityThresholdRange],
-            'request_payment_methods' => 'required|array|min:1',
-            'request_payment_methods.*' => 'integer',
-            'applicant_id' => 'required'
-        ]);
-    }
-
     /**
      * @OA\Post(
-     *     path="/api/requests/create",
+     *     path="/api/applicant/requests/create",
      *     summary="Create new request",
      *     tags={"Requests"},
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
      *             @OA\Property(property="applicant_id", type="number"),
-     *            @OA\Property(property="type", type="number", enum={0, 1}, description="0: Buy Request, 1: Sell Request"),
+     *             @OA\Property(property="type", type="number", enum={0, 1}, description="0: Buy Request, 1: Sell Request"),
      *             @OA\Property(property="trade_volume", type="number"),
      *             @OA\Property(property="lower_bound_feasibility_threshold", type="number"),
      *             @OA\Property(property="upper_bound_feasibility_threshold", type="number"),
@@ -397,10 +231,11 @@ class RequestController extends Controller
      *     )
      * )
      */
-    public function create(Request $request){
+    public function create(CreateRequestRequest $request){
+
         // Validate inputs
         try {
-            $validated_data = $this->createRequestValidation($request);
+            $validated_data =$request->validated();
         }
         catch (ValidationException $e) {
             return response()->json(['errors' => $e->errors()], 422); // 422 Unprocessable Request
@@ -457,9 +292,9 @@ class RequestController extends Controller
         }
     }
 
-    /**
+     /**
      * @OA\Get(
-     *     path="/api/requests/edit/setup/{applicantId}/{requestId}",
+     *     path="/api/applicant/requests/update/setup/{applicantId}/{requestId}",
      *     summary="Get setup information for request update.",
      *     tags={"Requests"},
      *     @OA\Parameter(
@@ -524,22 +359,9 @@ class RequestController extends Controller
         return response()->json(['data' => $result], 200);
     }
 
-    // Validate input fields through the request update process
-    public function updateRequestValidation(Request $request){
-        return $this->validate($request,[
-            'trade_volume' => 'required|numeric',
-            'description' => 'nullable',
-            'lower_bound_feasibility_threshold' => 'required|numeric',
-            'upper_bound_feasibility_threshold' => 'required|numeric',
-            'request_rate' => ['required', new FeasibilityThresholdRange],
-            'request_payment_methods' => 'required|array|min:1',
-            'request_payment_methods.*' => 'integer'
-        ]);
-    }
-
     /**
      * @OA\Put(
-     *     path="/api/requests/update/{applicantId}/{requestId}",
+     *     path="/api/applicant/requests/update/{applicantId}/{requestId}",
      *     summary="Update a request",
      *     tags={"Requests"},
      *     @OA\Parameter(
@@ -585,26 +407,26 @@ class RequestController extends Controller
      *     )
      * )
      */
-    public function update(Request $requestObj, $applicantId, $requestId){
+    public function update(UpdateRequestRequest $request, $applicantId, $requestId){
 
         $applicant = UserModel::find($applicantId);
         if(!$applicant) {
             return response()->json(['message' => 'Applicant not found!'], 404);
         }
 
-        $request = $applicant->requests()->where('id', $requestId)->first();
-        if (!$request) {
+        $req = $applicant->requests()->where('id', $requestId)->first();
+        if (!$req) {
             return response()->json(['message' => 'Request not found for this applicant.'], 404);
         }
 
         // Check whether the request has no associated bids
-        if(!($request->bids->isEmpty())) {
+        if(!($req->bids->isEmpty())) {
             return response()->json(['message' => 'The request has one or more associated bids.'], 422); // 422 Unprocessable Request
         }
 
         // Validate inputs
         try {
-            $validated_data = $this->updateRequestValidation($requestObj);
+            $validated_data = $request->validated();
         }
         catch (ValidationException $e) {
             return response()->json(['errors' => $e->errors()], 422); // 422 Unprocessable Request
@@ -622,7 +444,7 @@ class RequestController extends Controller
             $updateData['description'] = $validated_data['description'];
         }
 
-        $request->update($updateData);
+        $req->update($updateData);
 
         // Handle payment methods
         $applicant_linked_methods = $applicant->linkedMethods;
@@ -640,7 +462,7 @@ class RequestController extends Controller
         }
 
         // Sync the payment methods for the request
-        $request->paymentMethods()->sync($validated_data['request_payment_methods']);
+        $req->paymentMethods()->sync($validated_data['request_payment_methods']);
 
         return response()->json(['message' => 'Request updated successfully'],200);
     }

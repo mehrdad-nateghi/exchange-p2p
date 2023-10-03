@@ -1,7 +1,10 @@
 <?php
-
+use App\Http\Controllers\Guest\RequestController as GuestRequestController;
+use App\Http\Controllers\Applicant\RequestController as ApplicantRequestController;
+use App\Http\Controllers\Admin\RequestController as AdminRequestController;
 use App\Http\Controllers\BidController;
 use App\Http\Controllers\FinancialController;
+use App\Http\Controllers\Guest\BidController as GuestBidController;
 use App\Http\Controllers\RequestController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -17,24 +20,24 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
 /* Requests Management Routes */
-Route::get('/requests/filter/{count?}', [RequestController::class,'getAllRequestsByFilter'])->name('requests.getByFilter');
-Route::get('/requests/applicant/{applicantId}', [RequestController::class,'getApplicantAllRequests'])->name('requests.getApplicantAllRequests');
-Route::get('/requests/applicant/{applicantId}/{requestId}', [RequestController::class,'getApplicantRequest'])->name('requests.getApplicantSpecificRequest');
+// Guest User Routes
+Route::get('/requests/filter', [GuestRequestController::class,'getRequests'])->name('guest.requests.get.byFilter');
+Route::get('/requests/{requestId}', [GuestRequestController::class,'getRequest'])->name('guest.requests.get.single');
+// Applicant Routes
+Route::get('/applicant/requests/{applicantId}', [ApplicantRequestController::class,'getAllRequests'])->name('applicant.requests.get.all');
+Route::get('/applicant/requests/{applicantId}/{requestId}', [ApplicantRequestController::class,'getRequest'])->name('applicant.requests.get.single');
+Route::get('/applicant/requests/create/setup/{countryId}', [ApplicantRequestController::class,'getRequestCreationInitialInformation'])->name('applicant.requests.create.setup');
+Route::post('/applicant/requests/create', [ApplicantRequestController::class,'create'])->name('applicant.requests.create');
+Route::get('/applicant/requests/update/setup/{applicantId}/{requestId}', [ApplicantRequestController::class,'getRequestUpdateInitialInformation'])->name('applicant.requests.edit.setup');
+Route::put('/applicant/requests/update/{applicantId}/{requestId}', [ApplicantRequestController::class, 'update'])->name('applicant.requests.update');
+// Admin Routes
 
+/* Bids Management Routes */
+// Guest User Routes
+Route::get('/bids/request/{requestId}', [GuestBidController::class,'getBids'])->name('request.bids.get.all');
 
-Route::get('/requests/create/setup/{countryId}', [RequestController::class,'getRequestCreationInitialInformation'])->name('requests.create.setup');
-Route::post('/requests/create', [RequestController::class,'create'])->name('requests.create');
-Route::get('/requests/{requestId}', [RequestController::class,'getSpecificRequest'])->name('requests.get.single');
-
-Route::get('/requests/edit/setup/{applicantId}/{requestId}', [RequestController::class,'getRequestUpdateInitialInformation'])->name('requests.edit.setup');
-
-Route::get('/requests/edit/setup/{applicantId}/{requestId}', [RequestController::class,'getRequestUpdateInitialInformation'])->name('requests.edit.setup');
-
-Route::put('requests/update/{applicantId}/{requestId}', [RequestController::class, 'update'])->name('requests.update');
-
-/* Bid Management Routes */
-Route::get('/bids/request/{requestId}', [BidController::class,'getBids'])->name('bids.request.getBids');
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
