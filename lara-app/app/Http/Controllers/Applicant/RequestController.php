@@ -338,8 +338,7 @@ class RequestController extends Controller
         $euro_daily_rate = config('constants.Euro_Daily_Rate');
 
         // get feasibility range
-        $financial_controller = new FinancialController();
-        $feasibility_range_response = $financial_controller->getFeasibilityRange();
+        $feasibility_range_response = $this->getFeasibilityRange();
         if($feasibility_range_response['status'] == 404){
             return response()->json(['message' => $feasibility_range_response['message']], 404);
         }
