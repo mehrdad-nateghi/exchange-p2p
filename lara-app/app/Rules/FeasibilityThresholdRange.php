@@ -3,6 +3,7 @@
 namespace App\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
+use Illuminate\Support\Facades\Log;
 
 class FeasibilityThresholdRange implements Rule
 {
@@ -12,6 +13,7 @@ class FeasibilityThresholdRange implements Rule
         $lowerThreshold = request('lower_bound_feasibility_threshold');
         $upperThreshold = request('upper_bound_feasibility_threshold');
 
+        Log::info("we are here!". $value >= $lowerThreshold && $value <= $upperThreshold?'Y':'N');
         // Check if the value is within the specified range
         return $value >= $lowerThreshold && $value <= $upperThreshold;
     }

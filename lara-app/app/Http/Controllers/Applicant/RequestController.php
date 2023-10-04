@@ -6,8 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\RequestResource;
 use App\Models\Request as RequestModel;
 use App\Models\User as UserModel;
-use App\Rules\FeasibilityThresholdRange;
-use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use App\Http\Controllers\FinancialController;
 use App\Http\Requests\CreateRequestRequest;
@@ -15,6 +13,9 @@ use App\Http\Requests\UpdateRequestRequest;
 use App\Http\Resources\PaymentMethodResource;
 use App\Models\Country;
 use App\Models\Financial;
+use App\Rules\FeasibilityThresholdRange;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 /**
@@ -180,8 +181,7 @@ class RequestController extends Controller
         $euro_daily_rate = config('constants.Euro_Daily_Rate');
 
         // get feasibility range
-        $financial_controller = new FinancialController();
-        $feasibility_range_response = $financial_controller->getFeasibilityRange();
+        $feasibility_range_response = $this->getFeasibilityRange();
         if($feasibility_range_response['status'] == 200){
             $result = [
                 'payment_methods' => PaymentMethodResource::collection($system_payment_methods),
@@ -233,9 +233,11 @@ class RequestController extends Controller
      */
     public function create(CreateRequestRequest $request){
 
+        Log::info($request);
+
         // Validate inputs
         try {
-            $validated_data =$request->validated();
+            $validated_data = $request->validated();
         }
         catch (ValidationException $e) {
             return response()->json(['errors' => $e->errors()], 422); // 422 Unprocessable Request
