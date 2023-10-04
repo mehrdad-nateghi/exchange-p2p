@@ -8,6 +8,7 @@ use App\Models\Request as RequestModel;
 use App\Models\User as UserModel;
 use Illuminate\Validation\ValidationException;
 use App\Http\Controllers\FinancialController;
+use App\Http\Requests\CreateRequest;
 use App\Http\Requests\CreateRequestRequest;
 use App\Http\Requests\UpdateRequestRequest;
 use App\Http\Resources\PaymentMethodResource;
@@ -233,9 +234,7 @@ class RequestController extends Controller
      */
     public function create(CreateRequestRequest $request){
 
-        Log::info($request);
-
-        // Validate inputs
+        // Validate inputs using the form request
         try {
             $validated_data = $request->validated();
         }
@@ -426,7 +425,7 @@ class RequestController extends Controller
             return response()->json(['message' => 'The request has one or more associated bids.'], 422); // 422 Unprocessable Request
         }
 
-        // Validate inputs
+        // Validate inputs using the form request
         try {
             $validated_data = $request->validated();
         }

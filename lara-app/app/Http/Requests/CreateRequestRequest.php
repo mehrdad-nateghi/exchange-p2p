@@ -4,6 +4,8 @@ namespace App\Http\Requests;
 
 use App\Rules\FeasibilityThresholdRange;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class CreateRequestRequest extends FormRequest
 {
@@ -36,5 +38,10 @@ class CreateRequestRequest extends FormRequest
             'request_payment_methods.*' => 'integer',
             'applicant_id' => 'required'
         ];
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(response()->json(['errors' => $validator->errors()], 422));
     }
 }
