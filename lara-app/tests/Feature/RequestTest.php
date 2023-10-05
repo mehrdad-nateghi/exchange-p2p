@@ -3,10 +3,12 @@
 namespace Tests\Feature;
 
 use App\Enums\UserTypeEnum;
+use App\Http\Controllers\Applicant\RequestController as ApplicantRequestController;
 use App\Models\Bid;
 use App\Models\Country;
 use App\Models\Email;
 use App\Models\EmailTemplate;
+use App\Models\Financial;
 use App\Models\Notification;
 use App\Models\PaymentMethod;
 use App\Models\Request;
@@ -72,4 +74,41 @@ class RequestTest extends TestCase
     {
         $this->assertInstanceOf('Illuminate\Database\Eloquent\Collection', $this->request->notifications);
     }
+
+    /** @test for the getFeasibilityRange success scenario*/
+    public function testFeasibilityRangeWithFinancialInfo()
+    {
+        // Create a Financial instance in the database
+        Financial::factory()->create([
+            'feasibility_band_percentage' => 10,
+        ]);
+
+        // Set the config value for Euro Daily Rate
+        config(['constants.Euro_Daily_Rate' => 100]);
+
+        $controller = new ApplicantRequestController();
+
+        $response = $controller->getFeasibilityRange();
+
+        dump($response);
+
+        // Assertions
+        $this->assertEquals(200, $response['status']); // Check if the status is 200
+    }
+
+    /** @test for the getFeasibilityRange failure scenario*/
+    public function testFeasibilityRangeWithoutFinancialInfo()
+    {
+        // Ensure there is no Financial instance in the database
+
+        $controller = new ApplicantRequestController();
+
+        $response = $controller->getFeasibilityRange();
+
+        dump($response);
+
+        // Assertions
+        $this->assertEquals(404, $response['status']); // Check if the status is 404
+    }
+
 }

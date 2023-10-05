@@ -8,7 +8,7 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 
 /**
- * @OA\Info(title="My First API", description="This is test documentation", version="0.1")
+ * @OA\Info(title="Welcome to PayLibero's APIs Panel!", description="This is a documentation covers all the available services at the backend of the project. For further information about the parameters, please feel free to explore  the Schema part of each API. The Schema part is available for POST and PUT HTTP services.", version="0.1")
  * @OA\Get(
  *     path="/",
  *     @OA\Response(
