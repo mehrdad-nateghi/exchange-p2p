@@ -7,10 +7,13 @@ use App\Enums\UserTypeEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Passport\HasApiTokens;
 
 class User extends Model
 {
-    use HasFactory;
+    use HasApiTokens, HasFactory, Notifiable;
+
 
     protected $table = 'users';
 
@@ -18,7 +21,12 @@ class User extends Model
         'first_name',
         'last_name',
         'email',
+        'password',
         'created_at'
+    ];
+
+    protected $hidden = [
+        'password'
     ];
 
     public $timestamps = false;
