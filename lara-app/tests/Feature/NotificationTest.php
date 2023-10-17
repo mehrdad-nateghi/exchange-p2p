@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Enums\UserTypeEnum;
+use App\Enums\UserRoleEnum;
 use App\Models\Bid;
 use App\Models\Notification;
 use App\Models\Request;
@@ -25,7 +25,7 @@ class NotificationTest extends TestCase
     {
         Parent::setUp();
 
-        $this->user = User::factory()->create(['type'=>UserTypeEnum::Applicant]);
+        $this->user = User::factory()->create(['role'=>UserRoleEnum::Applicant]);
         $this->request = Request::factory()->create(['applicant_id' => $this->user->id]);
         $this->bid = Bid::factory()->create(['applicant_id'=>$this->user->id, 'request_id'=>$this->request->id]);
         $this->trade = Trade::factory()->create(['request_id'=>$this->request->id, 'bid_id'=>$this->bid->id]);

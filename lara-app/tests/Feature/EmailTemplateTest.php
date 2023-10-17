@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Enums\UserTypeEnum;
+use App\Enums\UserRoleEnum;
 use App\Models\Email;
 use App\Models\EmailTemplate;
 use App\Models\User;
@@ -21,7 +21,7 @@ class EmailTemplateTest extends TestCase
     {
         Parent::setUp();
 
-        $this->user = User::factory()->create(['type'=>UserTypeEnum::Applicant]);
+        $this->user = User::factory()->create(['role'=>UserRoleEnum::Applicant]);
         $this->emailTemplate = EmailTemplate::factory()->create();
         $this->email = Email::factory()->create(['user_id'=> $this->user->id, 'template_id'=>$this->emailTemplate->id, 'emailable_type' => "App\Models\User", 'emailable_id' => $this->user->id]);
     }

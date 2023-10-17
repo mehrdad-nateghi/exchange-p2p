@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Enums\UserTypeEnum;
+use App\Enums\UserRoleEnum;
 use App\Models\Bid;
 use App\Models\Email;
 use App\Models\EmailTemplate;
@@ -36,7 +36,7 @@ class BidTest extends TestCase
         parent::setUp();
 
         $this->paymentMethod = PaymentMethod::factory()->create();
-        $this->user = User::factory()->create(['type'=>UserTypeEnum::Applicant]);
+        $this->user = User::factory()->create(['role'=>UserRoleEnum::Applicant]);
         $this->linkedMethod = LinkedMethod::factory()->create(['method_type_id'=>$this->paymentMethod->id, 'applicant_id'=>$this->user->id]);
         $this->request = Request::factory()->create(['applicant_id' => $this->user->id]);
         $this->bid = Bid::factory()->create(['applicant_id'=>$this->user->id, 'request_id'=>$this->request->id, 'target_account_id'=>$this->linkedMethod->id]);

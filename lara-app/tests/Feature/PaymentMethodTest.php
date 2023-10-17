@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Enums\UserTypeEnum;
+use App\Enums\UserRoleEnum;
 use App\Models\Country;
 use App\Models\LinkedMethod;
 use App\Models\MethodAttribute;
@@ -27,7 +27,7 @@ class PaymentMethodTest extends TestCase
     {
         Parent::setUp();
 
-        $this->user = User::factory()->create(['type'=>UserTypeEnum::Applicant]);
+        $this->user = User::factory()->create(['role'=>UserRoleEnum::Applicant]);
         $this->country = Country::factory()->create();
         $this->paymentMethod = PaymentMethod::factory()->create(['country_id' => $this->country->id]);
         $this->request = Request::factory()->create(['applicant_id' => $this->user->id]);

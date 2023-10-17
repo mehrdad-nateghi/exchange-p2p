@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Enums\UserTypeEnum;
+use App\Enums\UserRoleEnum;
 use App\Models\User;
 use App\Models\UserVerify;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -19,7 +19,7 @@ class UserVerifyTest extends TestCase
     {
         Parent::setup();
 
-        $this->user = User::factory()->create(['type'=>UserTypeEnum::Applicant]);
+        $this->user = User::factory()->create(['role'=>UserRoleEnum::Applicant]);
         $this->userVerify = UserVerify::factory()->create(['user_id'=> $this->user->id]);
     }
 

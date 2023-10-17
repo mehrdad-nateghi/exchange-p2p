@@ -1,7 +1,10 @@
 <?php
+
+use App\Http\Controllers\Admin\AuthController as AdminAuthController;
 use App\Http\Controllers\Guest\RequestController as GuestRequestController;
 use App\Http\Controllers\Applicant\RequestController as ApplicantRequestController;
 use App\Http\Controllers\Admin\RequestController as AdminRequestController;
+use App\Http\Controllers\Applicant\AuthController as ApplicantAuthController;
 use App\Http\Controllers\BidController;
 use App\Http\Controllers\FinancialController;
 use App\Http\Controllers\Guest\BidController as GuestBidController;
@@ -32,11 +35,15 @@ Route::get('/applicant/requests/create/setup/{countryId}', [ApplicantRequestCont
 Route::post('/applicant/requests/create', [ApplicantRequestController::class,'create'])->name('applicant.requests.create');
 Route::get('/applicant/requests/update/setup/{applicantId}/{requestId}', [ApplicantRequestController::class,'getRequestUpdateInitialInformation'])->name('applicant.requests.edit.setup');
 Route::put('/applicant/requests/update/{applicantId}/{requestId}', [ApplicantRequestController::class, 'update'])->name('applicant.requests.update');
+Route::post('/applicant/signin',[ApplicantAuthController::class, 'signIn'])->name('applicant.auth.signIn');
 // Admin Routes
+Route::post('/admin/signin',[AdminAuthController::class, 'signIn'])->name('admin.auth.signIn');
 
 /* Bids Management Routes */
 // Guest User Routes
 Route::get('/bids/request/{requestId}', [GuestBidController::class,'getBids'])->name('request.bids.get.all');
+
+
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
