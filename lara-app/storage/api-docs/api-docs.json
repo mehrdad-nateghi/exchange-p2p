@@ -6,6 +6,88 @@
         "version": "0.1"
     },
     "paths": {
+        "/api/admin/signin": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Admin sign-in",
+                "operationId": "24663843399fedd2304caa7a6ec57662",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Admin signed-in successfully."
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "422": {
+                        "description": "Unprocessable request - Invalid input data"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/api/applicant/signin": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Applicant sign-in",
+                "operationId": "4c49590c4bee7dbed80d713aae044118",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Applicant signed-in successfully."
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "422": {
+                        "description": "Unprocessable request - Invalid input data"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
         "/api/applicant/requests/{applicantId}": {
             "get": {
                 "tags": [

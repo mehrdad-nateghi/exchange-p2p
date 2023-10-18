@@ -2,16 +2,16 @@
 
 namespace App\Models;
 
+use App\Enums\UserRoleEnum;
 use App\Enums\UserStatusEnum;
-use App\Enums\UserTypeEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Model
-{
+
+class User extends Authenticatable{
+
     use HasApiTokens, HasFactory, Notifiable;
 
 
@@ -107,7 +107,7 @@ class User extends Model
     */
     protected $casts = [
         'status' => UserStatusEnum::class,
-        'type' => UserTypeEnum::class
+        'role' => UserRoleEnum::class
     ];
 
 }

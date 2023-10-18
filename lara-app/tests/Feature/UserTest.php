@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Enums\UserTypeEnum;
+use App\Enums\UserRoleEnum;
 use App\Models\AuthenticationLog;
 use App\Models\Bid;
 use App\Models\Country;
@@ -41,7 +41,7 @@ class UserTest extends TestCase
     {
         Parent::setup();
 
-        $this->user = User::factory()->create(['type'=>UserTypeEnum::Applicant]);
+        $this->user = User::factory()->create(['role'=>UserRoleEnum::Applicant]);
         $this->userVerify = UserVerify::factory()->create(['user_id'=> $this->user->id]);
         $this->authenticationLog = AuthenticationLog::factory()->create(['applicant_id'=> $this->user->id]);
         $this->country = Country::factory()->create();
