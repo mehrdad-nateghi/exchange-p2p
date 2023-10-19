@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Enums\UserRoleEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SignInRequest;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
@@ -12,7 +13,7 @@ class AuthController extends Controller
     /**
      * @OA\Post(
      *     path="/api/admin/signin",
-     *     summary="Admin sign-in",
+     *     summary="Sign in an admin",
      *     tags={"Authentication"},
      *     @OA\RequestBody(
      *         required=true,
@@ -52,5 +53,30 @@ class AuthController extends Controller
         }
 
         return response()->json(['message' =>'Unauthorized'], 401);
+    }
+
+        /**
+     * @OA\Post(
+     *     path="/api/admin/signout",
+     *     summary="Sign out an admin",
+     *     tags={"Authentication"},
+     *     security={
+     *           {"bearerAuth": {}}
+     *     },
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successfully signed out.",
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthenticated.",
+     *     ),
+     * )
+     */
+    public function signout(Request $request){
+
+        $request->user()->token()->revoke();
+
+        return response()->json(['message' => 'Successfully signed out.']);
     }
 }

@@ -11,7 +11,7 @@
                 "tags": [
                     "Authentication"
                 ],
-                "summary": "Admin sign-in",
+                "summary": "Sign in an admin",
                 "operationId": "24663843399fedd2304caa7a6ec57662",
                 "requestBody": {
                     "required": true,
@@ -47,13 +47,35 @@
                 }
             }
         },
+        "/api/admin/signout": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Sign out an admin",
+                "operationId": "dcc25bc7b7fdb4740244d079225e9b80",
+                "responses": {
+                    "200": {
+                        "description": "Successfully signed out."
+                    },
+                    "401": {
+                        "description": "Unauthenticated."
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/applicant/signin": {
             "post": {
                 "tags": [
                     "Authentication"
                 ],
-                "summary": "Applicant sign-in",
-                "operationId": "4c49590c4bee7dbed80d713aae044118",
+                "summary": "Sign in an applicant",
+                "operationId": "b05ab9015d54b2ace9aa21a619aae832",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -86,6 +108,28 @@
                         "description": "Internal Server Error"
                     }
                 }
+            }
+        },
+        "/api/applicant/signout": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Sign out an applicant",
+                "operationId": "ff0a2ed6ce69db04ba86bc96a6c73953",
+                "responses": {
+                    "200": {
+                        "description": "Successfully signed out."
+                    },
+                    "401": {
+                        "description": "Unauthenticated."
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/api/applicant/requests/{applicantId}": {
@@ -528,6 +572,17 @@
                         "description": "Request not found"
                     }
                 }
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "name": "bearerAuth",
+                "in": "header",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
             }
         }
     },
