@@ -17,6 +17,14 @@ use Illuminate\Routing\Controller as BaseController;
  *         response=400,
  *         description="The specified user ID is invalid (not a number).",
  *     )
+ * ),
+ * @OA\SecurityScheme(
+ *     securityScheme="bearerAuth",
+ *     in="header",
+ *     name="bearerAuth",
+ *     type="http",
+ *     scheme="bearer",
+ *     bearerFormat="JWT",
  * )
  */
 class Controller extends BaseController

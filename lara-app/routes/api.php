@@ -35,10 +35,16 @@ Route::get('/applicant/requests/create/setup/{countryId}', [ApplicantRequestCont
 Route::post('/applicant/requests/create', [ApplicantRequestController::class,'create'])->name('applicant.requests.create');
 Route::get('/applicant/requests/update/setup/{applicantId}/{requestId}', [ApplicantRequestController::class,'getRequestUpdateInitialInformation'])->name('applicant.requests.edit.setup');
 Route::put('/applicant/requests/update/{applicantId}/{requestId}', [ApplicantRequestController::class, 'update'])->name('applicant.requests.update');
-Route::post('/applicant/signin',[ApplicantAuthController::class, 'signIn'])->name('applicant.auth.signIn');
-// Admin Routes
-Route::post('/admin/signin',[AdminAuthController::class, 'signIn'])->name('admin.auth.signIn');
 
+Route::post('/applicant/signin',[ApplicantAuthController::class, 'signIn'])->name('applicant.auth.signin');
+Route::middleware('auth:api')->group(function () {
+    Route::post('/applicant/signout',[ApplicantAuthController::class, 'signout'])->name('applicant.auth.signout');
+});
+// Admin Routes
+Route::post('/admin/signin',[AdminAuthController::class, 'signin'])->name('admin.auth.signin');
+Route::middleware('auth:api')->group(function () {
+    Route::post('/admin/signout',[AdminAuthController::class, 'signout'])->name('admin.auth.signout');
+});
 /* Bids Management Routes */
 // Guest User Routes
 Route::get('/bids/request/{requestId}', [GuestBidController::class,'getBids'])->name('request.bids.get.all');

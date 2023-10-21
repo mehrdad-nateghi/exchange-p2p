@@ -5,10 +5,8 @@ namespace App\Http\Controllers\Applicant;
 use App\Enums\UserRoleEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SignInRequest;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
@@ -16,7 +14,7 @@ class AuthController extends Controller
     /**
      * @OA\Post(
      *     path="/api/applicant/signin",
-     *     summary="Applicant sign-in",
+     *     summary="Sign in an applicant",
      *     tags={"Authentication"},
      *     @OA\RequestBody(
      *         required=true,
@@ -43,7 +41,7 @@ class AuthController extends Controller
      *     )
      * )
      */
-    public function signIn(SignInRequest $request){
+    public function signin(SignInRequest $request){
 
         $credentials = $request->only('email','password');
 
@@ -56,5 +54,30 @@ class AuthController extends Controller
         }
 
         return response()->json(['message' =>'Unauthorized'], 401);
+    }
+
+    /**
+     * @OA\Post(
+     *     path="/api/applicant/signout",
+     *     summary="Sign out an applicant",
+     *     tags={"Authentication"},
+     *     security={
+     *           {"bearerAuth": {}}
+     *     },
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successfully signed out.",
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthenticated.",
+     *     ),
+     * )
+     */
+    public function signout(Request $request){
+
+        $request->user()->token()->revoke();
+
+        return response()->json(['message' => 'Successfully signed out.']);
     }
 }
