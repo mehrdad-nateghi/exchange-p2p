@@ -109,33 +109,6 @@ class RequestController extends Controller
         }
     }
 
-    // Calculate feasibility range [Lower Bound, Upper Bound]
-    public function getFeasibilityRange(){
-
-        $euro_daily_rate = config('constants.Euro_Daily_Rate');
-
-        $financial_info = Financial::first();
-
-        $result = [];
-
-        if($financial_info instanceof Financial && $euro_daily_rate != Null){
-            $band_percentage = $financial_info->feasibility_band_percentage;
-            $lower_bound = $euro_daily_rate - ($euro_daily_rate * $band_percentage / 100);
-            $upper_bound = $euro_daily_rate + ($euro_daily_rate * $band_percentage / 100);
-
-            $result['feasibility_range'] = ['lower_bound'=>$lower_bound, 'upper_bound'=>$upper_bound];
-            $result['status'] = '200';
-
-            return $result;
-        }
-
-        $result['feasibility_range'] = Null;
-        $result['status'] = '404';
-        $result['message'] = 'Financial information or euro daily rate not found!';
-
-        return $result;
-    }
-
     /**
      * @OA\Get(
      *     path="/api/applicant/requests/create/setup/{countryId}",
@@ -466,7 +439,7 @@ class RequestController extends Controller
         // Check if the request payment methods exist and are associated with the applicant
         $difference = array_diff($request_payment_methods, $applicant_payment_methods);
         if (!empty($difference)) {
-            return response()->json(['message' => 'One or more selected payment methods are not available for this applicant.'], 404);
+            return response()->json(['message' => 'One or more selected payment methods are not available for the applicant.'], 404);
         }
 
         // Sync the payment methods for the request
