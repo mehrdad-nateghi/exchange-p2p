@@ -12,7 +12,7 @@
                     "Authentication"
                 ],
                 "summary": "Sign in an admin",
-                "operationId": "24663843399fedd2304caa7a6ec57662",
+                "operationId": "adminSignin",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -53,7 +53,7 @@
                     "Authentication"
                 ],
                 "summary": "Sign out an admin",
-                "operationId": "dcc25bc7b7fdb4740244d079225e9b80",
+                "operationId": "adminSignout",
                 "responses": {
                     "200": {
                         "description": "Successfully signed out."
@@ -75,7 +75,7 @@
                     "Authentication"
                 ],
                 "summary": "Sign in an applicant",
-                "operationId": "b05ab9015d54b2ace9aa21a619aae832",
+                "operationId": "applicantSignin",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -116,7 +116,7 @@
                     "Authentication"
                 ],
                 "summary": "Sign out an applicant",
-                "operationId": "ff0a2ed6ce69db04ba86bc96a6c73953",
+                "operationId": "applicantSignout",
                 "responses": {
                     "200": {
                         "description": "Successfully signed out."
@@ -132,53 +132,39 @@
                 ]
             }
         },
-        "/api/applicant/requests/{applicantId}": {
+        "/api/applicant/requests": {
             "get": {
                 "tags": [
                     "Requests"
                 ],
-                "summary": "Get all requests of the specific applicant",
-                "operationId": "22f102cdf6ad51c3086ada958c05df20",
-                "parameters": [
-                    {
-                        "name": "applicantId",
-                        "in": "path",
-                        "description": "ID of the applicant to fetch its requests",
-                        "required": true,
-                        "schema": {
-                            "type": "integer",
-                            "format": "int64"
-                        }
-                    }
-                ],
+                "summary": "Get all requests of an authenticated applicant",
+                "operationId": "getAllRequestsOfAnAuthenticatedApplicant",
                 "responses": {
                     "200": {
                         "description": "Successful operation"
                     },
-                    "404": {
-                        "description": "Applicant not found"
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
-        "/api/applicant/requests/{applicantId}/{requestId}": {
+        "/api/applicant/requests/{requestId}": {
             "get": {
                 "tags": [
                     "Requests"
                 ],
-                "summary": "Get specific request of the specific applicant",
-                "operationId": "bdd21481c97b513a5d8580ac8f1324e1",
+                "summary": "Get specific request of an authenticated applicant",
+                "operationId": "getSpecificRequestOfAnAuthenticatedApplicant",
                 "parameters": [
-                    {
-                        "name": "applicantId",
-                        "in": "path",
-                        "description": "ID of the applicant to fetch its request",
-                        "required": true,
-                        "schema": {
-                            "type": "integer",
-                            "format": "int64"
-                        }
-                    },
                     {
                         "name": "requestId",
                         "in": "path",
@@ -195,9 +181,20 @@
                         "description": "Successful operation"
                     },
                     "404": {
-                        "description": "Applicant not found or Request not found"
+                        "description": "Request not found"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/api/applicant/requests/create/setup/{countryId}": {
@@ -205,8 +202,8 @@
                 "tags": [
                     "Requests"
                 ],
-                "summary": "Get setup information for request creation.",
-                "operationId": "cf5bd3cf4b3da9a7f67bd5e560d49910",
+                "summary": "Get setup information for request creation",
+                "operationId": "getSetupInformationForRequestCreation",
                 "parameters": [
                     {
                         "name": "countryId",
@@ -225,8 +222,19 @@
                     },
                     "404": {
                         "description": "Country/FinancialInformation/EuroDailyRate not found"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/api/applicant/requests/create": {
@@ -235,7 +243,7 @@
                     "Requests"
                 ],
                 "summary": "Create new request",
-                "operationId": "3579dbf907eae4aeff671b04c65539da",
+                "operationId": "createRequest",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -293,30 +301,28 @@
                     "404": {
                         "description": "Applicant not found or One or more selected payment methods are not available for this applicant"
                     },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
                     "500": {
-                        "description": "Internal Server Error - An error occurred while creating the request"
+                        "description": "Internal Server Error"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
-        "/api/applicant/requests/update/setup/{applicantId}/{requestId}": {
+        "/api/applicant/requests/update/setup/{requestId}": {
             "get": {
                 "tags": [
                     "Requests"
                 ],
-                "summary": "Get setup information for request update.",
-                "operationId": "7e4278281cebc5f6668dfd3a001b3504",
+                "summary": "Get setup information for updating a request by applicant who initiated the request.",
+                "operationId": "getSetupInformationForRequestUpdateByApplicant",
                 "parameters": [
-                    {
-                        "name": "applicantId",
-                        "in": "path",
-                        "description": "ID of the applicant to fetch his request",
-                        "required": true,
-                        "schema": {
-                            "type": "integer",
-                            "format": "int64"
-                        }
-                    },
                     {
                         "name": "requestId",
                         "in": "path",
@@ -334,28 +340,29 @@
                     },
                     "404": {
                         "description": "Applicant/Request not found"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
-        "/api/applicant/requests/update/{applicantId}/{requestId}": {
+        "/api/applicant/requests/update/{requestId}": {
             "put": {
                 "tags": [
                     "Requests"
                 ],
-                "summary": "Update a request",
-                "operationId": "407e37309c0190da491e4727ba118e9f",
+                "summary": "Update a specific request by an applicant who initiated the request",
+                "operationId": "updateRequestByApplicant",
                 "parameters": [
-                    {
-                        "name": "applicantId",
-                        "in": "path",
-                        "description": "ID of the applicant to fetch his request",
-                        "required": true,
-                        "schema": {
-                            "type": "integer",
-                            "format": "int64"
-                        }
-                    },
                     {
                         "name": "requestId",
                         "in": "path",
@@ -411,10 +418,18 @@
                     "404": {
                         "description": "Applicant/Request not found or One or more selected payment methods are not available for this applicant"
                     },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
                     "500": {
-                        "description": "Internal Server Error - An error occurred while updating the request"
+                        "description": "Internal Server Error"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/": {
@@ -432,7 +447,7 @@
                     "Bids"
                 ],
                 "summary": "Get all bids of specific request",
-                "operationId": "20bde7f715681a67c0abca5d4c12c428",
+                "operationId": "getAssociatedBidsOfSpecificRequest",
                 "parameters": [
                     {
                         "name": "requestId",
@@ -451,6 +466,9 @@
                     },
                     "404": {
                         "description": "Request not found"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
                     }
                 }
             }
@@ -461,7 +479,7 @@
                     "Requests"
                 ],
                 "summary": "Get all requests by filter",
-                "operationId": "89d6f50210c5832aca2d73b4767ebaa2",
+                "operationId": "getAllRequestsByFilter",
                 "parameters": [
                     {
                         "name": "type",
@@ -541,6 +559,9 @@
                 "responses": {
                     "200": {
                         "description": "Successful operation"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
                     }
                 }
             }
@@ -551,7 +572,7 @@
                     "Requests"
                 ],
                 "summary": "Get specific request by id",
-                "operationId": "d46d8c483cbdc58840941d47604d1efc",
+                "operationId": "getSpecificRequest",
                 "parameters": [
                     {
                         "name": "requestId",
@@ -570,6 +591,9 @@
                     },
                     "404": {
                         "description": "Request not found"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
                     }
                 }
             }

@@ -28,21 +28,22 @@ use Illuminate\Support\Facades\Route;
 // Guest User Routes
 Route::get('/requests/filter', [GuestRequestController::class,'getRequests'])->name('guest.requests.get.byFilter');
 Route::get('/requests/{requestId}', [GuestRequestController::class,'getRequest'])->name('guest.requests.get.single');
-// Applicant Routes
-Route::get('/applicant/requests/{applicantId}', [ApplicantRequestController::class,'getAllRequests'])->name('applicant.requests.get.all');
-Route::get('/applicant/requests/{applicantId}/{requestId}', [ApplicantRequestController::class,'getRequest'])->name('applicant.requests.get.single');
-Route::get('/applicant/requests/create/setup/{countryId}', [ApplicantRequestController::class,'getRequestCreationInitialInformation'])->name('applicant.requests.create.setup');
-Route::post('/applicant/requests/create', [ApplicantRequestController::class,'create'])->name('applicant.requests.create');
-Route::get('/applicant/requests/update/setup/{applicantId}/{requestId}', [ApplicantRequestController::class,'getRequestUpdateInitialInformation'])->name('applicant.requests.edit.setup');
-Route::put('/applicant/requests/update/{applicantId}/{requestId}', [ApplicantRequestController::class, 'update'])->name('applicant.requests.update');
 
+// Applicant Routes
 Route::post('/applicant/signin',[ApplicantAuthController::class, 'signIn'])->name('applicant.auth.signin');
-Route::middleware('auth:api')->group(function () {
-    Route::post('/applicant/signout',[ApplicantAuthController::class, 'signout'])->name('applicant.auth.signout');
+Route::middleware(['auth:api', 'is.applicant'])->prefix('applicant')->group(function () {
+    Route::get('/requests', [ApplicantRequestController::class,'getOwnAllRequests'])->name('applicant.requests.get.all');
+    Route::get('/requests/{requestId}', [ApplicantRequestController::class,'getOwnRequest'])->name('applicant.requests.get.single');
+    Route::get('/requests/create/setup/{countryId}', [ApplicantRequestController::class,'getSetupInformationForRequestCreation'])->name('applicant.requests.create.setup');
+    Route::post('/requests/create', [ApplicantRequestController::class,'create'])->name('applicant.requests.create');
+    Route::get('/requests/update/setup/{requestId}', [ApplicantRequestController::class,'getSetupInformationForRequestUpdate'])->name('applicant.requests.update.setup');
+    Route::put('/requests/update/{requestId}', [ApplicantRequestController::class, 'update'])->name('applicant.requests.update');
+    Route::post('/signout',[ApplicantAuthController::class, 'signout'])->name('applicant.auth.signout');
 });
+
 // Admin Routes
 Route::post('/admin/signin',[AdminAuthController::class, 'signin'])->name('admin.auth.signin');
-Route::middleware('auth:api')->group(function () {
+Route::middleware(['auth:api', 'is.admin'])->group(function () {
     Route::post('/admin/signout',[AdminAuthController::class, 'signout'])->name('admin.auth.signout');
 });
 /* Bids Management Routes */

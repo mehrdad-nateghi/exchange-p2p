@@ -16,12 +16,13 @@ use Illuminate\Http\Request;
  */
 class RequestController extends Controller
 {
-        /**
+    /**
      * @OA\Get(
      *     path="/api/requests/filter",
      *     summary="Get all requests by filter",
      *     tags={"Requests"},
-     *      @OA\Parameter(
+     *     operationId="getAllRequestsByFilter",
+     *     @OA\Parameter(
      *         name="type",
      *         in="query",
      *         description="Filter requests by type (sell or buy)",
@@ -80,6 +81,10 @@ class RequestController extends Controller
      *     @OA\Response(
      *         response=200,
      *         description="Successful operation"
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal Server Error",
      *     )
      * )
      */
@@ -140,6 +145,7 @@ class RequestController extends Controller
      *     path="/api/requests/{requestId}",
      *     summary="Get specific request by id",
      *     tags={"Requests"},
+     *     operationId="getSpecificRequest",
      *     @OA\Parameter(
      *         name="requestId",
      *         in="path",
@@ -154,6 +160,10 @@ class RequestController extends Controller
      *     @OA\Response(
      *         response=404,
      *         description="Request not found"
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal Server Error",
      *     )
      *     )
      * )

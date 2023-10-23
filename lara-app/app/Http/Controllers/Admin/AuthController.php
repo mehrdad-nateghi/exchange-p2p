@@ -15,6 +15,7 @@ class AuthController extends Controller
      *     path="/api/admin/signin",
      *     summary="Sign in an admin",
      *     tags={"Authentication"},
+     *     operationId="adminSignin",
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
@@ -60,6 +61,7 @@ class AuthController extends Controller
      *     path="/api/admin/signout",
      *     summary="Sign out an admin",
      *     tags={"Authentication"},
+     *     operationId="adminSignout",
      *     security={
      *           {"bearerAuth": {}}
      *     },
