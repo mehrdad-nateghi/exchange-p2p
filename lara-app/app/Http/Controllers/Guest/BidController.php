@@ -19,6 +19,7 @@ class BidController extends Controller
      *     path="/api/bids/request/{requestId}",
      *     summary="Get all bids of specific request",
      *     tags={"Bids"},
+     *     operationId="getAssociatedBidsOfSpecificRequest",
      *     @OA\Parameter(
      *         name="requestId",
      *         in="path",
@@ -33,6 +34,10 @@ class BidController extends Controller
      *     @OA\Response(
      *         response=404,
      *         description="Request not found"
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal Server Error",
      *     )
      * )
      */

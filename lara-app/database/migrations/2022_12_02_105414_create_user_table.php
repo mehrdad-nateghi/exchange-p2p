@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->tinyInteger('status')->default(1);
-            $table->boolean('is_email_verified');
+            $table->boolean('is_email_verified')->default(1);
             $table->timestamp('created_at');
 
         });

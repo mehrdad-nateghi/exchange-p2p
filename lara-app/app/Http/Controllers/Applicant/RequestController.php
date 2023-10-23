@@ -5,18 +5,12 @@ namespace App\Http\Controllers\Applicant;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\RequestResource;
 use App\Models\Request as RequestModel;
-use App\Models\User as UserModel;
-use Illuminate\Validation\ValidationException;
-use App\Http\Controllers\FinancialController;
-use App\Http\Requests\CreateRequest;
 use App\Http\Requests\CreateRequestRequest;
 use App\Http\Requests\UpdateRequestRequest;
 use App\Http\Resources\PaymentMethodResource;
 use App\Models\Country;
 use App\Models\Financial;
-use App\Rules\FeasibilityThresholdRange;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 /**
@@ -30,56 +24,49 @@ class RequestController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/applicant/requests/{applicantId}",
-     *     summary="Get all requests of the specific applicant",
+     *     path="/api/applicant/requests",
+     *     summary="Get all requests of an authenticated applicant",
      *     tags={"Requests"},
-     *     @OA\Parameter(
-     *         name="applicantId",
-     *         in="path",
-     *         description="ID of the applicant to fetch its requests",
-     *         required=true,
-     *         @OA\Schema(type="integer", format="int64")
-     *     ),
+     *     operationId="getAllRequestsOfAnAuthenticatedApplicant",
+     *     security={
+     *           {"bearerAuth": {}}
+     *     },
      *     @OA\Response(
      *         response=200,
      *         description="Successful operation"
      *      ),
      *     @OA\Response(
-     *         response=404,
-     *         description="Applicant not found"
+     *         response=401,
+     *         description="Unauthorized"
+     *     ),
+     *     @OA\Response(
+     *         response=403,
+     *         description="Forbidden"
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal Server Error",
      *     )
      *     )
      * )
      */
-    public function getAllRequests($applicantId)
+    public function getOwnAllRequests()
     {
-        $user = UserModel::find($applicantId);
+        $user = Auth::user();
+        $requests = $user->requests()->get();
 
-        $response = '';
-
-        if($user instanceof UserModel && $user->type == \App\Enums\UserTypeEnum::Applicant) {
-            $requests = $user->requests()->get();
-            $response = response()->json(['requests' => RequestResource::collection($requests)], 200);
-        }
-        else {
-            $response = response()->json(['message' => 'Applicant not found.'], 404);
-        }
-
-        return $response;
+        return response(['requests' => RequestResource::collection($requests)], 200);
     }
 
     /**
      * @OA\Get(
-     *     path="/api/applicant/requests/{applicantId}/{requestId}",
-     *     summary="Get specific request of the specific applicant",
+     *     path="/api/applicant/requests/{requestId}",
+     *     summary="Get specific request of an authenticated applicant",
      *     tags={"Requests"},
-     *     @OA\Parameter(
-     *         name="applicantId",
-     *         in="path",
-     *         description="ID of the applicant to fetch its request",
-     *         required=true,
-     *         @OA\Schema(type="integer", format="int64")
-     *     ),
+     *     operationId="getSpecificRequestOfAnAuthenticatedApplicant",
+     *     security={
+     *           {"bearerAuth": {}}
+     *     },
      *     @OA\Parameter(
      *         name="requestId",
      *         in="path",
@@ -93,31 +80,33 @@ class RequestController extends Controller
      *      ),
      *     @OA\Response(
      *         response=404,
-     *         description="Applicant not found or Request not found"
+     *         description="Request not found"
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized"
+     *     ),
+     *     @OA\Response(
+     *         response=403,
+     *         description="Forbidden"
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal Server Error",
      *     )
      *     )
      * )
      */
-    public function getRequest($applicantId, $requestId)
+    public function getOwnRequest($requestId)
     {
-        $response = '';
-
-        $user = UserModel::find($applicantId);
-        if($user instanceof UserModel && $user->type == \App\Enums\UserTypeEnum::Applicant ) {
-            $request = $user->requests()->where('id',$requestId)->first();
-
-            if($request instanceof RequestModel) {
-                $response = response()->json(['request' => new RequestResource($request)], 200);
-            }
-            else {
-                $response = response()->json(['message' => 'Request not found.'], 404);
-            }
+        $user = Auth::user();
+        $request = $user->requests()->where('id',$requestId)->first();
+        if($request instanceof RequestModel) {
+            return response(['request' => new RequestResource($request)], 200);
         }
         else {
-            $response = response()->json(['message' => 'Applicant not found.'], 404);
+            return response(['message' => 'Request not found.'], 404);
         }
-
-        return $response;
     }
 
     // Calculate feasibility range [Lower Bound, Upper Bound]
@@ -150,8 +139,12 @@ class RequestController extends Controller
     /**
      * @OA\Get(
      *     path="/api/applicant/requests/create/setup/{countryId}",
-     *     summary="Get setup information for request creation.",
+     *     summary="Get setup information for request creation",
      *     tags={"Requests"},
+     *     operationId="getSetupInformationForRequestCreation",
+     *     security={
+     *           {"bearerAuth": {}}
+     *     },
      *     @OA\Parameter(
      *         name="countryId",
      *         in="path",
@@ -166,11 +159,23 @@ class RequestController extends Controller
      *     @OA\Response(
      *         response=404,
      *         description="Country/FinancialInformation/EuroDailyRate not found"
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized"
+     *     ),
+     *     @OA\Response(
+     *         response=403,
+     *         description="Forbidden"
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal Server Error",
      *     )
      *     )
      * )
      */
-    public function getRequestCreationInitialInformation($countryId){
+    public function getSetupInformationForRequestCreation($countryId){
 
         $country = Country::find($countryId);
         if(!($country instanceof Country)) {
@@ -200,6 +205,10 @@ class RequestController extends Controller
      *     path="/api/applicant/requests/create",
      *     summary="Create new request",
      *     tags={"Requests"},
+     *     operationId="createRequest",
+     *     security={
+     *           {"bearerAuth": {}}
+     *     },
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
@@ -216,37 +225,34 @@ class RequestController extends Controller
      *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="Request created successfully",
+     *         description="Successful operation",
      *     ),
      *     @OA\Response(
      *         response=422,
-     *         description="Unprocessable request - Invalid input data",
+     *         description="Unprocessable request",
      *     ),
      *     @OA\Response(
      *         response=404,
-     *         description="Applicant not found or One or more selected payment methods are not available for this applicant",
+     *         description="Applicant not found or One or more selected payment methods are not available for the applicant",
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized"
+     *     ),
+     *     @OA\Response(
+     *         response=403,
+     *         description="Forbidden"
      *     ),
      *     @OA\Response(
      *         response=500,
-     *         description="Internal Server Error - An error occurred while creating the request",
+     *         description="Internal Server Error",
      *     )
      * )
      */
     public function create(CreateRequestRequest $request){
 
-        // Validate inputs using the form request
-        try {
-            $validated_data = $request->validated();
-        }
-        catch (ValidationException $e) {
-            return response()->json(['errors' => $e->errors()], 422); // 422 Unprocessable Request
-        }
-
-        // Check if the applicant exists
-        $applicant = UserModel::find($validated_data['applicant_id']);
-        if(!($applicant instanceof UserModel)) {
-            return response()->json(['message' => 'Applicant not found.'], 404);
-        }
+        $applicant = Auth::user();
+        $validated_data = $request->validated();
 
         // Check if the request payment methods exist and associated with applicant
         $applicant_linked_methods = $applicant->linkedMethods;
@@ -258,7 +264,7 @@ class RequestController extends Controller
         }
         $difference = array_diff($request_payment_methods, $applicant_payment_methods); // Check all items of request_payment_methods list exist in $applicant_payment_methods
         if(!empty($difference)) {
-            return $response = response()->json(['message' => 'One or more selected payment methods are not available for this applicant.'], 404);
+            return response()->json(['message' => 'One or more selected payment methods are not available for this applicant.'], 404);
         }
 
         // Create request on database
@@ -295,16 +301,13 @@ class RequestController extends Controller
 
      /**
      * @OA\Get(
-     *     path="/api/applicant/requests/update/setup/{applicantId}/{requestId}",
-     *     summary="Get setup information for request update.",
+     *     path="/api/applicant/requests/update/setup/{requestId}",
+     *     summary="Get setup information for updating a request by applicant who initiated the request",
      *     tags={"Requests"},
-     *     @OA\Parameter(
-     *         name="applicantId",
-     *         in="path",
-     *         description="ID of the applicant to fetch his request",
-     *         required=true,
-     *         @OA\Schema(type="integer", format="int64")
-     *     ),
+     *     operationId="getSetupInformationForRequestUpdateByApplicant",
+     *     security={
+     *           {"bearerAuth": {}}
+     *     },
      *     @OA\Parameter(
      *         name="requestId",
      *         in="path",
@@ -319,20 +322,29 @@ class RequestController extends Controller
      *     @OA\Response(
      *         response=404,
      *         description="Applicant/Request not found"
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized"
+     *     ),
+     *     @OA\Response(
+     *         response=403,
+     *         description="Forbidden"
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal Server Error",
      *     )
      *     )
      * )
      */
-    public function getRequestUpdateInitialInformation($applicantId, $requestId){
+    public function getSetupInformationForRequestUpdate($requestId){
 
-        $applicant = UserModel::find($applicantId);
-        if(!$applicant) {
-            return response()->json(['message' => 'Applicant not found!'], 404);
-        }
+        $applicant = Auth::user();
 
         $request = $applicant->requests()->where('id', $requestId)->first();
         if (!$request) {
-            return response()->json(['message' => 'Request not found for this applicant.'], 404);
+            return response()->json(['message' => 'Request not found for the applicant.'], 404);
         }
 
         $euro_daily_rate = config('constants.Euro_Daily_Rate');
@@ -361,16 +373,13 @@ class RequestController extends Controller
 
     /**
      * @OA\Put(
-     *     path="/api/applicant/requests/update/{applicantId}/{requestId}",
-     *     summary="Update a request",
+     *     path="/api/applicant/requests/update/{requestId}",
+     *     summary="Update a specific request by an applicant who initiated the request",
      *     tags={"Requests"},
-     *     @OA\Parameter(
-     *         name="applicantId",
-     *         in="path",
-     *         description="ID of the applicant to fetch his request",
-     *         required=true,
-     *         @OA\Schema(type="integer", format="int64")
-     *     ),
+     *     operationId="updateRequestByApplicant",
+     *     security={
+     *           {"bearerAuth": {}}
+     *     },
      *     @OA\Parameter(
      *         name="requestId",
      *         in="path",
@@ -391,32 +400,37 @@ class RequestController extends Controller
      *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="Request updated successfully",
+     *         description="Successful operation",
      *     ),
      *     @OA\Response(
      *         response=422,
-     *         description="Unprocessable request - Invalid input data",
+     *         description="Unprocessable request",
      *     ),
      *     @OA\Response(
      *         response=404,
      *         description="Applicant/Request not found or One or more selected payment methods are not available for this applicant",
      *     ),
      *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized"
+     *     ),
+     *     @OA\Response(
+     *         response=403,
+     *         description="Forbidden"
+     *     ),
+     *     @OA\Response(
      *         response=500,
-     *         description="Internal Server Error - An error occurred while updating the request",
+     *         description="Internal Server Error",
      *     )
      * )
      */
-    public function update(UpdateRequestRequest $request, $applicantId, $requestId){
+    public function update(UpdateRequestRequest $request, $requestId){
 
-        $applicant = UserModel::find($applicantId);
-        if(!$applicant) {
-            return response()->json(['message' => 'Applicant not found!'], 404);
-        }
+        $applicant = Auth::user();
 
         $req = $applicant->requests()->where('id', $requestId)->first();
         if (!$req) {
-            return response()->json(['message' => 'Request not found for this applicant.'], 404);
+            return response()->json(['message' => 'Request not found for the applicant.'], 404);
         }
 
         // Check whether the request has no associated bids
@@ -424,13 +438,7 @@ class RequestController extends Controller
             return response()->json(['message' => 'The request has one or more associated bids.'], 422); // 422 Unprocessable Request
         }
 
-        // Validate inputs using the form request
-        try {
-            $validated_data = $request->validated();
-        }
-        catch (ValidationException $e) {
-            return response()->json(['errors' => $e->errors()], 422); // 422 Unprocessable Request
-        }
+        $validated_data = $request->validated();
 
         $updateData = [
             'trade_volume' => $validated_data['trade_volume'],
