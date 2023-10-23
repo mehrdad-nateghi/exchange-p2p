@@ -33,13 +33,10 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Admin signed-in successfully."
-                    },
-                    "401": {
-                        "description": "Unauthorized"
+                        "description": "Successful operation"
                     },
                     "422": {
-                        "description": "Unprocessable request - Invalid input data"
+                        "description": "Unprocessable request"
                     },
                     "500": {
                         "description": "Internal Server Error"
@@ -56,10 +53,16 @@
                 "operationId": "adminSignout",
                 "responses": {
                     "200": {
-                        "description": "Successfully signed out."
+                        "description": "Successful operation"
                     },
                     "401": {
-                        "description": "Unauthenticated."
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
                     }
                 },
                 "security": [
@@ -96,13 +99,10 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Applicant signed-in successfully."
-                    },
-                    "401": {
-                        "description": "Unauthorized"
+                        "description": "Successful operation."
                     },
                     "422": {
-                        "description": "Unprocessable request - Invalid input data"
+                        "description": "Unprocessable request"
                     },
                     "500": {
                         "description": "Internal Server Error"
@@ -119,10 +119,16 @@
                 "operationId": "applicantSignout",
                 "responses": {
                     "200": {
-                        "description": "Successfully signed out."
+                        "description": "Successful operation."
                     },
                     "401": {
-                        "description": "Unauthenticated."
+                        "description": "Unauthorized."
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
                     }
                 },
                 "security": [
@@ -144,7 +150,10 @@
                         "description": "Successful operation"
                     },
                     "401": {
-                        "description": "Unauthenticated"
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
                     },
                     "500": {
                         "description": "Internal Server Error"
@@ -184,7 +193,10 @@
                         "description": "Request not found"
                     },
                     "401": {
-                        "description": "Unauthenticated"
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
                     },
                     "500": {
                         "description": "Internal Server Error"
@@ -224,7 +236,10 @@
                         "description": "Country/FinancialInformation/EuroDailyRate not found"
                     },
                     "401": {
-                        "description": "Unauthenticated"
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
                     },
                     "500": {
                         "description": "Internal Server Error"
@@ -293,7 +308,7 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Request created successfully"
+                        "description": "Successful operation"
                     },
                     "422": {
                         "description": "Unprocessable request - Invalid input data"
@@ -302,7 +317,10 @@
                         "description": "Applicant not found or One or more selected payment methods are not available for this applicant"
                     },
                     "401": {
-                        "description": "Unauthenticated"
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
                     },
                     "500": {
                         "description": "Internal Server Error"
@@ -320,7 +338,7 @@
                 "tags": [
                     "Requests"
                 ],
-                "summary": "Get setup information for updating a request by applicant who initiated the request.",
+                "summary": "Get setup information for updating a request by applicant who initiated the request",
                 "operationId": "getSetupInformationForRequestUpdateByApplicant",
                 "parameters": [
                     {
@@ -342,7 +360,10 @@
                         "description": "Applicant/Request not found"
                     },
                     "401": {
-                        "description": "Unauthenticated"
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
                     },
                     "500": {
                         "description": "Internal Server Error"
@@ -410,7 +431,7 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Request updated successfully"
+                        "description": "Successful operation"
                     },
                     "422": {
                         "description": "Unprocessable request - Invalid input data"
@@ -419,7 +440,10 @@
                         "description": "Applicant/Request not found or One or more selected payment methods are not available for this applicant"
                     },
                     "401": {
-                        "description": "Unauthenticated"
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
                     },
                     "500": {
                         "description": "Internal Server Error"

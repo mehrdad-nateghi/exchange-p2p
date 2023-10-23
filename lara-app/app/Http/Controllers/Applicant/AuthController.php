@@ -26,15 +26,11 @@ class AuthController extends Controller
      *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="Applicant signed-in successfully.",
-     *     ),
-     *     @OA\Response(
-     *         response=401,
-     *         description="Unauthorized",
+     *         description="Successful operation.",
      *     ),
      *     @OA\Response(
      *         response=422,
-     *         description="Unprocessable request - Invalid input data",
+     *         description="Unprocessable request",
      *     ),
      *     @OA\Response(
      *         response=500,
@@ -68,12 +64,20 @@ class AuthController extends Controller
      *     },
      *     @OA\Response(
      *         response=200,
-     *         description="Successfully signed out.",
+     *         description="Successful operation.",
      *     ),
      *     @OA\Response(
      *         response=401,
-     *         description="Unauthenticated.",
+     *         description="Unauthorized.",
      *     ),
+     *     @OA\Response(
+     *         response=403,
+     *         description="Forbidden"
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal Server Error",
+     *     )
      * )
      */
     public function signout(Request $request){

@@ -2,23 +2,15 @@
 
 namespace App\Http\Controllers\Applicant;
 
-use App\Enums\UserRoleEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\RequestResource;
 use App\Models\Request as RequestModel;
-use App\Models\User as UserModel;
-use Illuminate\Validation\ValidationException;
-use App\Http\Controllers\FinancialController;
-use App\Http\Requests\CreateRequest;
 use App\Http\Requests\CreateRequestRequest;
 use App\Http\Requests\UpdateRequestRequest;
 use App\Http\Resources\PaymentMethodResource;
 use App\Models\Country;
 use App\Models\Financial;
-use App\Rules\FeasibilityThresholdRange;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 /**
@@ -45,7 +37,11 @@ class RequestController extends Controller
      *      ),
      *     @OA\Response(
      *         response=401,
-     *         description="Unauthenticated"
+     *         description="Unauthorized"
+     *     ),
+     *     @OA\Response(
+     *         response=403,
+     *         description="Forbidden"
      *     ),
      *     @OA\Response(
      *         response=500,
@@ -88,7 +84,11 @@ class RequestController extends Controller
      *     ),
      *     @OA\Response(
      *         response=401,
-     *         description="Unauthenticated"
+     *         description="Unauthorized"
+     *     ),
+     *     @OA\Response(
+     *         response=403,
+     *         description="Forbidden"
      *     ),
      *     @OA\Response(
      *         response=500,
@@ -162,7 +162,11 @@ class RequestController extends Controller
      *     ),
      *     @OA\Response(
      *         response=401,
-     *         description="Unauthenticated"
+     *         description="Unauthorized"
+     *     ),
+     *     @OA\Response(
+     *         response=403,
+     *         description="Forbidden"
      *     ),
      *     @OA\Response(
      *         response=500,
@@ -221,7 +225,7 @@ class RequestController extends Controller
      *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="Request created successfully",
+     *         description="Successful operation",
      *     ),
      *     @OA\Response(
      *         response=422,
@@ -233,7 +237,11 @@ class RequestController extends Controller
      *     ),
      *     @OA\Response(
      *         response=401,
-     *         description="Unauthenticated"
+     *         description="Unauthorized"
+     *     ),
+     *     @OA\Response(
+     *         response=403,
+     *         description="Forbidden"
      *     ),
      *     @OA\Response(
      *         response=500,
@@ -317,7 +325,11 @@ class RequestController extends Controller
      *     ),
      *     @OA\Response(
      *         response=401,
-     *         description="Unauthenticated"
+     *         description="Unauthorized"
+     *     ),
+     *     @OA\Response(
+     *         response=403,
+     *         description="Forbidden"
      *     ),
      *     @OA\Response(
      *         response=500,
@@ -388,7 +400,7 @@ class RequestController extends Controller
      *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="Request updated successfully",
+     *         description="Successful operation",
      *     ),
      *     @OA\Response(
      *         response=422,
@@ -400,7 +412,11 @@ class RequestController extends Controller
      *     ),
      *     @OA\Response(
      *         response=401,
-     *         description="Unauthenticated"
+     *         description="Unauthorized"
+     *     ),
+     *     @OA\Response(
+     *         response=403,
+     *         description="Forbidden"
      *     ),
      *     @OA\Response(
      *         response=500,
