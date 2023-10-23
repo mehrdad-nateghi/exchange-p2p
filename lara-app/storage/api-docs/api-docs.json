@@ -311,10 +311,10 @@
                         "description": "Successful operation"
                     },
                     "422": {
-                        "description": "Unprocessable request - Invalid input data"
+                        "description": "Unprocessable request"
                     },
                     "404": {
-                        "description": "Applicant not found or One or more selected payment methods are not available for this applicant"
+                        "description": "Applicant not found or One or more selected payment methods are not available for the applicant"
                     },
                     "401": {
                         "description": "Unauthorized"
@@ -434,7 +434,7 @@
                         "description": "Successful operation"
                     },
                     "422": {
-                        "description": "Unprocessable request - Invalid input data"
+                        "description": "Unprocessable request"
                     },
                     "404": {
                         "description": "Applicant/Request not found or One or more selected payment methods are not available for this applicant"

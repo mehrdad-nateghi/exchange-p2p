@@ -229,11 +229,11 @@ class RequestController extends Controller
      *     ),
      *     @OA\Response(
      *         response=422,
-     *         description="Unprocessable request - Invalid input data",
+     *         description="Unprocessable request",
      *     ),
      *     @OA\Response(
      *         response=404,
-     *         description="Applicant not found or One or more selected payment methods are not available for this applicant",
+     *         description="Applicant not found or One or more selected payment methods are not available for the applicant",
      *     ),
      *     @OA\Response(
      *         response=401,
@@ -404,7 +404,7 @@ class RequestController extends Controller
      *     ),
      *     @OA\Response(
      *         response=422,
-     *         description="Unprocessable request - Invalid input data",
+     *         description="Unprocessable request",
      *     ),
      *     @OA\Response(
      *         response=404,
