@@ -38,6 +38,7 @@ Route::middleware(['auth:api', 'is.applicant'])->prefix('applicant')->group(func
     Route::post('/requests/create', [ApplicantRequestController::class,'create'])->name('applicant.requests.create');
     Route::get('/requests/update/setup/{requestId}', [ApplicantRequestController::class,'getSetupInformationForRequestUpdate'])->name('applicant.requests.update.setup');
     Route::put('/requests/update/{requestId}', [ApplicantRequestController::class, 'update'])->name('applicant.requests.update');
+    Route::delete('/requests/remove/{requestId}', [ApplicantRequestController::class, 'remove'])->name('applicant.requests.remove');
     Route::post('/signout',[ApplicantAuthController::class, 'signout'])->name('applicant.auth.signout');
 });
 
