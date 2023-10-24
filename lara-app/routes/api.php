@@ -43,7 +43,8 @@ Route::middleware(['auth:api', 'is.applicant'])->prefix('applicant')->group(func
 
 // Admin Routes
 Route::post('/admin/signin',[AdminAuthController::class, 'signin'])->name('admin.auth.signin');
-Route::middleware(['auth:api', 'is.admin'])->group(function () {
+Route::middleware(['auth:api', 'is.admin'])->prefix('admin')->group(function () {
+    Route::delete('/requests/remove/{requestId}', [AdminRequestController::class, 'remove'])->name('admin.requests.remove');
     Route::post('/admin/signout',[AdminAuthController::class, 'signout'])->name('admin.auth.signout');
 });
 /* Bids Management Routes */
