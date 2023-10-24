@@ -174,8 +174,6 @@ class RequestController extends Controller
             return $linkedMethod->paymentMethod->id;
         })->toArray();
 
-        Log::info('request_owener_payment_methods'. $request_owener_payment_methods[0]);
-
         $request_payment_methods = $validated_data['request_payment_methods'];
 
         // Check if the request payment methods exist and are associated with the applicant
