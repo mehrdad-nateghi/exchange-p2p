@@ -36,10 +36,10 @@ class SetupPaymentmethods extends Command
             $this->setupPaymentmethodsForIran();
             $this->setupPaymentmethodsForGermany();
         }
-        elseif ($argument === 'setupPaymentmethodsForIran') {
+        elseif ($argument === 'setup-payment-methods-IR') {
             $this->setupPaymentmethodsForIran();
         }
-        elseif ($argument === 'setupPaymentmethodsForGermany') {
+        elseif ($argument === 'setup-payment-methods-DE') {
             $this->setupPaymentmethodsForGermany();
         }
         else {
@@ -52,14 +52,14 @@ class SetupPaymentmethods extends Command
 
         try{
             // Clear associated record to 'Iran' and its payment methods and attributes if exist
-            $countries = Country::where('name', 'Iran')->get();
+            $countries = Country::where('name', 'IR')->get();
             foreach ($countries as $country) {
                 $country->delete();
             }
 
             // Create country
             $country = Country::create([
-                'name'=>'Iran'
+                'name'=>'IR'
             ]);
 
             // Create payment methods for the country
@@ -81,13 +81,13 @@ class SetupPaymentmethods extends Command
 
             DB::commit();
 
-            $this->info('setupPaymentmethodsForIran is completed!');
+            $this->info('setup-payment-methods-IR is completed!');
             return Command::SUCCESS;
         } catch (\Exception $e) {
 
             DB::rollBack();
 
-            $this->error('setupPaymentmethodsForIran is failed!');
+            $this->error('setup-payment-methods-IR is failed!');
             return Command::FAILURE;
         }
     }
@@ -97,14 +97,14 @@ class SetupPaymentmethods extends Command
 
         try {
             // Clear associated record to 'Germany' and its payment methods and attributes if exist
-            $countries = Country::where('name', 'Germany')->get();
+            $countries = Country::where('name', 'DE')->get();
             foreach ($countries as $country) {
                 $country->delete();
             }
 
             // Create country
             $country = Country::create([
-                'name'=>'Germany'
+                'name'=>'DE'
             ]);
 
             // Create payment methods for the country
@@ -132,14 +132,14 @@ class SetupPaymentmethods extends Command
 
             DB::commit();
 
-            $this->info('setupPaymentmethodsForGermany is completed!');
+            $this->info('setup-payment-methods-DE is completed!');
             return Command::SUCCESS;
 
         } catch (\Exception $e) {
 
             DB::rollBack();
 
-            $this->error('setupPaymentmethodsForGermany is failed!');
+            $this->error('setup-payment-methods-DE is failed!');
             return Command::FAILURE;
         }
     }
