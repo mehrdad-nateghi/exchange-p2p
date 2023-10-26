@@ -431,7 +431,7 @@ class RequestController extends Controller
         $applicant = Auth::user();
 
         $req = $applicant->requests()->where('id', $requestId)->first();
-        if (!$req) {
+        if (!$req || $req->status == RequestStatusEnum::Removed) {
             return response()->json(['message' => 'Request not found for the applicant.'], 404);
         }
 
