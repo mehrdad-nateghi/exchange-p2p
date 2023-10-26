@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\RequestStatusEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateRequestRequest;
 use App\Http\Resources\PaymentMethodResource;
@@ -143,13 +144,8 @@ class RequestController extends Controller
     public function update(UpdateRequestRequest $request, $requestId){
 
         $req = Request::find($requestId);
-        if (!$req) {
+        if (!$req || $req->status == RequestStatusEnum::Removed) {
             return response()->json(['message' => 'Request not found.'], 404);
-        }
-
-        // Check whether the request has no associated bids
-        if(!($req->bids->isEmpty())) {
-            return response()->json(['message' => 'The request has one or more associated bids.'], 422); // 422 Unprocessable Request
         }
 
         $validated_data = $request->validated();
