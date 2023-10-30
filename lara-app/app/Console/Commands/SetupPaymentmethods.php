@@ -4,16 +4,16 @@ namespace App\Console\Commands;
 
 use App\Models\Country;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
-class SetupPaymentmethods extends Command
+class SetupPaymentMethods extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'setup:paymentmethods {argument?}';
+    protected $signature = 'setup:payment-methods';
 
     /**
      * The console command description.
@@ -22,6 +22,13 @@ class SetupPaymentmethods extends Command
      */
     protected $description = 'Setup contry-specific default payment methods on the database';
 
+    protected function configure()
+    {
+        $this->addOption('all', null, null, $description = 'Option for setting up payment methods of all countries.');
+        $this->addOption('IR', null, null, $description = 'Option for setting up payment methods of IR country.');
+        $this->addOption('DE', null, null, $description = 'Option for setting up payment methods of DE country.');
+    }
+
     /**
      * Execute the console command.
      *
@@ -29,118 +36,99 @@ class SetupPaymentmethods extends Command
      */
     public function handle()
     {
-
-        $argument = $this->argument('argument');
-
-        if ($argument === null) {
-            $this->setupPaymentmethodsForIran();
-            $this->setupPaymentmethodsForGermany();
+        if($this->option('all')) {
+            $this->setupPaymentMethodsForIR();
+            $this->setupPaymentMethodsForDE();
         }
-        elseif ($argument === 'setup-payment-methods-IR') {
-            $this->setupPaymentmethodsForIran();
+        elseif($this->option('DE')) {
+            $this->setupPaymentMethodsForDE();
         }
-        elseif ($argument === 'setup-payment-methods-DE') {
-            $this->setupPaymentmethodsForGermany();
+        elseif($this->option('IR')) {
+            $this->setupPaymentMethodsForIR();
         }
         else {
-            $this->error('Invalid argument provided. Use a valid option or provide no argument to execute all methods.');
-        }
-    }
-
-    public function setupPaymentmethodsForIran(){
-        DB::beginTransaction();
-
-        try{
-            // Clear associated record to 'Iran' and its payment methods and attributes if exist
-            $countries = Country::where('name', 'IR')->get();
-            foreach ($countries as $country) {
-                $country->delete();
-            }
-
-            // Create country
-            $country = Country::create([
-                'name'=>'IR'
-            ]);
-
-            // Create payment methods for the country
-            $payment_methods_info = [
-                ['name' => 'Bank Account'],
-            ];
-            $country->paymentmethods()->createMany($payment_methods_info);
-
-            // Create attributes for respective payment method
-            $bank_account_attributes = [
-                ['name' => 'bank_name'],
-                ['name' => 'holder_name'],
-                ['name' => 'account_number'],
-                ['name' => 'card_number'],
-                ['name' => 'shaba_number']
-            ];
-            $bank_account_payment_method = $country->paymentmethods()->where('name','Bank Account')->first();
-            $bank_account_payment_method->attributes()->createMany($bank_account_attributes);
-
-            DB::commit();
-
-            $this->info('setup-payment-methods-IR is completed!');
-            return Command::SUCCESS;
-        } catch (\Exception $e) {
-
-            DB::rollBack();
-
-            $this->error('setup-payment-methods-IR is failed!');
+            $this->error('Invalid option provided. Use a valid option.');
             return Command::FAILURE;
         }
     }
 
-    public function setupPaymentmethodsForGermany(){
-        DB::beginTransaction();
+
+    public function setupPaymentMethodsForDE()
+    {
 
         try {
-            // Clear associated record to 'Germany' and its payment methods and attributes if exist
-            $countries = Country::where('name', 'DE')->get();
-            foreach ($countries as $country) {
-                $country->delete();
+            $country = config('config_default_DE.country');
+            $country_DE = Country::where('name', $country)->first();
+
+            if (!$country_DE) {
+                $this->error('DE country does not exist. setup:payment-methods --DE is failed!');
+                return Command::FAILURE;
             }
 
-            // Create country
-            $country = Country::create([
-                'name'=>'DE'
-            ]);
+            $paymentMethods_DE = config('config_default_DE.payment_methods');
 
-            // Create payment methods for the country
-            $payment_methods_info = [
-                ['name' => 'Bank Account'],
-                ['name' => 'Paypal']
-            ];
-            $country->paymentmethods()->createMany($payment_methods_info);
+            foreach ($paymentMethods_DE as $pm) {
+                // Check whether the current payment method exists or not
+                $pm_name = $pm['name'];
+                $payment_method = $country_DE->paymentMethods()->where('name', $pm_name)->first();
 
-            // Create attributes for respective payment method
-            $bank_account_attributes = [
-                ['name' => 'bank_name'],
-                ['name' => 'holder_name'],
-                ['name' => 'iban'],
-                ['name' => 'bic']
-            ];
-            $bank_account_payment_method = $country->paymentmethods()->where('name','Bank Account')->first();
-            $bank_account_payment_method->attributes()->createMany($bank_account_attributes);
+                if (!$payment_method) {
+                    // Create a new payment method
+                    $created_payment_method = $country_DE->paymentMethods()->create(['name' => $pm_name]);
 
-            $paypal_attributes = [
-                ['name' => 'email']
-            ];
-            $paypal_payment_method = $country->paymentmethods()->where('name','Paypal')->first();
-            $paypal_payment_method->attributes()->createMany($paypal_attributes);
+                    // Declare attributes for the created payment method
+                    $attributes = $pm['attributes'];
+                    $created_payment_method->attributes()->createMany($attributes);
+                }
+            }
 
-            DB::commit();
-
-            $this->info('setup-payment-methods-DE is completed!');
+            $this->info('setup:payment-methods --DE is completed!');
             return Command::SUCCESS;
 
         } catch (\Exception $e) {
-
-            DB::rollBack();
-
-            $this->error('setup-payment-methods-DE is failed!');
+            $this->error('setup:payment-methods --DE is failed!');
             return Command::FAILURE;
         }
+
     }
+
+    public function setupPaymentMethodsForIR()
+    {
+
+        try {
+            $country = config('config_default_IR.country');
+            $country_IR = Country::where('name', $country)->first();
+
+            if (!$country_IR) {
+                $this->error('IR country does not exist. setup:payment-methods --IR is failed!');
+                return Command::FAILURE;
+            }
+
+            $paymentMethods_IR = config('config_default_IR.payment_methods');
+
+            foreach ($paymentMethods_IR as $pm) {
+                // Check whether the current payment method exists or not
+                $pm_name = $pm['name'];
+                $payment_method = $country_IR->paymentMethods()->where('name', $pm_name)->first();
+
+                if (!$payment_method) {
+                    // Create a new payment method
+                    $created_payment_method = $country_IR->paymentMethods()->create(['name' => $pm_name]);
+
+                    // Declare attributes for the created payment method
+                    $attributes = $pm['attributes'];
+                    $created_payment_method->attributes()->createMany($attributes);
+                }
+            }
+
+            $this->info('setup:payment-methods --IR is completed!');
+            return Command::SUCCESS;
+
+        } catch (\Exception $e) {
+            $this->error('setup:payment-methods --IR is failed!');
+            return Command::FAILURE;
+        }
+
+    }
+
 }
