@@ -7,7 +7,7 @@ return [
     'country' => 'DE',
     'payment_methods' => [
         [
-            'name' => 'Bank Account',
+            'name' => 'Bank Transfer',
             'attributes' => [
                 ['name' => 'bank_name'],
                 ['name' => 'holder_name'],
