@@ -10,7 +10,6 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 COPY ./dockerfiles/entrypoint.sh /usr/local/bin/entrypoint.sh
 
 ENV PORT=8000
-ENV INITIAL_SETUP=false
 
 RUN chmod +x /usr/local/bin/entrypoint.sh
 ENTRYPOINT [ "/usr/local/bin/entrypoint.sh" ]
