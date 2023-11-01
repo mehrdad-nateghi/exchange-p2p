@@ -11,8 +11,9 @@ return [
             'attributes' => [
                 ['name' => 'bank_name'],
                 ['name' => 'holder_name'],
-                ['name' => 'iban'],
-                ['name' => 'bic']
+                ['name' => 'account_number'],
+                ['name' => 'card_number'],
+                ['name' => 'shaba_number']
             ]
         ]
     ]
