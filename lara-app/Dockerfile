@@ -5,10 +5,12 @@ RUN apt-get install -y unzip libpq-dev libcurl4-gnutls-dev
 RUN docker-php-ext-install pdo pdo_mysql bcmath
 
 WORKDIR /var/www
-COPY . .
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+COPY ./dockerfiles/entrypoint.sh /usr/local/bin/entrypoint.sh
 
 ENV PORT=8000
-RUN chmod +x Docker/entrypoint.sh
-ENTRYPOINT [ "docker/entrypoint.sh" ]
+
+RUN chmod +x /usr/local/bin/entrypoint.sh
+ENTRYPOINT [ "/usr/local/bin/entrypoint.sh" ]
+
