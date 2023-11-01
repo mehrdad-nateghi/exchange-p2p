@@ -5,12 +5,16 @@ then
     composer install --no-progress --no-interaction
 fi
 
-if [ ! -f ".env" ]
+if [ "$RUN_SETUP_COMMANDS" = "true" ]
 then
-    echo "Creating env file for env $APP_ENV"
-    cp .env.example .env
-else
-    echo "env file exists."
+    # Run the setup commands
+    php artisan key:generate
+    php artisan migrate
+    php artisan cache:clear
+    php artisan config:clear
+    php artisan rout:clear
+    php artisan passport:install
+    php artisan db:seed
 fi
 
 
