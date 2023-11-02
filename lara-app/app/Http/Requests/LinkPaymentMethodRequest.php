@@ -50,11 +50,11 @@ class LinkPaymentMethodRequest extends FormRequest
             $country = $payment_method->country;
 
             if ($country->name === 'DE' && $payment_method->name === 'Paypal') {
-                $rules = $this->addPaypalRules($rules);
+                $rules = $this->addPaypalRulesForDE($rules);
             } elseif ($country->name === 'DE' && $payment_method->name === 'Bank Transfer') {
-                Log::alert('DE-Bank Transfer');
+                $rules = $this->addBankTransferRulesForDE($rules);
             } elseif ($country->name === 'IR' && $payment_method->name === 'Bank Transfer') {
-                Log::alert('IR-Bank Transfer');
+                $rules = $this->addBankTransferRulesForIR($rules);
             }
         }
 
@@ -71,7 +71,21 @@ class LinkPaymentMethodRequest extends FormRequest
 
     protected function addBankTransferRulesForDE($rules)
     {
-        $rules['payment_method_attributes.email'] = 'required|email';
+        $rules['payment_method_attributes.bank_name'] = 'required|string';
+        $rules['payment_method_attributes.holder_name'] = 'required|string';
+        $rules['payment_method_attributes.iban'] = 'required|string';
+        $rules['payment_method_attributes.bic'] = 'required|string';
+
+        return $rules;
+    }
+
+    protected function addBankTransferRulesForIR($rules)
+    {
+        $rules['payment_method_attributes.bank_name'] = 'required|string';
+        $rules['payment_method_attributes.holder_name'] = 'required|string';
+        $rules['payment_method_attributes.account_number'] = 'required|string';
+        $rules['payment_method_attributes.card_number'] = 'required|string';
+        $rules['payment_method_attributes.shaba_number'] = 'required|string';
 
         return $rules;
     }

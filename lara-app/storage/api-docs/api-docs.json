@@ -304,6 +304,90 @@
                 ]
             }
         },
+        "/api/applicant/payment-methods/link": {
+            "post": {
+                "tags": [
+                    "PaymentMethods"
+                ],
+                "summary": "Link a payment method to the authenticated applicant account",
+                "operationId": "linkPaymentMethod",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "payment_method_id": {
+                                        "description": "Id of the payment method which you intend to link",
+                                        "type": "string"
+                                    },
+                                    "payment_method_attributes": {
+                                        "properties": {
+                                            "holder_name": {
+                                                "description": "Required for Bank-Transfer linking",
+                                                "type": "string"
+                                            },
+                                            "bank_name": {
+                                                "description": "Required for Bank-Transfer linking",
+                                                "type": "string"
+                                            },
+                                            "iban": {
+                                                "description": "Required for DE Bank-Transfer linking",
+                                                "type": "string"
+                                            },
+                                            "bic": {
+                                                "description": "Required for DE Bank-Transfer linking",
+                                                "type": "string"
+                                            },
+                                            "account_number": {
+                                                "description": "Required for IR Bank-Transfer linking",
+                                                "type": "string"
+                                            },
+                                            "card_number": {
+                                                "description": "Required for IR Bank-Transfer linking",
+                                                "type": "string"
+                                            },
+                                            "shaba_number": {
+                                                "description": "Required for IR Bank-Transfer linking",
+                                                "type": "string"
+                                            },
+                                            "email": {
+                                                "description": "Required for Paypal linking",
+                                                "type": "string"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "422": {
+                        "description": "Unprocessable request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/applicant/requests": {
             "get": {
                 "tags": [
