@@ -791,10 +791,78 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Successful operation"
-                    },
-                    "500": {
-                        "description": "Internal Server Error"
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "requests": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "description": "A unique identifier or reference for a particular record or entity in the dataset.",
+                                                        "type": "integer"
+                                                    },
+                                                    "support_id": {
+                                                        "description": "A unique identifier for customer support improvement purpose.",
+                                                        "type": "string"
+                                                    },
+                                                    "type": {
+                                                        "description": "A categorical attribute that describes the nature or category of the particular request. 0 indicates Buy request and 1 indicates Sell request.",
+                                                        "type": "integer"
+                                                    },
+                                                    "trade_volume": {
+                                                        "description": "The quantitative measure of the volume or quantity of currency which would be sold or bought in the request.",
+                                                        "type": "decimal"
+                                                    },
+                                                    "lower_bound_feasibility_threshold": {
+                                                        "description": "The minimum threshold of the suggested price that must be met before a particular bid can be registered or considered valid.",
+                                                        "type": "decimal"
+                                                    },
+                                                    "upper_bound_feasibility_threshold": {
+                                                        "description": "The maximum threshold of the suggested price that must be met before a particular bid can be registered or considered valid.",
+                                                        "type": "decimal"
+                                                    },
+                                                    "acceptance_threshold": {
+                                                        "description": "The minimum threshold of the suggested price that must be met for an automatic bid acceptance to occur.",
+                                                        "type": "decimal"
+                                                    },
+                                                    "request_rate": {
+                                                        "description": "The cost or price associated with a single unit of currency.",
+                                                        "type": "decimal"
+                                                    },
+                                                    "status": {
+                                                        "description": "A descriptive attribute indicating the current state or condition of the request. 0 indicates Pending status, 1 indicates Inprocess status, and 2 indicates Removed status.",
+                                                        "type": "integer"
+                                                    },
+                                                    "description": {
+                                                        "description": "A textual field provided by the requester that contains additional information or a detailed explanation about the request.",
+                                                        "type": "string"
+                                                    },
+                                                    "created_at": {
+                                                        "description": "The timestamp or date when the request was initially created or entered into the system.",
+                                                        "type": "timestamp",
+                                                        "format": "date-time"
+                                                    },
+                                                    "updated_at": {
+                                                        "description": "The timestamp or date when the record was last modified in the system.",
+                                                        "type": "timestamp",
+                                                        "format": "date-time"
+                                                    },
+                                                    "applicant_id": {
+                                                        "description": "An identifier associated with the applicant who created the request in the system.",
+                                                        "type": "integer"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -833,6 +901,11 @@
         }
     },
     "components": {
+        "responses": {
+            "500": {
+                "description": "Internal Server Error"
+            }
+        },
         "securitySchemes": {
             "bearerAuth": {
                 "type": "http",

@@ -80,7 +80,25 @@ class RequestController extends Controller
      *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="Successful operation"
+     *         description="Successful operation",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="requests", type="array", @OA\Items(
+     *                 @OA\Property(property="id", type="integer", description = "A unique identifier or reference for a particular record or entity in the dataset."),
+     *                 @OA\Property(property="support_id", type="string", description = "A unique identifier for customer support improvement purpose."),
+     *                 @OA\Property(property="type", type="integer", description = "A categorical attribute that describes the nature or category of the particular request. 0 indicates Buy request and 1 indicates Sell request."),
+     *                 @OA\Property(property="trade_volume", type="decimal", description = "The quantitative measure of the volume or quantity of currency which would be sold or bought in the request." ),
+     *                 @OA\Property(property="lower_bound_feasibility_threshold", type="decimal", description = "The minimum threshold of the suggested price that must be met before a particular bid can be registered or considered valid."),
+     *                 @OA\Property(property="upper_bound_feasibility_threshold", type="decimal", description = "The maximum threshold of the suggested price that must be met before a particular bid can be registered or considered valid."),
+     *                 @OA\Property(property="acceptance_threshold", type="decimal", description = "The minimum threshold of the suggested price that must be met for an automatic bid acceptance to occur."),
+     *                 @OA\Property(property="request_rate", type="decimal", description = "The cost or price associated with a single unit of currency."),
+     *                 @OA\Property(property="status", type="integer", description = "A descriptive attribute indicating the current state or condition of the request. 0 indicates Pending status, 1 indicates Inprocess status, and 2 indicates Removed status."),
+     *                 @OA\Property(property="description", type="string", description = "A textual field provided by the requester that contains additional information or a detailed explanation about the request."),
+     *                 @OA\Property(property="created_at", type="timestamp", format="date-time", description = "The timestamp or date when the request was initially created or entered into the system."),
+     *                 @OA\Property(property="updated_at", type="timestamp", format="date-time", description = "The timestamp or date when the record was last modified in the system."),
+     *                 @OA\Property(property="applicant_id", type="integer", description = "An identifier associated with the applicant who created the request in the system.")
+     *             ))
+     *         )
+     *     ),
      *     ),
      *     @OA\Response(
      *         response=500,
