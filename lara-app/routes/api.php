@@ -11,7 +11,7 @@ use App\Http\Controllers\Guest\BidController as GuestBidController;
 use App\Http\Controllers\RequestController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\Applicant\PaymentMethodController as ApplicantPaymentMethodController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -40,6 +40,8 @@ Route::middleware(['auth:api', 'is.applicant'])->prefix('applicant')->group(func
     Route::put('/requests/update/{requestId}', [ApplicantRequestController::class, 'update'])->name('applicant.requests.update');
     Route::delete('/requests/remove/{requestId}', [ApplicantRequestController::class, 'remove'])->name('applicant.requests.remove');
     Route::post('/signout',[ApplicantAuthController::class, 'signout'])->name('applicant.auth.signout');
+    Route::delete('/payment-methods/unlink/{linkedPaymentMethodId}', [ApplicantPaymentMethodController::class, 'unlinkPaymentMethod'])->name('applicant.paymentMethods.unlink');
+
 });
 
 // Admin Routes

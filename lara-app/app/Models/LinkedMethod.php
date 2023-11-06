@@ -48,4 +48,10 @@ class LinkedMethod extends Model
         return $this->hasMany(Bid::class, 'target_account_id');
     }
 
+    /*
+    * Get the Requests for the LinkedMethod.
+    */
+    public function requests(){
+        return $this->belongsToMany(Request::class, 'request_linkedmethod', 'linked_method_id', 'request_id');
+    }
 }

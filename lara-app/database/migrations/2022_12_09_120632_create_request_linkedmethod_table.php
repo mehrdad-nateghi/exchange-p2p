@@ -12,11 +12,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('request_paymentmethod', function (Blueprint $table) {
+        Schema::create('request_linkedmethod', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('request_id');
-            $table->unsignedBigInteger('payment_method_id');
-            $table->foreign('payment_method_id')->references('id')->on('payment_methods')->onDelete('cascade');
+            $table->unsignedBigInteger('linked_method_id');
+            $table->foreign('linked_method_id')->references('id')->on('linked_methods')->onDelete('cascade');
             $table->foreign('request_id')->references('id')->on('requests')->onDelete('cascade');
 
         });
