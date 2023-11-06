@@ -792,9 +792,6 @@
                 "responses": {
                     "200": {
                         "description": "Successful operation"
-                    },
-                    "500": {
-                        "description": "Internal Server Error"
                     }
                 }
             }
@@ -833,6 +830,11 @@
         }
     },
     "components": {
+        "responses": {
+            "500": {
+                "description": "Internal Server Error"
+            }
+        },
         "securitySchemes": {
             "bearerAuth": {
                 "type": "http",
