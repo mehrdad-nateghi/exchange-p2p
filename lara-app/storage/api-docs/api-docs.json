@@ -814,23 +814,28 @@
                                                     },
                                                     "trade_volume": {
                                                         "description": "The quantitative measure of the volume or quantity of currency which would be sold or bought in the request.",
-                                                        "type": "decimal"
+                                                        "type": "number",
+                                                        "format": "double"
                                                     },
                                                     "lower_bound_feasibility_threshold": {
                                                         "description": "The minimum threshold of the suggested price that must be met before a particular bid can be registered or considered valid.",
-                                                        "type": "decimal"
+                                                        "type": "number",
+                                                        "format": "double"
                                                     },
                                                     "upper_bound_feasibility_threshold": {
                                                         "description": "The maximum threshold of the suggested price that must be met before a particular bid can be registered or considered valid.",
-                                                        "type": "decimal"
+                                                        "type": "number",
+                                                        "format": "double"
                                                     },
                                                     "acceptance_threshold": {
                                                         "description": "The minimum threshold of the suggested price that must be met for an automatic bid acceptance to occur.",
-                                                        "type": "decimal"
+                                                        "type": "number",
+                                                        "format": "double"
                                                     },
                                                     "request_rate": {
                                                         "description": "The cost or price associated with a single unit of currency.",
-                                                        "type": "decimal"
+                                                        "type": "number",
+                                                        "format": "double"
                                                     },
                                                     "status": {
                                                         "description": "A descriptive attribute indicating the current state or condition of the request. 0 indicates Pending status, 1 indicates Inprocess status, and 2 indicates Removed status.",
@@ -842,17 +847,17 @@
                                                     },
                                                     "created_at": {
                                                         "description": "The timestamp or date when the request was initially created or entered into the system.",
-                                                        "type": "timestamp",
+                                                        "type": "string",
                                                         "format": "date-time"
                                                     },
                                                     "updated_at": {
                                                         "description": "The timestamp or date when the record was last modified in the system.",
-                                                        "type": "timestamp",
+                                                        "type": "string",
                                                         "format": "date-time"
                                                     },
                                                     "applicant_id": {
                                                         "description": "An identifier associated with the applicant who created the request in the system.",
-                                                        "type": "integer"
+                                                        "type": "number"
                                                     }
                                                 },
                                                 "type": "object"
