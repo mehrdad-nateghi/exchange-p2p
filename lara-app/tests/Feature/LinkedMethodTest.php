@@ -65,4 +65,10 @@ class LinkedMethodTest extends TestCase
     {
         $this->assertTrue($this->linkedMethod->bids->contains($this->bid));
     }
+
+    /** @test for the m to n Request - LinkedMethod relation*/
+    public function a_linkedmethod_belongs_to_many_requests()
+    {
+        $this->assertInstanceOf('Illuminate\Database\Eloquent\Collection', $this->linkedMethod->requests);
+    }
 }

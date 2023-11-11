@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\LinkedMethodStatusEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -48,4 +49,17 @@ class LinkedMethod extends Model
         return $this->hasMany(Bid::class, 'target_account_id');
     }
 
+    /*
+    * Get the Requests for the LinkedMethod.
+    */
+    public function requests(){
+        return $this->belongsToMany(Request::class, 'request_linkedmethod', 'linked_method_id', 'request_id');
+    }
+
+    /*
+    * Enum casting for the status and type fields
+    */
+    protected $casts = [
+        'status' => LinkedMethodStatusEnum::class
+    ];
 }
