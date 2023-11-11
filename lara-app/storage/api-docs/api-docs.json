@@ -388,6 +388,62 @@
                 ]
             }
         },
+        "/api/applicant/payment-methods/unlink/{linkedMethodId}": {
+            "delete": {
+                "tags": [
+                    "PaymentMethods"
+                ],
+                "summary": "Unlink a specific linked method by an applicant who linked the method",
+                "operationId": "unlinkPaymentMethodByApplicant",
+                "parameters": [
+                    {
+                        "name": "linkedMethodId",
+                        "in": "path",
+                        "description": "ID of the linked method to unlink",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "A descriptive attribute indicating the result of request.",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Linked method not found"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/applicant/requests": {
             "get": {
                 "tags": [
@@ -876,9 +932,6 @@
                 "responses": {
                     "200": {
                         "description": "Successful operation"
-                    },
-                    "500": {
-                        "description": "Internal Server Error"
                     }
                 }
             }
@@ -917,6 +970,11 @@
         }
     },
     "components": {
+        "responses": {
+            "500": {
+                "description": "Internal Server Error"
+            }
+        },
         "securitySchemes": {
             "bearerAuth": {
                 "type": "http",
@@ -931,6 +989,10 @@
         {
             "name": "Requests",
             "description": "APIs for managing Requests"
+        },
+        {
+            "name": "PaymentMethods",
+            "description": "APIs for managing Payment Methods"
         },
         {
             "name": "Requests",

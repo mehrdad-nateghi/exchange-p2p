@@ -41,6 +41,8 @@ Route::middleware(['auth:api', 'is.applicant'])->prefix('applicant')->group(func
     Route::delete('/requests/remove/{requestId}', [ApplicantRequestController::class, 'remove'])->name('applicant.requests.remove');
     Route::post('/signout',[ApplicantAuthController::class, 'signout'])->name('applicant.auth.signout');
     Route::post('/payment-methods/link', [ApplicantPaymentMethodController::class, 'linkPaymentMethod'])->name('applicant.paymentMethods.link');
+    Route::delete('/payment-methods/unlink/{linkedMethodId}', [ApplicantPaymentMethodController::class, 'unlinkPaymentMethod'])->name('applicant.paymentMethods.unlink');
+
 });
 
 // Admin Routes

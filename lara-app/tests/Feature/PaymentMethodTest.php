@@ -52,10 +52,4 @@ class PaymentMethodTest extends TestCase
     {
         $this->assertTrue($this->paymentMethod->linkedMethods->contains($this->linkedMethod));
     }
-
-    /** @test for the m to n Request - PaymentMethod relation*/
-    public function a_paymentmethod_belongs_to_many_requests()
-    {
-        $this->assertInstanceOf('Illuminate\Database\Eloquent\Collection', $this->paymentMethod->requests);
-    }
 }

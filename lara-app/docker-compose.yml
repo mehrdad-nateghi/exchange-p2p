@@ -1,0 +1,52 @@
+version: "3.8"
+services:
+    # PHP Service
+    php:
+        build:
+            context: .
+            target: php
+            args:
+                - APP_ENV=${APP_ENV}
+        environment:
+            - APP_ENV=${APP_ENV}
+            - CONTAINER_ROLE=app
+            - RUN_SETUP_COMMANDS=${RUN_SETUP_COMMANDS}
+        working_dir: /var/www
+        volumes:
+            - ./:/var/www
+        ports:
+            - 8000:8000
+        depends_on:
+            - database
+
+    # Database Server
+    database:
+        image: mysql:8.2.0
+        restart: always
+        volumes:
+            - ./dockerfiles/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+            - database_data:/var/lib/mysql
+        ports:
+            - 3306:3306
+        environment:
+            - MYSQL_DATABASE=${DB_DATABASE}
+            - MYSQL_USER=${DB_USERNAME}
+            - MYSQL_PASSWORD=${DB_PASSWORD}
+            - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+
+    databaseAdmin:
+        depends_on:
+            - database
+        image: phpmyadmin
+        restart: always
+        ports:
+            - "8090:80"
+        environment:
+            - PMA_HOST=database
+            - PMA_PORT=3306
+            - MYSQL_USER=${DB_USERNAME}
+            - MYSQL_PASSWORD=${DB_PASSWORD}
+            - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+
+volumes:
+    database_data:
