@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\RequestResource;
 use App\Models\Request as RequestModel;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Log;
 
 /**
  * @OA\Tag(
@@ -108,7 +108,7 @@ class RequestController extends Controller
      */
     public function getRequests(Request $request)
     {
-        $query = RequestModel::with('paymentMethods');
+        $query = RequestModel::with('linkedMethods');
 
         // Filter requests by type
         if ($request->has('type')) {
@@ -119,8 +119,8 @@ class RequestController extends Controller
         // Filter requests by PaymentMethods
         if ($request->has('payment_methods')) {
             $paymentMethods = $request->input('payment_methods');
-            $query->whereHas('paymentMethods', function ($q) use ($paymentMethods) {
-                $q->whereIn('payment_methods.id', $paymentMethods);
+            $query->whereHas('linkedMethods', function ($q) use ($paymentMethods) {
+                $q->whereIn('method_type_id', $paymentMethods);
             });
         }
 

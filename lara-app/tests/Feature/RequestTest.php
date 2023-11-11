@@ -9,6 +9,7 @@ use App\Models\Country;
 use App\Models\Email;
 use App\Models\EmailTemplate;
 use App\Models\Financial;
+use App\Models\LinkedMethod;
 use App\Models\Notification;
 use App\Models\PaymentMethod;
 use App\Models\Request;
@@ -29,6 +30,7 @@ class RequestTest extends TestCase
     protected $notification;
     protected $country;
     protected $paymentMethod;
+    protected $linkedMethod;
 
     protected function setUp(): void
     {
@@ -37,6 +39,7 @@ class RequestTest extends TestCase
         $this->country = Country::factory()->create();
         $this->paymentMethod = PaymentMethod::factory()->create(['country_id' => $this->country->id]);
         $this->user = User::factory()->create(['role'=>UserRoleEnum::Applicant]);
+        $this->linkedMethod = LinkedMethod::factory()->create(['method_type_id'=>$this->paymentMethod->id, 'applicant_id'=>$this->user->id]);
         $this->request = Request::factory()->create(['applicant_id' => $this->user->id]);
         $this->bid = Bid::factory()->create(['applicant_id'=>$this->user->id, 'request_id'=>$this->request->id]);
         $this->emaiTemplate = EmailTemplate::factory()->create();
@@ -44,11 +47,11 @@ class RequestTest extends TestCase
         $this->notification = Notification::factory()->create(['user_id'=> $this->user->id, 'notifiable_id' => $this->request->id, 'notifiable_type' => "App\Models\Request"]);
     }
 
-    /** @test for the m to n Request - PaymentMethod relation*/
-    public function a_request_belongs_to_many_paymentmethod()
+    /** @test for the m to n Request - LinkedMethod relation*/
+    public function a_request_belongs_to_many_linkedmethod()
     {
-        $this->request->paymentMethods()->attach($this->paymentMethod);
-        $this->assertInstanceOf('Illuminate\Database\Eloquent\Collection', $this->request->paymentMethods);
+        $this->request->linkedMethods()->attach($this->linkedMethod);
+        $this->assertInstanceOf('Illuminate\Database\Eloquent\Collection', $this->request->linkedMethods);
     }
 
     /** @test for the 1 to n User - Request relation*/
