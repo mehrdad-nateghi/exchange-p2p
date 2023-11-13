@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Enums\BidStatusEnum;
 use App\Enums\LinkedMethodStatusEnum;
 use App\Enums\RequestStatusEnum;
-
+use Illuminate\Support\Facades\Log;
 
 /**
  * @OA\Tag(
@@ -22,7 +22,7 @@ class PaymentMethodController extends Controller
     /**
      * @OA\Get(
      *     path="/api/applicant/payment-methods",
-     *     summary="Get linked/unlinked payment methods of the authenticated applicant",
+     *     summary="Get linked/not_linked/unlinked payment methods of the authenticated applicant",
      *     tags={"PaymentMethods"},
      *     operationId="getPaymentMethods",
      *     security={
@@ -53,45 +53,26 @@ class PaymentMethodController extends Controller
         $response = [];
 
         // Fetch linked payment methods of the applicant
-        $applicant_linked_methods = $applicant->linkedMethods()->where('status', LinkedMethodStatusEnum::Active)->get();
+        $applicant_linked_methods = $applicant->getLinkedPaymentMethods();
         $reformatted_linked_payment_methods = $applicant_linked_methods->map(function ($lm) {
-            $lm_attributes = $lm->attributes->map(function ($attr) {
-                return [
-                    'attribute_id' => $attr['id'],
-                    'attribute_name' => $attr['name'],
-                    'value' => $attr['pivot']['value']
-                ];
-            });
-
-            return [
-                'payment_method_id' => $lm['method_type_id'],
-                'payment_method_name' => $lm->paymentMethod->name,
-                'country_id' => $lm->paymentMethod->country->id,
-                'payment_method_attributes' => $lm_attributes
-            ];
+            return $lm->formatAttributes();
         });
-
         $response['linked_payment_methods'] = $reformatted_linked_payment_methods;
 
         // Fetch unlinked payment methods of the applicant
-        $reformatted_unlinked_payment_methods = [];
+        $applicant_ulinked_methods = $applicant->getUnlinkedPaymentMethods();
+        $reformatted_ulinked_payment_methods = $applicant_ulinked_methods->map(function ($lm) {
+            return $lm->formatAttributes();
+        });
+        $response['ulinked_payment_methods'] = $reformatted_ulinked_payment_methods;
+
+        // Fetch not linked payment methods of the applicant
         $system_payment_methods = PaymentMethod::all();
-
-        foreach ($system_payment_methods as $pm) {
-            $islinked = false;
-            foreach ($reformatted_linked_payment_methods as $lm) {
-                if ($pm['id'] == $lm['payment_method_id']) {
-                    $islinked = true;
-                    break;
-                }
-            }
-
-            if (!$islinked) {
-                $reformatted_unlinked_payment_methods[] = $pm;
-            }
-        }
-
-        $response['unlinked_payment_methods'] = $reformatted_unlinked_payment_methods;
+        $linkedMethodIds = $reformatted_linked_payment_methods->pluck('payment_method_id')->toArray();
+        $reformatted_not_linked_payment_methods = $system_payment_methods->reject(function ($pm) use ($linkedMethodIds) {
+            return in_array($pm['id'], $linkedMethodIds);
+        })->values()->all();
+        $response['not_linked_payment_methods'] = $reformatted_not_linked_payment_methods;
 
         return response()->json($response, 200);
     }

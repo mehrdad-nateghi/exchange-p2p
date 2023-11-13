@@ -309,7 +309,7 @@
                 "tags": [
                     "PaymentMethods"
                 ],
-                "summary": "Get linked/unlinked payment methods of the authenticated applicant",
+                "summary": "Get linked/not_linked/unlinked payment methods of the authenticated applicant",
                 "operationId": "getPaymentMethods",
                 "responses": {
                     "200": {

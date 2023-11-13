@@ -38,5 +38,4 @@ class PaymentMethod extends Model
     public function linkedMethods(){
         return $this->hasMany(LinkedMethod::class, 'method_type_id');
     }
-
 }
