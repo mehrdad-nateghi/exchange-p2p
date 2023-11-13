@@ -65,6 +65,7 @@ class LinkPaymentMethodRequest extends FormRequest
     protected function addPaypalRulesForDE($rules)
     {
         $rules['payment_method_attributes.email'] = 'required|email';
+        $rules['payment_method_attributes.holder_name'] = 'required|string';
 
         return $rules;
     }
@@ -83,7 +84,7 @@ class LinkPaymentMethodRequest extends FormRequest
     {
         $rules['payment_method_attributes.bank_name'] = 'required|string';
         $rules['payment_method_attributes.holder_name'] = 'required|string';
-        $rules['payment_method_attributes.account_number'] = 'required|string';
+        $rules['payment_method_attributes.account_number'] = 'string';
         $rules['payment_method_attributes.card_number'] = 'required|string';
         $rules['payment_method_attributes.shaba_number'] = 'required|string';
 

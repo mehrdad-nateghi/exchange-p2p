@@ -18,7 +18,8 @@ return [
         [
             'name' => 'Paypal',
             'attributes' => [
-                ['name' => 'email']
+                ['name' => 'holder_name'],
+                ['name' => 'email'],
             ]
         ]
     ]

@@ -39,7 +39,7 @@ class PaymentMethodController extends Controller
      *                 @OA\Property(property="bank_name", type="string", description="Required for Bank-Transfer linking"),
      *                 @OA\Property(property="iban", type="string", description="Required for DE Bank-Transfer linking"),
      *                 @OA\Property(property="bic", type="string", description="Required for DE Bank-Transfer linking"),
-     *                 @OA\Property(property="account_number", type="string", description="Required for IR Bank-Transfer linking"),
+     *                 @OA\Property(property="account_number", type="string", description="Optional for IR Bank-Transfer linking"),
      *                 @OA\Property(property="card_number", type="string", description="Required for IR Bank-Transfer linking"),
      *                 @OA\Property(property="shaba_number", type="string", description="Required for IR Bank-Transfer linking"),
      *                 @OA\Property(property="email", type="string", description="Required for Paypal linking")
