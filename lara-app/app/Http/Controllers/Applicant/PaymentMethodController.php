@@ -10,6 +10,7 @@ use App\Http\Requests\LinkPaymentMethodRequest;
 use App\Models\LinkedMethod;
 use App\Models\PaymentMethod;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 /**
  * @OA\Tag(
@@ -91,6 +92,9 @@ class PaymentMethodController extends Controller
         $input_method_attributes = $validatedData['payment_method_attributes'];
         foreach($input_method_attributes as $input_attr_name => $input_attr_value) {
             $payment_method_attr = $payment_method->attributes()->where('name',$input_attr_name)->first();
+            if(!$payment_method_attr) {
+                return response(['message' => 'Some of the attributes are not available on database.'], 422);
+            }
             $linked_method->attributes()->attach($payment_method_attr, ['value' => $input_attr_value]);
         }
 
