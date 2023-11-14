@@ -63,7 +63,7 @@ class LinkedMethod extends Model
 
         foreach($attibutes as $input_attr_name => $input_attr_value) {
             $payment_method_attr = $this->attributes()->where('name',$input_attr_name)->first();
-            $this->attributes()->attach($payment_method_attr, ['value' => $input_attr_value]);
+            $this->attributes()->updateExistingPivot($payment_method_attr, ['value' => $input_attr_value]);
         }
 
         return true;
