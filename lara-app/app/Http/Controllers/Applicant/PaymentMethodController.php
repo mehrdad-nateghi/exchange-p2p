@@ -10,6 +10,7 @@ use App\Http\Requests\LinkPaymentMethodRequest;
 use App\Models\LinkedMethod;
 use App\Models\PaymentMethod;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 /**
  * @OA\Tag(
@@ -39,7 +40,7 @@ class PaymentMethodController extends Controller
      *                 @OA\Property(property="bank_name", type="string", description="Required for Bank-Transfer linking"),
      *                 @OA\Property(property="iban", type="string", description="Required for DE Bank-Transfer linking"),
      *                 @OA\Property(property="bic", type="string", description="Required for DE Bank-Transfer linking"),
-     *                 @OA\Property(property="account_number", type="string", description="Required for IR Bank-Transfer linking"),
+     *                 @OA\Property(property="account_number", type="string", description="Optional for IR Bank-Transfer linking"),
      *                 @OA\Property(property="card_number", type="string", description="Required for IR Bank-Transfer linking"),
      *                 @OA\Property(property="shaba_number", type="string", description="Required for IR Bank-Transfer linking"),
      *                 @OA\Property(property="email", type="string", description="Required for Paypal linking")
@@ -91,6 +92,9 @@ class PaymentMethodController extends Controller
         $input_method_attributes = $validatedData['payment_method_attributes'];
         foreach($input_method_attributes as $input_attr_name => $input_attr_value) {
             $payment_method_attr = $payment_method->attributes()->where('name',$input_attr_name)->first();
+            if(!$payment_method_attr) {
+                return response(['message' => 'Some of the attributes are not available on database.'], 422);
+            }
             $linked_method->attributes()->attach($payment_method_attr, ['value' => $input_attr_value]);
         }
 

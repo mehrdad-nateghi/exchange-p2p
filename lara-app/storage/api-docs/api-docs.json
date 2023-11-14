@@ -340,7 +340,7 @@
                                                 "type": "string"
                                             },
                                             "account_number": {
-                                                "description": "Required for IR Bank-Transfer linking",
+                                                "description": "Optional for IR Bank-Transfer linking",
                                                 "type": "string"
                                             },
                                             "card_number": {
