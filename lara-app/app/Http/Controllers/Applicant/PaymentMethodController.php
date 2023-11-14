@@ -10,6 +10,7 @@ use App\Http\Requests\LinkPaymentMethodRequest;
 use App\Models\LinkedMethod;
 use App\Models\PaymentMethod;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 /**
  * @OA\Tag(
@@ -180,5 +181,27 @@ class PaymentMethodController extends Controller
         $linked_method->save();
 
         return response(['message' => 'Payment method unlinked successfully'],200);
+    }
+
+    public function updateLinkedMethod(LinkPaymentMethodRequest $request, $linked_method_id){
+
+        $applicant = Auth::user();
+
+        $validated_credentials = $request->validated();
+
+        $linked_method = $applicant->linkedMethods()->where('id',$linked_method_id)->where('status',LinkedMethodStatusEnum::Active)->first();
+        if(!($linked_method instanceof LinkedMethod)) {
+            return response(['message' => 'Linked payment method not found for the applicant.'], 422);
+        }
+
+        // Sync the payment method's attributes by credential values
+        $input_method_attributes = $validated_credentials['payment_method_attributes'];
+        $update_status = $linked_method->initializeAttributes($input_method_attributes);
+
+        Log::info("status:".$update_status);
+
+
+
+
     }
 }

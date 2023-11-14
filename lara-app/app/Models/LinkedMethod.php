@@ -18,7 +18,7 @@ class LinkedMethod extends Model
         'created_at'
     ];
 
-    public $timestamps = false;
+    public $timestamps = true;
 
     /**
     * Get the PaymentMetod that owns the LinkedMethod.
@@ -54,6 +54,19 @@ class LinkedMethod extends Model
     */
     public function requests(){
         return $this->belongsToMany(Request::class, 'request_linkedmethod', 'linked_method_id', 'request_id');
+    }
+
+    /*
+     * Initialize the linked method's attributes
+     */
+    public function initializeAttributes($attibutes){
+
+        foreach($attibutes as $input_attr_name => $input_attr_value) {
+            $payment_method_attr = $this->attributes()->where('name',$input_attr_name)->first();
+            $this->attributes()->attach($payment_method_attr, ['value' => $input_attr_value]);
+        }
+
+        return true;
     }
 
     /*
