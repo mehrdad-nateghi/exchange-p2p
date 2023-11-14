@@ -196,7 +196,7 @@ class PaymentMethodController extends Controller
 
         // Sync the payment method's attributes by credential values
         $input_method_attributes = $validated_credentials['payment_method_attributes'];
-        $update_status = $linked_method->initializeAttributes($input_method_attributes);
+        $update_status = $linked_method->updateAttributes($input_method_attributes);
 
         Log::info("status:".$update_status);
 

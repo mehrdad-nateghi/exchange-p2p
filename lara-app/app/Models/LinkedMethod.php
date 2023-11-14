@@ -59,11 +59,16 @@ class LinkedMethod extends Model
     /*
      * Initialize the linked method's attributes
      */
-    public function initializeAttributes($attibutes){
+    public function updateAttributes($attibutes){
 
         foreach($attibutes as $input_attr_name => $input_attr_value) {
             $payment_method_attr = $this->attributes()->where('name',$input_attr_name)->first();
-            $this->attributes()->updateExistingPivot($payment_method_attr, ['value' => $input_attr_value]);
+            if($payment_method_attr instanceof MethodAttribute) {
+                $this->attributes()->updateExistingPivot($payment_method_attr, ['value' => $input_attr_value]);
+            }
+            else{
+                $this->attributes()->attach($payment_method_attr, ['value' => $input_attr_value]);
+            }
         }
 
         return true;
