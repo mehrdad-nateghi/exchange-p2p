@@ -2,9 +2,12 @@
 
 namespace App\Models;
 
+use App\Enums\BidStatusEnum;
 use App\Enums\LinkedMethodStatusEnum;
+use App\Enums\RequestStatusEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
 
 class LinkedMethod extends Model
 {
@@ -57,22 +60,67 @@ class LinkedMethod extends Model
     }
 
     /*
-     * Initialize the linked method's attributes
+     * Update the linked method's attributes
      */
-    public function updateAttributes($attibutes){
+    public function updateAttributes($attributes){
 
-        foreach($attibutes as $input_attr_name => $input_attr_value) {
-            $payment_method_attr = $this->attributes()->where('name',$input_attr_name)->first();
-            if($payment_method_attr instanceof MethodAttribute) {
-                $this->attributes()->updateExistingPivot($payment_method_attr, ['value' => $input_attr_value]);
-            }
-            else{
-                $this->attributes()->attach($payment_method_attr, ['value' => $input_attr_value]);
+        foreach ($attributes as $input_attr_name => $input_attr_value) {
+            $linked_method_attr = $this->attributes()->where('name', $input_attr_name)->first();
+
+            if ($linked_method_attr instanceof MethodAttribute) {
+                $this->attributes()->updateExistingPivot($linked_method_attr->id, ['value' => $input_attr_value]);
+            } else {
+                $payment_method_attr = $this->paymentMethod->attributes()->where('name', $input_attr_name)->first();
+
+                if ($payment_method_attr) {
+                    $this->attributes()->attach([$payment_method_attr->id => ['value' => $input_attr_value]]);
+                } else {
+                    return false;
+                }
             }
         }
 
         return true;
     }
+
+    /*
+     * Check whether the linked method is engaged with an active request
+     */
+    public function isEngagedWithAnyActiveRequest(){
+
+        $linked_method_owner = $this->user;
+
+        $requests_linked_methods_id = $linked_method_owner->requests()
+        ->where('status', '!=', RequestStatusEnum::Removed)
+        ->with('linkedMethods:id')
+        ->get()
+        ->pluck('linkedMethods.*.id')
+        ->flatten()
+        ->all();
+
+        if (in_array($this->id, $requests_linked_methods_id)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /*
+     * Check whether the linked method is engaged with an active request
+     */
+    public function isEngagedWithAnyActiveBid(){
+
+        $associatedBids = $this->bids()
+                ->whereNotIn('status', [BidStatusEnum::Rejected, BidStatusEnum::Invalid])
+                ->get();
+
+        if (!$associatedBids->isEmpty()) {
+            return true;
+        }
+
+        return false;
+    }
+
 
     /*
     * Enum casting for the status and type fields

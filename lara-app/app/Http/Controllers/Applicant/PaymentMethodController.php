@@ -32,6 +32,7 @@ class PaymentMethodController extends Controller
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
+     *             @OA\Property(property="link_payment_method",type="boolean",description="Show this is the linking functionality for validation purpose",default=true),
      *             @OA\Property(property="payment_method_id", type="string", description="Id of the payment method which you intend to link"),
      *             @OA\Property(
      *                 property="payment_method_attributes",
@@ -40,7 +41,7 @@ class PaymentMethodController extends Controller
      *                 @OA\Property(property="bank_name", type="string", description="Required for Bank-Transfer linking"),
      *                 @OA\Property(property="iban", type="string", description="Required for DE Bank-Transfer linking"),
      *                 @OA\Property(property="bic", type="string", description="Required for DE Bank-Transfer linking"),
-     *                 @OA\Property(property="account_number", type="string", description="Required for IR Bank-Transfer linking"),
+     *                 @OA\Property(property="account_number", type="string", description="Optional for IR Bank-Transfer linking"),
      *                 @OA\Property(property="card_number", type="string", description="Required for IR Bank-Transfer linking"),
      *                 @OA\Property(property="shaba_number", type="string", description="Required for IR Bank-Transfer linking"),
      *                 @OA\Property(property="email", type="string", description="Required for Paypal linking")
@@ -92,6 +93,9 @@ class PaymentMethodController extends Controller
         $input_method_attributes = $validatedData['payment_method_attributes'];
         foreach($input_method_attributes as $input_attr_name => $input_attr_value) {
             $payment_method_attr = $payment_method->attributes()->where('name',$input_attr_name)->first();
+            if(!$payment_method_attr) {
+                return response(['message' => 'Some of the attributes are not available on database.'], 422);
+            }
             $linked_method->attributes()->attach($payment_method_attr, ['value' => $input_attr_value]);
         }
 
@@ -151,29 +155,7 @@ class PaymentMethodController extends Controller
         }
 
         // Check whether the linked method is associated with an active request or bid
-        $valid_to_unlink = true;
-
-        $requests_linked_methods_id = $applicant->requests()
-        ->where('status', '!=', RequestStatusEnum::Removed)
-        ->with('linkedMethods:id')
-        ->get()
-        ->pluck('linkedMethods.*.id')
-        ->flatten()
-        ->all();
-
-        if (in_array($linked_method_id, $requests_linked_methods_id)) {
-            $valid_to_unlink = false;
-        }
-
-        $associatedBids = $linked_method->bids()
-                ->whereNotIn('status', [BidStatusEnum::Rejected, BidStatusEnum::Invalid])
-                ->get();
-
-        if (!$associatedBids->isEmpty()) {
-            $valid_to_unlink = false;
-        }
-
-        if(!$valid_to_unlink) {
+        if($linked_method->isEngagedWithAnyActiveRequest() || $linked_method->isEngagedWithAnyActiveBid()) {
             return response(['message' => 'The linked method is already associated with an active request or bid.'], 403);
         }
 
@@ -183,6 +165,70 @@ class PaymentMethodController extends Controller
         return response(['message' => 'Payment method unlinked successfully'],200);
     }
 
+
+
+    /**
+     * @OA\Put(
+     *     path="/api/applicant/payment-methods/update-linked-method/{linkedMethodId}",
+     *     summary="Update a specific linked method by an applicant who linked the method",
+     *     tags={"PaymentMethods"},
+     *     operationId="updateLinkedPaymentMethodByApplicant",
+     *     security={
+     *           {"bearerAuth": {}}
+     *     },
+     *     @OA\Parameter(
+     *         name="linkedMethodId",
+     *         in="path",
+     *         description="ID of the linked method to update",
+     *         required=true,
+     *         @OA\Schema(type="integer", format="int64")
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="payment_method_attributes",
+     *                 type="object",
+     *                 @OA\Property(property="holder_name", type="string", description="Required for Bank-Transfer linking"),
+     *                 @OA\Property(property="bank_name", type="string", description="Required for Bank-Transfer linking"),
+     *                 @OA\Property(property="iban", type="string", description="Required for DE Bank-Transfer linking"),
+     *                 @OA\Property(property="bic", type="string", description="Required for DE Bank-Transfer linking"),
+     *                 @OA\Property(property="account_number", type="string", description="Optional for IR Bank-Transfer linking"),
+     *                 @OA\Property(property="card_number", type="string", description="Required for IR Bank-Transfer linking"),
+     *                 @OA\Property(property="shaba_number", type="string", description="Required for IR Bank-Transfer linking"),
+     *                 @OA\Property(property="email", type="string", description="Required for Paypal linking")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation",
+     *         @OA\JsonContent(
+     *              @OA\Property(property="message", type="string", description="A descriptive attribute indicating the result of request.")
+     *      )
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Unprocessable request",
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Linked method not found",
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized"
+     *     ),
+     *     @OA\Response(
+     *         response=403,
+     *         description="Forbidden"
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal Server Error",
+     *     )
+     * )
+     */
     public function updateLinkedMethod(LinkPaymentMethodRequest $request, $linked_method_id){
 
         $applicant = Auth::user();
@@ -194,14 +240,17 @@ class PaymentMethodController extends Controller
             return response(['message' => 'Linked payment method not found for the applicant.'], 422);
         }
 
-        // Sync the payment method's attributes by credential values
+        if($linked_method->isEngagedWithAnyActiveRequest() || $linked_method->isEngagedWithAnyActiveBid()) {
+            return response(['message' => 'The linked method is already associated with an active request or bid.'], 403);
+        }
+
+        // Update the payment method's attributes by credential values
         $input_method_attributes = $validated_credentials['payment_method_attributes'];
-        $update_status = $linked_method->updateAttributes($input_method_attributes);
+        $update_attrs = $linked_method->updateAttributes($input_method_attributes);
+        if(!$update_attrs) {
+            return response(['message' => 'Some problems occured during the updating associated fields.'], 500);
+        }
 
-        Log::info("status:".$update_status);
-
-
-
-
+        return response(['message' => 'Linked payment method updated successfully'],200);
     }
 }
