@@ -38,6 +38,7 @@ Route::middleware(['auth:api', 'is.applicant'])->prefix('applicant')->group(func
     Route::put('/requests/update/{requestId}', [ApplicantRequestController::class, 'update'])->name('applicant.requests.update');
     Route::delete('/requests/remove/{requestId}', [ApplicantRequestController::class, 'remove'])->name('applicant.requests.remove');
     Route::post('/signout',[ApplicantAuthController::class, 'signout'])->name('applicant.auth.signout');
+    Route::post('/payment-methods/link', [ApplicantPaymentMethodController::class, 'linkPaymentMethod'])->name('applicant.paymentMethods.link');
     Route::get('/payment-methods', [ApplicantPaymentMEthodController::class, 'getPaymentMethods'])->name('applicant.paymentMethods.get');
     Route::delete('/payment-methods/unlink/{linkedMethodId}', [ApplicantPaymentMethodController::class, 'unlinkPaymentMethod'])->name('applicant.paymentMethods.unlink');
 
@@ -51,6 +52,7 @@ Route::middleware(['auth:api', 'is.admin'])->prefix('admin')->prefix('admin')->g
     Route::put('/requests/update/{requestId}', [AdminRequestController::class, 'update'])->name('admin.requests.update');
     Route::post('/signout',[AdminAuthController::class, 'signout'])->name('admin.auth.signout');
 });
+
 /* Bids Management Routes */
 // Guest User Routes
 Route::get('/bids/request/{requestId}', [GuestBidController::class,'getBids'])->name('request.bids.get.all');

@@ -19,7 +19,8 @@ class LinkedMethod extends Model
         'created_at'
     ];
 
-    public $timestamps = false;
+    public $timestamps = true;
+    const UPDATED_AT = null;
 
     /**
     * Get the PaymentMetod that owns the LinkedMethod.
