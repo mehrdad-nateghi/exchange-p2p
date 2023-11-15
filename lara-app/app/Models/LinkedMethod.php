@@ -5,7 +5,6 @@ namespace App\Models;
 use App\Enums\LinkedMethodStatusEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Log;
 
 class LinkedMethod extends Model
 {
@@ -74,6 +73,7 @@ class LinkedMethod extends Model
         });
 
         return [
+            'id' => $this->id,
             'payment_method_id' => $this['method_type_id'],
             'payment_method_name' => $this->paymentMethod->name,
             'country_id' => $this->paymentMethod->country->id,

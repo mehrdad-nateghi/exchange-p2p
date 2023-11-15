@@ -304,6 +304,98 @@
                 ]
             }
         },
+        "/api/applicant/payment-methods": {
+            "get": {
+                "tags": [
+                    "PaymentMethods"
+                ],
+                "summary": "Get linked/not_linked payment methods of the authenticated applicant",
+                "operationId": "getPaymentMethods",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "linked_payment_methods": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "description": "A unique identifier for the linked method in the dataset.",
+                                                        "type": "integer"
+                                                    },
+                                                    "payment_method_id": {
+                                                        "description": "A unique identifier for the payment method in the dataset.",
+                                                        "type": "integer"
+                                                    },
+                                                    "payment_method_name": {
+                                                        "description": "A descriptive name attribute for the payment method filled by user.",
+                                                        "type": "string"
+                                                    },
+                                                    "country_id": {
+                                                        "description": "A unique identifier for the country which the payment method is associated with.",
+                                                        "type": "integer"
+                                                    },
+                                                    "payment_method_attributes": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "properties": {
+                                                                "attribute_id": {
+                                                                    "description": "A unique identifier for the attribute in the dataset.",
+                                                                    "type": "integer"
+                                                                },
+                                                                "attribute_name": {
+                                                                    "description": "A descriptive attribute for presenting the payment method attribute's name.",
+                                                                    "type": "string"
+                                                                },
+                                                                "value": {
+                                                                    "description": "An attribute for presenting the value of payment method attribute filled by the user.",
+                                                                    "type": "string"
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        }
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        },
+                                        "not_linked_payment_methods": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "description": "A unique identifier or reference for a particular record in the dataset.",
+                                                        "type": "integer"
+                                                    },
+                                                    "name": {
+                                                        "description": "A descriptive attribute for presenting the payment method name.",
+                                                        "type": "string"
+                                                    },
+                                                    "country_id": {
+                                                        "description": "A unique identifier or reference for a particular country which the payment method is associated with.",
+                                                        "type": "integer"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/applicant/payment-methods/link": {
             "post": {
                 "tags": [
@@ -379,94 +471,6 @@
                     },
                     "500": {
                         "description": "Internal Server Error"
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/api/applicant/payment-methods": {
-            "get": {
-                "tags": [
-                    "PaymentMethods"
-                ],
-                "summary": "Get linked/not_linked payment methods of the authenticated applicant",
-                "operationId": "getPaymentMethods",
-                "responses": {
-                    "200": {
-                        "description": "Successful operation",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "linked_payment_methods": {
-                                            "type": "array",
-                                            "items": {
-                                                "properties": {
-                                                    "payment_method_id": {
-                                                        "description": "A unique identifier or reference for a particular record in the dataset.",
-                                                        "type": "integer"
-                                                    },
-                                                    "payment_method_name": {
-                                                        "description": "A descriptive attribute for presenting the payment method name.",
-                                                        "type": "string"
-                                                    },
-                                                    "country_id": {
-                                                        "description": "A unique identifier or reference for a particular country which the payment method is associated with.",
-                                                        "type": "integer"
-                                                    },
-                                                    "payment_method_attributes": {
-                                                        "type": "array",
-                                                        "items": {
-                                                            "properties": {
-                                                                "attribute_id": {
-                                                                    "description": "A unique identifier or reference for a particular record in the dataset.",
-                                                                    "type": "integer"
-                                                                },
-                                                                "attribute_name": {
-                                                                    "description": "A descriptive attribute for presenting the payment method attribute name.",
-                                                                    "type": "string"
-                                                                },
-                                                                "value": {
-                                                                    "description": "A descriptive attribute for presenting the value of payment method attribute filled by the user.",
-                                                                    "type": "string"
-                                                                }
-                                                            },
-                                                            "type": "object"
-                                                        }
-                                                    }
-                                                },
-                                                "type": "object"
-                                            }
-                                        },
-                                        "not_linked_payment_methods": {
-                                            "type": "array",
-                                            "items": {
-                                                "properties": {
-                                                    "id": {
-                                                        "description": "A unique identifier or reference for a particular record in the dataset.",
-                                                        "type": "integer"
-                                                    },
-                                                    "name": {
-                                                        "description": "A descriptive attribute for presenting the payment method name.",
-                                                        "type": "string"
-                                                    },
-                                                    "country_id": {
-                                                        "description": "A unique identifier or reference for a particular country which the payment method is associated with.",
-                                                        "type": "integer"
-                                                    }
-                                                },
-                                                "type": "object"
-                                            }
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
                     }
                 },
                 "security": [
