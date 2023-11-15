@@ -5,13 +5,11 @@ use App\Http\Controllers\Guest\RequestController as GuestRequestController;
 use App\Http\Controllers\Applicant\RequestController as ApplicantRequestController;
 use App\Http\Controllers\Admin\RequestController as AdminRequestController;
 use App\Http\Controllers\Applicant\AuthController as ApplicantAuthController;
-use App\Http\Controllers\BidController;
-use App\Http\Controllers\FinancialController;
 use App\Http\Controllers\Guest\BidController as GuestBidController;
-use App\Http\Controllers\RequestController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Applicant\PaymentMethodController as ApplicantPaymentMethodController;
+use App\Http\Controllers\Applicant\PaymentMethodController as ApplicantPaymentMEthodController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -41,6 +39,7 @@ Route::middleware(['auth:api', 'is.applicant'])->prefix('applicant')->group(func
     Route::delete('/requests/remove/{requestId}', [ApplicantRequestController::class, 'remove'])->name('applicant.requests.remove');
     Route::post('/signout',[ApplicantAuthController::class, 'signout'])->name('applicant.auth.signout');
     Route::post('/payment-methods/link', [ApplicantPaymentMethodController::class, 'linkPaymentMethod'])->name('applicant.paymentMethods.link');
+    Route::get('/payment-methods', [ApplicantPaymentMEthodController::class, 'getPaymentMethods'])->name('applicant.paymentMethods.get');
     Route::delete('/payment-methods/unlink/{linkedMethodId}', [ApplicantPaymentMethodController::class, 'unlinkPaymentMethod'])->name('applicant.paymentMethods.unlink');
 
 });
