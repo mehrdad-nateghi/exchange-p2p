@@ -149,9 +149,35 @@ class LinkedMethod extends Model
     }
 
     /*
+    *Format the attributes of the linked method
+    */
+    public function formatAttributes()
+    {
+        $attributes = $this->attributes()->get();
+
+        $lm_attributes = $attributes->map(function ($attr) {
+            return [
+                'attribute_id' => $attr['id'],
+                'attribute_name' => $attr['name'],
+                'value' => $attr['pivot']['value'],
+            ];
+        });
+
+        return [
+            'id' => $this->id,
+            'payment_method_id' => $this['method_type_id'],
+            'payment_method_name' => $this->paymentMethod->name,
+            'country_id' => $this->paymentMethod->country->id,
+            'payment_method_attributes' => $lm_attributes,
+        ];
+    }
+
+    /*
     * Enum casting for the status and type fields
     */
     protected $casts = [
         'status' => LinkedMethodStatusEnum::class
     ];
+
+
 }

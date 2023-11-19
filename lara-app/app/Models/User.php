@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Laravel\Passport\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-
+use Illuminate\Support\Facades\Log;
 
 class User extends Authenticatable{
 
@@ -103,6 +103,27 @@ class User extends Authenticatable{
         return $this->morphMany(Notification::class, 'notifiable');
     }
 
+    /**
+    * Get applicant linked payment methods
+    */
+    public function getLinkedPaymentMethods(){
+        $linked_methods = $this->linkedMethods()
+        ->where('status', LinkedMethodStatusEnum::Active)
+        ->get();
+
+        return $linked_methods;
+    }
+
+    /**
+     * Get applicant unlinked payment methods
+    */
+    public function getUnlinkedPaymentMethods(){
+        $linked_methods = $this->linkedMethods()
+        ->where('status', LinkedMethodStatusEnum::Removed)
+        ->get();
+
+        return $linked_methods;
+    }
     /*
      * Get a specific linked method if it exists and active
      */

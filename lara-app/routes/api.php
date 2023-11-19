@@ -5,13 +5,12 @@ use App\Http\Controllers\Guest\RequestController as GuestRequestController;
 use App\Http\Controllers\Applicant\RequestController as ApplicantRequestController;
 use App\Http\Controllers\Admin\RequestController as AdminRequestController;
 use App\Http\Controllers\Applicant\AuthController as ApplicantAuthController;
-use App\Http\Controllers\BidController;
-use App\Http\Controllers\FinancialController;
 use App\Http\Controllers\Guest\BidController as GuestBidController;
-use App\Http\Controllers\RequestController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Applicant\PaymentMethodController as ApplicantPaymentMethodController;
+use App\Http\Controllers\Admin\PaymentMethodController as AdminPaymentMethodController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -41,8 +40,9 @@ Route::middleware(['auth:api', 'is.applicant'])->prefix('applicant')->group(func
     Route::delete('/requests/remove/{requestId}', [ApplicantRequestController::class, 'remove'])->name('applicant.requests.remove');
     Route::post('/signout',[ApplicantAuthController::class, 'signout'])->name('applicant.auth.signout');
     Route::post('/payment-methods/link/{paymentMethodId}', [ApplicantPaymentMethodController::class, 'linkPaymentMethod'])->name('applicant.paymentMethods.link');
+    Route::get('/payment-methods', [ApplicantPaymentMEthodController::class, 'getPaymentMethods'])->name('applicant.paymentMethods.get');
     Route::delete('/payment-methods/unlink/{linkedMethodId}', [ApplicantPaymentMethodController::class, 'unlinkPaymentMethod'])->name('applicant.paymentMethods.unlink');
-    Route::put('/payment-methods/linked-method/update/{linkedMethodId}', [ApplicantPaymentMethodController::class, 'updateLinkedMethod'])->name('applicant.paymentMethods.updateLinkedMethod');
+    Route::put('/payment-methods/linked-method/update/{linkedMethodId}', [ApplicantPaymentMethodController::class, 'updateLinkedMethod'])->name('applicant.paymentMethods.linkedMethod.update');
 
 });
 
@@ -53,6 +53,7 @@ Route::middleware(['auth:api', 'is.admin'])->prefix('admin')->prefix('admin')->g
     Route::get('/requests/update/setup/{requestId}', [AdminRequestController::class,'getSetupInformationForRequestUpdate'])->name('admin.requests.update.setup');
     Route::put('/requests/update/{requestId}', [AdminRequestController::class, 'update'])->name('admin.requests.update');
     Route::post('/signout',[AdminAuthController::class, 'signout'])->name('admin.auth.signout');
+    Route::get('/applicant/payment-methods/{applicantId}', [AdminPaymentMethodController::class, 'getApplicantPaymentMethods'])->name('admin.applicantPaymentMethods.get');
 });
 
 /* Bids Management Routes */
