@@ -8,7 +8,8 @@ use App\Http\Controllers\Applicant\AuthController as ApplicantAuthController;
 use App\Http\Controllers\Guest\BidController as GuestBidController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Applicant\PaymentMethodController as ApplicantPaymentMEthodController;
+use App\Http\Controllers\Applicant\PaymentMethodController as ApplicantPaymentMethodController;
+use App\Http\Controllers\Admin\PaymentMethodController as AdminPaymentMethodController;
 
 /*
 |--------------------------------------------------------------------------
@@ -51,6 +52,7 @@ Route::middleware(['auth:api', 'is.admin'])->prefix('admin')->prefix('admin')->g
     Route::get('/requests/update/setup/{requestId}', [AdminRequestController::class,'getSetupInformationForRequestUpdate'])->name('admin.requests.update.setup');
     Route::put('/requests/update/{requestId}', [AdminRequestController::class, 'update'])->name('admin.requests.update');
     Route::post('/signout',[AdminAuthController::class, 'signout'])->name('admin.auth.signout');
+    Route::get('/applicant/payment-methods/{applicantId}', [AdminPaymentMethodController::class, 'getApplicantPaymentMethods'])->name('admin.applicantPaymentMethods.get');
 });
 
 /* Bids Management Routes */

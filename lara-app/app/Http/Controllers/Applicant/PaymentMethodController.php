@@ -20,53 +20,51 @@ use Illuminate\Support\Facades\Log;
  */
 class PaymentMethodController extends Controller
 {
-
     /**
-     * @OA\Get(
-     *     path="/api/applicant/payment-methods",
-     *     summary="Get linked/not_linked payment methods of the authenticated applicant",
-     *     tags={"PaymentMethods"},
-     *     operationId="getPaymentMethods",
-     *     security={
-     *           {"bearerAuth": {}}
-     *     },
-     * @OA\Response(
-     *     response=200,
-     *     description="Successful operation",
-     *     @OA\JsonContent(
-     *         @OA\Property(property="linked_payment_methods", type="array", @OA\Items(
-     *             @OA\Property(property="id", type="integer", description="A unique identifier for the linked method in the dataset."),
-     *             @OA\Property(property="payment_method_id", type="integer", description="A unique identifier for the payment method in the dataset."),
-     *             @OA\Property(property="payment_method_name", type="string", description="A descriptive name attribute for the payment method filled by user."),
-     *             @OA\Property(property="country_id", type="integer", description="A unique identifier for the country which the payment method is associated with."),
-     *             @OA\Property(property="payment_method_attributes", type="array", @OA\Items(
-     *                  @OA\Property(property="attribute_id", type="integer", description="A unique identifier for the attribute in the dataset."),
-     *                  @OA\Property(property="attribute_name", type="string", description="A descriptive attribute for presenting the payment method attribute's name."),
-     *                  @OA\Property(property="value", type="string", description="An attribute for presenting the value of payment method attribute filled by the user."),
-     *              ),
-     *          )),
-     *      ),
-     *      @OA\Property(property="not_linked_payment_methods", type="array", @OA\Items(
-     *      @OA\Property(property="id", type="integer", description="A unique identifier or reference for a particular record in the dataset."),
-     *      @OA\Property(property="name", type="string", description="A descriptive attribute for presenting the payment method name."),
-     *      @OA\Property(property="country_id", type="integer", description="A unique identifier or reference for a particular country which the payment method is associated with.")
-     *     )),
-     *  ),
-     *     @OA\Response(
-     *         response=401,
-     *         description="Unauthorized"
-     *     ),
-     *     @OA\Response(
-     *         response=403,
-     *         description="Forbidden"
-     *     ),
-     *     @OA\Response(
-     *         response=500,
-     *         description="Internal Server Error",
-     *     )
-     *     )
-     * )
-     */
+    * @OA\Get(
+    *     path="/api/applicant/payment-methods",
+    *     summary="Get linked/not_linked payment methods of the authenticated applicant",
+    *     tags={"PaymentMethods"},
+    *     operationId="getPaymentMethods",
+    *     security={
+    *         {"bearerAuth": {}}
+    *     },
+    *     @OA\Response(
+    *         response=200,
+    *         description="Successful operation",
+    *         @OA\JsonContent(
+    *             @OA\Property(property="linked_payment_methods", type="array", @OA\Items(
+    *                 @OA\Property(property="id", type="integer", description="A unique identifier for the linked method in the dataset."),
+    *                 @OA\Property(property="payment_method_id", type="integer", description="A unique identifier for the payment method in the dataset."),
+    *                 @OA\Property(property="payment_method_name", type="string", description="A descriptive name attribute for the payment method filled by the user."),
+    *                 @OA\Property(property="country_id", type="integer", description="A unique identifier for the country which the payment method is associated with."),
+    *                 @OA\Property(property="payment_method_attributes", type="array", @OA\Items(
+    *                     @OA\Property(property="attribute_id", type="integer", description="A unique identifier for the attribute in the dataset."),
+    *                     @OA\Property(property="attribute_name", type="string", description="A descriptive attribute for presenting the payment method attribute's name."),
+    *                     @OA\Property(property="value", type="string", description="An attribute for presenting the value of payment method attribute filled by the user."),
+    *                 )),
+    *             )),
+    *             @OA\Property(property="not_linked_payment_methods", type="array", @OA\Items(
+    *                 @OA\Property(property="id", type="integer", description="A unique identifier or reference for a particular record in the dataset."),
+    *                 @OA\Property(property="name", type="string", description="A descriptive attribute for presenting the payment method name."),
+    *                 @OA\Property(property="country_id", type="integer", description="A unique identifier or reference for a particular country which the payment method is associated with."),
+    *             )),
+    *         ),
+    *     ),
+    *     @OA\Response(
+    *         response=401,
+    *         description="Unauthorized"
+    *     ),
+    *     @OA\Response(
+    *         response=403,
+    *         description="Forbidden"
+    *     ),
+    *     @OA\Response(
+    *         response=500,
+    *         description="Internal Server Error",
+    *     )
+    * )
+    */
     public function getPaymentMethods()
     {
         $applicant = Auth::user();
