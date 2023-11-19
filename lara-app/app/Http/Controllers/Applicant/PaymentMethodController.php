@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers\Applicant;
 
-use App\Enums\BidStatusEnum;
 use App\Enums\LinkedMethodStatusEnum;
-use App\Enums\RequestStatusEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LinkPaymentMethodRequest;
 use App\Models\LinkedMethod;
 use App\Models\PaymentMethod;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 /**
@@ -22,18 +21,23 @@ class PaymentMethodController extends Controller
 {
     /**
      * @OA\Post(
-     *     path="/api/applicant/payment-methods/link",
+     *     path="/api/applicant/payment-methods/link/{paymentMethodId}",
      *     summary="Link a payment method to the authenticated applicant account",
      *     tags={"PaymentMethods"},
      *     operationId="linkPaymentMethod",
      *     security={
      *         {"bearerAuth": {}}
      *     },
+     *     @OA\Parameter(
+     *         name="paymentMethodId",
+     *         in="path",
+     *         description="Id of the payment method which you intend to link",
+     *         required=true,
+     *         @OA\Schema(type="integer", format="int64")
+     *     ),
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
-     *             @OA\Property(property="link_payment_method",type="boolean",description="Show this is the linking functionality for validation purpose",default=true),
-     *             @OA\Property(property="payment_method_id", type="string", description="Id of the payment method which you intend to link"),
      *             @OA\Property(
      *                 property="payment_method_attributes",
      *                 type="object",
@@ -70,18 +74,19 @@ class PaymentMethodController extends Controller
      *     )
      * )
      */
-    public function linkPaymentMethod(LinkPaymentMethodRequest $request) {
+    public function linkPaymentMethod(LinkPaymentMethodRequest $request, $payment_method_id) {
 
         $applicant = Auth::user();
 
         $validatedData = $request->validated();
-        $payment_method_id = $validatedData['payment_method_id'];
 
         // Check whther the payment method is linked before or not
         $linked_method = $applicant->linkedMethods()->where('method_type_id',$payment_method_id)->where('status', LinkedMethodStatusEnum::Active)->first();
         if($linked_method instanceof LinkedMethod) {
             return response(['message' => 'Payment method is already linked to the applicant account.'], 422);
         }
+
+        DB::beginTransaction();
 
         // Link the target payment method
         $linked_method = $applicant->linkedMethods()->create([
@@ -91,13 +96,14 @@ class PaymentMethodController extends Controller
         // Attach the payment method's attributes by credential values
         $payment_method = PaymentMethod::find($payment_method_id);
         $input_method_attributes = $validatedData['payment_method_attributes'];
-        foreach($input_method_attributes as $input_attr_name => $input_attr_value) {
-            $payment_method_attr = $payment_method->attributes()->where('name',$input_attr_name)->first();
-            if(!$payment_method_attr) {
-                return response(['message' => 'Some of the attributes are not available on database.'], 422);
-            }
-            $linked_method->attributes()->attach($payment_method_attr, ['value' => $input_attr_value]);
+        $initiation = $linked_method->initiateAttributes($payment_method, $input_method_attributes);
+        if (!$initiation) {
+            // If attributes initiation fails, rollback the transaction
+            DB::rollBack();
+            return response(['message' => 'Some of the attributes are not available in the database.'], 422);
         }
+
+        DB::commit();
 
         return response(['message' => 'Payment method linked successfully'],200);
     }
@@ -149,9 +155,9 @@ class PaymentMethodController extends Controller
         $applicant = Auth::user();
 
         // Check whether the linked method is available for the applicant
-        $linked_method = $applicant->linkedMethods()->where('id',$linked_method_id)->first();
-        if(!$linked_method || $linked_method->status == LinkedMethodStatusEnum::Removed){
-            return response(['message' => 'Linked method not found for the applicant.'], 404);
+        $linked_method = $applicant->getLinkedMethodIfIsActive($linked_method_id);
+        if(!$linked_method){
+            return response(['message' => 'Linked payment method not found for the applicant.'], 404);
         }
 
         // Check whether the linked method is associated with an active request or bid
@@ -165,11 +171,9 @@ class PaymentMethodController extends Controller
         return response(['message' => 'Payment method unlinked successfully'],200);
     }
 
-
-
     /**
      * @OA\Put(
-     *     path="/api/applicant/payment-methods/update-linked-method/{linkedMethodId}",
+     *     path="/api/applicant/payment-methods/linked-method/update/{linkedMethodId}",
      *     summary="Update a specific linked method by an applicant who linked the method",
      *     tags={"PaymentMethods"},
      *     operationId="updateLinkedPaymentMethodByApplicant",
@@ -235,9 +239,9 @@ class PaymentMethodController extends Controller
 
         $validated_credentials = $request->validated();
 
-        $linked_method = $applicant->linkedMethods()->where('id',$linked_method_id)->where('status',LinkedMethodStatusEnum::Active)->first();
-        if(!($linked_method instanceof LinkedMethod)) {
-            return response(['message' => 'Linked payment method not found for the applicant.'], 422);
+        $linked_method = $applicant->getLinkedMethodIfIsActive($linked_method_id);
+        if(!$linked_method){
+            return response(['message' => 'Linked payment method not found for the applicant.'], 404);
         }
 
         if($linked_method->isEngagedWithAnyActiveRequest() || $linked_method->isEngagedWithAnyActiveBid()) {

@@ -40,9 +40,9 @@ Route::middleware(['auth:api', 'is.applicant'])->prefix('applicant')->group(func
     Route::put('/requests/update/{requestId}', [ApplicantRequestController::class, 'update'])->name('applicant.requests.update');
     Route::delete('/requests/remove/{requestId}', [ApplicantRequestController::class, 'remove'])->name('applicant.requests.remove');
     Route::post('/signout',[ApplicantAuthController::class, 'signout'])->name('applicant.auth.signout');
-    Route::post('/payment-methods/link', [ApplicantPaymentMethodController::class, 'linkPaymentMethod'])->name('applicant.paymentMethods.link');
+    Route::post('/payment-methods/link/{paymentMethodId}', [ApplicantPaymentMethodController::class, 'linkPaymentMethod'])->name('applicant.paymentMethods.link');
     Route::delete('/payment-methods/unlink/{linkedMethodId}', [ApplicantPaymentMethodController::class, 'unlinkPaymentMethod'])->name('applicant.paymentMethods.unlink');
-    Route::put('/payment-methods/update-linked-method/{linkedMethodId}', [ApplicantPaymentMethodController::class, 'updateLinkedMethod'])->name('applicant.paymentMethods.updateLinkedMethod');
+    Route::put('/payment-methods/linked-method/update/{linkedMethodId}', [ApplicantPaymentMethodController::class, 'updateLinkedMethod'])->name('applicant.paymentMethods.updateLinkedMethod');
 
 });
 

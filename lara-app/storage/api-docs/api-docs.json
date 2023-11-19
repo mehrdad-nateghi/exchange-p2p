@@ -304,28 +304,31 @@
                 ]
             }
         },
-        "/api/applicant/payment-methods/link": {
+        "/api/applicant/payment-methods/link/{paymentMethodId}": {
             "post": {
                 "tags": [
                     "PaymentMethods"
                 ],
                 "summary": "Link a payment method to the authenticated applicant account",
                 "operationId": "linkPaymentMethod",
+                "parameters": [
+                    {
+                        "name": "paymentMethodId",
+                        "in": "path",
+                        "description": "Id of the payment method which you intend to link",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
                 "requestBody": {
                     "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
                                 "properties": {
-                                    "link_payment_method": {
-                                        "description": "Show this is the linking functionality for validation purpose",
-                                        "type": "boolean",
-                                        "default": true
-                                    },
-                                    "payment_method_id": {
-                                        "description": "Id of the payment method which you intend to link",
-                                        "type": "string"
-                                    },
                                     "payment_method_attributes": {
                                         "properties": {
                                             "holder_name": {
@@ -449,7 +452,7 @@
                 ]
             }
         },
-        "/api/applicant/payment-methods/update-linked-method/{linkedMethodId}": {
+        "/api/applicant/payment-methods/linked-method/update/{linkedMethodId}": {
             "put": {
                 "tags": [
                     "PaymentMethods"

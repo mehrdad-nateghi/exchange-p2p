@@ -7,7 +7,6 @@ use App\Enums\LinkedMethodStatusEnum;
 use App\Enums\RequestStatusEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Log;
 
 class LinkedMethod extends Model
 {
@@ -121,6 +120,33 @@ class LinkedMethod extends Model
         return false;
     }
 
+    /*
+     * Initiate attributes of the payment method through linking process
+     */
+    public function initiateAttributes($payment_method, $input_method_attributes)
+    {
+        $validationFailed = false;
+        $attachments = []; // To use for batch attributes attachment
+
+        // Validate whther all attributes for the payment method are available on database
+        foreach ($input_method_attributes as $input_attr_name => $input_attr_value) {
+            $payment_method_attr = $payment_method->attributes()->where('name',$input_attr_name)->first();
+
+            if (!$payment_method_attr) {
+                $validationFailed = true;
+                break;
+            }
+
+            $attachments[] = ['method_attribute_id' => $payment_method_attr->id, 'value' => $input_attr_value];
+        }
+
+        // If validation passed, proceed with attachment
+        if (!$validationFailed) {
+            $this->attributes()->attach($attachments);
+        }
+
+        return !$validationFailed;
+    }
 
     /*
     * Enum casting for the status and type fields
