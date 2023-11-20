@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use App\Enums\LinkedMethodStatusEnum;
 use App\Enums\UserRoleEnum;
 use App\Enums\UserStatusEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Laravel\Passport\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-
+use Illuminate\Support\Facades\Log;
 
 class User extends Authenticatable{
 
@@ -95,11 +96,64 @@ class User extends Authenticatable{
          return $this->morphMany(Email::class, 'emailable');
      }
 
-        /*
+    /*
     * Get the Notifications related the User (1 to n user-notification polymorphic relation)
     */
     public function relatedNotifications(){
         return $this->morphMany(Notification::class, 'notifiable');
+    }
+
+    /**
+    * Check whther the user is an applicant
+    */
+    public function checkIsActiveApplicant(){
+        return $this->status == UserStatusEnum::Active && $this->role == UserRoleEnum::Applicant;
+    }
+
+    /**
+    * Get applicant linked payment methods
+    */
+    public function getLinkedPaymentMethods(){
+        $linked_methods = $this->linkedMethods()
+        ->where('status', LinkedMethodStatusEnum::Active)
+        ->get();
+
+        return $linked_methods;
+    }
+
+    /**
+     * Get applicant unlinked payment methods
+    */
+    public function getUnlinkedPaymentMethods(){
+        $linked_methods = $this->linkedMethods()
+        ->where('status', LinkedMethodStatusEnum::Removed)
+        ->get();
+
+        return $linked_methods;
+    }
+
+    /*
+     * Get a specific linked method by linked_method_id if it exists and active
+     */
+    public function getLinkedMethodIfIsActive($linked_method_id){
+        $linked_method = $this->linkedMethods()
+        ->where('id',$linked_method_id)
+        ->where('status',LinkedMethodStatusEnum::Active)
+        ->first();
+
+        return $linked_method;
+    }
+
+    /*
+     * Get a specific linked method by payment_method_id if it exists and active
+     */
+    public function getLinkedMethodByPaymentMethodIdIfIsActive($payment_method_id){
+        $linked_method = $this->linkedMethods()
+        ->where('method_type_id',$payment_method_id)
+        ->where('status', LinkedMethodStatusEnum::Active)
+        ->first();
+
+        return $linked_method;
     }
 
     /*

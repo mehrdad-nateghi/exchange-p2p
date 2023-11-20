@@ -72,6 +72,284 @@
                 ]
             }
         },
+        "/api/admin/applicant/payment-methods/{applicantId}": {
+            "get": {
+                "tags": [
+                    "PaymentMethods"
+                ],
+                "summary": "Get linked/not_linked/unlinked payment methods of a specific applicant by an admin",
+                "operationId": "getPaymentMethodsOfAnApplicantByAdmin",
+                "parameters": [
+                    {
+                        "name": "applicantId",
+                        "in": "path",
+                        "description": "Id of the applicant to fetch his/her payment methods",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "linked_payment_methods": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "description": "A unique identifier for the linked method in the dataset.",
+                                                        "type": "integer"
+                                                    },
+                                                    "payment_method_id": {
+                                                        "description": "A unique identifier for the payment method in the dataset.",
+                                                        "type": "integer"
+                                                    },
+                                                    "payment_method_name": {
+                                                        "description": "A descriptive name attribute for the payment method filled by the user.",
+                                                        "type": "string"
+                                                    },
+                                                    "country_id": {
+                                                        "description": "A unique identifier for the country which the payment method is associated with.",
+                                                        "type": "integer"
+                                                    },
+                                                    "payment_method_attributes": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "properties": {
+                                                                "attribute_id": {
+                                                                    "description": "A unique identifier for the attribute in the dataset.",
+                                                                    "type": "integer"
+                                                                },
+                                                                "attribute_name": {
+                                                                    "description": "A descriptive attribute for presenting the payment method attribute's name.",
+                                                                    "type": "string"
+                                                                },
+                                                                "value": {
+                                                                    "description": "An attribute for presenting the value of payment method attribute filled by the user.",
+                                                                    "type": "string"
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        }
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        },
+                                        "unlinked_payment_methods": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "description": "A unique identifier for the linked method in the dataset.",
+                                                        "type": "integer"
+                                                    },
+                                                    "payment_method_id": {
+                                                        "description": "A unique identifier for the payment method in the dataset.",
+                                                        "type": "integer"
+                                                    },
+                                                    "payment_method_name": {
+                                                        "description": "A descriptive name attribute for the payment method filled by user.",
+                                                        "type": "string"
+                                                    },
+                                                    "country_id": {
+                                                        "description": "A unique identifier for the country which the payment method is associated with.",
+                                                        "type": "integer"
+                                                    },
+                                                    "payment_method_attributes": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "properties": {
+                                                                "attribute_id": {
+                                                                    "description": "A unique identifier for the attribute in the dataset.",
+                                                                    "type": "integer"
+                                                                },
+                                                                "attribute_name": {
+                                                                    "description": "A descriptive attribute for presenting the payment method attribute's name.",
+                                                                    "type": "string"
+                                                                },
+                                                                "value": {
+                                                                    "description": "An attribute for presenting the value of payment method attribute filled by the user.",
+                                                                    "type": "string"
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        }
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        },
+                                        "not_linked_payment_methods": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "description": "A unique identifier or reference for a particular record in the dataset.",
+                                                        "type": "integer"
+                                                    },
+                                                    "name": {
+                                                        "description": "A descriptive attribute for presenting the payment method name.",
+                                                        "type": "string"
+                                                    },
+                                                    "country_id": {
+                                                        "description": "A unique identifier or reference for a particular country which the payment method is associated with.",
+                                                        "type": "integer"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Applicant not found"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/admin/applicant/payment-methods/link/{applicantId}/{paymentMethodId}": {
+            "post": {
+                "tags": [
+                    "PaymentMethods"
+                ],
+                "summary": "Link a payment method to the applicant account",
+                "operationId": "linkPaymentMethodToApplicantAccountByAdmin",
+                "parameters": [
+                    {
+                        "name": "applicantId",
+                        "in": "path",
+                        "description": "Id of the applicant to link the payment method to his/her account",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    },
+                    {
+                        "name": "paymentMethodId",
+                        "in": "path",
+                        "description": "Id of the payment method which you intend to link",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "payment_method_attributes": {
+                                        "properties": {
+                                            "holder_name": {
+                                                "description": "Required for Bank-Transfer linking",
+                                                "type": "string"
+                                            },
+                                            "bank_name": {
+                                                "description": "Required for Bank-Transfer linking",
+                                                "type": "string"
+                                            },
+                                            "iban": {
+                                                "description": "Required for DE Bank-Transfer linking",
+                                                "type": "string"
+                                            },
+                                            "bic": {
+                                                "description": "Required for DE Bank-Transfer linking",
+                                                "type": "string"
+                                            },
+                                            "account_number": {
+                                                "description": "Optional for IR Bank-Transfer linking",
+                                                "type": "string"
+                                            },
+                                            "card_number": {
+                                                "description": "Required for IR Bank-Transfer linking",
+                                                "type": "string"
+                                            },
+                                            "shaba_number": {
+                                                "description": "Required for IR Bank-Transfer linking",
+                                                "type": "string"
+                                            },
+                                            "email": {
+                                                "description": "Required for Paypal linking",
+                                                "type": "string"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "A descriptive attribute indicating the result of request.",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Applicant or Payment Method not found"
+                    },
+                    "422": {
+                        "description": "Unprocessable request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/admin/requests/remove/{requestId}": {
             "delete": {
                 "tags": [
@@ -304,23 +582,132 @@
                 ]
             }
         },
-        "/api/applicant/payment-methods/link": {
+        "/api/applicant/payment-methods": {
+            "get": {
+                "tags": [
+                    "PaymentMethods"
+                ],
+                "summary": "Get linked/not_linked payment methods of the authenticated applicant",
+                "operationId": "getPaymentMethods",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "linked_payment_methods": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "description": "A unique identifier for the linked method in the dataset.",
+                                                        "type": "integer"
+                                                    },
+                                                    "payment_method_id": {
+                                                        "description": "A unique identifier for the payment method in the dataset.",
+                                                        "type": "integer"
+                                                    },
+                                                    "payment_method_name": {
+                                                        "description": "A descriptive name attribute for the payment method filled by the user.",
+                                                        "type": "string"
+                                                    },
+                                                    "country_id": {
+                                                        "description": "A unique identifier for the country which the payment method is associated with.",
+                                                        "type": "integer"
+                                                    },
+                                                    "payment_method_attributes": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "properties": {
+                                                                "attribute_id": {
+                                                                    "description": "A unique identifier for the attribute in the dataset.",
+                                                                    "type": "integer"
+                                                                },
+                                                                "attribute_name": {
+                                                                    "description": "A descriptive attribute for presenting the payment method attribute's name.",
+                                                                    "type": "string"
+                                                                },
+                                                                "value": {
+                                                                    "description": "An attribute for presenting the value of payment method attribute filled by the user.",
+                                                                    "type": "string"
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        }
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        },
+                                        "not_linked_payment_methods": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "description": "A unique identifier or reference for a particular record in the dataset.",
+                                                        "type": "integer"
+                                                    },
+                                                    "name": {
+                                                        "description": "A descriptive attribute for presenting the payment method name.",
+                                                        "type": "string"
+                                                    },
+                                                    "country_id": {
+                                                        "description": "A unique identifier or reference for a particular country which the payment method is associated with.",
+                                                        "type": "integer"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/applicant/payment-methods/link/{paymentMethodId}": {
             "post": {
                 "tags": [
                     "PaymentMethods"
                 ],
                 "summary": "Link a payment method to the authenticated applicant account",
                 "operationId": "linkPaymentMethod",
+                "parameters": [
+                    {
+                        "name": "paymentMethodId",
+                        "in": "path",
+                        "description": "Id of the payment method which you intend to link",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
                 "requestBody": {
                     "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
                                 "properties": {
-                                    "payment_method_id": {
-                                        "description": "Id of the payment method which you intend to link",
-                                        "type": "string"
-                                    },
                                     "payment_method_attributes": {
                                         "properties": {
                                             "holder_name": {
@@ -366,7 +753,23 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Successful operation"
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "A descriptive attribute indicating the result of request.",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Payment Method not found"
                     },
                     "422": {
                         "description": "Unprocessable request"
@@ -423,6 +826,114 @@
                                 }
                             }
                         }
+                    },
+                    "404": {
+                        "description": "Linked method not found"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/applicant/payment-methods/linked-method/update/{linkedMethodId}": {
+            "put": {
+                "tags": [
+                    "PaymentMethods"
+                ],
+                "summary": "Update a specific linked method by an applicant who linked the method",
+                "operationId": "updateLinkedPaymentMethodByApplicant",
+                "parameters": [
+                    {
+                        "name": "linkedMethodId",
+                        "in": "path",
+                        "description": "ID of the linked method to update",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "payment_method_attributes": {
+                                        "properties": {
+                                            "holder_name": {
+                                                "description": "Required for Bank-Transfer linking",
+                                                "type": "string"
+                                            },
+                                            "bank_name": {
+                                                "description": "Required for Bank-Transfer linking",
+                                                "type": "string"
+                                            },
+                                            "iban": {
+                                                "description": "Required for DE Bank-Transfer linking",
+                                                "type": "string"
+                                            },
+                                            "bic": {
+                                                "description": "Required for DE Bank-Transfer linking",
+                                                "type": "string"
+                                            },
+                                            "account_number": {
+                                                "description": "Optional for IR Bank-Transfer linking",
+                                                "type": "string"
+                                            },
+                                            "card_number": {
+                                                "description": "Required for IR Bank-Transfer linking",
+                                                "type": "string"
+                                            },
+                                            "shaba_number": {
+                                                "description": "Required for IR Bank-Transfer linking",
+                                                "type": "string"
+                                            },
+                                            "email": {
+                                                "description": "Required for Paypal linking",
+                                                "type": "string"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "A descriptive attribute indicating the result of request.",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable request"
                     },
                     "404": {
                         "description": "Linked method not found"
