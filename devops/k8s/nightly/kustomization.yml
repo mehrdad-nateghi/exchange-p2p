@@ -1,0 +1,16 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: paylibero-nightly
+
+resources:
+  - ../base
+  - ingresses.yml
+
+patches:
+  - path: deployments/core-laravel.yml
+  - path: statefulsets/mysql.yml
+
+images:
+  - name: docker.io/paylibero/build-core-laravel
+    newTag: ${DEPLOY_COMMIT_SHORT_SHA}

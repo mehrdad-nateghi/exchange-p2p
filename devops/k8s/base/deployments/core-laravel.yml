@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: core-laravel
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: core-laravel
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 75%
+  template:
+    metadata:
+      labels:
+        app: core-laravel
+        commit-short-sha: "commit_${DEPLOY_COMMIT_SHORT_SHA}"
+    spec:
+      restartPolicy: Always
+      containers:
+        - image: docker.io/paylibero/build-core-laravel
+          imagePullPolicy: Always
+          name: core-laravel
+          ports:
+            - containerPort: 8000
+              protocol: TCP
+          env:
+            - name: APP_NAME
+              value: Laravel
+
+            - name: APP_ENV
+              value: production
+
+            - name: APP_URL
+              value: Laravel
+
+            - name: DB_CONNECTION
+              value: mysql
+
+            - name: DB_HOST
+              value: paylibero-db-mysql-headless
+
+            - name: DB_PORT
+              value: 3306
+          resources: {}
+  # TODO: These configs will apply after we add health check API.
+  # livenessProbe:
+  #   failureThreshold: 5
+  #   httpGet:
+  #     path: /health/
+  #     port: 3000
+  #     scheme: HTTP
+  #   initialDelaySeconds: 90
+  #   periodSeconds: 60
+  #   successThreshold: 1
+  #   timeoutSeconds: 1
+
+  # readinessProbe:
+  #   failureThreshold: 5
+  #   httpGet:
+  #     path: /health/
+  #     port: 3000
+  #     scheme: HTTP
+  #   initialDelaySeconds: 20
+  #   periodSeconds: 10
+  #   successThreshold: 1
+  #   timeoutSeconds: 1

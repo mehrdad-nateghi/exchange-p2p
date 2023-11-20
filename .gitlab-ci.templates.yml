@@ -1,0 +1,66 @@
+variables:
+  # Cache Compression Tool
+  FF_USE_FASTZIP: "true"
+  CACHE_COMPRESSION_LEVEL: "fast"
+
+.test_job_template:
+  interruptible: true
+  tags:
+    - docker-executer
+  rules:
+    - if: '$CI_MERGE_REQUEST_ID == null && $CI_COMMIT_REF_NAME == "main"'
+    - if: '$CI_MERGE_REQUEST_ID == null && $CI_COMMIT_REF_NAME == "production"'
+
+.build_job_template:
+  interruptible: true
+  tags:
+    - shell-executer # Directly run on CI worker node instead of containers to preserve docker layer cache between builds
+  cache: [] # we use docker cache to build
+  variables:
+    # for job
+    COMPOSE_DOCKER_CLI_BUILD: "1"
+    DOCKER_BUILDKIT: "1"
+  script:
+    - cd $CI_PROJECT_DIR/devops/build
+    - docker-compose -f docker-compose.base.yml -f docker-compose.${ENVIRONMENT_NAME}.yml build ${SERVICE_NAME}
+    - > # update the latest tag only on commits to main
+      if [ -z "$CI_MERGE_REQUEST_ID" ] && [ $CI_COMMIT_REF_NAME == "main" ]; then
+        CI_COMMIT_SHORT_SHA=latest docker-compose -f docker-compose.base.yml -f docker-compose.${ENVIRONMENT_NAME}.yml build -q ${SERVICE_NAME}
+      fi
+    - echo "--- successfully built the following docker image tag ${CI_COMMIT_SHORT_SHA} ---"
+    - echo ${DOCKER_PASSWORD} | docker login --username ${DOCKER_USERNAME} --password-stdin
+    - docker-compose -f docker-compose.base.yml -f docker-compose.${ENVIRONMENT_NAME}.yml push ${SERVICE_NAME}
+    - > # push the latest tag only on commits to main
+      if [ -z "$CI_MERGE_REQUEST_ID" ] && [ $CI_COMMIT_REF_NAME == "main" ]; then
+        CI_COMMIT_SHORT_SHA=latest docker-compose -f docker-compose.base.yml -f docker-compose.${ENVIRONMENT_NAME}.yml push ${SERVICE_NAME}
+      fi
+
+.base-deploy-scripts:
+  &base_deploy_scripts # remove all deployments excluding current service
+  - sed -i "/- deployments\/$SERVICE_NAME\.yml/p;/- deployments\/\(.*\)\.yml/d" devops/k8s/base/kustomization.yml
+  - >
+    sed -i "/- path: deployments\/$SERVICE_NAME\.yml/p;/- path: deployments\/\(.*\)\.yml/d" devops/k8s/${ENVIRONMENT_NAME}/kustomization.yml
+
+  - kubectl config get-contexts
+  - kubectl config set-context --current --namespace=${ENVIRONMENT_PREFIX:-paylibero}-${ENVIRONMENT_NAME}
+
+  - kubectl kustomize devops/k8s/${ENVIRONMENT_NAME} | envsubst | kubectl apply --record -f -
+  - kubectl wait --for=condition=available --timeout=200s deployment/${SERVICE_NAME}
+
+.base_deploy_job_template:
+  image: bitnami/kubectl:latest
+  tags:
+    - docker-executer
+  cache: []
+  variables: {}
+  script:
+    - *base_deploy_scripts
+
+.deploy_job_template:
+  extends: .base_deploy_job_template
+  script:
+    # upstream pipeline may already provide the DEPLOY_COMMIT_SHORT_SHA, otherwise we set it to CI_COMMIT_SHORT_SHA
+    - export DEPLOY_COMMIT_SHORT_SHA=${DEPLOY_COMMIT_SHORT_SHA:-$CI_COMMIT_SHORT_SHA}
+    - *base_deploy_scripts
+    - kubectl wait --for=condition=ready --timeout=200s pod -l app=${SERVICE_NAME},commit-short-sha=commit_${DEPLOY_COMMIT_SHORT_SHA}
+    - echo "--- successfully deployed ${SERVICE_NAME} for the commit ${DEPLOY_COMMIT_SHORT_SHA} ---"

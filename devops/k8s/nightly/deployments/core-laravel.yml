@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: core-laravel
+spec:
+  replicas: 2
+  template:
+    spec:
+      containers:
+        - name: core-laravel
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "2Gi"
+              cpu: "1000m"
+          env:
+            - name: DB_USERNAME
+                valueFrom:
+                secretKeyRef:
+                  name: core-laravel-mysql-db
+                  key:  username
+            
+            - name: DB_PASSWORD
+               valueFrom:
+               secretKeyRef:
+                 name: core-laravel-mysql-db
+                 key: password
