@@ -1,0 +1,11 @@
+gitops:
+  manifest_projects:
+    - id: paylibero
+      default_namespace: paylibero-nightly
+      paths:
+        - glob: "/**/*.{yaml,yml,json}"
+
+ci_access:
+  groups:
+    - id: arvanCloud
+      default_namespace: paylibero-nightly

@@ -1,0 +1,15 @@
+include: /.gitlab-ci.templates.yml
+
+stages:
+  - Triggers
+
+trigger-core-laravel:
+  stage: Triggers
+  variables:
+    DEPLOY_COMMIT_SHORT_SHA: $DEPLOY_COMMIT_SHORT_SHA
+    ENVIRONMENT_NAME: $ENVIRONMENT_NAME
+  trigger:
+    include: /lara-app/.gitlab-ci.yml
+    strategy: depend
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "pipeline" && $SERVICE_NAME == "core-laravel"

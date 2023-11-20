@@ -1,0 +1,17 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: paylibero-db-mysql
+spec:
+  replicas: 1
+  template:
+    spec:
+      containers:
+        - name: mysql
+          resources:
+            requests:
+              cpu: ".5"
+              memory: 1G
+            limits:
+              cpu: ".5"
+              memory: 1G
