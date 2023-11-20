@@ -68,6 +68,7 @@ class SetupPaymentMethods extends Command
             $paymentMethods_DE = config('config_default_DE.payment_methods');
 
             foreach ($paymentMethods_DE as $pm) {
+
                 // Check whether the current payment method exists or not
                 $pm_name = $pm['name'];
                 $payment_method = $country_DE->paymentMethods()->where('name', $pm_name)->first();

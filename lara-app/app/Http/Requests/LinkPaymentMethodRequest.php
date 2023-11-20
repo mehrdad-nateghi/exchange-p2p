@@ -4,11 +4,8 @@ namespace App\Http\Requests;
 
 use App\Models\LinkedMethod;
 use App\Models\PaymentMethod;
-use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Validation\UnauthorizedException;
+
 
 class LinkPaymentMethodRequest extends FormRequest
 {
@@ -30,7 +27,6 @@ class LinkPaymentMethodRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            //'payment_method_id' => 'required_if:link_payment_method,true|exists:App\Models\PaymentMethod,id',
             'payment_method_attributes' => 'required|array|min:1'
         ];
 
@@ -53,11 +49,11 @@ class LinkPaymentMethodRequest extends FormRequest
         // Prepare apprpriate rules based on the input payment method
         $country = $payment_method->country;
 
-        if ($country->name === 'DE' && $payment_method->name === 'Paypal') {
+        if ($country->name === config('config_default_DE.country') && $payment_method->name === config('config_default_DE.payment_methods.paypal.name')) {
             $rules = $this->addPaypalRulesForDE($rules);
-        } elseif ($country->name === 'DE' && $payment_method->name === 'Bank Transfer') {
+        } elseif ($country->name === config('config_default_DE.country') && $payment_method->name === config('config_default_DE.payment_methods.bank_transfer.name')) {
             $rules = $this->addBankTransferRulesForDE($rules);
-        } elseif ($country->name === 'IR' && $payment_method->name === 'Bank Transfer') {
+        } elseif ($country->name === config('config_default_IR.country') && $payment_method->name === config('config_default_IR.payment_methods.bank_transfer.name')) {
             $rules = $this->addBankTransferRulesForIR($rules);
         }
 
