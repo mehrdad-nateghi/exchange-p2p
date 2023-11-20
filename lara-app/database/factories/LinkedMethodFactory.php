@@ -21,7 +21,8 @@ class LinkedMethodFactory extends Factory
         return [
             'applicant_id' => User::factory(),
             'method_type_id' => PaymentMethod::factory(),
-            'created_at' => fake()->dateTime()
+            'created_at' => fake()->dateTime(),
+            'updated_at' => fake()->dateTime()
         ];
     }
 }

@@ -125,6 +125,18 @@ class User extends Authenticatable{
         return $linked_methods;
     }
     /*
+     * Get a specific linked method if it exists and active
+     */
+    public function getLinkedMethodIfIsActive($linked_method_id){
+        $linked_method = $this->linkedMethods()
+        ->where('id',$linked_method_id)
+        ->where('status',LinkedMethodStatusEnum::Active)
+        ->first();
+
+        return $linked_method;
+    }
+
+    /*
     * Enum casting for the status and type fields
     */
     protected $casts = [

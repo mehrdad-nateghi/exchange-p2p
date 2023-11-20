@@ -2,12 +2,10 @@
 
 namespace App\Http\Requests;
 
+use App\Models\LinkedMethod;
 use App\Models\PaymentMethod;
-use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Validation\UnauthorizedException;
+
 
 class LinkPaymentMethodRequest extends FormRequest
 {
@@ -29,37 +27,37 @@ class LinkPaymentMethodRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'payment_method_id' => 'required|exists:App\Models\PaymentMethod,id',
             'payment_method_attributes' => 'required|array|min:1'
         ];
 
-        $rules = $this->generatePaymentMethodRules($rules);
-
-        Log::info('rules:'.json_encode($rules));
+        // Check if validation will be run for Link Payment Method functionality
+        if($this->route('paymentMethodId') !== null && PaymentMethod::where('id', $this->route('paymentMethodId'))->exists()){
+            $payment_method = PaymentMethod::find($this->route('paymentMethodId'));
+            $rules = $this->generatePaymentMethodRules($rules, $payment_method);
+        }
+        // Check if validation will be run for Update Linked Payment Method functionality
+        elseif($this->route('linkedMethodId') !== null && PaymentMethod::where('id', $this->route('linkedMethodId'))->exists()){
+            $linked_method = LinkedMethod::find($this->route('linkedMethodId'));
+            $payment_method = $linked_method->paymentMethod;
+            $rules = $this->generatePaymentMethodRules($rules, $payment_method);
+        }
 
         return $rules;
     }
 
-    protected function generatePaymentMethodRules($rules){
+    protected function generatePaymentMethodRules($rules, $payment_method){
+        // Prepare apprpriate rules based on the input payment method
+        $country = $payment_method->country;
 
-        $payment_method_id = $this->has('payment_method_id') ? $this->input('payment_method_id'):'';
-        if($payment_method_id && PaymentMethod::where('id', $payment_method_id)->exists()) {
-
-            // Prepare apprpriate rules based on the input payment method
-            $payment_method = PaymentMethod::find($payment_method_id);
-            $country = $payment_method->country;
-
-            if ($country->name === 'DE' && $payment_method->name === 'Paypal') {
-                $rules = $this->addPaypalRulesForDE($rules);
-            } elseif ($country->name === 'DE' && $payment_method->name === 'Bank Transfer') {
-                $rules = $this->addBankTransferRulesForDE($rules);
-            } elseif ($country->name === 'IR' && $payment_method->name === 'Bank Transfer') {
-                $rules = $this->addBankTransferRulesForIR($rules);
-            }
+        if ($country->name === config('config_default_DE.country') && $payment_method->name === config('config_default_DE.payment_methods.paypal.name')) {
+            $rules = $this->addPaypalRulesForDE($rules);
+        } elseif ($country->name === config('config_default_DE.country') && $payment_method->name === config('config_default_DE.payment_methods.bank_transfer.name')) {
+            $rules = $this->addBankTransferRulesForDE($rules);
+        } elseif ($country->name === config('config_default_IR.country') && $payment_method->name === config('config_default_IR.payment_methods.bank_transfer.name')) {
+            $rules = $this->addBankTransferRulesForIR($rules);
         }
 
         return $rules;
-
     }
 
     protected function addPaypalRulesForDE($rules)

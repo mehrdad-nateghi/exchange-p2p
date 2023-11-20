@@ -6,7 +6,7 @@
 return [
     'country' => 'DE',
     'payment_methods' => [
-        [
+        'bank_transfer' => [
             'name' => 'Bank Transfer',
             'attributes' => [
                 ['name' => 'bank_name'],
@@ -15,7 +15,7 @@ return [
                 ['name' => 'bic']
             ]
         ],
-        [
+        'paypal' => [
             'name' => 'Paypal',
             'attributes' => [
                 ['name' => 'holder_name'],
