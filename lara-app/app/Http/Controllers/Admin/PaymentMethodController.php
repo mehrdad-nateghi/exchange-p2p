@@ -2,10 +2,15 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\LinkedMethodStatusEnum;
 use App\Enums\UserRoleEnum;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\LinkPaymentMethodRequest;
+use App\Models\LinkedMethod;
 use App\Models\PaymentMethod;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class PaymentMethodController extends Controller
 {
@@ -21,7 +26,7 @@ class PaymentMethodController extends Controller
     *     @OA\Parameter(
     *         name="applicantId",
     *         in="path",
-    *         description="ID of the applicant to fetch his/her payment methods",
+    *         description="Id of the applicant to fetch his/her payment methods",
     *         required=true,
     *         @OA\Schema(type="integer", format="int64")
     *     ),
@@ -109,5 +114,116 @@ class PaymentMethodController extends Controller
         $response['not_linked_payment_methods'] = $reformatted_not_linked_payment_methods;
 
         return response()->json($response, 200);
+    }
+
+        /**
+     * @OA\Post(
+     *     path="/api/admin/applicant/payment-methods/link/{applicantId}/{paymentMethodId}",
+     *     summary="Link a payment method to the applicant account",
+     *     tags={"PaymentMethods"},
+     *     operationId="linkPaymentMethodToApplicantAccountByAdmin",
+     *     security={
+     *         {"bearerAuth": {}}
+     *     },
+     *     @OA\Parameter(
+    *         name="applicantId",
+    *         in="path",
+    *         description="Id of the applicant to link the payment method to his/her account",
+    *         required=true,
+    *         @OA\Schema(type="integer", format="int64")
+    *     ),
+    *     @OA\Parameter(
+    *         name="paymentMethodId",
+    *         in="path",
+    *         description="Id of the payment method which you intend to link",
+    *         required=true,
+    *         @OA\Schema(type="integer", format="int64")
+    *     ),
+    *     @OA\RequestBody(
+    *         required=true,
+    *         @OA\JsonContent(
+    *             @OA\Property(
+    *                 property="payment_method_attributes",
+    *                 type="object",
+    *                 @OA\Property(property="holder_name", type="string", description="Required for Bank-Transfer linking"),
+    *                 @OA\Property(property="bank_name", type="string", description="Required for Bank-Transfer linking"),
+    *                 @OA\Property(property="iban", type="string", description="Required for DE Bank-Transfer linking"),
+    *                 @OA\Property(property="bic", type="string", description="Required for DE Bank-Transfer linking"),
+    *                 @OA\Property(property="account_number", type="string", description="Optional for IR Bank-Transfer linking"),
+    *                 @OA\Property(property="card_number", type="string", description="Required for IR Bank-Transfer linking"),
+    *                 @OA\Property(property="shaba_number", type="string", description="Required for IR Bank-Transfer linking"),
+    *                 @OA\Property(property="email", type="string", description="Required for Paypal linking")
+    *             )
+    *         )
+    *     ),
+    *     @OA\Response(
+    *         response=200,
+    *         description="Successful operation",
+    *         @OA\JsonContent(
+    *              @OA\Property(property="message", type="string", description="A descriptive attribute indicating the result of request.")
+    *      )
+    *     ),
+    *     @OA\Response(
+    *         response=404,
+    *         description="Applicant or Payment Method not found",
+    *     ),
+    *     @OA\Response(
+    *         response=422,
+    *         description="Unprocessable request",
+    *     ),
+    *     @OA\Response(
+    *         response=401,
+    *         description="Unauthorized"
+    *     ),
+    *     @OA\Response(
+    *         response=403,
+    *         description="Forbidden"
+    *     ),
+    *     @OA\Response(
+    *         response=500,
+    *         description="Internal Server Error",
+    *     )
+    * )
+    */
+    public function linkPaymentMethodToApplicantAccount(LinkPaymentMethodRequest $request, $applicant_id, $payment_method_id) {
+
+        $applicant = User::find($applicant_id);
+        if(!$applicant || !$applicant->checkIsActiveApplicant()) {
+            return response(['message' => 'Applicant not found!'],404);
+        }
+
+        $payment_method = PaymentMethod::find($payment_method_id);
+        if(!($payment_method instanceof PaymentMethod)){
+            return response(['message' => 'Payment method not found!'],404);
+        }
+
+        $validatedData = $request->validated();
+
+        // Check whther the payment method is linked before or not
+        $linked_method = $applicant->getLinkedMethodByPaymentMethodIdIfIsActive($payment_method_id);
+        if($linked_method instanceof LinkedMethod) {
+            return response(['message' => 'Payment method is already linked to the applicant account.'], 422);
+        }
+
+        DB::beginTransaction();
+
+        // Link the target payment method
+        $linked_method = $applicant->linkedMethods()->create([
+            "method_type_id" => $payment_method_id
+        ]);
+
+        // Attach the payment method's attributes by credential values
+        $payment_method = PaymentMethod::find($payment_method_id);
+        $input_method_attributes = $validatedData['payment_method_attributes'];
+        $initiation = $linked_method->initiateAttributes($payment_method, $input_method_attributes);
+        if (!$initiation) {
+            // If attributes initiation fails, rollback the transaction
+            DB::rollBack();
+            return response(['message' => 'Some of the attributes are not available in the database.'], 422);
+        }
+
+        DB::commit();
+
+        return response(['message' => 'Payment method linked successfully'],200);
     }
 }

@@ -104,6 +104,13 @@ class User extends Authenticatable{
     }
 
     /**
+    * Check whther the user is an applicant
+    */
+    public function checkIsActiveApplicant(){
+        return $this->status == UserStatusEnum::Active && $this->role == UserRoleEnum::Applicant;
+    }
+
+    /**
     * Get applicant linked payment methods
     */
     public function getLinkedPaymentMethods(){
@@ -124,13 +131,26 @@ class User extends Authenticatable{
 
         return $linked_methods;
     }
+
     /*
-     * Get a specific linked method if it exists and active
+     * Get a specific linked method by linked_method_id if it exists and active
      */
     public function getLinkedMethodIfIsActive($linked_method_id){
         $linked_method = $this->linkedMethods()
         ->where('id',$linked_method_id)
         ->where('status',LinkedMethodStatusEnum::Active)
+        ->first();
+
+        return $linked_method;
+    }
+
+    /*
+     * Get a specific linked method by payment_method_id if it exists and active
+     */
+    public function getLinkedMethodByPaymentMethodIdIfIsActive($payment_method_id){
+        $linked_method = $this->linkedMethods()
+        ->where('method_type_id',$payment_method_id)
+        ->where('status', LinkedMethodStatusEnum::Active)
         ->first();
 
         return $linked_method;

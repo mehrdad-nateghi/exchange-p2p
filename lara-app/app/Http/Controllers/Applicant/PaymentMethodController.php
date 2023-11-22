@@ -122,6 +122,13 @@ class PaymentMethodController extends Controller
      *     @OA\Response(
      *         response=200,
      *         description="Successful operation",
+     *         @OA\JsonContent(
+     *              @OA\Property(property="message", type="string", description="A descriptive attribute indicating the result of request.")
+     *      )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Payment Method not found",
      *     ),
      *     @OA\Response(
      *         response=422,
@@ -145,10 +152,15 @@ class PaymentMethodController extends Controller
 
         $applicant = Auth::user();
 
+        $payment_method = PaymentMethod::find($payment_method_id);
+        if(!($payment_method instanceof PaymentMethod)){
+            return response(['message' => 'Payment method not found!'],404);
+        }
+
         $validatedData = $request->validated();
 
         // Check whther the payment method is linked before or not
-        $linked_method = $applicant->linkedMethods()->where('method_type_id',$payment_method_id)->where('status', LinkedMethodStatusEnum::Active)->first();
+        $linked_method = $applicant->getLinkedMethodByPaymentMethodIdIfIsActive($payment_method_id);
         if($linked_method instanceof LinkedMethod) {
             return response(['message' => 'Payment method is already linked to the applicant account.'], 422);
         }
