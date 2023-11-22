@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Enums\LinkedMethodStatusEnum;
 use App\Enums\UserRoleEnum;
 use App\Http\Controllers\Controller;
+use App\Models\LinkedMethod;
 use App\Models\PaymentMethod;
 use App\Models\User;
 
