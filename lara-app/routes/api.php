@@ -55,6 +55,7 @@ Route::middleware(['auth:api', 'is.admin'])->prefix('admin')->prefix('admin')->g
     Route::post('/signout',[AdminAuthController::class, 'signout'])->name('admin.auth.signout');
     Route::get('/applicant/payment-methods/{applicantId}', [AdminPaymentMethodController::class, 'getApplicantPaymentMethods'])->name('admin.applicantPaymentMethods.get');
     Route::delete('/payment-methods/unlink/{linkedMethodId}', [AdminPaymentMethodController::class, 'unlinkPaymentMethod'])->name('admin.paymentMethods.unlink');
+    Route::post('/applicant/payment-methods/link/{applicantId}/{paymentMethodId}', [AdminPaymentMethodController::class, 'linkPaymentMethodToApplicantAccount'])->name('admin.applicant.paymentMethods.link');
 });
 
 /* Bids Management Routes */
