@@ -232,6 +232,62 @@
                 ]
             }
         },
+        "/api/admin/payment-methods/unlink/{linkedMethodId}": {
+            "delete": {
+                "tags": [
+                    "PaymentMethods"
+                ],
+                "summary": "Unlink a specific linked method by an admin",
+                "operationId": "unlinkPaymentMethodByAdmin",
+                "parameters": [
+                    {
+                        "name": "linkedMethodId",
+                        "in": "path",
+                        "description": "Id of the linked method to unlink",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "A descriptive attribute indicating the result of request.",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Linked method not found"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/admin/requests/remove/{requestId}": {
             "delete": {
                 "tags": [
