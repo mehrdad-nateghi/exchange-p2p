@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Enums\LinkedMethodStatusEnum;
 use App\Enums\UserRoleEnum;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\LinkPaymentMethodRequest;
 use App\Models\LinkedMethod;
 use App\Models\PaymentMethod;
 use App\Models\User;
@@ -224,6 +223,66 @@ class PaymentMethodController extends Controller
         DB::commit();
 
         return response(['message' => 'Payment method linked successfully'],200);
+    }
+
+    /**
+    * @OA\Delete(
+    *     path="/api/admin/payment-methods/unlink/{linkedMethodId}",
+    *     summary="Unlink a specific linked method by an admin",
+    *     tags={"PaymentMethods"},
+    *     operationId="unlinkPaymentMethodByAdmin",
+    *     security={
+    *           {"bearerAuth": {}}
+    *     },
+    *     @OA\Parameter(
+    *         name="linkedMethodId",
+    *         in="path",
+    *         description="Id of the linked method to unlink",
+    *         required=true,
+    *         @OA\Schema(type="integer", format="int64")
+    *     ),
+    *     @OA\Response(
+    *         response=200,
+    *         description="Successful operation",
+    *         @OA\JsonContent(
+    *              @OA\Property(property="message", type="string", description="A descriptive attribute indicating the result of request.")
+    *      )
+    *     ),
+    *     @OA\Response(
+    *         response=404,
+    *         description="Linked method not found",
+    *     ),
+    *     @OA\Response(
+    *         response=401,
+    *         description="Unauthorized"
+    *     ),
+    *     @OA\Response(
+    *         response=403,
+    *         description="Forbidden"
+    *     ),
+    *     @OA\Response(
+    *         response=500,
+    *         description="Internal Server Error",
+    *     )
+    * )
+    */
+    public function unlinkPaymentMethod($linked_method_id){
+
+        // Check whether the linked method is available
+        $linked_method = LinkedMethod::find($linked_method_id);
+        if(!$linked_method || $linked_method->status == LinkedMethodStatusEnum::Removed){
+            return response(['message' => 'Linked payment method not found.'], 404);
+        }
+
+        // Check whether the linked method is associated with an active request or bid
+        if($linked_method->isEngagedWithAnyActiveRequest() || $linked_method->isEngagedWithAnyActiveBid()) {
+            return response(['message' => 'The linked method is already associated with an active request or bid.'], 403);
+        }
+
+        $linked_method->status = LinkedMethodStatusEnum::Removed;
+        $linked_method->save();
+
+        return response(['message' => 'Payment method unlinked successfully'],200);
     }
 
      /**
