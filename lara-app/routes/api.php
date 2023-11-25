@@ -56,6 +56,7 @@ Route::middleware(['auth:api', 'is.admin'])->prefix('admin')->prefix('admin')->g
     Route::get('/applicant/payment-methods/{applicantId}', [AdminPaymentMethodController::class, 'getApplicantPaymentMethods'])->name('admin.applicantPaymentMethods.get');
     Route::delete('/payment-methods/unlink/{linkedMethodId}', [AdminPaymentMethodController::class, 'unlinkPaymentMethod'])->name('admin.paymentMethods.unlink');
     Route::post('/applicant/payment-methods/link/{applicantId}/{paymentMethodId}', [AdminPaymentMethodController::class, 'linkPaymentMethodToApplicantAccount'])->name('admin.applicant.paymentMethods.link');
+    Route::put('/payment-methods/linked-method/update/{linkedMethodId}', [AdminPaymentMethodController::class, 'updateLinkedMethod'])->name('admin.paymentMethods.linkedMethod.update');
 });
 
 /* Bids Management Routes */

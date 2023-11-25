@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Models\LinkedMethod;
 use App\Models\PaymentMethod;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 
 class PaymentMethodController extends Controller
 {
@@ -113,7 +114,7 @@ class PaymentMethodController extends Controller
         return response()->json($response, 200);
     }
 
-        /**
+    /**
      * @OA\Post(
      *     path="/api/admin/applicant/payment-methods/link/{applicantId}/{paymentMethodId}",
      *     summary="Link a payment method to the applicant account",
@@ -282,5 +283,86 @@ class PaymentMethodController extends Controller
         $linked_method->save();
 
         return response(['message' => 'Payment method unlinked successfully'],200);
+    }
+
+     /**
+     * @OA\Put(
+     *     path="/api/admin/payment-methods/linked-method/update/{linkedMethodId}",
+     *     summary="Update a specific linked method by an admin",
+     *     tags={"PaymentMethods"},
+     *     operationId="updateLinkedPaymentMethodByAdmin",
+     *     security={
+     *           {"bearerAuth": {}}
+     *     },
+     *     @OA\Parameter(
+     *         name="linkedMethodId",
+     *         in="path",
+     *         description="Id of the linked method to update",
+     *         required=true,
+     *         @OA\Schema(type="integer", format="int64")
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="payment_method_attributes",
+     *                 type="object",
+     *                 @OA\Property(property="holder_name", type="string", description="Required for Bank-Transfer linking"),
+     *                 @OA\Property(property="bank_name", type="string", description="Required for Bank-Transfer linking"),
+     *                 @OA\Property(property="iban", type="string", description="Required for DE Bank-Transfer linking"),
+     *                 @OA\Property(property="bic", type="string", description="Required for DE Bank-Transfer linking"),
+     *                 @OA\Property(property="account_number", type="string", description="Optional for IR Bank-Transfer linking"),
+     *                 @OA\Property(property="card_number", type="string", description="Required for IR Bank-Transfer linking"),
+     *                 @OA\Property(property="shaba_number", type="string", description="Required for IR Bank-Transfer linking"),
+     *                 @OA\Property(property="email", type="string", description="Required for Paypal linking")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation",
+     *         @OA\JsonContent(
+     *              @OA\Property(property="message", type="string", description="A descriptive attribute indicating the result of request.")
+     *      )
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Unprocessable request",
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Linked method not found",
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized"
+     *     ),
+     *     @OA\Response(
+     *         response=403,
+     *         description="Forbidden"
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal Server Error",
+     *     )
+     * )
+     */
+    public function updateLinkedMethod(LinkPaymentMethodRequest $request, $linked_method_id){
+
+        $validated_credentials = $request->validated();
+
+        $linked_method = LinkedMethod::find($linked_method_id);
+        if(!$linked_method || $linked_method->status == LinkedMethodStatusEnum::Removed){
+            return response(['message' => 'Linked payment method not found.'], 404);
+        }
+
+        // Update the payment method's attributes by credential values
+        $input_method_attributes = $validated_credentials['payment_method_attributes'];
+        $update_attrs = $linked_method->updateAttributes($input_method_attributes);
+        if(!$update_attrs) {
+            return response(['message' => 'Some problems occured during the updating associated fields.'], 500);
+        }
+
+        return response(['message' => 'Linked payment method updated successfully'],200);
     }
 }
