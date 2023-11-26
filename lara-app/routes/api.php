@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Applicant\PaymentMethodController as ApplicantPaymentMethodController;
 use App\Http\Controllers\Admin\PaymentMethodController as AdminPaymentMethodController;
+use App\Http\Controllers\Guest\EmailController;
 
 /*
 |--------------------------------------------------------------------------
@@ -62,8 +63,7 @@ Route::middleware(['auth:api', 'is.admin'])->prefix('admin')->prefix('admin')->g
 /* Bids Management Routes */
 // Guest User Routes
 Route::get('/bids/request/{requestId}', [GuestBidController::class,'getBids'])->name('request.bids.get.all');
-
-
+Route::get('/send-test-email', [EmailController::class,'sendTestEmail']);
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
