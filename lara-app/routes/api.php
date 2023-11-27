@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Applicant\PaymentMethodController as ApplicantPaymentMethodController;
 use App\Http\Controllers\Admin\PaymentMethodController as AdminPaymentMethodController;
 use App\Http\Controllers\Guest\EmailController;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
 /*
 |--------------------------------------------------------------------------
@@ -65,6 +66,13 @@ Route::middleware(['auth:api', 'is.admin'])->prefix('admin')->prefix('admin')->g
 Route::get('/bids/request/{requestId}', [GuestBidController::class,'getBids'])->name('request.bids.get.all');
 Route::get('/send-test-email', [EmailController::class,'sendTestEmail']);
 
+/* Guest User Authentication Routes */
+// Route::post('/signup', [GuestAuthController::class, 'applicantSignUp'])->name('guest.signup.applicant');
+// Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+//     $request->fulfill();
+
+//     return response("User verified successfully!",200);
+// })->middleware(['signed'])->name('verification.verify');
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

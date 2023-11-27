@@ -25,7 +25,6 @@ class UserFactory extends Factory
             'email' => fake()->unique()->safeEmail(),
             'password' => Hash::make(fake()->password()),
             'status' => \App\Enums\UserStatusEnum::Active,
-            'is_email_verified' => '1',
             'created_at' => fake()->dateTime()
         ];
     }

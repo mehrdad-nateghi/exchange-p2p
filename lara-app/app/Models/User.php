@@ -5,13 +5,13 @@ namespace App\Models;
 use App\Enums\LinkedMethodStatusEnum;
 use App\Enums\UserRoleEnum;
 use App\Enums\UserStatusEnum;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Laravel\Passport\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Support\Facades\Log;
 
-class User extends Authenticatable{
+class User extends Authenticatable implements MustVerifyEmail{
 
     use HasApiTokens, HasFactory, Notifiable;
 

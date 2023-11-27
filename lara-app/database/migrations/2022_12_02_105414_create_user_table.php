@@ -16,13 +16,13 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->tinyInteger('role')->default(0);
-            $table->string('first_name');
-            $table->string('last_name');
+            $table->string('first_name')->nullable();
+            $table->string('last_name')->nullable();
             $table->string('email')->unique();
-            $table->string('password');
+            $table->string('password')->nullable();
             $table->tinyInteger('status')->default(1);
-            $table->boolean('is_email_verified')->default(1);
-            $table->timestamp('created_at');
+            $table->timestamp('email_verified_at')->nullable();
+            $table->timestamp('created_at')->nullable();
 
         });
     }
