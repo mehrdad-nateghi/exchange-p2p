@@ -11,7 +11,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Applicant\PaymentMethodController as ApplicantPaymentMethodController;
 use App\Http\Controllers\Admin\PaymentMethodController as AdminPaymentMethodController;
 use App\Http\Controllers\Guest\EmailController;
+use App\Http\Controllers\Guest\AuthController as GuestAuthController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,7 +34,7 @@ Route::get('/requests/{requestId}', [GuestRequestController::class,'getRequest']
 
 // Applicant Routes
 Route::post('/applicant/signin',[ApplicantAuthController::class, 'signIn'])->name('applicant.auth.signin');
-Route::middleware(['auth:api', 'is.applicant'])->prefix('applicant')->group(function () {
+Route::middleware(['auth:api', 'is.applicant', 'email.is.verified'])->prefix('applicant')->group(function () {
     Route::get('/requests', [ApplicantRequestController::class,'getOwnAllRequests'])->name('applicant.requests.get.all');
     Route::get('/requests/{requestId}', [ApplicantRequestController::class,'getOwnRequest'])->name('applicant.requests.get.single');
     Route::get('/requests/create/setup/{countryId}', [ApplicantRequestController::class,'getSetupInformationForRequestCreation'])->name('applicant.requests.create.setup');
@@ -50,7 +52,7 @@ Route::middleware(['auth:api', 'is.applicant'])->prefix('applicant')->group(func
 
 // Admin Routes
 Route::post('/admin/signin',[AdminAuthController::class, 'signin'])->name('admin.auth.signin');
-Route::middleware(['auth:api', 'is.admin'])->prefix('admin')->prefix('admin')->group(function () {
+Route::middleware(['auth:api', 'is.admin', 'email.is.verified'])->prefix('admin')->prefix('admin')->group(function () {
     Route::delete('/requests/remove/{requestId}', [AdminRequestController::class, 'remove'])->name('admin.requests.remove');
     Route::get('/requests/update/setup/{requestId}', [AdminRequestController::class,'getSetupInformationForRequestUpdate'])->name('admin.requests.update.setup');
     Route::put('/requests/update/{requestId}', [AdminRequestController::class, 'update'])->name('admin.requests.update');
@@ -67,12 +69,9 @@ Route::get('/bids/request/{requestId}', [GuestBidController::class,'getBids'])->
 Route::get('/send-test-email', [EmailController::class,'sendTestEmail']);
 
 /* Guest User Authentication Routes */
-// Route::post('/signup', [GuestAuthController::class, 'applicantSignUp'])->name('guest.signup.applicant');
-// Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
-//     $request->fulfill();
+Route::post('/user/signup/send-code', [GuestAuthController::class, 'preSignup'])->name('guest.signup.preSignup');
+Route::post('/user/signup/verify', [GuestAuthController::class, 'signup'])->name('guest.signup.verify');
 
-//     return response("User verified successfully!",200);
-// })->middleware(['signed'])->name('verification.verify');
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

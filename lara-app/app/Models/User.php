@@ -11,7 +11,7 @@ use Laravel\Passport\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Authenticatable implements MustVerifyEmail{
+class User extends Authenticatable{
 
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -23,6 +23,7 @@ class User extends Authenticatable implements MustVerifyEmail{
         'last_name',
         'email',
         'password',
+        'email_verified_at',
         'created_at'
     ];
 
@@ -30,20 +31,13 @@ class User extends Authenticatable implements MustVerifyEmail{
         'password'
     ];
 
-    public $timestamps = false;
+    public $timestamps = true;
 
     /*
     * Get the Notifications for the User
     */
     public function notifications(){
         return $this->hasMany(Notification::class);
-    }
-
-    /*
-    * Get the UserVerify for the User
-    */
-    public function userVerify(){
-        return $this->hasOne(UserVerify::class);
     }
 
     /*

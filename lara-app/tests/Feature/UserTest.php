@@ -42,7 +42,6 @@ class UserTest extends TestCase
         Parent::setup();
 
         $this->user = User::factory()->create(['role'=>UserRoleEnum::Applicant]);
-        $this->userVerify = UserVerify::factory()->create(['user_id'=> $this->user->id]);
         $this->authenticationLog = AuthenticationLog::factory()->create(['applicant_id'=> $this->user->id]);
         $this->country = Country::factory()->create();
         $this->paymentMethod = PaymentMethod::factory()->create(['country_id' => $this->country->id]);
@@ -60,12 +59,6 @@ class UserTest extends TestCase
     public function a_user_has_many_notifications()
     {
         $this->assertTrue($this->user->notifications->contains($this->notification));
-    }
-
-    /** @test for the 1 to 1 User - UserVerify relation*/
-    public function a_user_has_a_userverify()
-    {
-        $this->assertInstanceOf(UserVerify::class, $this->user->userVerify);
     }
 
     /** @test for the 1 to n User - AuthenticationLog relation*/

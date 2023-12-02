@@ -23,7 +23,7 @@ return new class extends Migration
             $table->tinyInteger('status')->default(1);
             $table->timestamp('email_verified_at')->nullable();
             $table->timestamp('created_at')->nullable();
-
+            $table->timestamp('updated_at')->nullable();
         });
     }
 
