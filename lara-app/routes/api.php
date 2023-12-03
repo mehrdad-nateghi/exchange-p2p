@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Applicant\PaymentMethodController as ApplicantPaymentMethodController;
 use App\Http\Controllers\Admin\PaymentMethodController as AdminPaymentMethodController;
 use App\Http\Controllers\Guest\EmailController;
+use App\Http\Controllers\Guest\PaymentMethodController as GuestPaymentMethodController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -28,6 +30,8 @@ use App\Http\Controllers\Guest\EmailController;
 // Guest User Routes
 Route::get('/requests/filter', [GuestRequestController::class,'getRequests'])->name('guest.requests.get.byFilter');
 Route::get('/requests/{requestId}', [GuestRequestController::class,'getRequest'])->name('guest.requests.get.single');
+Route::get('/payment-methods', [GuestPaymentMethodController::class,'getPaymentMethods'])->name('guest.paymentMethods.get');
+
 
 // Applicant Routes
 Route::post('/applicant/signin',[ApplicantAuthController::class, 'signIn'])->name('applicant.auth.signin');

@@ -34,7 +34,7 @@ class RequestController extends Controller
      *        description="0: Buy, 1: Sell"
      *     ),
      *     @OA\Parameter(
-     *         name="payment_methods[]",
+     *         name="payment_methods",
      *         in="query",
      *         description="Filter requests by payment methods",
      *         @OA\Schema(
@@ -47,8 +47,11 @@ class RequestController extends Controller
      *         name="request_status",
      *         in="query",
      *         description="Filter requests by status",
-     *         @OA\Schema(type="string"),
-     *         style="form"
+     *         @OA\Schema(
+     *             type="integer",
+     *             enum={"0", "1"}
+     *         ),
+     *        description="0: Pending, 1: Inprocess"
      *     ),
      *     @OA\Parameter(
      *         name="trade_volume_min",
