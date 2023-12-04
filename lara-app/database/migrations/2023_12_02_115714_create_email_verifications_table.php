@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('email_verifications', function (Blueprint $table) {
             $table->id();
-            $table->string('email')->unique();
+            $table->string('email');
             $table->string('code');
             $table->timestamp('expired_at');
             $table->timestamps();

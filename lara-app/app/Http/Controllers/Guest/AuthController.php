@@ -9,7 +9,7 @@ use App\Http\Requests\SignUpRequest;
 use App\Models\EmailVerification;
 use App\Models\User;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Crypt;
 
 class AuthController extends Controller
 {
@@ -19,12 +19,16 @@ class AuthController extends Controller
      */
     public function sendVerificationCodeByEmail($email){
 
-        Log::info(config('constants.Verification_Code_Expiration_Per_Minutes'));
+        // Generate an unique code
+        $code = random_int(100000, 999999);
+        while (EmailVerification::where('code', Crypt::encryptString($code))->exists()) {
+            $code = random_int(100000, 999999);
+        }
 
-        $emailVerification = EmailVerification::updateOrCreate(
-            ['email' => $email],
+        $emailVerification = EmailVerification::Create(
             [
-                'code' => mt_rand(100000, 999999),
+                'email' => $email,
+                'code' => Crypt::encryptString($code),
                 'expired_at' => Carbon::now()->addMinutes(config('constants.Verification_Code_Expiration_Per_Minutes'))
             ]
         );
@@ -126,7 +130,9 @@ class AuthController extends Controller
         $email = $validated_credentials['email'];
         $code = $validated_credentials['code'];
 
-        $verificationInstance = EmailVerification::where('email', $email)->first();
+        $verificationInstance = EmailVerification::where('email', $email)
+        ->latest('created_at') // Order by created_at column in descending order to ensure the latest generated verification code for the input email is considering
+        ->first();
 
         if (!$verificationInstance || !$verificationInstance->isValid($code)) {
             return response(['error' => 'Invalid verification code.'], 422);
@@ -141,8 +147,6 @@ class AuthController extends Controller
         if(!$user) {
             return response(['error' => 'Internal server error.'], 500);
         }
-
-        $verificationInstance->delete();
 
         $user->refresh();
 

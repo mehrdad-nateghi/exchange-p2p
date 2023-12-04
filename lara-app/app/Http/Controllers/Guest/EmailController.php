@@ -13,10 +13,8 @@ class EmailController extends Controller
     public function sendTestEmail()
     {
         $email = new TestMailHog();
-        Log::alert("hereee.");
 
         Mail::to('mahdijafari3957@gmail.com')->send($email);
-        Log::alert("hereee 2222.");
 
         return "Email sent successfully!";
     }

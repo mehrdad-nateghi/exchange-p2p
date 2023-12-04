@@ -6,6 +6,7 @@ use App\Mail\EmailVerificationMail;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
@@ -22,8 +23,10 @@ class EmailVerification extends Model
     public function sendCode()
     {
         try {
-            // Send email with verification code
-            Mail::to($this->email)->send(new EmailVerificationMail($this->code));
+
+            $code = Crypt::decryptString($this->code);
+
+            Mail::to($this->email)->send(new EmailVerificationMail($code));
 
             return true;
 
@@ -39,7 +42,7 @@ class EmailVerification extends Model
      */
     public function isValid($code) {
 
-        if($this->code !== $code || Carbon::now()->greaterThan($this->expired_at)) {
+        if(Crypt::decryptString($this->code) !== $code || Carbon::now()->greaterThan($this->expired_at)) {
             return false;
         }
 
