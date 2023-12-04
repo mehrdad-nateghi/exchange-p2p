@@ -68,6 +68,6 @@ class Kernel extends HttpKernel
         'json.response' => \App\Http\Middleware\ForceJsonResponse::class,
         'is.applicant' => \App\Http\Middleware\IsApplicant::class,
         'is.admin' => \App\Http\Middleware\IsAdmin::class,
-
+        'email.is.verified' => \App\Http\Middleware\EmailVerifiedMiddleware::class,
     ];
 }

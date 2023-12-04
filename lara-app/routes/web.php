@@ -14,6 +14,6 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    Debugbar::info("index page loded currently!");
     return view('welcome');
 });
+

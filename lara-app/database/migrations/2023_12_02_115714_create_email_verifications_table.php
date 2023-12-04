@@ -13,12 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('user_verifies', function(Blueprint $table){
+        Schema::create('email_verifications', function (Blueprint $table) {
             $table->id();
-            $table->string('token');
-            $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-
+            $table->string('email');
+            $table->string('code');
+            $table->timestamp('expired_at');
+            $table->timestamp('created_at')->nullable();
         });
     }
 
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('email_verifications');
     }
 };

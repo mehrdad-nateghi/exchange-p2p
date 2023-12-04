@@ -8,6 +8,12 @@ use App\Http\Requests\SignInRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * @OA\Tag(
+ *     name="Authentication",
+ *     description="APIs for managing user authentication"
+ * )
+ */
 class AuthController extends Controller
 {
     /**
