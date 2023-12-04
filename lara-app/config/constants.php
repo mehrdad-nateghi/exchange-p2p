@@ -10,5 +10,7 @@ return [
         'Trade_Pr' => 'TR-',
         'Transaction_Pr' => 'TS-',
         'Invoice_Pr' => 'IN-'
-    ]
+    ],
+
+    'Verification_Code_Expiration_Per_Minutes' => '60'
 ];

@@ -350,6 +350,62 @@
                 ]
             }
         },
+        "/api/admin/payment-methods/unlink/{linkedMethodId}": {
+            "delete": {
+                "tags": [
+                    "PaymentMethods"
+                ],
+                "summary": "Unlink a specific linked method by an admin",
+                "operationId": "unlinkPaymentMethodByAdmin",
+                "parameters": [
+                    {
+                        "name": "linkedMethodId",
+                        "in": "path",
+                        "description": "Id of the linked method to unlink",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "A descriptive attribute indicating the result of request.",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Linked method not found"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/admin/payment-methods/linked-method/update/{linkedMethodId}": {
             "put": {
                 "tags": [
@@ -437,62 +493,6 @@
                     },
                     "422": {
                         "description": "Unprocessable request"
-                    },
-                    "404": {
-                        "description": "Linked method not found"
-                    },
-                    "401": {
-                        "description": "Unauthorized"
-                    },
-                    "403": {
-                        "description": "Forbidden"
-                    },
-                    "500": {
-                        "description": "Internal Server Error"
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/api/admin/payment-methods/unlink/{linkedMethodId}": {
-            "delete": {
-                "tags": [
-                    "PaymentMethods"
-                ],
-                "summary": "Unlink a specific linked method by an admin",
-                "operationId": "unlinkPaymentMethodByAdmin",
-                "parameters": [
-                    {
-                        "name": "linkedMethodId",
-                        "in": "path",
-                        "description": "Id of the linked method to unlink",
-                        "required": true,
-                        "schema": {
-                            "type": "integer",
-                            "format": "int64"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successful operation",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "description": "A descriptive attribute indicating the result of request.",
-                                            "type": "string"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
                     },
                     "404": {
                         "description": "Linked method not found"
@@ -1489,6 +1489,109 @@
                 }
             }
         },
+        "/api/user/signup/send-code": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Send verification code by email during the user signing up process",
+                "operationId": "userPreSignup",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "email": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "A descriptive attribute indicating the result of request.",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable request"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/api/user/signup/verify": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Veify the code and finalize signing up process",
+                "operationId": "userSignup",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "code": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "A descriptive attribute indicating the result of request.",
+                                            "type": "string"
+                                        },
+                                        "user_id": {
+                                            "description": "An unique identifier for the user in the database.",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable request"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
         "/api/bids/request/{requestId}": {
             "get": {
                 "tags": [
@@ -1737,6 +1840,10 @@
         }
     },
     "tags": [
+        {
+            "name": "Authentication",
+            "description": "APIs for managing user authentication"
+        },
         {
             "name": "Requests",
             "description": "APIs for managing Requests"

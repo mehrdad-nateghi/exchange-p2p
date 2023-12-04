@@ -37,7 +37,6 @@ class DatabaseSeeder extends Seeder
                 LinkedMethodSeeder::class,
                 LinkedmethodMethodattributeSeeder::class,
                 NotificationSeeder::class,
-                UserVerifySeeder::class,
                 AuthenticationLogSeeder::class,
                 RequestSeeder::class,
                 RequestPaymentMethodSeeder::class,

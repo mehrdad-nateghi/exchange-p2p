@@ -5,11 +5,11 @@ namespace App\Models;
 use App\Enums\LinkedMethodStatusEnum;
 use App\Enums\UserRoleEnum;
 use App\Enums\UserStatusEnum;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Laravel\Passport\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Support\Facades\Log;
 
 class User extends Authenticatable{
 
@@ -23,6 +23,7 @@ class User extends Authenticatable{
         'last_name',
         'email',
         'password',
+        'email_verified_at',
         'created_at'
     ];
 
@@ -30,20 +31,13 @@ class User extends Authenticatable{
         'password'
     ];
 
-    public $timestamps = false;
+    public $timestamps = true;
 
     /*
     * Get the Notifications for the User
     */
     public function notifications(){
         return $this->hasMany(Notification::class);
-    }
-
-    /*
-    * Get the UserVerify for the User
-    */
-    public function userVerify(){
-        return $this->hasOne(UserVerify::class);
     }
 
     /*
