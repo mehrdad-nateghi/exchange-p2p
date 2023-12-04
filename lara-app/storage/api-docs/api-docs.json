@@ -1624,6 +1624,52 @@
                 }
             }
         },
+        "/api/payment-methods": {
+            "get": {
+                "tags": [
+                    "PaymentMethods"
+                ],
+                "summary": "Get all the system payment methods",
+                "operationId": "getSystemPaymentMethods",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "payment_methods": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "description": "A unique identifier for the payment method in the dataset.",
+                                                        "type": "integer"
+                                                    },
+                                                    "name": {
+                                                        "description": "A descriptive name attribute for the payment method filled by the user.",
+                                                        "type": "string"
+                                                    },
+                                                    "country_id": {
+                                                        "description": "A unique identifier for the country which the payment method is associated with.",
+                                                        "type": "integer"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
         "/api/requests/filter": {
             "get": {
                 "tags": [
@@ -1646,7 +1692,7 @@
                         }
                     },
                     {
-                        "name": "payment_methods[]",
+                        "name": "payment_methods",
                         "in": "query",
                         "description": "Filter requests by payment methods",
                         "style": "form",
@@ -1660,10 +1706,13 @@
                     {
                         "name": "request_status",
                         "in": "query",
-                        "description": "Filter requests by status",
-                        "style": "form",
+                        "description": "0: Pending, 1: Inprocess",
                         "schema": {
-                            "type": "string"
+                            "type": "integer",
+                            "enum": [
+                                "0",
+                                "1"
+                            ]
                         }
                     },
                     {

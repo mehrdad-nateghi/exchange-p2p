@@ -14,6 +14,8 @@ use App\Http\Controllers\Guest\EmailController;
 use App\Http\Controllers\Guest\AuthController as GuestAuthController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Guest\PaymentMethodController as GuestPaymentMethodController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -31,6 +33,8 @@ use Illuminate\Support\Facades\Auth;
 // Guest User Routes
 Route::get('/requests/filter', [GuestRequestController::class,'getRequests'])->name('guest.requests.get.byFilter');
 Route::get('/requests/{requestId}', [GuestRequestController::class,'getRequest'])->name('guest.requests.get.single');
+Route::get('/payment-methods', [GuestPaymentMethodController::class,'getPaymentMethods'])->name('guest.paymentMethods.get');
+
 
 // Applicant Routes
 Route::post('/applicant/signin',[ApplicantAuthController::class, 'signIn'])->name('applicant.auth.signin');
