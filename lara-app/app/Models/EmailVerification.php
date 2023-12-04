@@ -17,6 +17,9 @@ class EmailVerification extends Model
     protected $table = 'email_verifications';
     protected $fillable = ['email', 'code', 'expired_at'];
 
+    public $timestamps = true;
+    const UPDATED_AT = null;
+
     /**
      * Send verification code to the destination email
      */

@@ -21,10 +21,6 @@ class AuthController extends Controller
 
         // Generate an unique code
         $code = random_int(100000, 999999);
-        while (EmailVerification::where('code', Crypt::encryptString($code))->exists()) {
-            $code = random_int(100000, 999999);
-        }
-
         $emailVerification = EmailVerification::Create(
             [
                 'email' => $email,
