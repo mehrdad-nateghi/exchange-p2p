@@ -746,6 +746,66 @@
                 ]
             }
         },
+        "/api/applicant/set-password": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Set password to the applicant account by authenticated applicant",
+                "operationId": "setPasswordToApplicantAccountByApplicant",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "password": {
+                                        "description": "The password must contain at least 8 digits, one lowercase letter, one uppercase letter, one digit, and one special character",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "A descriptive attribute indicating the result of request.",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/applicant/payment-methods": {
             "get": {
                 "tags": [
@@ -1542,7 +1602,7 @@
                 "tags": [
                     "Authentication"
                 ],
-                "summary": "Veify the code and finalize signing up process",
+                "summary": "Veify the code,  finalize signing up process and then sign in the user accordingly",
                 "operationId": "userSignup",
                 "requestBody": {
                     "required": true,
@@ -1573,8 +1633,8 @@
                                             "description": "A descriptive attribute indicating the result of request.",
                                             "type": "string"
                                         },
-                                        "user_id": {
-                                            "description": "An unique identifier for the user in the database.",
+                                        "token": {
+                                            "description": "A token generated for the user as a consequence of signing in process.",
                                             "type": "string"
                                         }
                                     },

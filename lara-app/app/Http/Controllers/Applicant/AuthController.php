@@ -4,10 +4,11 @@ namespace App\Http\Controllers\Applicant;
 
 use App\Enums\UserRoleEnum;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\SetPasswordRequest;
 use App\Http\Requests\SignInRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
@@ -85,5 +86,58 @@ class AuthController extends Controller
         $request->user()->token()->revoke();
 
         return response()->json(['message' => 'Successfully signed out.']);
+    }
+
+    /**
+     * @OA\Post(
+     *     path="/api/applicant/set-password",
+     *     summary="Set password to the applicant account by authenticated applicant",
+     *     tags={"Authentication"},
+     *     operationId="setPasswordToApplicantAccountByApplicant",
+     *     security={
+     *           {"bearerAuth": {}}
+     *     },
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             @OA\Property(property="password", type="string", description="The password must contain at least 8 digits, one lowercase letter, one uppercase letter, one digit, and one special character"),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation",
+     *         @OA\JsonContent(
+     *              @OA\Property(property="message", type="string", description="A descriptive attribute indicating the result of request."),
+     *      )
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Unprocessable request",
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized"
+     *     ),
+     *     @OA\Response(
+     *         response=403,
+     *         description="Forbidden"
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal Server Error",
+     *     )
+     * )
+     */
+    public function setPassword(SetPasswordRequest $request){
+
+        $applicant = Auth::user();
+
+        $validated_credentials = $request->validated();
+
+        $applicant->update([
+            'password'=> Hash::make($validated_credentials['password'])
+        ]);
+
+        return response(['message' => 'The password set successfully'], 200);
     }
 }
