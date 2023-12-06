@@ -162,8 +162,4 @@ class AuthController extends Controller
 
     }
 
-
-    public function setPassword(){
-
-    }
 }
