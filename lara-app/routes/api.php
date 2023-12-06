@@ -74,6 +74,8 @@ Route::get('/send-test-email', [EmailController::class,'sendTestEmail']);
 /* Guest User Authentication Routes */
 Route::post('/user/signup/send-code', [GuestAuthController::class, 'preSignup'])->name('guest.signup.preSignup');
 Route::post('/user/signup/verify', [GuestAuthController::class, 'signup'])->name('guest.signup.verify');
+Route::post('/user/reset-password/send-code', [GuestAuthController::class, 'preResetPassword'])->name('guest.resetPassword.sendCode');
+Route::post('/user/reset-password/set-new-password', [GuestAuthController::class, 'resetPassword'])->name('guest.resetPassword.setNewPassword');
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

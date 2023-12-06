@@ -133,15 +133,18 @@ class AuthController extends Controller
         $applicant = Auth::user();
 
         $validated_credentials = $request->validated();
+        $password = $validated_credentials['password'];
 
         if($applicant->password) {
             return response(['message' => 'The password is already set for the applicant.'], 422);
         }
 
-        $applicant->update([
-            'password'=> Hash::make($validated_credentials['password'])
-        ]);
+        $update_password = $applicant->updatePassword($password);
 
-        return response(['message' => 'The password set successfully'], 200);
+        if($update_password) {
+            return response(['message' => 'The password set successfully'], 200);
+        }
+
+        return response(['error' => 'Internal server error.'], 500);
     }
 }
