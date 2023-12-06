@@ -134,6 +134,10 @@ class AuthController extends Controller
 
         $validated_credentials = $request->validated();
 
+        if($applicant->password) {
+            return response(['message' => 'The password is already set for the applicant.'], 422);
+        }
+
         $applicant->update([
             'password'=> Hash::make($validated_credentials['password'])
         ]);
