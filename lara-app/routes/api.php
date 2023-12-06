@@ -12,8 +12,6 @@ use App\Http\Controllers\Applicant\PaymentMethodController as ApplicantPaymentMe
 use App\Http\Controllers\Admin\PaymentMethodController as AdminPaymentMethodController;
 use App\Http\Controllers\Guest\EmailController;
 use App\Http\Controllers\Guest\AuthController as GuestAuthController;
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
-use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Guest\PaymentMethodController as GuestPaymentMethodController;
 
 
@@ -51,6 +49,7 @@ Route::middleware(['auth:api', 'is.applicant', 'email.is.verified'])->prefix('ap
     Route::get('/payment-methods', [ApplicantPaymentMEthodController::class, 'getPaymentMethods'])->name('applicant.paymentMethods.get');
     Route::delete('/payment-methods/unlink/{linkedMethodId}', [ApplicantPaymentMethodController::class, 'unlinkPaymentMethod'])->name('applicant.paymentMethods.unlink');
     Route::put('/payment-methods/linked-method/update/{linkedMethodId}', [ApplicantPaymentMethodController::class, 'updateLinkedMethod'])->name('applicant.paymentMethods.linkedMethod.update');
+    Route::post('/set-password',[ApplicantAuthController::class, 'setPassword'])->name('applicant.auth.setPassword');
 
 });
 

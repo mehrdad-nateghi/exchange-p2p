@@ -9,6 +9,7 @@ use App\Http\Requests\SignUpRequest;
 use App\Models\EmailVerification;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 
 class AuthController extends Controller
@@ -91,7 +92,7 @@ class AuthController extends Controller
     /**
      * @OA\Post(
      *     path="/api/user/signup/verify",
-     *     summary="Veify the code and finalize signing up process",
+     *     summary="Veify the code,  finalize signing up process and then sign in the user accordingly",
      *     tags={"Authentication"},
      *     operationId="userSignup",
      *     @OA\RequestBody(
@@ -106,7 +107,7 @@ class AuthController extends Controller
      *         description="Successful operation",
      *         @OA\JsonContent(
      *              @OA\Property(property="message", type="string", description="A descriptive attribute indicating the result of request."),
-     *              @OA\Property(property="user_id", type="string", description="An unique identifier for the user in the database.")
+     *              @OA\Property(property="token", type="string", description="A token generated for the user as a consequence of signing in process.")
      *      )
      *     ),
      *     @OA\Response(
@@ -125,6 +126,11 @@ class AuthController extends Controller
 
         $email = $validated_credentials['email'];
         $code = $validated_credentials['code'];
+
+        $user = User::where('email', $email)->first();
+        if($user instanceof User && $user->email_verified_at) {
+            return response(['message' => 'A user has already registered with the input email address.'], 422);
+        }
 
         $verificationInstance = EmailVerification::where('email', $email)
         ->latest('created_at') // Order by created_at column in descending order to ensure the latest generated verification code for the input email is considering
@@ -146,7 +152,14 @@ class AuthController extends Controller
 
         $user->refresh();
 
-        return response(['message' => 'User signed up successfully', 'user_id' => $user->id], 200);
+        // Log in the user after successful signup
+        Auth::login($user);
+
+        // Create a personal access token for the user
+        $token = $user->createToken('ApplicantToken')->accessToken;
+
+        return response(['message' => 'User signed up and signed in successfully', 'token' => $token], 200);
+
     }
 
 }
