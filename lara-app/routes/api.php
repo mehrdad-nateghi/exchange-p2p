@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\PaymentMethodController as AdminPaymentMethodCont
 use App\Http\Controllers\Guest\EmailController;
 use App\Http\Controllers\Guest\AuthController as GuestAuthController;
 use App\Http\Controllers\Guest\PaymentMethodController as GuestPaymentMethodController;
+use App\Http\Controllers\Applicant\BidController as ApplicantBidController;
 
 
 /*
@@ -50,6 +51,7 @@ Route::middleware(['auth:api', 'is.applicant', 'email.is.verified'])->prefix('ap
     Route::delete('/payment-methods/unlink/{linkedMethodId}', [ApplicantPaymentMethodController::class, 'unlinkPaymentMethod'])->name('applicant.paymentMethods.unlink');
     Route::put('/payment-methods/linked-method/update/{linkedMethodId}', [ApplicantPaymentMethodController::class, 'updateLinkedMethod'])->name('applicant.paymentMethods.linkedMethod.update');
     Route::post('/set-password',[ApplicantAuthController::class, 'setPassword'])->name('applicant.auth.setPassword');
+    Route::post('requests/bid/register/{requestId}',[ApplicantBidController::class, 'register'])->name('applicant.requests.bid.register');
 
 });
 

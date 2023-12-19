@@ -17,9 +17,9 @@ return new class extends Migration
             $table->id();
             $table->string('support_id')->unique();
             $table->tinyInteger('type');
-            $table->integer('bid_rate');
+            $table->decimal('bid_rate',13,2);
             $table->tinyInteger('status');
-            $table->string('description');
+            $table->string('description')->nullable();
             $table->unsignedBigInteger('request_id');
             $table->unsignedBigInteger('applicant_id');
             $table->unsignedBigInteger('target_account_id');
