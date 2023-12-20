@@ -9,6 +9,7 @@ use App\Http\Requests\PreResetPasswordRequest;
 use App\Http\Requests\PreSignUpRequest;
 use App\Http\Requests\ResetPasswordRequest;
 use App\Http\Requests\SignUpRequest;
+use App\Http\Requests\VerifyResetPasswordRequest;
 use App\Models\EmailVerification;
 use App\Models\User;
 use Carbon\Carbon;
@@ -221,7 +222,7 @@ class AuthController extends Controller
 
      /**
      * @OA\Post(
-     *     path="/api/user/reset-password/set-new-password",
+     *     path="/api/user/reset-password/verify",
      *     summary="Verify the input code as well as setting new password during the user password reseting process",
      *     tags={"Authentication"},
      *     operationId="userResetPassword",
@@ -229,8 +230,7 @@ class AuthController extends Controller
      *         required=true,
      *         @OA\JsonContent(
      *             @OA\Property(property="email", type="string"),
-     *             @OA\Property(property="code", type="string"),
-     *             @OA\Property(property="password", type="string", description="The password must contain at least 8 digits, one lowercase letter, one uppercase letter, one digit, and one special character"),
+     *             @OA\Property(property="code", type="string")
      *         )
      *     ),
      *     @OA\Response(
@@ -238,6 +238,7 @@ class AuthController extends Controller
      *         description="Successful operation",
      *         @OA\JsonContent(
      *              @OA\Property(property="message", type="string", description="A descriptive attribute indicating the result of request."),
+     *              @OA\Property(property="token", type="string", description="A token generated for the user as a consequence of signing in process.")
      *      )
      *     ),
      *     @OA\Response(
@@ -254,13 +255,18 @@ class AuthController extends Controller
      *     )
      * )
      */
-    public function resetPassword(ResetPasswordRequest $request)
+    public function verifyResetPassword(VerifyResetPasswordRequest $request)
     {
         $validated_credentials = $request->validated();
 
         $email = $validated_credentials['email'];
         $code = $validated_credentials['code'];
-        $password = $validated_credentials['password'];
+
+        $user = User::where('email', $email)->first();
+
+        if(!$user) {
+            return response(['message' => 'User not found.'], 404);
+        }
 
         $verificationInstance = EmailVerification::where('email', $email)
         ->latest('created_at') // Order by created_at column in descending order to ensure the latest generated verification code for the input email is considering
@@ -270,18 +276,13 @@ class AuthController extends Controller
             return response(['error' => 'Invalid verification code.'], 422);
         }
 
-        $user = User::where('email', $email)->first();
+        // Log in the user after successful code verification
+        Auth::login($user);
 
-        if(!$user) {
-            return response(['message' => 'User not found.'], 404);
-        }
+        // Create a personal access token for the user
+        $token = $user->createToken('ApplicantToken')->accessToken;
 
-        $update_password = $user->updatePassword($password);
+        return response(['message' => 'User verified and signed in successfully', 'token' => $token], 200);
 
-        if($update_password) {
-            return response(['message' => 'The password reset successfully'], 200);
-        }
-
-        return response(['error' => 'Internal server error.'], 500);
     }
 }

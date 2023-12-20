@@ -147,4 +147,60 @@ class AuthController extends Controller
 
         return response(['error' => 'Internal server error.'], 500);
     }
+
+    /**
+     * @OA\Post(
+     *     path="/api/applicant/reset-password",
+     *     summary="Reset the password of the applicant account by authenticated applicant",
+     *     tags={"Authentication"},
+     *     operationId="resetPasswordOfApplicantAccountByApplicant",
+     *     security={
+     *           {"bearerAuth": {}}
+     *     },
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             @OA\Property(property="password", type="string", description="The new password must contain at least 8 digits, one lowercase letter, one uppercase letter, one digit, and one special character"),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation",
+     *         @OA\JsonContent(
+     *              @OA\Property(property="message", type="string", description="A descriptive attribute indicating the result of request."),
+     *      )
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Unprocessable request",
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized"
+     *     ),
+     *     @OA\Response(
+     *         response=403,
+     *         description="Forbidden"
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal Server Error",
+     *     )
+     * )
+     */
+    public function resetPassword(SetPasswordRequest $request){
+
+        $applicant = Auth::user();
+
+        $validated_credentials = $request->validated();
+        $password = $validated_credentials['password'];
+
+        $update_password = $applicant->updatePassword($password);
+
+        if($update_password) {
+            return response(['message' => 'The password reset successfully'], 200);
+        }
+
+        return response(['error' => 'Internal server error.'], 500);
+    }
 }

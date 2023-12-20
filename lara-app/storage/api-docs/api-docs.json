@@ -806,6 +806,66 @@
                 ]
             }
         },
+        "/api/applicant/reset-password": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Reset the password of the applicant account by authenticated applicant",
+                "operationId": "resetPasswordOfApplicantAccountByApplicant",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "password": {
+                                        "description": "The new password must contain at least 8 digits, one lowercase letter, one uppercase letter, one digit, and one special character",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "A descriptive attribute indicating the result of request.",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/applicant/payment-methods": {
             "get": {
                 "tags": [
@@ -1703,7 +1763,7 @@
                 }
             }
         },
-        "/api/user/reset-password/set-new-password": {
+        "/api/user/reset-password/verify": {
             "post": {
                 "tags": [
                     "Authentication"
@@ -1721,10 +1781,6 @@
                                     },
                                     "code": {
                                         "type": "string"
-                                    },
-                                    "password": {
-                                        "description": "The password must contain at least 8 digits, one lowercase letter, one uppercase letter, one digit, and one special character",
-                                        "type": "string"
                                     }
                                 },
                                 "type": "object"
@@ -1741,6 +1797,10 @@
                                     "properties": {
                                         "message": {
                                             "description": "A descriptive attribute indicating the result of request.",
+                                            "type": "string"
+                                        },
+                                        "token": {
+                                            "description": "A token generated for the user as a consequence of signing in process.",
                                             "type": "string"
                                         }
                                     },
