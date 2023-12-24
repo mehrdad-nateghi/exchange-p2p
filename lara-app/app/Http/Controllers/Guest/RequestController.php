@@ -208,13 +208,19 @@ class RequestController extends Controller
             ];
         });
 
-        $request_payment_methods = $request->paymentMethods()
-        ->select('payment_methods.id as payment_method_id', 'payment_methods.name')
+        $request_payment_methods = collect($request->linkedMethods()
+        ->with('paymentMethod')
         ->get()
         ->map(function ($item) {
-            unset($item->pivot);
-            return $item;
-        });
+            // Keep only the payment_method.id and payment_method.name fields
+            return [
+                'payment_method' => [
+                    'id' => $item->paymentMethod->id,
+                    'name' => $item->paymentMethod->name,
+                ],
+            ];
+        }))
+        ->pluck('payment_method');
 
         $data = [
             'request_id' => $request->id,
