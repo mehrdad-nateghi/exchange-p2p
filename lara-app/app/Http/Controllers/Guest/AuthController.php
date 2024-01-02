@@ -4,11 +4,16 @@ namespace App\Http\Controllers\Guest;
 
 use App\Enums\UserRoleEnum;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\PreForgetPasswordRequest;
+use App\Http\Requests\PreResetPasswordRequest;
 use App\Http\Requests\PreSignUpRequest;
+use App\Http\Requests\ResetPasswordRequest;
 use App\Http\Requests\SignUpRequest;
+use App\Http\Requests\VerifyResetPasswordRequest;
 use App\Models\EmailVerification;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 
@@ -82,7 +87,7 @@ class AuthController extends Controller
         $emailVerificationCode = $this->sendVerificationCodeByEmail($validated_credentials['email']);
 
         if($emailVerificationCode) {
-            return response(['message' => 'The verification code sent successfully. Please check your email to verify your account'], 200);
+            return response(['message' => 'The verification code sent successfully.'], 200);
         }
 
         return response(['error' => 'Internal Server Error'], 500);
@@ -162,4 +167,122 @@ class AuthController extends Controller
 
     }
 
+
+    /**
+     * @OA\Post(
+     *     path="/api/user/reset-password/send-code",
+     *     summary="Send verification code by email during the user password reseting process",
+     *     tags={"Authentication"},
+     *     operationId="userPreResetPassword",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             @OA\Property(property="email", type="string")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation",
+     *         @OA\JsonContent(
+     *              @OA\Property(property="message", type="string", description="A descriptive attribute indicating the result of request.")
+     *      )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="User not found",
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Unprocessable request",
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal Server Error",
+     *     )
+     * )
+     */
+    public function preResetPassword(PreResetPasswordRequest $request){
+
+        $validated_credentials = $request->validated();
+        $email = $validated_credentials['email'];
+
+        $user = User::where('email', $email)->first();
+        if(!$user) {
+            return response(['message' => 'User not found.'], 404);
+        }
+
+        $emailVerificationCode = $this->sendVerificationCodeByEmail($email);
+
+        if($emailVerificationCode) {
+            return response(['message' => 'The verification code sent successfully.'], 200);
+        }
+
+        return response(['error' => 'Internal Server Error'], 500);
+    }
+
+     /**
+     * @OA\Post(
+     *     path="/api/user/reset-password/verify",
+     *     summary="Verify the input code as well as setting new password during the user password reseting process",
+     *     tags={"Authentication"},
+     *     operationId="userResetPassword",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             @OA\Property(property="email", type="string"),
+     *             @OA\Property(property="code", type="string")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation",
+     *         @OA\JsonContent(
+     *              @OA\Property(property="message", type="string", description="A descriptive attribute indicating the result of request."),
+     *              @OA\Property(property="token", type="string", description="A token generated for the user as a consequence of signing in process.")
+     *      )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="User not found",
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Unprocessable request",
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal Server Error",
+     *     )
+     * )
+     */
+    public function verifyResetPassword(VerifyResetPasswordRequest $request)
+    {
+        $validated_credentials = $request->validated();
+
+        $email = $validated_credentials['email'];
+        $code = $validated_credentials['code'];
+
+        $user = User::where('email', $email)->first();
+
+        if(!$user) {
+            return response(['message' => 'User not found.'], 404);
+        }
+
+        $verificationInstance = EmailVerification::where('email', $email)
+        ->latest('created_at') // Order by created_at column in descending order to ensure the latest generated verification code for the input email is considering
+        ->first();
+
+        if (!$verificationInstance || !$verificationInstance->isValid($code)) {
+            return response(['error' => 'Invalid verification code.'], 422);
+        }
+
+        // Log in the user after successful code verification
+        Auth::login($user);
+
+        // Create a personal access token for the user
+        $token = $user->createToken('ApplicantToken')->accessToken;
+
+        return response(['message' => 'User verified and signed in successfully', 'token' => $token], 200);
+
+    }
 }

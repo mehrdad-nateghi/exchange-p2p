@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Laravel\Passport\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\Hash;
 
 class User extends Authenticatable{
 
@@ -148,6 +149,20 @@ class User extends Authenticatable{
         ->first();
 
         return $linked_method;
+    }
+
+    /*
+     * Update the password of user
+     */
+    public function updatePassword($password){
+
+        $hashed_password = Hash::make($password);
+
+        $this->password = $hashed_password;
+
+        $this->save();
+
+        return true;
     }
 
     /*
