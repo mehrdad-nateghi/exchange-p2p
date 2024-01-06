@@ -51,6 +51,7 @@ Route::middleware(['auth:api', 'is.applicant', 'email.is.verified'])->prefix('ap
     Route::delete('/payment-methods/unlink/{linkedMethodId}', [ApplicantPaymentMethodController::class, 'unlinkPaymentMethod'])->name('applicant.paymentMethods.unlink');
     Route::put('/payment-methods/linked-method/update/{linkedMethodId}', [ApplicantPaymentMethodController::class, 'updateLinkedMethod'])->name('applicant.paymentMethods.linkedMethod.update');
     Route::post('/set-password',[ApplicantAuthController::class, 'setPassword'])->name('applicant.auth.setPassword');
+    Route::post('/reset-password',[ApplicantAuthController::class, 'resetPassword'])->name('applicant.auth.resetPassword');
     Route::post('requests/bid/register/{requestId}',[ApplicantBidController::class, 'register'])->name('applicant.requests.bid.register');
 
 });
@@ -76,6 +77,8 @@ Route::get('/send-test-email', [EmailController::class,'sendTestEmail']);
 /* Guest User Authentication Routes */
 Route::post('/user/signup/send-code', [GuestAuthController::class, 'preSignup'])->name('guest.signup.preSignup');
 Route::post('/user/signup/verify', [GuestAuthController::class, 'signup'])->name('guest.signup.verify');
+Route::post('/user/reset-password/send-code', [GuestAuthController::class, 'preResetPassword'])->name('guest.resetPassword.sendCode');
+Route::post('/user/reset-password/verify', [GuestAuthController::class, 'verifyResetPassword'])->name('guest.resetPassword.setNewPassword');
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
