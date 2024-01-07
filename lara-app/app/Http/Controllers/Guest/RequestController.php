@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\RequestResource;
 use App\Models\Request as RequestModel;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 /**
  * @OA\Tag(
@@ -98,7 +97,11 @@ class RequestController extends Controller
      *                 @OA\Property(property="description", type="string", description = "A textual field provided by the requester that contains additional information or a detailed explanation about the request."),
      *                 @OA\Property(property="created_at", type="string", format="date-time", description = "The timestamp or date when the request was initially created or entered into the system."),
      *                 @OA\Property(property="updated_at", type="string", format="date-time", description = "The timestamp or date when the record was last modified in the system."),
-     *                 @OA\Property(property="applicant_id", type="number", description = "An identifier associated with the applicant who created the request in the system.")
+     *                 @OA\Property(property="applicant_id", type="number", description = "An identifier associated with the applicant who created the request in the system."),
+     *                 @OA\Property(property="request_payment_methods", type="array", @OA\Items(
+     *                 @OA\Property(property="id", type="number", description = "An identifier of request payment method."),
+     *                 @OA\Property(property="name", type="string", description = "The name of request payment method.")
+     *              )
      *             ))
      *         )
      *     ),
@@ -157,6 +160,25 @@ class RequestController extends Controller
         }
 
         $requests = $query->get();
+
+        // Include request payment methods into each request
+        $requests = $requests->map(function($req){
+            $req['request_payment_methods'] = collect($req->linkedMethods()
+            ->with('paymentMethod')
+            ->get()
+            ->map(function ($item) {
+                // Keep only the payment_method.id and payment_method.name fields
+                return [
+                    'payment_method' => [
+                        'id' => $item->paymentMethod->id,
+                        'name' => $item->paymentMethod->name,
+                    ],
+                ];
+            }))
+            ->pluck('payment_method');
+
+            return $req;
+        });
 
         return response()->json(['requests' =>  RequestResource::collection($requests)], 200);
     }
