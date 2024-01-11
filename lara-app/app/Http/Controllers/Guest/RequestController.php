@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\RequestResource;
 use App\Models\Request as RequestModel;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 /**
  * @OA\Tag(

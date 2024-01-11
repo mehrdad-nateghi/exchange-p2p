@@ -3,9 +3,9 @@
 namespace App\Models;
 
 use App\Enums\LinkedMethodStatusEnum;
+use App\Enums\RequestStatusEnum;
 use App\Enums\UserRoleEnum;
 use App\Enums\UserStatusEnum;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Laravel\Passport\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
