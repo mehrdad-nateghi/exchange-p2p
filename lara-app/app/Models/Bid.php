@@ -25,7 +25,7 @@ class Bid extends Model
         'description'
     ];
 
-    public $timestamps = false;
+    public $timestamps = true;
 
 
     /**
