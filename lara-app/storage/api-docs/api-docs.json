@@ -2054,6 +2054,22 @@
                                                     "applicant_id": {
                                                         "description": "An identifier associated with the applicant who created the request in the system.",
                                                         "type": "number"
+                                                    },
+                                                    "request_payment_methods": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "properties": {
+                                                                "id": {
+                                                                    "description": "An identifier of request payment method.",
+                                                                    "type": "number"
+                                                                },
+                                                                "name": {
+                                                                    "description": "The name of request payment method.",
+                                                                    "type": "string"
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        }
                                                     }
                                                 },
                                                 "type": "object"
@@ -2064,6 +2080,9 @@
                                 }
                             }
                         }
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
                     }
                 }
             }
@@ -2102,11 +2121,6 @@
         }
     },
     "components": {
-        "responses": {
-            "500": {
-                "description": "Internal Server Error"
-            }
-        },
         "securitySchemes": {
             "bearerAuth": {
                 "type": "http",
