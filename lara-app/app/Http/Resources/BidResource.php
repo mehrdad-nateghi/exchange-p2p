@@ -24,6 +24,7 @@ class BidResource extends JsonResource
             'request_id' => $this->request_id,
             'applicant_id' => $this->applicant_id,
             'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at
           ];
     }
 }

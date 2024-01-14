@@ -1842,13 +1842,67 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Successful operation"
-                    },
-                    "404": {
-                        "description": "Request not found"
-                    },
-                    "500": {
-                        "description": "Internal Server Error"
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "bids": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "description": "A unique identifier or reference for a particular record or entity in the dataset.",
+                                                        "type": "integer"
+                                                    },
+                                                    "support_id": {
+                                                        "description": "A unique identifier for customer support improvement purpose.",
+                                                        "type": "string"
+                                                    },
+                                                    "type": {
+                                                        "description": "A categorical attribute that describes the nature or category of the particular bid. 0 indicates Sell bid and 1 indicates Buy bid.",
+                                                        "type": "integer"
+                                                    },
+                                                    "bid_rate": {
+                                                        "description": "The quantitative measure of the suggested rate of the bid for the request.",
+                                                        "type": "number",
+                                                        "format": "double"
+                                                    },
+                                                    "status": {
+                                                        "description": "A descriptive attribute indicating the current state or condition of the bid. 0 indicates Registered status, 1 indicates Top status, 2 indicates Confirmed status, 3 indicates Rejected status, 4 indicates Invalid status.",
+                                                        "type": "integer"
+                                                    },
+                                                    "description": {
+                                                        "description": "A textual field that contains additional information or a detailed explanation about the bid.",
+                                                        "type": "string"
+                                                    },
+                                                    "request_id": {
+                                                        "description": "An identifier associated with the request which the bid is registered on it.",
+                                                        "type": "number"
+                                                    },
+                                                    "applicant_id": {
+                                                        "description": "An identifier associated with the applicant who created the bid in the system.",
+                                                        "type": "number"
+                                                    },
+                                                    "created_at": {
+                                                        "description": "The timestamp or date when the bid was initially created or entered into the system.",
+                                                        "type": "string",
+                                                        "format": "date-time"
+                                                    },
+                                                    "updated_at": {
+                                                        "description": "The timestamp or date when the bid was last modified in the system.",
+                                                        "type": "string",
+                                                        "format": "date-time"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -2121,6 +2175,14 @@
         }
     },
     "components": {
+        "responses": {
+            "404": {
+                "description": "Request not found"
+            },
+            "500": {
+                "description": "Internal Server Error"
+            }
+        },
         "securitySchemes": {
             "bearerAuth": {
                 "type": "http",
