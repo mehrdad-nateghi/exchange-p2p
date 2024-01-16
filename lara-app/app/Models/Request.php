@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\BidStatusEnum;
 use App\Enums\RequestStatusEnum;
 use App\Enums\RequestTypeEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -72,6 +73,22 @@ class Request extends Model
     */
     public function notifications(){
         return $this->morphMany(Notification::class, 'notifiable');
+    }
+
+    /*
+     * Accept a specific bid for the request
+     */
+    public function acceptBid($bid) {
+
+        $this->bids()->where('id',$bid->id)->update([
+            'status' => BidStatusEnum::Confirmed
+        ]);
+
+        $this->bids()->whereIn('status',[BidStatusEnum::Top, BidStatusEnum::Registered])->update([
+            'status' => BidStatusEnum::Rejected
+        ]);
+
+        return true;
     }
 
     /*

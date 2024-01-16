@@ -20,7 +20,8 @@ return new class extends Migration
             $table->tinyInteger('status');
             $table->unsignedBigInteger('request_id');
             $table->unsignedBigInteger('bid_id');
-            $table->timestamp('created_at');
+            $table->timestamp('created_at')->nullable();
+            $table->timestamp('updated_at')->nullable();
             $table->foreign('request_id')->references('id')->on('requests')->onDelete('cascade');
             $table->foreign('bid_id')->references('id')->on('bids')->onDelete('cascade');
 
