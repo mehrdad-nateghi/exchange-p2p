@@ -53,7 +53,7 @@ Route::middleware(['auth:api', 'is.applicant', 'email.is.verified'])->prefix('ap
     Route::post('/set-password',[ApplicantAuthController::class, 'setPassword'])->name('applicant.auth.setPassword');
     Route::post('/reset-password',[ApplicantAuthController::class, 'resetPassword'])->name('applicant.auth.resetPassword');
     Route::post('requests/bid/register/{requestId}',[ApplicantBidController::class, 'register'])->name('applicant.requests.bid.register');
-
+    Route::post('/bids/accept',[ApplicantBidController::class, 'acceptBid'])->name('applicant.bids.accept');
 });
 
 // Admin Routes

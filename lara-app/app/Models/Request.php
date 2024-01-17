@@ -3,12 +3,10 @@
 namespace App\Models;
 
 use App\Enums\BidStatusEnum;
-use App\Enums\BidTypeEnum;
 use App\Enums\RequestStatusEnum;
 use App\Enums\RequestTypeEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Log;
 
 class Request extends Model
 {
@@ -111,6 +109,22 @@ class Request extends Model
      */
     public function getRequestPaymentMethods() {
         return $this->linkedMethods()->with('paymentMethod')->get()->pluck('paymentMethod')->unique();
+    }
+
+    /*
+     * Accept a specific bid for the request
+     */
+    public function acceptBid($bid) {
+
+        $this->bids()->where('id',$bid->id)->update([
+            'status' => BidStatusEnum::Confirmed
+        ]);
+
+        $this->bids()->whereIn('status',[BidStatusEnum::Top, BidStatusEnum::Registered])->update([
+            'status' => BidStatusEnum::Rejected
+        ]);
+
+        return true;
     }
 
     /*

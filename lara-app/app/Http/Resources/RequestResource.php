@@ -14,7 +14,7 @@ class RequestResource extends JsonResource
      */
     public function toArray($request)
     {
-        return [
+        $data = [
             'id' => $this->id,
             'support_id' => $this->support_id,
             'type' => $this->type,
@@ -29,5 +29,12 @@ class RequestResource extends JsonResource
             'updated_at' => $this->updated_at,
             'applicant_id' => $this->applicant_id
           ];
+
+          // Check if request_payment_methods must be included in response
+          if(isset($this->request_payment_methods)){
+            $data['request_payment_methods'] = $this->request_payment_methods;
+          }
+
+          return $data;
     }
 }
