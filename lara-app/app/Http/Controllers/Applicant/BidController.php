@@ -9,13 +9,69 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\AcceptBidRequest;
 use App\Models\Bid;
 use App\Models\Trade;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class BidController extends Controller
 {
+
+    // This service will be used for doing bid acceptance process, serves in related APIs
+    public function acceptBidService($request, $bid) {
+
+        DB::beginTransaction();
+
+        try {
+
+            // Proceed with the bid acceptance process
+            $request->acceptBid($bid);
+
+            // Create a trade entry
+            $trade = Trade::create([
+                'support_id' => Str::uuid(),
+                'trade_fee' => 0,
+                'request_id' => $request->id,
+                'bid_id' =>$bid->id,
+                'status' => TradeStatusEnum::RialPending,
+            ]);
+
+            if ($trade) {
+                // Set the support_id using the pattern 'TR' + id
+                $trade->update([
+                    'support_id' => config('constants.SupportId_Prefixes.Trade_Pr') . $trade->id
+                ]);
+
+                // Set system fee
+                $system_fee_set_status = $trade->setSystemFee();
+                if (!$system_fee_set_status) {
+                    throw new \Exception("An error occurred while confirming the bid, specifically setting the system fee to the trade.");
+                }
+
+                // Change the request's status
+                $request->update([
+                    'status' => RequestStatusEnum::InTrade
+                ]);
+
+                DB::commit();
+
+                return [
+                    'status' => 200,
+                    'message' => "Bid confirmed successfully."
+                ];
+            }
+            else {
+                throw new \Exception("An error occurred while confirming the bid, specifically creating the trade.");
+            }
+        } catch (\Exception $e) {
+
+            DB::rollBack();
+
+            return [
+                'status' => 500,
+                'message' => "An error occurred while confirming the bid."
+            ];
+        }
+    }
 
     /**
      * @OA\Post(
@@ -76,51 +132,10 @@ class BidController extends Controller
             return response(['message' => 'Bid not found or not associated with any request of the applicant.'], 404);
         }
 
-        $request = $bid->request;
+        $bid_acceptance = $this->acceptBidService($bid->request, $bid);
 
-        DB::beginTransaction();
+        return response(['message' => $bid_acceptance['message']],$bid_acceptance['status']);
 
-        try {
-
-            // Proceed with the bid acceptance process
-            $request->acceptBid($bid);
-
-            // Create a trade entry
-            $trade = Trade::create([
-                'support_id' => Str::uuid(),
-                'trade_fee' => 0,
-                'request_id' => $request->id,
-                'bid_id' =>$bid->id,
-                'status' => TradeStatusEnum::RialPending,
-            ]);
-
-            if ($trade) {
-                // Set the support_id using the pattern 'TR' + id
-                $trade->update([
-                    'support_id' => config('constants.SupportId_Prefixes.Trade_Pr') . $trade->id
-                ]);
-
-                // Set system fee
-                $system_fee_set_status = $trade->setSystemFee();
-                if (!$system_fee_set_status) {
-                    throw new \Exception("An error occurred while confirming the bid, specifically setting the system fee to the trade.");
-                }
-
-                // Change the request's status
-                $request->update([
-                    'status' => RequestStatusEnum::InTrade
-                ]);
-
-                DB::commit();
-
-                return response(['message' => 'Bid confirmed successfully.'], 200);
-            }
-            else {
-                throw new \Exception("An error occurred while confirming the bid, specifically creating the trade.");
-            }
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return response(['message' => 'An error occurred while confirming the bid.'], 500);
-        }
     }
+
 }
