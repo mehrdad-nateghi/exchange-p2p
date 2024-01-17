@@ -83,8 +83,8 @@ class BidController extends Controller
 
         // Check the request exists and the bidder applicant is not the applicant who owns the request
         $req = RequestModel::find($requestId);
-        if(!$req || $req->status === RequestStatusEnum::Removed || $req->user->id === $applicant->id) {
-            return response(['message' => 'Request not found or the current applicant is the owner of the target request.'], 404);
+        if(!$req || $req->status === RequestStatusEnum::Removed || $req->status === RequestStatusEnum::InTrade || $req->user->id === $applicant->id) {
+            return response(['message' => 'Request not found or bid registeration not allowed for the request.'], 404);
         }
 
         // Check the specified input payment method exists in request payment methods list
