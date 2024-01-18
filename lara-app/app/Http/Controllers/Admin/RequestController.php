@@ -8,7 +8,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateRequestRequest;
 use App\Http\Resources\PaymentMethodResource;
 use App\Models\Request;
-use Illuminate\Support\Facades\Log;
 
 /**
  * @OA\Tag(
@@ -139,7 +138,7 @@ class RequestController extends Controller
                 'trade_volume' => $request['trade_volume'],
                 'request_rate' => $request['request_rate'],
                 'description' => $request['description'],
-                'payment_methods' => PaymentMethodResource::collection($request->paymentMethods()->get())
+                'payment_methods' => PaymentMethodResource::collection($request->getRequestPaymentMethods())
             ]
         ];
 
