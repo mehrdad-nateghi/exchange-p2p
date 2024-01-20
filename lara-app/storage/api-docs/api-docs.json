@@ -1428,9 +1428,6 @@
                         "application/json": {
                             "schema": {
                                 "properties": {
-                                    "applicant_id": {
-                                        "type": "number"
-                                    },
                                     "type": {
                                         "description": "0: Buy Request, 1: Sell Request",
                                         "type": "number",

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Applicant;
 
 use App\Enums\BidStatusEnum;
+use App\Enums\LinkedMethodStatusEnum;
 use App\Enums\RequestStatusEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\RequestResource;
@@ -13,6 +14,7 @@ use App\Http\Resources\PaymentMethodResource;
 use App\Models\Country;
 use App\Models\Financial;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
@@ -188,7 +190,6 @@ class RequestController extends Controller
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
-     *             @OA\Property(property="applicant_id", type="number"),
      *             @OA\Property(property="type", type="number", enum={0, 1}, description="0: Buy Request, 1: Sell Request"),
      *             @OA\Property(property="trade_volume", type="number"),
      *             @OA\Property(property="lower_bound_feasibility_threshold", type="number"),
@@ -231,47 +232,64 @@ class RequestController extends Controller
         $validated_data = $request->validated();
 
         // Check if the request payment methods exist and associated with applicant
-        $applicant_linked_methods = $applicant->linkedMethods;
+        $applicant_linked_methods = $applicant->linkedMethods()->where('status',LinkedMethodStatusEnum::Active)->get();
         $request_payment_methods = $validated_data['request_payment_methods'];
         $applicant_payment_methods = [];
         foreach($applicant_linked_methods as $lm){
             $payment_method = $lm->paymentMethod;
-            array_push($applicant_payment_methods, $payment_method->id);
+            $applicant_payment_methods[] = $payment_method->id;
         }
         $difference = array_diff($request_payment_methods, $applicant_payment_methods); // Check all items of request_payment_methods list exist in $applicant_payment_methods
         if(!empty($difference)) {
-            return response()->json(['message' => 'One or more selected payment methods are not available for this applicant.'], 404);
+            return response(['message' => 'One or more selected payment methods are not available for this applicant.'], 404);
         }
 
-        // Create request on database
-        $new_request = RequestModel::create([
-            'type' => $validated_data['type'],
-            'support_id' => Str::uuid(),
-            'trade_volume' => $validated_data['trade_volume'],
-            'lower_bound_feasibility_threshold' => $validated_data['lower_bound_feasibility_threshold'],
-            'upper_bound_feasibility_threshold' => $validated_data['upper_bound_feasibility_threshold'],
-            'acceptance_threshold' => $validated_data['acceptance_threshold'],
-            'request_rate' => $validated_data['request_rate'],
-            'description' => $validated_data['description'],
-            'status' => \App\Enums\RequestStatusEnum::Pending ,
-            'is_removed' => False,
-            'applicant_id' => $applicant->id
-        ]);
-
-        if($new_request instanceof RequestModel) {
-            // Set the support_id using the pattern 'RE' + id
-            $new_request->update(['support_id' => config('constants.SupportId_Prefixes.Request_Pr') . $new_request->id]);
-
-            // Attach payment methods to the request using the relationship
-            $new_request->paymentMethods()->attach($request_payment_methods);
-
-            // Refresh the object to ensure attributes like created_at are up-to-date
-            $new_request->refresh();
-
-            return response()->json(['message' => 'Request created successfully.', 'request' => new RequestResource($new_request)], 200);
+        // Generate request linked methods based on input request payment methods
+        $request_linked_methods = [];
+        foreach($request_payment_methods as $pm) {
+            $lm = $applicant->linkedMethods()->where('method_type_id', $pm)->first();
+            $request_linked_methods[] = $lm->id;
         }
-        else {
-            return response()->json(['message' => 'An error occurred while creating the request.'], 500);
+
+        DB::beginTransaction();
+
+        try {
+
+            // Create request on database
+            $new_request = RequestModel::create([
+                'type' => $validated_data['type'],
+                'support_id' => Str::uuid(),
+                'trade_volume' => $validated_data['trade_volume'],
+                'lower_bound_feasibility_threshold' => $validated_data['lower_bound_feasibility_threshold'],
+                'upper_bound_feasibility_threshold' => $validated_data['upper_bound_feasibility_threshold'],
+                'acceptance_threshold' => $validated_data['acceptance_threshold'],
+                'request_rate' => $validated_data['request_rate'],
+                'description' => $validated_data['description'],
+                'status' => \App\Enums\RequestStatusEnum::Pending ,
+                'applicant_id' => $applicant->id
+            ]);
+
+            if ($new_request) {
+
+                // Set the support_id using the pattern 'RE' + id
+                $new_request->update(['support_id' => config('constants.SupportId_Prefixes.Request_Pr') . $new_request->id]);
+
+                // Attach payment methods to the request using the relationship
+                $new_request->linkedMethods()->attach($request_linked_methods);
+
+                // Refresh the object to ensure attributes like created_at are up-to-date
+                $new_request->refresh();
+
+                DB::commit();
+
+                return response(['message' => 'Request created successfully.', 'request' => new RequestResource($new_request)], 200);
+            }
+            else {
+                throw new \Exception("An error occurred while creating the request.");
+            }
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response(['message' => 'An error occurred while creating the request.'], 500);
         }
     }
 
