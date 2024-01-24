@@ -13,9 +13,11 @@ use App\Http\Requests\AcceptBidRequest;
 use App\Http\Requests\RegisterBidRequest;
 use App\Models\Bid as BidModel;
 use App\Models\Request as RequestModel;
+use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use PhpParser\Node\Stmt\TryCatch;
 
 class BidController extends Controller
 {
@@ -128,30 +130,49 @@ class BidController extends Controller
             $target_account_id = $requester_linked_method->id; // Must be set to requester linked method as the destination account
         }
 
-        // Store the new bid on database
-        $new_bid = $req->bids()->create([
-            'type' => $req->type == RequestTypeEnum::Sell ? BidTypeEnum::Buy : BidTypeEnum::Sell,
-            'support_id' => Str::uuid(),
-            'bid_rate' => $validated_credentials['bid_rate'],
-            'description' => isset($validated_credentials['description'])? $validated_credentials['description']: Null,
-            'status' => BidStatusEnum::Registered,
-            'applicant_id' => $applicant->id,
-            'target_account_id' => $target_account_id
-        ]);
+        DB::beginTransaction();
 
-        if($new_bid instanceof BidModel) {
+        try {
 
-            // Set the support_id using the pattern 'BI' + id
-            $new_bid->update(['support_id' => config('constants.SupportId_Prefixes.Bid_Pr') . $new_bid->id]);
+            // Store the new bid on database
+            $new_bid = $req->bids()->create([
+                'type' => $req->type == RequestTypeEnum::Sell ? BidTypeEnum::Buy : BidTypeEnum::Sell,
+                'support_id' => Str::uuid(),
+                'bid_rate' => $validated_credentials['bid_rate'],
+                'description' => isset($validated_credentials['description'])? $validated_credentials['description']: Null,
+                'status' => BidStatusEnum::Registered,
+                'applicant_id' => $applicant->id,
+                'target_account_id' => $target_account_id
+            ]);
 
-            // Set registered bid as the top bid
-            $req->setTopBid($new_bid->id);
+            if($new_bid instanceof BidModel) {
 
-            return response(['message' => 'New bid registered successfully.'], 200);
+                // Set the support_id using the pattern 'BI' + id
+                $new_bid->update(['support_id' => config('constants.SupportId_Prefixes.Bid_Pr') . $new_bid->id]);
+
+                // Set registered bid as the top bid
+                $req->setTopBid($new_bid->id);
+
+                // Check the status change potential for request
+                if($req->status == RequestStatusEnum::Pending) {
+                    $req->update([
+                        'status' => RequestStatusEnum::InProcess
+                    ]);
+                }
+
+                DB::commit();
+
+                return response(['message' => 'New bid registered successfully.'], 200);
+            }
+            else {
+                throw new Exception('An error occurred while registering the new bid.');
+            }
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response(['message' => $e->getMessage()], 500);
         }
-        else {
-            return response(['message' => 'An error occurred while registering the new bid.'], 500);
-        }
+
+
     }
 
      /**
