@@ -8,7 +8,6 @@ use App\Enums\RequestTypeEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-
 class Request extends Model
 {
     use HasFactory;
@@ -73,6 +72,43 @@ class Request extends Model
     */
     public function notifications(){
         return $this->morphMany(Notification::class, 'notifiable');
+    }
+
+    /*
+     * Set a bid as the top bid of the request
+     */
+    public function setTopBid($bid_id){
+        $current_top_bid = $this->bids()->where("status", BidStatusEnum::Top)->first();
+        $processing_bid = $this->bids()->where("id", $bid_id)->first();
+
+        if($processing_bid) {
+            $processing_bid->status = BidStatusEnum::Top;
+
+            if($current_top_bid) {
+                $current_top_bid->status = BidStatusEnum::Registered;
+                $current_top_bid->save();
+            }
+
+            $processing_bid->save();
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /*
+     * Get the top bid of the request
+     */
+    public function getTopBid(){
+        return $this->bids()->where('status', BidStatusEnum::Top)->first();
+    }
+
+    /*
+     * Get the request payment methods
+     */
+    public function getRequestPaymentMethods() {
+        return $this->linkedMethods()->with('paymentMethod')->get()->pluck('paymentMethod')->unique();
     }
 
     /*
