@@ -109,7 +109,7 @@ class BidController extends Controller
         $target_account_id = '';
         // Check appropriate validations on sell request
         if($req->type === RequestTypeEnum::Sell) {
-            if($top_bid && $top_bid->bid_rate > $bid_rate) {
+            if($top_bid && $top_bid->bid_rate >= $bid_rate) {
                 return response(['message' => 'The bid_rate must be greater than the current active top bid.'], 422);
             }
             $target_account_id = $bidder_linked_method->id; // Must be set to bidder linked method as the destination account
@@ -117,7 +117,7 @@ class BidController extends Controller
 
         // Check appropriate validations on buy request
         if($req->type === RequestTypeEnum::Buy) {
-            if($top_bid && $top_bid->bid_rate < $bid_rate) {
+            if($top_bid && $top_bid->bid_rate <= $bid_rate) {
                 return response(['message' => 'The bid_rate must be less than the current active top bid.'], 422);
             }
 
