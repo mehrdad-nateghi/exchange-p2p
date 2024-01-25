@@ -192,6 +192,8 @@ return [
          */
         App\Providers\AppServiceProvider::class,
         App\Providers\AuthServiceProvider::class,
+        App\Providers\RepositoryServiceProvider::class,
+
 
         Laravel\Passport\PassportServiceProvider::class,
 
@@ -216,6 +218,9 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // 'ExampleClass' => App\Example\ExampleClass::class,
+
+        // 'UserRepository' => App\Repositories\UserRepository::class,
+        // 'UserRepositoryInterface' => App\Interfaces\UserRepositoryInterface::class,
     ])->toArray(),
 
 ];
