@@ -866,6 +866,86 @@
                 ]
             }
         },
+        "/api/applicant/requests/bid/register/{requestId}": {
+            "post": {
+                "tags": [
+                    "Bids"
+                ],
+                "summary": "Register new sell/buy bid",
+                "operationId": "registerBid",
+                "parameters": [
+                    {
+                        "name": "requestId",
+                        "in": "path",
+                        "description": "ID of the request which the applicant tend to register bid on",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "bid_rate": {
+                                        "type": "number"
+                                    },
+                                    "payment_method_id": {
+                                        "type": "number"
+                                    },
+                                    "description": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "A descriptive attribute indicating the result of request.",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable request"
+                    },
+                    "404": {
+                        "description": "Request not found or linked method not found for the requester/bidder"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/applicant/bids/accept": {
             "post": {
                 "tags": [
@@ -1428,9 +1508,6 @@
                         "application/json": {
                             "schema": {
                                 "properties": {
-                                    "applicant_id": {
-                                        "type": "number"
-                                    },
                                     "type": {
                                         "description": "0: Buy Request, 1: Sell Request",
                                         "type": "number",

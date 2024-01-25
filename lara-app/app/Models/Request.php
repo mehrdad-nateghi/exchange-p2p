@@ -8,7 +8,6 @@ use App\Enums\RequestTypeEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-
 class Request extends Model
 {
     use HasFactory;
@@ -76,19 +75,43 @@ class Request extends Model
     }
 
     /*
-     * Accept a specific bid for the request
+     * Set a bid as the top bid of the request
      */
-    public function acceptBid($bid) {
+    public function setTopBid($bid_id){
+        $current_top_bid = $this->bids()->where("status", BidStatusEnum::Top)->first();
+        $processing_bid = $this->bids()->where("id", $bid_id)->first();
 
-        $this->bids()->where('id',$bid->id)->update([
-            'status' => BidStatusEnum::Confirmed
-        ]);
+        if($processing_bid) {
+            $processing_bid->status = BidStatusEnum::Top;
 
-        $this->bids()->whereIn('status',[BidStatusEnum::Top, BidStatusEnum::Registered])->update([
-            'status' => BidStatusEnum::Rejected
-        ]);
+            if($current_top_bid) {
+                $current_top_bid->status = BidStatusEnum::Registered;
+                $current_top_bid->save();
+            }
 
-        return true;
+            $processing_bid->save();
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /*
+     * Get the top bid of the request
+     */
+    public function getTopBid(){
+        return $this->bids()->where('status', BidStatusEnum::Top)->first();
+    }
+
+    /**
+     * Get request payment methods
+     */
+    public function getRequestPaymentMethods(){
+        return collect($this->linkedMethods()
+        ->with('paymentMethod')
+        ->get())
+        ->pluck('paymentMethod');
     }
 
     /*

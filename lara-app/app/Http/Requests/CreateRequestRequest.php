@@ -35,8 +35,7 @@ class CreateRequestRequest extends FormRequest
             'acceptance_threshold' => ['required', new FeasibilityThresholdRange],
             'request_rate' => ['required', new FeasibilityThresholdRange],
             'request_payment_methods' => 'required|array|min:1',
-            'request_payment_methods.*' => 'integer',
-            'applicant_id' => 'required'
+            'request_payment_methods.*' => 'integer'
         ];
     }
 

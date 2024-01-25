@@ -7,7 +7,9 @@ use App\Enums\RequestStatusEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateRequestRequest;
 use App\Http\Resources\PaymentMethodResource;
+use App\Interfaces\UserRepositoryInterface;
 use App\Models\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 /**
@@ -18,6 +20,13 @@ use Illuminate\Support\Facades\Log;
  */
 class RequestController extends Controller
 {
+
+    private $userRepository;
+
+    public function __construct(UserRepositoryInterface $userRepository)
+    {
+        $this->userRepository = $userRepository;
+    }
 
     /**
      * @OA\Delete(
@@ -139,7 +148,7 @@ class RequestController extends Controller
                 'trade_volume' => $request['trade_volume'],
                 'request_rate' => $request['request_rate'],
                 'description' => $request['description'],
-                'payment_methods' => PaymentMethodResource::collection($request->paymentMethods()->get())
+                'payment_methods' => PaymentMethodResource::collection($request->getRequestPaymentMethods())
             ]
         ];
 
@@ -220,25 +229,35 @@ class RequestController extends Controller
             $updateData['description'] = $validated_data['description'];
         }
 
-        $req->update($updateData);
+        DB::beginTransaction();
 
-        // Handle payment methods
-        $request_owener__linked_methods = $req->user->linkedMethods;
-        $request_owener_payment_methods = $request_owener__linked_methods->map(function ($linkedMethod) {
-            return $linkedMethod->paymentMethod->id;
-        })->toArray();
+        try {
+            $req->update($updateData);
 
-        $request_payment_methods = $validated_data['request_payment_methods'];
+            // Handle payment methods
+            $requester = $req->user;
+            $requester_payment_methods = $this->userRepository->getPaymentMethodsUserLinked($requester);
 
-        // Check if the request payment methods exist and are associated with the applicant
-        $difference = array_diff($request_payment_methods, $request_owener_payment_methods);
-        if (!empty($difference)) {
-            return response()->json(['message' => 'One or more selected payment methods are not available for the applicant who initiated the request.'], 404);
+            $request_payment_methods = $validated_data['request_payment_methods'];
+
+            // Check if the request payment methods exist and are associated with the requester
+            $difference = array_diff($request_payment_methods, $requester_payment_methods);
+            if (!empty($difference)) {
+                throw new \Exception('One or more selected payment methods are not available for the applicant who initiated the request.');
+            }
+
+            // Retrieve peer linked methods based on the request payment methods
+            $request_linked_methods = $this->userRepository->getPeerLinkedMethods($requester, $request_payment_methods);
+
+            // Sync the payment methods for the request
+            $req->linkedMethods()->sync($request_linked_methods);
+
+            DB::commit();
+
+            return response(['message' => 'Request updated successfully'],200);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response(['message' => $e->getMessage()], 500);
         }
-
-        // Sync the payment methods for the request
-        $req->paymentMethods()->sync($validated_data['request_payment_methods']);
-
-        return response()->json(['message' => 'Request updated successfully'],200);
     }
 }
