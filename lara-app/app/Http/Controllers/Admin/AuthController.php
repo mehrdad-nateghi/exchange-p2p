@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Enums\UserRoleEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SignInRequest;
+use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -32,6 +33,18 @@ class AuthController extends Controller
      *     @OA\Response(
      *         response=200,
      *         description="Successful operation",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="token", type="string", description="An encrypted token for authorizing the signed in user."),
+     *             @OA\Property(property="user", type="array", @OA\Items(
+     *                 @OA\Property(property="id", type="integer", description="A unique identifier for the user in the dataset."),
+     *                 @OA\Property(property="role", type="integer", description="A field indicates user role. 0: Applicant, 1: Admin."),
+     *                 @OA\Property(property="first_name", type="string", description="A field indicates user's first name."),
+     *                 @OA\Property(property="last_name", type="string", description="A field indicates user's last name."),
+     *                 @OA\Property(property="email", type="string", description="A field indicates user's email."),
+     *                 @OA\Property(property="status", type="integer", description="A field indicates user's status. 0: Deactive, 1: Active"),
+     *                 @OA\Property(property="is_email_verified", type="boolean", description="A field indicates whther user's email is verified or not. true: is_verified, false: is_not_verified"),
+     *             )),
+     *         ),
      *     ),
      *     @OA\Response(
      *         response=422,
@@ -51,7 +64,7 @@ class AuthController extends Controller
             $user = Auth::user();
             if ($user->role === UserRoleEnum::Admin) {
                 $token = $user->createToken('AdminToken')->accessToken;
-                return response()->json(['token' => $token], 200);
+                return response(['token' => $token, 'user' => new UserResource($user)], 200);
             }
         }
 

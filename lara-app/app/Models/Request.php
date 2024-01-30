@@ -127,16 +127,6 @@ class Request extends Model
         return true;
     }
 
-    /**
-     * Get request payment methods
-     */
-    public function getRequestPaymentMethods(){
-        return collect($this->linkedMethods()
-        ->with('paymentMethod')
-        ->get())
-        ->pluck('paymentMethod');
-    }
-
     /*
     * Enum casting for the status and type fields
     */
