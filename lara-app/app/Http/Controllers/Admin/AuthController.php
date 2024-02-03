@@ -6,6 +6,7 @@ use App\Enums\UserRoleEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SignInRequest;
 use App\Http\Resources\UserResource;
+use App\Interfaces\AuthRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -17,6 +18,14 @@ use Illuminate\Support\Facades\Auth;
  */
 class AuthController extends Controller
 {
+
+    private $authRepository;
+
+    public function __construct(AuthRepositoryInterface $authRepository)
+    {
+        $this->authRepository = $authRepository;
+    }
+
     /**
      * @OA\Post(
      *     path="/api/admin/signin",
@@ -64,7 +73,11 @@ class AuthController extends Controller
             $user = Auth::user();
             if ($user->role === UserRoleEnum::Admin) {
                 $token = $user->createToken('AdminToken')->accessToken;
-                return response(['token' => $token, 'user' => new UserResource($user)], 200);
+
+                // Set token into cookie
+                $response = $this->authRepository->setAccessTokenInCookie($token);
+
+                return $response->setContent(['token' => $token, 'user' => new UserResource($user)], 200);
             }
         }
 
