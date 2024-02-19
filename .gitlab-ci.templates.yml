@@ -28,14 +28,14 @@ variables:
     - docker-compose -f docker-compose.base.yml build  ${SERVICE_NAME}
     - > # update the latest tag only on commits to main
       if [ -z "$CI_MERGE_REQUEST_ID" ] && [ $CI_COMMIT_REF_NAME == "main" ]; then
-        CI_COMMIT_SHORT_SHA=latest docker-compose -f docker-compose.base.yml -f docker-compose.${ENVIRONMENT_NAME}.yml build -q ${SERVICE_NAME}
+        CI_COMMIT_SHORT_SHA=latest docker-compose -f docker-compose.base.yml build -q ${SERVICE_NAME}
       fi
     - echo "--- successfully built the following docker image tag ${CI_COMMIT_SHORT_SHA} ---"
-    - echo ${DOCKER_PASSWORD} | docker login --username ${DOCKER_USERNAME} --password-stdin
-    - docker-compose -f docker-compose.base.yml -f docker-compose.${ENVIRONMENT_NAME}.yml push ${SERVICE_NAME}
+    - docker login --username ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}
+    - docker-compose -f docker-compose.base.yml push ${SERVICE_NAME}
     - > # push the latest tag only on commits to main
       if [ -z "$CI_MERGE_REQUEST_ID" ] && [ $CI_COMMIT_REF_NAME == "main" ]; then
-        CI_COMMIT_SHORT_SHA=latest docker-compose -f docker-compose.base.yml -f docker-compose.${ENVIRONMENT_NAME}.yml push ${SERVICE_NAME}
+        CI_COMMIT_SHORT_SHA=latest docker-compose -f docker-compose.base.yml push ${SERVICE_NAME}
       fi
 
 .base-deploy-scripts:
