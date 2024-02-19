@@ -12,6 +12,9 @@ variables:
     - if: '$CI_MERGE_REQUEST_ID == null && $CI_COMMIT_REF_NAME == "production"'
 
 .build_job_template:
+  image: gitlab/dind
+  services:
+    - docker:dind
   interruptible: true
   tags:
     # - shell-executer # Directly run on CI worker node instead of containers to preserve docker layer cache between builds
