@@ -2,6 +2,7 @@ version: "2.0"
 
 services:
   core-laravel:
+    image: paylibero/build-core-laravel:${CI_COMMIT_SHORT_SHA}
     build:
       context: ../../lara-app
       dockerfile: Dockerfile
