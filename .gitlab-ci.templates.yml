@@ -22,7 +22,7 @@ variables:
     DOCKER_BUILDKIT: "1"
   script:
     - cd $CI_PROJECT_DIR/devops/build
-    - docker-compose -f docker-compose.base.yml -f docker-compose.${ENVIRONMENT_NAME}.yml build ${SERVICE_NAME}
+    - docker compose -f docker-compose.base.yml -f docker-compose.${ENVIRONMENT_NAME}.yml build ${SERVICE_NAME}
     - > # update the latest tag only on commits to main
       if [ -z "$CI_MERGE_REQUEST_ID" ] && [ $CI_COMMIT_REF_NAME == "main" ]; then
         CI_COMMIT_SHORT_SHA=latest docker-compose -f docker-compose.base.yml -f docker-compose.${ENVIRONMENT_NAME}.yml build -q ${SERVICE_NAME}
