@@ -25,7 +25,7 @@ variables:
     DOCKER_BUILDKIT: "1"
   script:
     - cd $CI_PROJECT_DIR/devops/build
-    - docker-compose -f docker-compose.base.yml -f docker-compose.${ENVIRONMENT_NAME}.yml build --build-arg CI_COMMIT_SHORT_SHA=SOME  core-laravel
+    - docker-compose -f docker-compose.base.yml -f docker-compose.${ENVIRONMENT_NAME}.yml build --build-arg CI_COMMIT_SHORT_SHA=6cf3ede3 --build-arg "CI_COMMIT_MESSAGE=Update .gitlab-ci.templates.yml" --build-arg CI_PIPELINE_URL=some --build-arg CI_PIPELINE_CREATED_AT=2024-02-19T10:53:43Z  ${SERVICE_NAME}
     - docker-compose -f docker-compose.base.yml -f docker-compose.${ENVIRONMENT_NAME}.yml build --build-arg "CI_COMMIT_SHORT_SHA=$CI_COMMIT_SHORT_SHA" --build-arg "CI_COMMIT_MESSAGE=$CI_COMMIT_MESSAGE" --build-arg "CI_PIPELINE_CREATED_AT=$CI_PIPELINE_CREATED_AT" ${SERVICE_NAME}
     - > # update the latest tag only on commits to main
       if [ -z "$CI_MERGE_REQUEST_ID" ] && [ $CI_COMMIT_REF_NAME == "main" ]; then
