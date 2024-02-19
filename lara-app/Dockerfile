@@ -11,7 +11,9 @@ ARG CI_COMMIT_SHORT_SHA
 ARG CI_COMMIT_MESSAGE
 ARG CI_PIPELINE_CREATED_AT
 
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+# Install composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+# COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 COPY ./dockerfiles/entrypoint.sh /usr/local/bin/entrypoint.sh
 
 # Image metadata:
