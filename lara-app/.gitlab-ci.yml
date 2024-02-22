@@ -135,7 +135,7 @@ test-vars:
   script:
     # upstream pipeline may already provide the DEPLOY_COMMIT_SHORT_SHA, otherwise we set it to CI_COMMIT_SHORT_SHA
     - export DEPLOY_COMMIT_SHORT_SHA=${DEPLOY_COMMIT_SHORT_SHA:-$CI_COMMIT_SHORT_SHA}
-    - export KUBECONFIG=$KUBE_CONFIG_NAME
+    - export KUBECONFIG=$ARVAN_KUBE_CONFIG_NIGHTLY
     # Debug script
     - echo $KUBECONFIG
     - cat $KUBECONFIG
@@ -147,8 +147,7 @@ deploy-nightly:
   variables:
     SERVICE_NAME: core-laravel
     ENVIRONMENT_NAME: nightly
-    KUBE_CONFIG_NAME: ARVAN_KUBE_CONFIG_NIGHTLY
-    ARVAN_KUBE_CONFIG_NIGHTLY: $ARVAN_KUBE_CONFIG_NIGHTLY
+    KUBE_CONFIG_NAME: $ARVAN_KUBE_CONFIG_NIGHTLY
   # rules:
   #   - if: '$CI_MERGE_REQUEST_ID == null && $CI_COMMIT_REF_NAME == "main"'
   environment:
