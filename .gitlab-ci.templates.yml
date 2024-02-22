@@ -51,7 +51,9 @@ variables:
   - kubectl wait --for=condition=available --timeout=200s deployment/${SERVICE_NAME}
 
 .base_deploy_job_template:
-  image: bitnami/kubectl:latest
+  image:
+    name: bitnami/kubectl:latest
+    entrypoint: [""]
   tags:
     - docker-executor
   cache: []
