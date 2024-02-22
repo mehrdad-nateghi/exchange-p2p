@@ -126,6 +126,7 @@ deploy-nightly:
   variables:
     SERVICE_NAME: core-laravel
     ENVIRONMENT_NAME: nightly
+    KUBE_CONFIG_NAME: ARVAN_KUBE_CONFIG_NIGHTLY
   # rules:
   #   - if: '$CI_MERGE_REQUEST_ID == null && $CI_COMMIT_REF_NAME == "main"'
   environment:
