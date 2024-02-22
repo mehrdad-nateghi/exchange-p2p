@@ -8,8 +8,6 @@ trigger-core-laravel:
   variables:
     DEPLOY_COMMIT_SHORT_SHA: $DEPLOY_COMMIT_SHORT_SHA
     ENVIRONMENT_NAME: $ENVIRONMENT_NAME
-    ARVAN_KUBE_CONFIG_NIGHTLY: $ARVAN_KUBE_CONFIG_NIGHTLY
-    ARVAN_KUBE_CONFIG_PRODUCTION: $ARVAN_KUBE_CONFIG_PRODUCTION
   trigger:
     include: /lara-app/.gitlab-ci.yml
     strategy: depend
