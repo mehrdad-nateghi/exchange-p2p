@@ -133,7 +133,7 @@ test-vars:
   script:
     # upstream pipeline may already provide the DEPLOY_COMMIT_SHORT_SHA, otherwise we set it to CI_COMMIT_SHORT_SHA
     - export DEPLOY_COMMIT_SHORT_SHA=${DEPLOY_COMMIT_SHORT_SHA:-$CI_COMMIT_SHORT_SHA}
-    - export KUBECONFIG=$ARVAN_KUBE_CONFIG_NIGHTLY
+    - export KUBECONFIG=${$KUBE_CONFIG_NAME}
     # Debug script
     - echo $ARVAN_KUBE_CONFIG_NIGHTLY
     - cat $ARVAN_KUBE_CONFIG_NIGHTLY
