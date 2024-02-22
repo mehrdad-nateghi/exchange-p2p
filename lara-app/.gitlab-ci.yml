@@ -138,6 +138,7 @@ test-vars:
     # Debug script
     - echo $KUBECONFIG
     - cat $KUBECONFIG
+    - kubectl config get-contexts
 
 deploy-nightly:
   stage: Deploy
