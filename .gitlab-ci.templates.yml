@@ -66,7 +66,7 @@ variables:
   script:
     # upstream pipeline may already provide the DEPLOY_COMMIT_SHORT_SHA, otherwise we set it to CI_COMMIT_SHORT_SHA
     - export DEPLOY_COMMIT_SHORT_SHA=${DEPLOY_COMMIT_SHORT_SHA:-$CI_COMMIT_SHORT_SHA}
-    - export KUBECONFIG=${KUBE_CONFIG_NAME}
+    - export KUBECONFIG=$KUBE_CONFIG_NAME
     - *base_deploy_scripts
     - kubectl wait --for=condition=ready --timeout=200s pod -l app=${SERVICE_NAME},commit-short-sha=commit_${DEPLOY_COMMIT_SHORT_SHA}
     - echo "--- successfully deployed ${SERVICE_NAME} for the commit ${DEPLOY_COMMIT_SHORT_SHA} ---"
