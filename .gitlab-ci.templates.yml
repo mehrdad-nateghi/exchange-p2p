@@ -53,7 +53,7 @@ variables:
 .base_deploy_job_template:
   image: bitnami/kubectl:latest
   tags:
-    - docker-executer
+    - docker-executor
   cache: []
   variables: {}
   script:
