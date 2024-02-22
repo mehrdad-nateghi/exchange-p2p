@@ -57,7 +57,9 @@ variables:
   tags:
     - docker-executor
   cache: []
-  variables: {}
+  variables:
+    ARVAN_KUBE_CONFIG_NIGHTLY: $ARVAN_KUBE_CONFIG_NIGHTLY
+    ARVAN_KUBE_CONFIG_PRODUCTION: $ARVAN_KUBE_CONFIG_PRODUCTION
   script:
     - *base_deploy_scripts
 
