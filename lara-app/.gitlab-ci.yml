@@ -129,11 +129,11 @@ test-vars:
     - docker-executor
   cache: []
   variables:
-    KUBE_CONFIG_NAME: ARVAN_KUBE_CONFIG_NIGHTLY
+    KUBE_CONFIG_NAME: $ARVAN_KUBE_CONFIG_NIGHTLY
   script:
     # upstream pipeline may already provide the DEPLOY_COMMIT_SHORT_SHA, otherwise we set it to CI_COMMIT_SHORT_SHA
     - export DEPLOY_COMMIT_SHORT_SHA=${DEPLOY_COMMIT_SHORT_SHA:-$CI_COMMIT_SHORT_SHA}
-    - export KUBECONFIG=${$KUBE_CONFIG_NAME}
+    - export KUBECONFIG=$KUBE_CONFIG_NAME
     # Debug script
     - echo $ARVAN_KUBE_CONFIG_NIGHTLY
     - cat $ARVAN_KUBE_CONFIG_NIGHTLY
