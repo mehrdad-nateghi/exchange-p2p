@@ -130,13 +130,13 @@ test-vars:
   cache: []
   variables:
     KUBE_CONFIG_NAME: ARVAN_KUBE_CONFIG_NIGHTLY
-    ARVAN_KUBE_CONFIG_NIGHTLY: $ARVAN_KUBE_CONFIG_NIGHTLY
-    ARVAN_KUBE_CONFIG_PRODUCTION: $ARVAN_KUBE_CONFIG_PRODUCTION
   script:
     # upstream pipeline may already provide the DEPLOY_COMMIT_SHORT_SHA, otherwise we set it to CI_COMMIT_SHORT_SHA
     - export DEPLOY_COMMIT_SHORT_SHA=${DEPLOY_COMMIT_SHORT_SHA:-$CI_COMMIT_SHORT_SHA}
     - export KUBECONFIG=$ARVAN_KUBE_CONFIG_NIGHTLY
     # Debug script
+    - echo $ARVAN_KUBE_CONFIG_NIGHTLY
+    - cat $ARVAN_KUBE_CONFIG_NIGHTLY
     - echo $KUBECONFIG
     - cat $KUBECONFIG
     - kubectl config get-contexts
