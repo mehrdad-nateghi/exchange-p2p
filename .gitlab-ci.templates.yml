@@ -12,6 +12,9 @@ variables:
     - if: '$CI_MERGE_REQUEST_ID == null && $CI_COMMIT_REF_NAME == "production"'
 
 .build_job_template:
+  image: docker:20-dind
+  services:
+    - docker:dind
   interruptible: true
   tags:
     # - shell-executer # Directly run on CI worker node instead of containers to preserve docker layer cache between builds
@@ -22,13 +25,13 @@ variables:
     DOCKER_BUILDKIT: "1"
   script:
     - cd $CI_PROJECT_DIR/devops/build
-    - docker-compose -f docker-compose.base.yml -f docker-compose.${ENVIRONMENT_NAME}.yml build ${SERVICE_NAME}
+    - docker-compose -f docker-compose.base.yml -f docker-compose.${ENVIRONMENT_NAME}.yml build  ${SERVICE_NAME}
     - > # update the latest tag only on commits to main
       if [ -z "$CI_MERGE_REQUEST_ID" ] && [ $CI_COMMIT_REF_NAME == "main" ]; then
         CI_COMMIT_SHORT_SHA=latest docker-compose -f docker-compose.base.yml -f docker-compose.${ENVIRONMENT_NAME}.yml build -q ${SERVICE_NAME}
       fi
     - echo "--- successfully built the following docker image tag ${CI_COMMIT_SHORT_SHA} ---"
-    - echo ${DOCKER_PASSWORD} | docker login --username ${DOCKER_USERNAME} --password-stdin
+    - docker login --username ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}
     - docker-compose -f docker-compose.base.yml -f docker-compose.${ENVIRONMENT_NAME}.yml push ${SERVICE_NAME}
     - > # push the latest tag only on commits to main
       if [ -z "$CI_MERGE_REQUEST_ID" ] && [ $CI_COMMIT_REF_NAME == "main" ]; then
@@ -48,9 +51,11 @@ variables:
   - kubectl wait --for=condition=available --timeout=200s deployment/${SERVICE_NAME}
 
 .base_deploy_job_template:
-  image: bitnami/kubectl:latest
+  image:
+    name: bitnami/kubectl:latest
+    entrypoint: [""]
   tags:
-    - docker-executer
+    - docker-executor
   cache: []
   variables: {}
   script:
@@ -61,6 +66,7 @@ variables:
   script:
     # upstream pipeline may already provide the DEPLOY_COMMIT_SHORT_SHA, otherwise we set it to CI_COMMIT_SHORT_SHA
     - export DEPLOY_COMMIT_SHORT_SHA=${DEPLOY_COMMIT_SHORT_SHA:-$CI_COMMIT_SHORT_SHA}
+    - export KUBECONFIG=$KUBE_CONFIG_NAME
     - *base_deploy_scripts
     - kubectl wait --for=condition=ready --timeout=200s pod -l app=${SERVICE_NAME},commit-short-sha=commit_${DEPLOY_COMMIT_SHORT_SHA}
     - echo "--- successfully deployed ${SERVICE_NAME} for the commit ${DEPLOY_COMMIT_SHORT_SHA} ---"
