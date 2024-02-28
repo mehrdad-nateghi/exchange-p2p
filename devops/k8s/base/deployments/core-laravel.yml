@@ -42,7 +42,7 @@ spec:
               value: paylibero-db-mysql-headless
 
             - name: DB_PORT
-              value: 3306
+              value: '3306'
           resources: {}
   # TODO: These configs will apply after we add health check API.
   # livenessProbe:
