@@ -5,8 +5,8 @@ metadata:
   labels:
     app.kubernetes.io/instance: paylibero-db
     app.kubernetes.io/name: mysql
-    app.kubernetes.io/version: 8.2
-    helm.sh/chart: mysql-9.14.3
+    app.kubernetes.io/version: "8.2"
+    helm.sh/chart: "mysql-9.14.3"
 spec:
   replicas: 1
   podManagementPolicy: ""
@@ -22,8 +22,8 @@ spec:
       labels:
         app.kubernetes.io/instance: paylibero-db
         app.kubernetes.io/name: mysql
-        app.kubernetes.io/version: 8.2
-        helm.sh/chart: mysql-9.14.3
+        app.kubernetes.io/version: "8.2"
+        helm.sh/chart: "mysql-9.14.3"
     spec:
       serviceAccountName: paylibero-db-mysql
       affinity:
