@@ -6,7 +6,7 @@ stages:
 trigger-core-laravel:
   stage: Triggers
   variables:
-    DEPLOY_COMMIT_SHORT_SHA: $DEPLOY_COMMIT_SHORT_SHA
+    DEPLOY_COMMIT_SHORT_SHA: $CI_COMMIT_SHORT_SHA
     ENVIRONMENT_NAME: $ENVIRONMENT_NAME
   trigger:
     include: /lara-app/.gitlab-ci.yml
