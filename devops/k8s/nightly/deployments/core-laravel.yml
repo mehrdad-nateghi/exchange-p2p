@@ -10,7 +10,7 @@ spec:
         - name: core-laravel
           resources:
             requests:
-              memory: "128Mi"
+              memory: "256Mi"
               cpu: "100m"
             limits:
               memory: "2Gi"
