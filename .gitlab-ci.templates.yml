@@ -46,6 +46,7 @@ variables:
 
   - kubectl config get-contexts
   - kubectl config set-context --current --namespace=${ENVIRONMENT_PREFIX:-paylibero}-${ENVIRONMENT_NAME}
+  - echo $DEPLOY_COMMIT_SHORT_SHA
   - sed -i 's/deb.debian.org/debian.hostiran.ir/g' /etc/apt/sources.list
   - sed -i '/debian-security/d' /etc/apt/sources.list
   - which envsubst || (apt-get update && apt-get install -y gettext)
