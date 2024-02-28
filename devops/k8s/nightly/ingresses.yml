@@ -24,7 +24,7 @@ spec:
     - host: core-lara-33e1254e7d-paylibero-nightly.apps.ir-thr-ba1.arvancaas.ir
       http:
         paths:
-          - core:
+          - backend:
               service:
                 name: core-laravel
                 port:
