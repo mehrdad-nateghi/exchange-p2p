@@ -17,13 +17,12 @@ spec:
               cpu: "1000m"
           env:
             - name: DB_USERNAME
-                valueFrom:
+              valueFrom:
                 secretKeyRef:
                   name: core-laravel-mysql-db
-                  key:  username
-            
+                  key: username
             - name: DB_PASSWORD
-               valueFrom:
-               secretKeyRef:
-                 name: core-laravel-mysql-db
-                 key: password
+              valueFrom:
+                secretKeyRef:
+                  name: core-laravel-mysql-db
+                  key: password
