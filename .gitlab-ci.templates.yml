@@ -47,6 +47,7 @@ variables:
   - kubectl config get-contexts
   - kubectl config set-context --current --namespace=${ENVIRONMENT_PREFIX:-paylibero}-${ENVIRONMENT_NAME}
   - sed -i 's/deb.debian.org/debian.hostiran.ir/g' /etc/apt/sources.list
+  - sed -i 's|*http://debian.hostiran.ir/debian-security*||g' /etc/apt/sources.list
   - which envsubst || (apt-get update && apt-get install -y gettext)
   - kubectl kustomize devops/k8s/${ENVIRONMENT_NAME} | envsubst | tee /tmp/manifest.yaml
   - kubectl apply --record -f /tmp/manifest.yaml
