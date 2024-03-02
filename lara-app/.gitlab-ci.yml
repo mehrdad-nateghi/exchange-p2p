@@ -6,7 +6,7 @@ stages:
   # - Test
   # - Security
   - Build
-  # - Deploy
+  - Deploy
 
 # variables:
 #   MYSQL_ROOT_PASSWORD: root
@@ -120,15 +120,15 @@ build-nightly:
     deployment_tier: staging
     action: prepare
 
-# deploy-nightly:
-#   stage: Deploy
-#   extends: .deploy_job_template
-#   variables:
-#     SERVICE_NAME: core-laravel
-#     ENVIRONMENT_NAME: nightly
-#     KUBE_CONFIG_NAME: $ARVAN_KUBE_CONFIG_NIGHTLY
-#   # rules:
-#   #   - if: '$CI_MERGE_REQUEST_ID == null && $CI_COMMIT_REF_NAME == "main"'
-#   environment:
-#     name: $SERVICE_NAME-nightly
-#     deployment_tier: staging
+deploy-nightly:
+  stage: Deploy
+  extends: .deploy_job_template
+  variables:
+    SERVICE_NAME: core-laravel
+    ENVIRONMENT_NAME: nightly
+    KUBE_CONFIG_NAME: $ARVAN_KUBE_CONFIG_NIGHTLY
+  # rules:
+  #   - if: '$CI_MERGE_REQUEST_ID == null && $CI_COMMIT_REF_NAME == "main"'
+  environment:
+    name: $SERVICE_NAME-nightly
+    deployment_tier: staging

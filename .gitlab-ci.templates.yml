@@ -46,13 +46,19 @@ variables:
 
   - kubectl config get-contexts
   - kubectl config set-context --current --namespace=${ENVIRONMENT_PREFIX:-paylibero}-${ENVIRONMENT_NAME}
-
-  - kubectl kustomize devops/k8s/${ENVIRONMENT_NAME} | envsubst | kubectl apply --record -f -
-  - kubectl wait --for=condition=available --timeout=200s deployment/${SERVICE_NAME}
+  - sed -i 's/deb.debian.org/debian.hostiran.ir/g' /etc/apt/sources.list
+  - sed -i '/debian-security/d' /etc/apt/sources.list
+  - which envsubst || (apt-get update && apt-get install -y gettext)
+  - kubectl kustomize devops/k8s/${ENVIRONMENT_NAME} | envsubst | tee /tmp/manifest.yaml
+  - kubectl apply --record -f /tmp/manifest.yaml
+  # kubectl wait has issues for now. it is being under consideration in Arvan.
+  #- kubectl wait --for=condition=available --timeout=200s deployment/${SERVICE_NAME}
 
 .base_deploy_job_template:
   image:
     name: bitnami/kubectl:latest
+    docker:
+      user: root
     entrypoint: [""]
   tags:
     - docker-executor
@@ -68,5 +74,6 @@ variables:
     - export DEPLOY_COMMIT_SHORT_SHA=${DEPLOY_COMMIT_SHORT_SHA:-$CI_COMMIT_SHORT_SHA}
     - export KUBECONFIG=$KUBE_CONFIG_NAME
     - *base_deploy_scripts
-    - kubectl wait --for=condition=ready --timeout=200s pod -l app=${SERVICE_NAME},commit-short-sha=commit_${DEPLOY_COMMIT_SHORT_SHA}
+    # kubectl wait has issues for now. it is being under consideration in Arvan.
+    #- kubectl wait --for=condition=ready --timeout=200s pod -l app=${SERVICE_NAME},commit-short-sha=commit_${DEPLOY_COMMIT_SHORT_SHA}
     - echo "--- successfully deployed ${SERVICE_NAME} for the commit ${DEPLOY_COMMIT_SHORT_SHA} ---"

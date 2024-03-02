@@ -132,8 +132,8 @@ metadata:
     app.kubernetes.io/instance: paylibero-db
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: mysql
-    app.kubernetes.io/version: 8.0.35
-    helm.sh/chart: mysql-9.14.3
+    app.kubernetes.io/version: "8.0.35"
+    helm.sh/chart: "mysql-9.14.3"
     app.kubernetes.io/component: primary
 spec:
   replicas: 1
@@ -154,8 +154,8 @@ spec:
         app.kubernetes.io/instance: paylibero-db
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: mysql
-        app.kubernetes.io/version: 8.0.35
-        helm.sh/chart: mysql-9.14.3
+        app.kubernetes.io/version: "8.0.35"
+        helm.sh/chart: "mysql-9.14.3"
         app.kubernetes.io/component: primary
     spec:
       serviceAccountName: paylibero-db-mysql
@@ -258,10 +258,10 @@ spec:
                   mysqladmin status -uroot -p"${password_aux}"
           resources:
             limits:
-              cpu: ".5"
+              cpu: "0.5"
               memory: 1G
             requests:
-              cpu: ".5"
+              cpu: "0.5"
               memory: 1G
           volumeMounts:
             - name: data
