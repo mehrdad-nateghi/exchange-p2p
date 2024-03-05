@@ -4,6 +4,7 @@ services:
   core-laravel:
     image: paylibero/build-core-laravel:${CI_COMMIT_SHORT_SHA}
     build:
+      dockerfile: Dockerfile.cloud
       args:
         - CI_COMMIT_SHORT_SHA
         - CI_COMMIT_MESSAGE
