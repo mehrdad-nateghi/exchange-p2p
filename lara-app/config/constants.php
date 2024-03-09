@@ -12,5 +12,9 @@ return [
         'Invoice_Pr' => 'IN-'
     ],
 
-    'Verification_Code_Expiration_Per_Minutes' => '60'
+    'Verification_Code_Expiration_Per_Minutes' => '60',
+
+    'PASSPORT_ACCESS_TOKEN_EXPIRES_IN_PER_HOUR' => '24',
+
+    'COOKIE_EXPIRES_IN_PER_MIN' => '60'
 ];

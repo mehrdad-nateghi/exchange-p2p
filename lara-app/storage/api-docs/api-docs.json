@@ -33,7 +33,56 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Successful operation"
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "token": {
+                                            "description": "An encrypted token for authorizing the signed in user.",
+                                            "type": "string"
+                                        },
+                                        "user": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "description": "A unique identifier for the user in the dataset.",
+                                                        "type": "integer"
+                                                    },
+                                                    "role": {
+                                                        "description": "A field indicates user role. 0: Applicant, 1: Admin.",
+                                                        "type": "integer"
+                                                    },
+                                                    "first_name": {
+                                                        "description": "A field indicates user's first name.",
+                                                        "type": "string"
+                                                    },
+                                                    "last_name": {
+                                                        "description": "A field indicates user's last name.",
+                                                        "type": "string"
+                                                    },
+                                                    "email": {
+                                                        "description": "A field indicates user's email.",
+                                                        "type": "string"
+                                                    },
+                                                    "status": {
+                                                        "description": "A field indicates user's status. 0: Deactive, 1: Active",
+                                                        "type": "integer"
+                                                    },
+                                                    "is_email_verified": {
+                                                        "description": "A field indicates whther user's email is verified or not. true: is_verified, false: is_not_verified",
+                                                        "type": "boolean"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     },
                     "422": {
                         "description": "Unprocessable request"
@@ -707,7 +756,56 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Successful operation."
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "token": {
+                                            "description": "An encrypted token for authorizing the signed in user.",
+                                            "type": "string"
+                                        },
+                                        "user": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "description": "A unique identifier for the user in the dataset.",
+                                                        "type": "integer"
+                                                    },
+                                                    "role": {
+                                                        "description": "A field indicates user role. 0: Applicant, 1: Admin.",
+                                                        "type": "integer"
+                                                    },
+                                                    "first_name": {
+                                                        "description": "A field indicates user's first name.",
+                                                        "type": "string"
+                                                    },
+                                                    "last_name": {
+                                                        "description": "A field indicates user's last name.",
+                                                        "type": "string"
+                                                    },
+                                                    "email": {
+                                                        "description": "A field indicates user's email.",
+                                                        "type": "string"
+                                                    },
+                                                    "status": {
+                                                        "description": "A field indicates user's status. 0: Deactive, 1: Active",
+                                                        "type": "integer"
+                                                    },
+                                                    "is_email_verified": {
+                                                        "description": "A field indicates whther user's email is verified or not. true: is_verified, false: is_not_verified",
+                                                        "type": "boolean"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     },
                     "422": {
                         "description": "Unprocessable request"
