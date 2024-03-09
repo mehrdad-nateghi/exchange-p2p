@@ -6,7 +6,7 @@ stages:
   # - Test
   # - Security
   - Build
-  # - Deploy
+  - Deploy
 
 # variables:
 #   MYSQL_ROOT_PASSWORD: root
@@ -18,22 +18,23 @@ stages:
 cache:
   key: "$CI_JOB_NAME-$CI_COMMIT_REF_SLUG"
 
-# composer:
-#   stage: Prepare
-#   script:
-#     - php -v
-#     - composer install --prefer-dist --no-ansi --no-interaction --no-progress --no-scripts
-#     - cp .env.example .env
-#     - php artisan key:generate
-#   artifacts:
-#     paths:
-#       - vendor/
-#       - .env
-#     expire_in: 1 days
-#     when: always
-#   cache:
-#     paths:
-#       - vendor/
+composer:
+  stage: Build
+  script:
+    - php -v
+    - composer install --prefer-dist --no-ansi --no-interaction --no-progress --no-scripts
+    - cp .env.example .env
+    - php artisan key:generate
+  artifacts:
+    paths:
+      - vendor/
+      - .env
+    expire_in: 1 days
+    when: always
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}-composer
+    paths:
+      - vendor/
 
 # db-seeding:
 #   stage: Build
@@ -120,15 +121,15 @@ build-nightly:
     deployment_tier: staging
     action: prepare
 
-# deploy-nightly:
-#   stage: Deploy
-#   extends: .deploy_job_template
-#   variables:
-#     SERVICE_NAME: core-laravel
-#     ENVIRONMENT_NAME: nightly
-#     KUBE_CONFIG_NAME: $ARVAN_KUBE_CONFIG_NIGHTLY
-#   # rules:
-#   #   - if: '$CI_MERGE_REQUEST_ID == null && $CI_COMMIT_REF_NAME == "main"'
-#   environment:
-#     name: $SERVICE_NAME-nightly
-#     deployment_tier: staging
+deploy-nightly:
+  stage: Deploy
+  extends: .deploy_job_template
+  variables:
+    SERVICE_NAME: core-laravel
+    ENVIRONMENT_NAME: nightly
+    KUBE_CONFIG_NAME: $ARVAN_KUBE_CONFIG_NIGHTLY
+  # rules:
+  #   - if: '$CI_MERGE_REQUEST_ID == null && $CI_COMMIT_REF_NAME == "main"'
+  environment:
+    name: $SERVICE_NAME-nightly
+    deployment_tier: staging
