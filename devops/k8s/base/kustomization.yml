@@ -9,6 +9,4 @@ resources:
 
   - statefulsets/mysql.yml
 
-  - serviceAccounts/mysql.yml
-
   - configs/mysql.yml
