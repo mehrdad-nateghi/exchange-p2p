@@ -6,6 +6,7 @@ stages:
   # - Test
   # - Security
   - Build
+  - Composer
   - Deploy
 
 # variables:
@@ -17,24 +18,6 @@ stages:
 
 cache:
   key: "$CI_JOB_NAME-$CI_COMMIT_REF_SLUG"
-
-composer:
-  stage: Build
-  script:
-    - php -v
-    - composer install --prefer-dist --no-ansi --no-interaction --no-progress --no-scripts
-    - cp .env.example .env
-    - php artisan key:generate
-  artifacts:
-    paths:
-      - vendor/
-      - .env
-    expire_in: 1 days
-    when: always
-  cache:
-    key: ${CI_COMMIT_REF_SLUG}-composer
-    paths:
-      - vendor/
 
 # db-seeding:
 #   stage: Build
@@ -120,6 +103,24 @@ build-nightly:
     name: $SERVICE_NAME-nightly
     deployment_tier: staging
     action: prepare
+
+composer:
+  stage: Composer
+  script:
+    - php -v
+    - composer install --prefer-dist --no-ansi --no-interaction --no-progress --no-scripts
+    - cp .env.example .env
+    - php artisan key:generate
+  artifacts:
+    paths:
+      - vendor/
+      - .env
+    expire_in: 1 days
+    when: always
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}-composer
+    paths:
+      - vendor/
 
 deploy-nightly:
   stage: Deploy
