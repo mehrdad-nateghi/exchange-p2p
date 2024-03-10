@@ -115,8 +115,8 @@ build-nightly:
   variables:
     SERVICE_NAME: core-laravel
     ENVIRONMENT_NAME: nightly
-  rules:
-    - if: '$CI_MERGE_REQUEST_ID == null && $CI_COMMIT_REF_NAME == "main"'
+  # rules:
+  #   - if: '$CI_MERGE_REQUEST_ID == null && $CI_COMMIT_REF_NAME == "main"'
   environment:
     name: $SERVICE_NAME-nightly
     deployment_tier: staging
