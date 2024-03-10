@@ -10,3 +10,5 @@ resources:
   - statefulsets/mysql.yml
 
   - configs/mysql.yml
+
+  - cronjobs/mysql_backup.yml
