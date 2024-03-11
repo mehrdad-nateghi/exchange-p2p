@@ -9,6 +9,6 @@ resources:
 
   - statefulsets/mysql.yml
 
-  - serviceAccounts/mysql.yml
-
   - configs/mysql.yml
+
+  - cronjobs/mysql_backup.yml
