@@ -5,8 +5,8 @@ stages:
   # - Prepare
   # - Test
   # - Security
+  # - Composer
   - Build
-  - Composer
   - Deploy
 
 # variables:
@@ -91,6 +91,24 @@ cache:
 #     paths:
 #       - security-checker/
 
+# composer:
+#   stage: Composer
+#   script:
+#     - php -v
+#     - composer install --prefer-dist --no-ansi --no-interaction --no-progress --no-scripts
+#     - cp .env.example .env
+#     - php artisan key:generate
+#   artifacts:
+#     paths:
+#       - vendor/
+#       - .env
+#     expire_in: 1 days
+#     when: always
+#   cache:
+#     key: ${CI_COMMIT_REF_SLUG}-composer
+#     paths:
+#       - vendor/
+
 build-nightly:
   stage: Build
   extends: .build_job_template
@@ -104,23 +122,6 @@ build-nightly:
     deployment_tier: staging
     action: prepare
 
-composer:
-  stage: Composer
-  script:
-    - php -v
-    - composer install --prefer-dist --no-ansi --no-interaction --no-progress --no-scripts
-    - cp .env.example .env
-    - php artisan key:generate
-  artifacts:
-    paths:
-      - vendor/
-      - .env
-    expire_in: 1 days
-    when: always
-  cache:
-    key: ${CI_COMMIT_REF_SLUG}-composer
-    paths:
-      - vendor/
 
 deploy-nightly:
   stage: Deploy
