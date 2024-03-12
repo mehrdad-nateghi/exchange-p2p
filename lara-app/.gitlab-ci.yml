@@ -5,7 +5,7 @@ stages:
   # - Prepare
   # - Test
   # - Security
-  # - Composer
+  - Composer
   - Build
   - Deploy
 
@@ -91,23 +91,25 @@ cache:
 #     paths:
 #       - security-checker/
 
-# composer:
-#   stage: Composer
-#   script:
-#     - php -v
-#     - composer install --prefer-dist --no-ansi --no-interaction --no-progress --no-scripts
-#     - cp .env.example .env
-#     - php artisan key:generate
-#   artifacts:
-#     paths:
-#       - vendor/
-#       - .env
-#     expire_in: 1 days
-#     when: always
-#   cache:
-#     key: ${CI_COMMIT_REF_SLUG}-composer
-#     paths:
-#       - vendor/
+composer:
+ stage: Composer
+ image: ghcr.io/devgine/composer-php:latest
+ script:
+   - cd lara-app
+   - php -v
+   - composer install --prefer-dist --no-ansi --no-interaction --no-progress --no-scripts
+   - cp .env.example .env
+   - php artisan key:generate
+ artifacts:
+   paths:
+     - lara-app/vendor/
+     - lara-app/.env
+   expire_in: 1 days
+   when: always
+ cache:
+   key: ${CI_COMMIT_REF_SLUG}-composer
+   paths:
+     - lara-app/vendor/
 
 build-nightly:
   stage: Build
