@@ -1,0 +1,15 @@
+# test and build pipelines are in paylibero/pex project
+include: /.gitlab-ci.templates.yml
+
+stages:
+  - Deploy
+
+pex-app:deploy:
+  stage: Deploy
+  extends: .deploy_job_template
+  variables:
+   SERVICE_NAME: pex-app
+   ENVIRONMENT_PREFIX: paylibero
+  environment:
+    name: paylibero-$ENVIRONMENT_NAME-$SERVICE_NAME
+    url: $DEPLOYMENT_URL
