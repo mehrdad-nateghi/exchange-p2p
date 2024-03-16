@@ -11,6 +11,7 @@ use App\Models\Bid;
 use App\Models\Request;
 use App\Models\Trade;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 
@@ -95,7 +96,7 @@ class BidRepository implements BidRepositoryInterface
     public function autoConfirmBid(Request $request, Bid $bid)
     {
         // Check potential of auto bid confirmation
-        if(($request->type == RequestTypeEnum::Sell && $request->acceptanceThreshold > $bid->bid_rate) || ($request->type == RequestTypeEnum::Buy && $request->acceptanceThreshold < $bid->bid_rate)) {
+        if(($request->type == RequestTypeEnum::Sell && $request->acceptance_threshold > $bid->bid_rate) || ($request->type == RequestTypeEnum::Buy && $request->acceptance_threshold < $bid->bid_rate)) {
             return [
                 'status' => 422,
                 'message' => 'Auto bid confirmation denied.'
