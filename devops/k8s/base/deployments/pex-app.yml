@@ -21,7 +21,7 @@ spec:
       imagePullSecrets:
         - name: regcred
       containers:
-        - image: docker.io/paylibero/build-pex-frontend
+        - image: docker.io/paylibero/pex-app
           imagePullPolicy: Always
           name: pex-app
           ports:
