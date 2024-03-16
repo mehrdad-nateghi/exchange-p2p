@@ -38,7 +38,7 @@ spec:
               service:
                 name: pex-app
                 port:
-                  number: 4000
+                  number: 8000
             path: /
             pathType: ImplementationSpecific
     # - host: nightly.paylibero.ir

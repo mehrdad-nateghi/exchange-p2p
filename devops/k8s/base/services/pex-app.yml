@@ -6,5 +6,6 @@ spec:
   selector:
     app: pex-app
   ports:
-    - port: 4000
+    - port: 8000
+      protocol: TCP
       targetPort: 3000
