@@ -9,7 +9,6 @@ pex-app:deploy:
   extends: .deploy_job_template
   variables:
    SERVICE_NAME: pex-app
-   ENVIRONMENT_NAME: nightly
    ENVIRONMENT_PREFIX: paylibero
    KUBE_CONFIG_NAME: $ARVAN_KUBE_CONFIG_NIGHTLY
   environment:
