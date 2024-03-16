@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: pex-app
+spec:
+  selector:
+    app: pex-app
+  ports:
+    - port: 4000
+      targetPort: 3000

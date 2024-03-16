@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pex-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pex-app
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 75%
+  template:
+    metadata:
+      labels:
+        app: pex-app
+        commit-short-sha: 'commit_${DEPLOY_COMMIT_SHORT_SHA}'
+    spec:
+      restartPolicy: Always
+      imagePullSecrets:
+        - name: regcred
+      containers:
+        - image: docker.io/paylibero/build-pex-frontend
+          imagePullPolicy: Always
+          name: pex-app
+          ports:
+            - containerPort: 3000
+          env:
+            - name: NODE_ENV
+              value: production
+            - name: NEXT_PUBLIC_API_SERVER_ADDRESS
+              value: http://core-laravel:8000
+            - name: NEXT_PUBLIC_SITE_SECRET
+              value: 6Lc_s1QpAAAAAIQhxFfqYkcgTvwfPjdQ-sumzg6L
+            - name: NEXT_PUBLIC_REACT_APP_SITE_KEY
+              value: 6Lc_s1QpAAAAAG7VQZxe9zddFwX_CHXAJ1t7oN9Q
+            - name: NEXT_PUBLIC_AUTH_TOKEN
+              value: pl-auth-token
+            - name: PUBLIC_BUILD_COMMIT_SHA
+              value: "'${DEPLOY_COMMIT_SHORT_SHA}'"
+          resources: {}
+          livenessProbe:
+            failureThreshold: 5
+            httpGet:
+              path: /health/
+              port: 3000
+              scheme: HTTP
+            initialDelaySeconds: 90
+            periodSeconds: 60
+            successThreshold: 1
+            timeoutSeconds: 1
+
+          readinessProbe:
+            failureThreshold: 5
+            httpGet:
+              path: /health/
+              port: 3000
+              scheme: HTTP
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1

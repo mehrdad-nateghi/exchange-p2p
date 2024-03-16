@@ -4,8 +4,10 @@ kind: Kustomization
 resources:
   - services/mysql.yml
   - services/core-laravel.yml
-
+  - services/pex-app.yml
+  
   - deployments/core-laravel.yml
+  - deployments/pex-app.yml
 
   - statefulsets/mysql.yml
 

@@ -11,3 +11,15 @@ trigger-core-laravel:
   trigger:
     include: /lara-app/.gitlab-ci.yml
     strategy: depend
+
+trigger-pex-app:
+  stage: Triggers
+  variables:
+    DEPLOY_COMMIT_SHORT_SHA: $DEPLOY_COMMIT_SHORT_SHA
+    ENVIRONMENT_NAME: $ENVIRONMENT_NAME
+    DEPLOYMENT_URL: $DEPLOYMENT_URL
+  trigger:
+    include: /devops/external-app-ci-configs/pex-app.gitlab-ci.yml
+    strategy: depend
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "pipeline" && $SERVICE_NAME == "pex-app"
