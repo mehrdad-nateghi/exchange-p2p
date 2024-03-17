@@ -58,7 +58,7 @@ variables:
 
 .base_deploy_job_template:
   image:
-    name: bitnami/kubectl:latest
+    name: hub.hamdocker.ir/bitnami/kubectl:latest
     docker:
       user: root
     entrypoint: [""]
