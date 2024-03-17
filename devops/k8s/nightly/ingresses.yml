@@ -21,24 +21,6 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-    - host: paylibero-33e1254e7d-paylibero-nightly.apps.ir-thr-ba1.arvancaas.ir
-      http:
-        paths:
-          - backend:
-              service:
-                name: pex-app
-                port:
-                  number: 8000
-            path: /
-            pathType: ImplementationSpecific
-          - backend:
-              service:
-                name: core-laravel
-                port:
-                  number: 8000
-            path: /api
-            pathType: ImplementationSpecific
-
     - host: core-lara-33e1254e7d-paylibero-nightly.apps.ir-thr-ba1.arvancaas.ir
       http:
         paths:
@@ -60,41 +42,20 @@ spec:
                   number: 8000
             path: /
             pathType: ImplementationSpecific
-    # - host: nightly.paylibero.ir
-    #   http:
-    #     paths:
-    #       - backend:
-    #           service:
-    #             name: core-laravel
-    #             port:
-    #               number: 8000
-    #         path: /
-    #         pathType: ImplementationSpecific
-    #       - backend:
-    #           service:
-    #             name: core-laravel
-    #             port:
-    #               number: 8000
-    #         path: /api
-    #         pathType: ImplementationSpecific
-    # - host: paylibero.ir
-    #   http:
-    #     paths:
-    #       - backend:
-    #           service:
-    #             name: core-laravel
-    #             port:
-    #               number: 8000
-    #         path: /
-    #         pathType: ImplementationSpecific
-    #       - backend:
-    #           service:
-    #             name: core-laravel
-    #             port:
-    #               number: 8000
-    #         path: /api
-    #         pathType: ImplementationSpecific
-  # tls:
-  #   - hosts:
-  #       - core-lara-33e1254e7d-paylibero-nightly.apps.ir-thr-ba1.arvancaas.ir
-  #     secretName: core-lara-33e1254e7d-paylibero-nightly-apps-ir-thr-ba1-arvancaas-ir-tls
+    - host: nightly.paylibero.ir
+      http:
+        paths:
+          - backend:
+              service:
+                name: core-laravel
+                port:
+                  number: 8000
+            path: /
+            pathType: ImplementationSpecific
+          - backend:
+              service:
+                name: core-laravel
+                port:
+                  number: 8000
+            path: /api
+            pathType: ImplementationSpecific
