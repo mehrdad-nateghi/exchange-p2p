@@ -71,6 +71,7 @@ variables:
 
 .deploy_job_template:
   extends: .base_deploy_job_template
+  dependencies: []
   script:
     # upstream pipeline may already provide the DEPLOY_COMMIT_SHORT_SHA, otherwise we set it to CI_COMMIT_SHORT_SHA
     - export DEPLOY_COMMIT_SHORT_SHA=${DEPLOY_COMMIT_SHORT_SHA:-$CI_COMMIT_SHORT_SHA}
