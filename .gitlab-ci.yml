@@ -11,15 +11,16 @@ trigger-core-laravel:
   trigger:
     include: /lara-app/.gitlab-ci.yml
     strategy: depend
-  rules:
-    - if: '($CI_PIPELINE_SOURCE != "pipeline") && (($CI_MERGE_REQUEST_ID && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main" && $CI_MERGE_REQUEST_TITLE !~ /^Draft:/) || $CI_COMMIT_REF_NAME == "main" || $CI_COMMIT_REF_NAME == "production")'
-      changes:
-        - lara-app/**/*
-        - .gitlab-ci.templates.yml
-        - devops/build/*
-        - devops/k8s/**/core-laravel.yml
-        - devops/k8s/**/kustomization.yml
-        - devops/k8s/**/ingresses.yml
+  # rules:
+  #   # if: '($CI_PIPELINE_SOURCE != "pipeline") && (($CI_MERGE_REQUEST_ID && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main" && $CI_MERGE_REQUEST_TITLE !~ /^Draft:/) || $CI_COMMIT_REF_NAME == "main" || $CI_COMMIT_REF_NAME == "production")'
+  #   - changes:
+  #       - .gitlab-ci.yml
+  #       - lara-app/**/*
+  #       - .gitlab-ci.templates.yml
+  #       - devops/build/*
+  #       - devops/k8s/**/core-laravel.yml
+  #       - devops/k8s/**/kustomization.yml
+  #       - devops/k8s/**/ingresses.yml
 
 trigger-pex-app:
   stage: Triggers
