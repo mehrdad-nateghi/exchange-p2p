@@ -62,8 +62,8 @@ variables:
     docker:
       user: root
     entrypoint: [""]
-  tags:
-    - docker-executor
+  # tags:
+  #   - docker-executor
   cache: []
   variables: {}
   script:
