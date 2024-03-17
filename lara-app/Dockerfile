@@ -1,4 +1,4 @@
-FROM php:8.2 as php
+FROM php:8.2
 
 RUN apt-get update -y
 RUN apt-get install -y unzip libpq-dev libcurl4-gnutls-dev
@@ -12,7 +12,6 @@ ARG CI_PIPELINE_CREATED_AT
 
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-# COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 COPY ./dockerfiles/entrypoint.sh /usr/local/bin/entrypoint.sh
 
 # Image metadata:
@@ -31,11 +30,11 @@ ENV CI_COMMIT_SHORT_SHA ${CI_COMMIT_SHORT_SHA}
 ENV CI_PIPELINE_CREATED_AT ${CI_PIPELINE_CREATED_AT}
 ENV CI_PIPELINE_URL ${CI_PIPELINE_URL}
 
+COPY . .
+RUN composer install --no-interaction
 
 ENV PORT=8000
-
 EXPOSE 8000
-
 RUN chmod +x /usr/local/bin/entrypoint.sh
 ENTRYPOINT [ "/usr/local/bin/entrypoint.sh" ]
 
