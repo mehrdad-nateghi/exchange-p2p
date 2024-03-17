@@ -1,9 +1,10 @@
-# image: edbizarro/gitlab-ci-pipeline-php:7.3
+include: /.gitlab-ci.templates.yml
 
 stages:
   # - Prepare
   # - Test
   # - Security
+  - Composer
   - Build
   - Deploy
 
@@ -16,23 +17,6 @@ stages:
 
 cache:
   key: "$CI_JOB_NAME-$CI_COMMIT_REF_SLUG"
-
-# composer:
-#   stage: Prepare
-#   script:
-#     - php -v
-#     - composer install --prefer-dist --no-ansi --no-interaction --no-progress --no-scripts
-#     - cp .env.example .env
-#     - php artisan key:generate
-#   artifacts:
-#     paths:
-#       - vendor/
-#       - .env
-#     expire_in: 1 days
-#     when: always
-#   cache:
-#     paths:
-#       - vendor/
 
 # db-seeding:
 #   stage: Build
@@ -106,6 +90,26 @@ cache:
 #     paths:
 #       - security-checker/
 
+composer:
+ stage: Composer
+ image: ghcr.io/devgine/composer-php:latest
+ script:
+   - cd lara-app
+   - php -v
+   - composer install --prefer-dist --no-ansi --no-interaction --no-progress --no-scripts
+   - cp .env.example .env
+   - php artisan key:generate
+ artifacts:
+   paths:
+     - lara-app/vendor/
+     - lara-app/.env
+   expire_in: 1 days
+   when: always
+ cache:
+   key: ${CI_COMMIT_REF_SLUG}-composer
+   paths:
+     - lara-app/vendor/
+
 build-nightly:
   stage: Build
   extends: .build_job_template
@@ -119,14 +123,16 @@ build-nightly:
     deployment_tier: staging
     action: prepare
 
+
 deploy-nightly:
   stage: Deploy
   extends: .deploy_job_template
   variables:
     SERVICE_NAME: core-laravel
     ENVIRONMENT_NAME: nightly
-  # rules:
-  #   - if: '$CI_MERGE_REQUEST_ID == null && $CI_COMMIT_REF_NAME == "main"'
+    KUBE_CONFIG_NAME: $ARVAN_KUBE_CONFIG_NIGHTLY
+  rules:
+    - if: '$CI_MERGE_REQUEST_ID == null && $CI_COMMIT_REF_NAME == "main"'
   environment:
     name: $SERVICE_NAME-nightly
     deployment_tier: staging

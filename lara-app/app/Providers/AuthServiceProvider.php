@@ -26,8 +26,6 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        Passport::personalAccessTokensExpireIn(now()->addHours(24));
-        //Passport::tokensExpireIn(now()->addDays(1));
-        //
+        Passport::personalAccessTokensExpireIn(now()->addHours(config('constants.PASSPORT_ACCESS_TOKEN_EXPIRES_IN_PER_HOUR')));
     }
 }

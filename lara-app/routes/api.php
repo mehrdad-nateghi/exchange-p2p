@@ -30,6 +30,7 @@ use App\Http\Controllers\Applicant\BidController as ApplicantBidController;
 
 /* Requests Management Routes */
 // Guest User Routes
+
 Route::get('/requests/filter', [GuestRequestController::class,'getRequests'])->name('guest.requests.get.byFilter');
 Route::get('/requests/{requestId}', [GuestRequestController::class,'getRequest'])->name('guest.requests.get.single');
 Route::get('/payment-methods', [GuestPaymentMethodController::class,'getPaymentMethods'])->name('guest.paymentMethods.get');

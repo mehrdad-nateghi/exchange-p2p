@@ -18,6 +18,77 @@ spec:
         commit-short-sha: "commit_${DEPLOY_COMMIT_SHORT_SHA}"
     spec:
       restartPolicy: Always
+      imagePullSecrets:
+       - name: regcred
+      initContainers:
+        - name: laravel-setup
+          env:
+            - name: APP_NAME
+              value: Laravel
+            - name: APP_ENV
+              value: production
+            - name: DB_PORT
+              value: '3306'
+            - name: APP_KEY
+              value: "ggrz5rUpSYczpc"
+            - name: APP_DEBUG
+              value: 'false'
+            - name: APP_URL
+              value: http://localhost
+            - name: LOG_CHANNEL
+              value: stack
+            - name: LOG_DEPRECATIONS_CHANNEL
+              value: 'null'
+            - name:  LOG_LEVEL 
+              value: debug
+            - name: DB_CONNECTION
+              value: mysql
+            - name: DB_HOST
+              value: paylibero-db-mysql-headless
+            - name: DB_DATABASE
+              value: laravel
+            - name: DB_USERNAME
+              value: paylibero
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: paylibero-db-mysql
+                  key: mysql-password
+            - name: MYSQL_DATABASE
+              value: laravel
+            - name: BROADCAST_DRIVER
+              value: log
+            - name: CACHE_DRIVER
+              value: file
+            - name: FILESYSTEM_DISK
+              value: local
+            - name: QUEUE_CONNECTION
+              value: sync
+            - name: SESSION_DRIVER
+              value: file
+            - name: SESSION_LIFETIME
+              value: '120'
+            - name: MEMCACHED_HOST
+              value: '127.0.0.1'
+            - name: REDIS_HOST
+              value: '127.0.0.1'
+            - name: REDIS_PASSWORD
+              value: 'null'
+            - name: REDIS_PORT
+              value: '6379'
+            - name: RUN_SETUP_COMMANDS
+              value: 'false'
+          image: docker.io/paylibero/build-core-laravel
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              cd /var/www
+              php artisan key:generate 
+              php artisan migrate --force
+              php artisan cache:clear
+              php artisan config:clear
+              php artisan route:clear
+              php artisan passport:install
       containers:
         - image: docker.io/paylibero/build-core-laravel
           imagePullPolicy: Always
@@ -25,44 +96,69 @@ spec:
           ports:
             - containerPort: 8000
               protocol: TCP
+          livenessProbe:
+            tcpSocket:
+              port: 8000
+            initialDelaySeconds: 90
+            periodSeconds: 60
+            failureThreshold: 5
+            successThreshold: 1
+            timeoutSeconds: 1
+          readinessProbe:
+            tcpSocket:
+              port: 8000
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            failureThreshold: 5
+            successThreshold: 1
+            timeoutSeconds: 1
           env:
             - name: APP_NAME
               value: Laravel
-
             - name: APP_ENV
               value: production
-
+            - name: DB_PORT
+              value: '3306'
+            - name: APP_KEY
+              value: "ggrz5rUpSYczpc"
+            - name: APP_DEBUG
+              value: 'false'
             - name: APP_URL
-              value: Laravel
-
+              value: http://localhost
+            - name: LOG_CHANNEL
+              value: stack
+            - name: LOG_DEPRECATIONS_CHANNEL
+              value: 'null'
+            - name:  LOG_LEVEL 
+              value: debug
             - name: DB_CONNECTION
               value: mysql
-
             - name: DB_HOST
               value: paylibero-db-mysql-headless
-
-            - name: DB_PORT
-              value: 3306
+            - name: DB_DATABASE
+              value: laravel
+            - name: MYSQL_DATABASE
+              value: laravel
+            - name: BROADCAST_DRIVER
+              value: log
+            - name: CACHE_DRIVER
+              value: file
+            - name: FILESYSTEM_DISK
+              value: local
+            - name: QUEUE_CONNECTION
+              value: sync
+            - name: SESSION_DRIVER
+              value: file
+            - name: SESSION_LIFETIME
+              value: '120'
+            - name: MEMCACHED_HOST
+              value: '127.0.0.1'
+            - name: REDIS_HOST
+              value: '127.0.0.1'
+            - name: REDIS_PASSWORD
+              value: 'null'
+            - name: REDIS_PORT
+              value: '6379'
+            - name: RUN_SETUP_COMMANDS
+              value: 'false'
           resources: {}
-  # TODO: These configs will apply after we add health check API.
-  # livenessProbe:
-  #   failureThreshold: 5
-  #   httpGet:
-  #     path: /health/
-  #     port: 3000
-  #     scheme: HTTP
-  #   initialDelaySeconds: 90
-  #   periodSeconds: 60
-  #   successThreshold: 1
-  #   timeoutSeconds: 1
-
-  # readinessProbe:
-  #   failureThreshold: 5
-  #   httpGet:
-  #     path: /health/
-  #     port: 3000
-  #     scheme: HTTP
-  #   initialDelaySeconds: 20
-  #   periodSeconds: 10
-  #   successThreshold: 1
-  #   timeoutSeconds: 1

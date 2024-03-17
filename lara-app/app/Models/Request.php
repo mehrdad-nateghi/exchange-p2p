@@ -104,14 +104,11 @@ class Request extends Model
         return $this->bids()->where('status', BidStatusEnum::Top)->first();
     }
 
-    /**
-     * Get request payment methods
+    /*
+     * Get the request payment methods
      */
-    public function getRequestPaymentMethods(){
-        return collect($this->linkedMethods()
-        ->with('paymentMethod')
-        ->get())
-        ->pluck('paymentMethod');
+    public function getRequestPaymentMethods() {
+        return $this->linkedMethods()->with('paymentMethod')->get()->pluck('paymentMethod')->unique();
     }
 
     /*

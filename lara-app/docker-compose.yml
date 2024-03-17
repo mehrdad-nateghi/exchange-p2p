@@ -4,7 +4,6 @@ services:
     php:
         build:
             context: .
-            target: php
             args:
                 - APP_ENV=${APP_ENV}
         environment:

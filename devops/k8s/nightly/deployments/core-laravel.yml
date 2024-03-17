@@ -10,20 +10,19 @@ spec:
         - name: core-laravel
           resources:
             requests:
-              memory: "128Mi"
-              cpu: "100m"
+              memory: "256Mi"
+              cpu: "128m"
             limits:
-              memory: "2Gi"
-              cpu: "1000m"
+              memory: "2048Mi"
+              cpu: "1024m"
           env:
             - name: DB_USERNAME
-                valueFrom:
+              valueFrom:
                 secretKeyRef:
                   name: core-laravel-mysql-db
-                  key:  username
-            
+                  key: username
             - name: DB_PASSWORD
-               valueFrom:
-               secretKeyRef:
-                 name: core-laravel-mysql-db
-                 key: password
+              valueFrom:
+                secretKeyRef:
+                  name: core-laravel-mysql-db
+                  key: password
