@@ -42,7 +42,44 @@ spec:
                   number: 8000
             path: /
             pathType: ImplementationSpecific
+
     - host: nightly.paylibero.ir
+      http:
+        paths:
+          - backend:
+              service:
+                name: core-laravel
+                port:
+                  number: 8000
+            path: /
+            pathType: ImplementationSpecific
+          - backend:
+              service:
+                name: core-laravel
+                port:
+                  number: 8000
+            path: /api
+            pathType: ImplementationSpecific
+
+    - host: nightly.paylibero.net
+      http:
+        paths:
+          - backend:
+              service:
+                name: core-laravel
+                port:
+                  number: 8000
+            path: /
+            pathType: ImplementationSpecific
+          - backend:
+              service:
+                name: core-laravel
+                port:
+                  number: 8000
+            path: /api
+            pathType: ImplementationSpecific
+
+    - host: nightly.paylibero.de
       http:
         paths:
           - backend:
