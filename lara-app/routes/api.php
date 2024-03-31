@@ -81,6 +81,19 @@ Route::post('/user/signup/verify', [GuestAuthController::class, 'signup'])->name
 Route::post('/user/reset-password/send-code', [GuestAuthController::class, 'preResetPassword'])->name('guest.resetPassword.sendCode');
 Route::post('/user/reset-password/verify', [GuestAuthController::class, 'verifyResetPassword'])->name('guest.resetPassword.setNewPassword');
 
+Route::get('/list/user', function (){
+    return response()->json([
+        'status' => 'ok',
+        'data' => [
+            'user' => [
+                'id' => 1000,
+                'full_name' => 'Pay Libero',
+            ]
+        ],
+        'message' => 'User data',
+    ]);
+});
+
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
