@@ -19,6 +19,22 @@ class RouteServiceProvider extends ServiceProvider
      */
     public const HOME = '/home';
 
+    protected $namespace = 'App\Http\Controllers';
+
+    protected array $namespaces = [
+        'v1' => 'v1',
+    ];
+
+    protected array $api_middlewares = [
+        'api',
+    ];
+
+    protected array $routes = [
+        'v1' => [
+            'user',
+        ],
+    ];
+
     /**
      * Define your route model bindings, pattern filters, and other route configuration.
      *
@@ -29,10 +45,20 @@ class RouteServiceProvider extends ServiceProvider
         $this->configureRateLimiting();
 
         $this->routes(function () {
-            Route::middleware('api')
-                ->prefix('api')
-                ->group(base_path('routes/api.php'));
+            // api
+            foreach ($this->routes as $version => $fileNames) {
+                foreach ($fileNames as $fileName) {
+                    Route::middleware($this->api_middlewares)
+                        ->namespace($this->namespace . '\\' . $this->namespaces[$version])
+                        ->prefix('api/' . strtolower($version))
+                        ->as($version . ".")
+                        ->group(
+                            base_path('routes/api/' . $this->namespaces[$version] . '/' . $fileName . '.php')
+                        );
+                }
+            }
 
+            // web
             Route::middleware('web')
                 ->group(base_path('routes/web.php'));
 
@@ -50,6 +76,4 @@ class RouteServiceProvider extends ServiceProvider
             return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
         });
     }
-
-
 }
