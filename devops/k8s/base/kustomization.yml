@@ -5,9 +5,11 @@ resources:
   - services/mysql.yml
   - services/core-laravel.yml
   - services/pex-app.yml
-  
+  - services/pex-storybook.yml
+
   - deployments/core-laravel.yml
   - deployments/pex-app.yml
+  - deployments/pex-storybook.yml
 
   - statefulsets/mysql.yml
 

@@ -61,6 +61,17 @@ spec:
             path: /api
             pathType: ImplementationSpecific
 
+    - host: storybook.paylibero.ir
+      http:
+        paths:
+          - backend:
+              service:
+                name: pex-storybook
+                port:
+                  number: 80
+            path: /
+            pathType: ImplementationSpecific
+
     - host: nightly.paylibero.net
       http:
         paths:
