@@ -18,9 +18,6 @@ components:
 security:
   - bearer: []
 servers:
-  - url: http://localhost:8000/api
   - url: http://localhost:8000/api/v1
-  - url: http://localhost:8000/api/v2
   - url: https://paylibero.ir/api/v1
-  - url: https://paylibero.ir/api/v2
 paths:
