@@ -1,0 +1,21 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  labels:
+    type: db-mysql-backup
+  name: db-mysql-backup
+spec:
+  concurrencyPolicy: Forbid
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - env:
+            - name: region_name
+              value: nightly
+            name: db-mysql-backup
+  schedule: 0 1 1 1 *
+  successfulJobsHistoryLimit: 7
+  suspend: true

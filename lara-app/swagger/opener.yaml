@@ -1,0 +1,23 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: PayLibero API
+  description: description...
+components:
+  securitySchemes:
+    bearer:
+      type: http
+      scheme: bearer
+  responses:
+    default:
+      description: ''
+      content:
+        application/json:
+          schema:
+            type: object
+security:
+  - bearer: []
+servers:
+  - url: http://localhost:8000/api/v1
+  - url: https://paylibero.ir/api/v1
+paths:

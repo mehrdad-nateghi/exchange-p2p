@@ -1,5 +1,8 @@
 <?php
 
+var_dump("HELLO TEST");
+die;
+
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Http\Request;
 

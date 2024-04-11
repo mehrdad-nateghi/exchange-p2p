@@ -30,6 +30,7 @@ use App\Http\Controllers\Applicant\BidController as ApplicantBidController;
 
 /* Requests Management Routes */
 // Guest User Routes
+
 Route::get('/requests/filter', [GuestRequestController::class,'getRequests'])->name('guest.requests.get.byFilter');
 Route::get('/requests/{requestId}', [GuestRequestController::class,'getRequest'])->name('guest.requests.get.single');
 Route::get('/payment-methods', [GuestPaymentMethodController::class,'getPaymentMethods'])->name('guest.paymentMethods.get');
@@ -54,7 +55,6 @@ Route::middleware(['auth:api', 'is.applicant', 'email.is.verified'])->prefix('ap
     Route::post('/reset-password',[ApplicantAuthController::class, 'resetPassword'])->name('applicant.auth.resetPassword');
     Route::post('requests/bid/register/{requestId}',[ApplicantBidController::class, 'register'])->name('applicant.requests.bid.register');
     Route::post('/bids/accept',[ApplicantBidController::class, 'acceptBid'])->name('applicant.bids.accept');
-    Route::get('/get-token',[ApplicantAuthController::class, 'getToken'])->name('applicant.auth.getToken')->middleware('validate.token.in.cookie');
 });
 
 // Admin Routes
@@ -68,7 +68,6 @@ Route::middleware(['auth:api', 'is.admin', 'email.is.verified'])->prefix('admin'
     Route::delete('/payment-methods/unlink/{linkedMethodId}', [AdminPaymentMethodController::class, 'unlinkPaymentMethod'])->name('admin.paymentMethods.unlink');
     Route::post('/applicant/payment-methods/link/{applicantId}/{paymentMethodId}', [AdminPaymentMethodController::class, 'linkPaymentMethodToApplicantAccount'])->name('admin.applicant.paymentMethods.link');
     Route::put('/payment-methods/linked-method/update/{linkedMethodId}', [AdminPaymentMethodController::class, 'updateLinkedMethod'])->name('admin.paymentMethods.linkedMethod.update');
-    Route::get('/get-token',[AdminAuthController::class, 'getToken'])->name('admin.auth.getToken')->middleware('validate.token.in.cookie');
 });
 
 /* Bids Management Routes */
@@ -85,4 +84,17 @@ Route::post('/user/reset-password/verify', [GuestAuthController::class, 'verifyR
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
+});
+
+Route::get('/list/user', function (){
+    return response()->json([
+        'status' => 'ok',
+        'data' => [
+            'user' => [
+                'id' => 1000,
+                'full_name' => 'Pay Libero',
+            ]
+        ],
+        'message' => 'User data',
+    ]);
 });

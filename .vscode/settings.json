@@ -6,6 +6,7 @@
     "interruptible",
     "kustomize",
     "laravel",
+    "nextjs",
     "paylibero",
     "statefulsets"
   ]
