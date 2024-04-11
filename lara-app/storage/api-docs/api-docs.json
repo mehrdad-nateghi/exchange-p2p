@@ -121,6 +121,47 @@
                 ]
             }
         },
+        "/api/admin/get-token": {
+            "get": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Get token included into cookie",
+                "operationId": "getTokenIncludedInCookieByAdmin",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "token": {
+                                            "description": "An access token dispatched from the cookie.",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/admin/applicant/payment-methods/{applicantId}": {
             "get": {
                 "tags": [
@@ -946,6 +987,47 @@
                     },
                     "422": {
                         "description": "Unprocessable request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/applicant/get-token": {
+            "get": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Get token included into cookie",
+                "operationId": "getTokenIncludedInCookieByApplicant",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "token": {
+                                            "description": "An access token dispatched from the cookie.",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     },
                     "401": {
                         "description": "Unauthorized"

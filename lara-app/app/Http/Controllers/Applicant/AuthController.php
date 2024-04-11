@@ -10,6 +10,8 @@ use App\Http\Resources\UserResource;
 use App\Interfaces\AuthRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Laravel\Passport\Token;
 
 class AuthController extends Controller
 {
@@ -227,4 +229,41 @@ class AuthController extends Controller
 
         return response(['error' => 'Internal server error.'], 500);
     }
+
+    /**
+     * @OA\Get(
+     *     path="/api/applicant/get-token",
+     *     summary="Get token included into cookie",
+     *     tags={"Authentication"},
+     *     operationId="getTokenIncludedInCookieByApplicant",
+     *     security={
+     *           {"bearerAuth": {}}
+     *     },
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation",
+     *         @OA\JsonContent(
+     *              @OA\Property(property="token", type="string", description="An access token dispatched from the cookie."),
+     *      )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized"
+     *     ),
+     *     @OA\Response(
+     *         response=403,
+     *         description="Forbidden"
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal Server Error",
+     *     )
+     * )
+     */
+    public function getToken(Request $request) {
+        $token = $this->authRepository->getTokenFromCookie($request);
+
+        return response(['token' => $token], 200);
+    }
+
 }
