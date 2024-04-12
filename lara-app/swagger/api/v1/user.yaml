@@ -3,9 +3,6 @@
       description: ''
       tags:
         - User list (v1)
-      parameters: [
-
-      ]
       responses:
         '200':
           description: Successful operation
