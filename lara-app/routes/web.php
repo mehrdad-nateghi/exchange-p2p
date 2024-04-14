@@ -19,4 +19,5 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-
+Route::get('api_list', [SwaggerController::class, 'api']);
+Route::view('swagger_ui', 'swagger.index');

@@ -31,7 +31,6 @@ class RouteServiceProvider extends ServiceProvider
 
     protected array $routes = [
         'v1' => [
-            'swagger',
             'user',
         ],
     ];
