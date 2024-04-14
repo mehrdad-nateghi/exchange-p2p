@@ -6,7 +6,6 @@ use App\Http\Controllers\Applicant\RequestController as ApplicantRequestControll
 use App\Http\Controllers\Admin\RequestController as AdminRequestController;
 use App\Http\Controllers\Applicant\AuthController as ApplicantAuthController;
 use App\Http\Controllers\Guest\BidController as GuestBidController;
-use App\Http\Controllers\Swagger\SwaggerController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Applicant\PaymentMethodController as ApplicantPaymentMethodController;
