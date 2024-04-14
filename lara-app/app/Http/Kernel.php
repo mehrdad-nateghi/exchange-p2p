@@ -69,5 +69,6 @@ class Kernel extends HttpKernel
         'is.applicant' => \App\Http\Middleware\IsApplicant::class,
         'is.admin' => \App\Http\Middleware\IsAdmin::class,
         'email.is.verified' => \App\Http\Middleware\EmailVerifiedMiddleware::class,
+        'validate.token.in.cookie' => \App\Http\Middleware\ValidateTokenInCookie::class,
     ];
 }

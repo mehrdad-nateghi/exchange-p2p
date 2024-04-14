@@ -34,7 +34,7 @@ spec:
             - name: APP_DEBUG
               value: 'false'
             - name: APP_URL
-              value: http://localhost
+              value: https://core-lara-33e1254e7d-paylibero-nightly.apps.ir-thr-ba1.arvancaas.ir
             - name: LOG_CHANNEL
               value: stack
             - name: LOG_DEPRECATIONS_CHANNEL
@@ -124,7 +124,7 @@ spec:
             - name: APP_DEBUG
               value: 'false'
             - name: APP_URL
-              value: http://localhost
+              value: https://core-lara-33e1254e7d-paylibero-nightly.apps.ir-thr-ba1.arvancaas.ir
             - name: LOG_CHANNEL
               value: stack
             - name: LOG_DEPRECATIONS_CHANNEL

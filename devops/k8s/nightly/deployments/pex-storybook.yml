@@ -1,0 +1,16 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pex-storybook
+spec:
+  template:
+    spec:
+      containers:
+        - name: pex-storybook
+          resources:
+            requests:
+              memory: '128Mi'
+              cpu: '64m'
+            limits:
+              memory: '256Mi'
+              cpu: '128m'

@@ -10,6 +10,7 @@ resources:
 patches:
   - path: deployments/core-laravel.yml
   - path: deployments/pex-app.yml
+  - path: deployments/pex-storybook.yml
   - path: statefulsets/mysql.yml
   - path: cronjobs/mysql_backup.yml
 
@@ -17,4 +18,6 @@ images:
   - name: docker.io/paylibero/build-core-laravel
     newTag: ${DEPLOY_COMMIT_SHORT_SHA}
   - name: docker.io/paylibero/pex-app
+    newTag: ${DEPLOY_COMMIT_SHORT_SHA}
+  - name: docker.io/paylibero/pex-storybook
     newTag: ${DEPLOY_COMMIT_SHORT_SHA}

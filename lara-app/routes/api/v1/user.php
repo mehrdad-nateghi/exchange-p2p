@@ -85,3 +85,16 @@ Route::post('/user/reset-password/verify', [GuestAuthController::class, 'verifyR
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::get('/list/user', function (){
+    return response()->json([
+        'status' => 'ok',
+        'data' => [
+            'user' => [
+                'id' => 1000,
+                'full_name' => 'Pay Libero',
+            ]
+        ],
+        'message' => 'User data',
+    ]);
+});

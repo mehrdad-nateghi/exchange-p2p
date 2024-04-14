@@ -14,6 +14,7 @@ trigger-core-laravel:
   rules:
     - if: '($CI_PIPELINE_SOURCE != "pipeline") && (($CI_MERGE_REQUEST_ID && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main" && $CI_MERGE_REQUEST_TITLE !~ /^Draft:/) || $CI_COMMIT_REF_NAME == "main" || $CI_COMMIT_REF_NAME == "production")'
       changes:
+        - .gitlab-ci.yml
         - lara-app/**/*
         - .gitlab-ci.templates.yml
         - devops/build/*
@@ -32,3 +33,15 @@ trigger-pex-app:
     strategy: depend
   rules:
     - if: $CI_PIPELINE_SOURCE == "pipeline" && $SERVICE_NAME == "pex-app"
+
+trigger-pex-storybook:
+  stage: Triggers
+  variables:
+    DEPLOY_COMMIT_SHORT_SHA: $DEPLOY_COMMIT_SHORT_SHA
+    ENVIRONMENT_NAME: $ENVIRONMENT_NAME
+    DEPLOYMENT_URL: $DEPLOYMENT_URL
+  trigger:
+    include: /devops/external-apps-ci-configs/storybook.gitlab-ci.yml
+    strategy: depend
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "pipeline" && $SERVICE_NAME == "pex-storybook"

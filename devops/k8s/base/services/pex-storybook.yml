@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: pex-storybook
+spec:
+  selector:
+    app: pex-storybook
+  ports:
+    - port: 80
+      targetPort: 80
