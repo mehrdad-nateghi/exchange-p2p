@@ -2,8 +2,12 @@
 
 namespace App\Exceptions;
 
+use Illuminate\Auth\AuthenticationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Throwable;
+use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class Handler extends ExceptionHandler
 {
@@ -41,10 +45,46 @@ class Handler extends ExceptionHandler
      *
      * @return void
      */
-    public function register()
+    public function register(): void
     {
-        $this->reportable(function (Throwable $e) {
-            //
+        $this->renderable(function (ModelNotFoundException $e, $request) {
+            if (request()->wantsJson() || $request->is('api/*')) {
+                return responseService()
+                    ->setStatusToFailed()
+                    ->setMessage('Item Not Found')
+                    ->setStatusCode(Response::HTTP_NOT_FOUND)
+                    ->getApiResponse();
+            }
+        });
+
+        $this->renderable(function (AuthenticationException $e, $request) {
+            if (request()->wantsJson() || $request->is('api/*')) {
+                return responseService()
+                    ->setStatusToFailed()
+                    ->setMessage('unAuthenticated')
+                    ->setStatusCode(Response::HTTP_UNAUTHORIZED)
+                    ->getApiResponse();
+            }
+        });
+
+        $this->renderable(function (ValidationException $e, $request) {
+            if (request()->wantsJson() || $request->is('api/*')) {
+                return responseService()
+                    ->setStatusToFailed()
+                    ->setMessage('UnprocessableEntity')
+                    ->setStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY)
+                    ->getApiResponse();
+            }
+        });
+
+        $this->renderable(function (NotFoundHttpException $e, $request) {
+            if (request()->wantsJson() || $request->is('api/*')) {
+                return responseService()
+                    ->setStatusToFailed()
+                    ->setMessage('The requested link does not exist')
+                    ->setStatusCode(Response::HTTP_BAD_REQUEST)
+                    ->getApiResponse();
+            }
         });
     }
 }
