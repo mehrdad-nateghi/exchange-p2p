@@ -91,7 +91,15 @@ class ResponseService
         );
     }
 
-    public function responseApi($status, $message = null, $data = null, $code = 200, $headers = []): JsonResponse
+    /**
+     * @param $status
+     * @param $message
+     * @param $data
+     * @param  int  $code
+     * @param  array  $headers
+     * @return JsonResponse
+     */
+    private function responseApi(string $status,$message = null,$data = null, int $code = 200, array $headers = []): JsonResponse
     {
         return response()->json(
             compact('status', 'message', 'data'),
