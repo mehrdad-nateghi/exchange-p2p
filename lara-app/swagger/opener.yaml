@@ -20,4 +20,3 @@ security:
 servers:
   - url: http://localhost:8000/api/v1
   - url: https://paylibero.ir/api/v1
-paths:
