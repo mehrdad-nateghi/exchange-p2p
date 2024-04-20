@@ -83,12 +83,9 @@ spec:
           args:
             - |
               cd /var/www
-              php artisan key:generate 
+              php artisan optimize:clear
+              php artisan optimize
               php artisan migrate --force
-              php artisan cache:clear
-              php artisan config:clear
-              php artisan route:clear
-              php artisan passport:install
       containers:
         - image: docker.io/paylibero/build-core-laravel
           imagePullPolicy: Always
