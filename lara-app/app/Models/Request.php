@@ -112,22 +112,6 @@ class Request extends Model
     }
 
     /*
-     * Accept a specific bid for the request
-     */
-    public function acceptBid($bid) {
-
-        $this->bids()->where('id',$bid->id)->update([
-            'status' => BidStatusEnum::Confirmed
-        ]);
-
-        $this->bids()->whereIn('status',[BidStatusEnum::Top, BidStatusEnum::Registered])->update([
-            'status' => BidStatusEnum::Rejected
-        ]);
-
-        return true;
-    }
-
-    /*
     * Enum casting for the status and type fields
     */
     protected $casts = [
