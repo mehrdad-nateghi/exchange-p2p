@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\LinkedMethodStatusEnum;
 use App\Enums\UserRoleEnum;
 use App\Enums\UserStatusEnum;
+use App\Traits\UUID;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Passport\HasApiTokens;
@@ -15,7 +16,7 @@ use Illuminate\Support\Facades\Hash;
 class User extends Authenticatable
 {
 
-    use HasApiTokens,HasFactory,Notifiable,SoftDeletes;
+    use HasApiTokens,HasFactory,Notifiable,SoftDeletes, UUID;
 
     protected $table = 'users';
 
