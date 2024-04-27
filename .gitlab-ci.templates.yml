@@ -12,7 +12,7 @@ variables:
     - if: '$CI_MERGE_REQUEST_ID == null && $CI_COMMIT_REF_NAME == "production"'
 
 .build_job_template:
-  image: docker:20-dind
+  image: hub.hamdocker.ir/library/docker:20-dind
   services:
     - docker:dind
   interruptible: true
@@ -58,7 +58,7 @@ variables:
 
 .base_deploy_job_template:
   image:
-    name: bitnami/kubectl:latest
+    name: hub.hamdocker.ir/bitnami/kubectl:latest
     docker:
       user: root
     entrypoint: [""]

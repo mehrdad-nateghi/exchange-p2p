@@ -87,7 +87,7 @@ spec:
               php artisan optimize
               php artisan migrate --force
       containers:
-        - image: docker.io/paylibero/build-core-laravel
+        - image: registry.hamdocker.ir/paylibero/build-core-laravel
           imagePullPolicy: Always
           name: core-laravel
           ports:
