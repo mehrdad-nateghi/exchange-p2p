@@ -15,9 +15,9 @@ patches:
   - path: cronjobs/mysql_backup.yml
 
 images:
-  - name: docker.io/paylibero/build-core-laravel
+  - name: registry.hamdocker.ir/paylibero/build-core-laravel
     newTag: ${DEPLOY_COMMIT_SHORT_SHA}
-  - name: docker.io/paylibero/pex-app
+  - name: registry.hamdocker.ir/paylibero/pex-app
     newTag: ${DEPLOY_COMMIT_SHORT_SHA}
-  - name: docker.io/paylibero/pex-storybook
+  - name: registry.hamdocker.ir/paylibero/pex-storybook
     newTag: ${DEPLOY_COMMIT_SHORT_SHA}

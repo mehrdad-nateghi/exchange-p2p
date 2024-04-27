@@ -31,7 +31,7 @@ variables:
         CI_COMMIT_SHORT_SHA=latest docker-compose -f docker-compose.base.yml -f docker-compose.${ENVIRONMENT_NAME}.yml build -q ${SERVICE_NAME}
       fi
     - echo "--- successfully built the following docker image tag ${CI_COMMIT_SHORT_SHA} ---"
-    - docker login --username ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}
+    - docker login registry.hamdocker.ir/paylibero --username ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}
     - docker-compose -f docker-compose.base.yml -f docker-compose.${ENVIRONMENT_NAME}.yml push ${SERVICE_NAME}
     - > # push the latest tag only on commits to main
       if [ -z "$CI_MERGE_REQUEST_ID" ] && [ $CI_COMMIT_REF_NAME == "main" ]; then
