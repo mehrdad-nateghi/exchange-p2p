@@ -17,7 +17,7 @@ variables:
     - docker:dind
   interruptible: true
   tags:
-    # - shell-executer # Directly run on CI worker node instead of containers to preserve docker layer cache between builds
+    - shell-executer # Directly run on CI worker node instead of containers to preserve docker layer cache between builds
   cache: [] # we use docker cache to build
   variables:
     # for job
