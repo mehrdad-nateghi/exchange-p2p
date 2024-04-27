@@ -19,9 +19,9 @@ spec:
     spec:
       restartPolicy: Always
       imagePullSecrets:
-        - name: regcred
+        - name: hamdocker
       containers:
-        - image: docker.io/paylibero/pex-app
+        - image: registry.hamdocker.ir/paylibero/pex-app
           imagePullPolicy: Always
           name: pex-app
           ports:
