@@ -46,7 +46,6 @@ variables:
 
   - kubectl config get-contexts
   - kubectl config set-context --current --namespace=${ENVIRONMENT_PREFIX:-paylibero}-${ENVIRONMENT_NAME}
-  # - cat /etc/apt/sources.list
   # - sed -i 's/deb.debian.org/debian.hostiran.ir/g' /etc/apt/sources.list
   # - sed -i '/debian-security/d' /etc/apt/sources.list
   # for envsubst to not replace the value of $MYSQL_ROOT_PASSWORD so that probes would succeed.
@@ -59,7 +58,7 @@ variables:
 
 .base_deploy_job_template:
   image:
-    name: bitnami/kubectl:latest
+    name: hub.hamdocker.ir/bitnami/kubectl:latest
     docker:
       user: root
     entrypoint: [""]
