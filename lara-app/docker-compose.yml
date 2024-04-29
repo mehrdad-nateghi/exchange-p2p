@@ -26,13 +26,24 @@ services:
             - ./dockerfiles/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
             - database_data:/var/lib/mysql
         ports:
-            - 3306:3306
+            - 3307:3306
         environment:
             - MYSQL_DATABASE=${DB_DATABASE}
             - MYSQL_USER=${DB_USERNAME}
             - MYSQL_PASSWORD=${DB_PASSWORD}
             - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
 
+    redis:
+        image: bitnami/redis:7.2.4
+        logging:
+            driver: none
+        volumes:
+            - redis_data:/bitnami/redis/data
+        ports:
+            - 6379:6379
+        environment:
+            - ALLOW_EMPTY_PASSWORD=yes
+    
     databaseAdmin:
         depends_on:
             - database
@@ -56,3 +67,4 @@ services:
 
 volumes:
     database_data:
+    redis_data:
