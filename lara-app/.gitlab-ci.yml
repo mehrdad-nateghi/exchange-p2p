@@ -50,7 +50,7 @@ phpunit:
     - name: hub.hamdocker.ir/library/mysql:8.2
       alias: mysql
       command: ["--default-authentication-plugin=mysql_native_password"]
-    - name: hub.hamdocker.ir/library/redis:7.2.4
+    - name: hub.hamdocker.ir/library/bitnami/redis:7.2.4
       alias: redis
   variables:
     MYSQL_ROOT_PASSWORD: root
