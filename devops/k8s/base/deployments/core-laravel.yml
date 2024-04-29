@@ -70,12 +70,17 @@ spec:
               value: '120'
             - name: MEMCACHED_HOST
               value: '127.0.0.1'
+
             - name: REDIS_HOST
-              value: '127.0.0.1'
+              value: redis-headless
             - name: REDIS_PASSWORD
-              value: 'null'
+              valueFrom:
+                secretKeyRef:
+                  name: redis
+                  key: redis-password
             - name: REDIS_PORT
               value: '6379'
+
             - name: RUN_SETUP_COMMANDS
               value: 'false'
           image: registry.hamdocker.ir/paylibero/build-core-laravel
@@ -150,12 +155,17 @@ spec:
               value: '120'
             - name: MEMCACHED_HOST
               value: '127.0.0.1'
+
             - name: REDIS_HOST
-              value: '127.0.0.1'
+              value: redis-headless
             - name: REDIS_PASSWORD
-              value: 'null'
+              valueFrom:
+                secretKeyRef:
+                  name: redis
+                  key: redis-password
             - name: REDIS_PORT
               value: '6379'
+
             - name: RUN_SETUP_COMMANDS
               value: 'false'
           resources: {}
