@@ -1,3 +1,6 @@
+
+# VERSION: 7.2.4
+
 architecture: replication
 auth:
   enabled: true
