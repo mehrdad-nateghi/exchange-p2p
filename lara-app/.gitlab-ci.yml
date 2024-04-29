@@ -47,10 +47,10 @@ phpunit:
     - php artisan migrate:fresh --seed
     - php -d memory_limit=256M ./vendor/bin/phpunit --coverage-text --colors=never
   services:
-    - name: mysql:8.2
+    - name: hub.hamdocker.ir/library/mysql:8.2
       alias: mysql
       command: ["--default-authentication-plugin=mysql_native_password"]
-    - name: redis:7.2.4
+    - name: hub.hamdocker.ir/library/redis:7.2.4
       alias: redis
   variables:
     MYSQL_ROOT_PASSWORD: root
