@@ -50,7 +50,7 @@ phpunit:
     - name: mysql:8.2
       alias: mysql
       command: ["--default-authentication-plugin=mysql_native_password"]
-    - name: bitnami:redis:7.2.4
+    - name: redis:7.2.4
       alias: redis
   variables:
     MYSQL_ROOT_PASSWORD: root
