@@ -19,7 +19,7 @@ class VerificationCode extends Model
     use HasFactory, SoftDeletes, UUID, Notifiable;
 
     protected $fillable = [
-        'code', 'via', 'type', 'expired_at'
+        'code','to', 'via', 'type', 'expired_at',
     ];
 
     protected $casts = [

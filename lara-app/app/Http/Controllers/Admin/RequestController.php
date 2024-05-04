@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Enums\old\BidStatusEnum;
-use App\Enums\old\RequestStatusEnum;
+use App\Enums\Legacy\BidStatusEnum;
+use App\Enums\Legacy\RequestStatusEnum;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\UpdateRequestRequest;
+use App\Http\Requests\Legacy\UpdateRequestRequest;
 use App\Http\Resources\PaymentMethodResource;
 use App\Interfaces\UserRepositoryInterface;
 use App\Models\Request;

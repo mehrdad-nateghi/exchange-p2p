@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Applicant;
 
-use App\Enums\old\BidStatusEnum;
-use App\Enums\old\RequestStatusEnum;
+use App\Enums\Legacy\BidStatusEnum;
+use App\Enums\Legacy\RequestStatusEnum;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\CreateRequestRequest;
-use App\Http\Requests\UpdateRequestRequest;
+use App\Http\Requests\Legacy\CreateRequestRequest;
+use App\Http\Requests\Legacy\UpdateRequestRequest;
 use App\Http\Resources\PaymentMethodResource;
 use App\Http\Resources\RequestResource;
 use App\Interfaces\UserRepositoryInterface;
@@ -266,7 +266,7 @@ class RequestController extends Controller
                 'acceptance_threshold' => $validated_data['acceptance_threshold'],
                 'request_rate' => $validated_data['request_rate'],
                 'description' => $validated_data['description'],
-                'status' => \App\Enums\old\RequestStatusEnum::Pending ,
+                'status' => \App\Enums\Legacy\RequestStatusEnum::Pending ,
                 'applicant_id' => $applicant->id
             ]);
 

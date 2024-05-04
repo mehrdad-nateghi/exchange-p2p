@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\Applicant;
 
-use App\Enums\old\BidStatusEnum;
-use App\Enums\old\BidTypeEnum;
-use App\Enums\old\LinkedMethodStatusEnum;
-use App\Enums\old\RequestStatusEnum;
-use App\Enums\old\RequestTypeEnum;
-use App\Enums\old\TradeStatusEnum;
+use App\Enums\Legacy\BidStatusEnum;
+use App\Enums\Legacy\BidTypeEnum;
+use App\Enums\Legacy\LinkedMethodStatusEnum;
+use App\Enums\Legacy\RequestStatusEnum;
+use App\Enums\Legacy\RequestTypeEnum;
+use App\Enums\Legacy\TradeStatusEnum;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\AcceptBidRequest;
-use App\Http\Requests\RegisterBidRequest;
+use App\Http\Requests\Legacy\AcceptBidRequest;
+use App\Http\Requests\Legacy\RegisterBidRequest;
 use App\Models\Bid as BidModel;
 use App\Models\Request as RequestModel;
 use Exception;

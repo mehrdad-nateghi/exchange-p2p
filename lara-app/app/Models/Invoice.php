@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Enums\InvoiceTypeEnum;
-use App\Enums\old\InvoiceStatusEnum;
+use App\Enums\Legacy\InvoiceStatusEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 

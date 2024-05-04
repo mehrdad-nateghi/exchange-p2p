@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Applicant;
 
-use App\Enums\old\UserRoleEnum;
+use App\Enums\Legacy\UserRoleEnum;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\SetPasswordRequest;
-use App\Http\Requests\SignInRequest;
+use App\Http\Requests\Legacy\SetPasswordRequest;
+use App\Http\Requests\Legacy\SignInRequest;
 use App\Http\Resources\UserResource;
 use App\Interfaces\AuthRepositoryInterface;
 use Illuminate\Http\Request;

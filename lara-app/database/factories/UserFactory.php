@@ -18,12 +18,12 @@ class UserFactory extends Factory
     public function definition()
     {
         return [
-            'role' => \App\Enums\old\UserRoleEnum::Admin,
+            'role' => \App\Enums\Legacy\UserRoleEnum::Admin,
             'first_name' => fake()->name(),
             'last_name' => fake()->lastName(),
             'email' => fake()->unique()->safeEmail(),
             'password' => Hash::make(fake()->password()),
-            'status' => \App\Enums\old\UserStatusEnum::Active,
+            'status' => \App\Enums\Legacy\UserStatusEnum::Active,
             'created_at' => fake()->dateTime()
         ];
     }

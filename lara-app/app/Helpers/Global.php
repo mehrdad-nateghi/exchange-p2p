@@ -1,7 +1,6 @@
 <?php
 
-use App\Services\ResponseService;
-use Illuminate\Support\Facades\Crypt;
+use App\Services\API\V1\ResponseService;
 
 /////////////////////////////////////////////////////
 if (!function_exists('responseService')) {

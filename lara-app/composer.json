@@ -16,7 +16,8 @@
     "laravel/passport": "^11.9",
     "laravel/sanctum": "^3.0",
     "laravel/tinker": "^2.7",
-    "spatie/laravel-data": "^3.12"
+    "spatie/laravel-data": "^3.12",
+    "timehunter/laravel-google-recaptcha-v3": "~2.5"
   },
   "require-dev": {
     "barryvdh/laravel-debugbar": "^3.7",

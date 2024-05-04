@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use App\Enums\old\LinkedMethodStatusEnum;
-use App\Enums\old\UserRoleEnum;
-use App\Enums\old\UserStatusEnum;
+use App\Enums\Legacy\LinkedMethodStatusEnum;
+use App\Enums\Legacy\UserRoleEnum;
+use App\Enums\Legacy\UserStatusEnum;
 use App\Traits\UUID;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;

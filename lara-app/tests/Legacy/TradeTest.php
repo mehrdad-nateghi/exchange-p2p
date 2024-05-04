@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Enums\old\UserRoleEnum;
+use App\Enums\Legacy\UserRoleEnum;
 use App\Models\Bid;
 use App\Models\Country;
 use App\Models\Email;
