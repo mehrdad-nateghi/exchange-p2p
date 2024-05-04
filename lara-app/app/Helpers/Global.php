@@ -1,12 +1,12 @@
 <?php
 
-use App\Services\API\V1\ResponseService;
+use App\Services\Global\ApiResponseService;
 
 /////////////////////////////////////////////////////
-if (!function_exists('responseService')) {
-    function responseService(): ResponseService
+if (!function_exists('apiResponse')) {
+    function apiResponse(): ApiResponseService
     {
-        return new ResponseService();
+        return new ApiResponseService();
     }
 }
 /////////////////////////////////////////////////////

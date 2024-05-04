@@ -25,18 +25,18 @@ class SendCodeController extends Controller
             $emailNotificationService->verificationCode($verificationCode, $verificationCodeService->getCode());
 
             // send to user's email
-            return responseService()
-                ->setMessage(trans('api-message.common.success'))
-                ->setData($data)
-                ->setStatusCode(Response::HTTP_CREATED)
+            return apiResponse()
+                ->message(trans('api-message.common.success'))
+                ->data($data)
+                ->statusCode(Response::HTTP_CREATED)
                 ->getApiResponse();
         }catch (\Throwable $t){
             Log::error($t);
 
-            return responseService()
-                ->setStatus('failed')
-                ->setStatusCode(Response::HTTP_BAD_REQUEST)
-                ->setMessage(trans('api-message.common.error'))
+            return apiResponse()
+                ->failed()
+                ->statusCode(Response::HTTP_BAD_REQUEST)
+                ->message(trans('api-message.common.error'))
                 ->getApiResponse();
         }
     }

@@ -12,7 +12,6 @@ use App\Services\API\V1\VerificationCodeService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Symfony\Component\HttpFoundation\Response;
 
 class SignupController extends Controller
 {
@@ -40,21 +39,19 @@ class SignupController extends Controller
 
             DB::commit();
 
-            //todo-mn: new message: verification code sent successfully to the email
-            return responseService()
-                ->setMessage(trans('api-message.common.success'))
-                //->setData($verificationCode)
-                ->setStatusCode(Response::HTTP_CREATED)
+            return apiResponse()
+                ->message(trans('api-message.verification_code_sent_successfully'))
+                ->created()
                 ->getApiResponse();
         } catch (\Throwable $t) {
             DB::rollBack();
 
             Log::error($t);
 
-            return responseService()
-                ->setStatus('failed')
-                ->setStatusCode(Response::HTTP_BAD_REQUEST)
-                ->setMessage(trans('api-message.common.error'))
+            return apiResponse()
+                ->failed()
+                ->serverError()
+                ->message(trans('api-message.internal_server_error'))
                 ->getApiResponse();
         }
     }

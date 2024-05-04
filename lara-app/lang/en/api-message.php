@@ -8,4 +8,12 @@ return [
     'delete.success' => 'The resource was deleted successfully.',
     'common.success' => 'The action was successful.',
     'common.error' => 'An error occurred.',
+    'internal_server_error' => 'Internal Server Error!',
+    'un_authenticated' => 'unAuthenticated',
+    'un_processable_entity' => 'unAuthenticated',
+    'item_not_found' => 'Item Not Found',
+    'requested_link_does_not_exist' => 'requested link does not exist',
+
+    // Verification Code
+    'verification_code_sent_successfully' => 'Verification code sent successfully'
 ];
