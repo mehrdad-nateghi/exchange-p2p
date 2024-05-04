@@ -2,23 +2,19 @@
 
 namespace App\Http\Controllers\Applicant;
 
-use App\Enums\BidStatusEnum;
-use App\Enums\LinkedMethodStatusEnum;
-use App\Enums\RequestStatusEnum;
+use App\Enums\old\BidStatusEnum;
+use App\Enums\old\RequestStatusEnum;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\RequestResource;
-use App\Models\Request as RequestModel;
 use App\Http\Requests\CreateRequestRequest;
 use App\Http\Requests\UpdateRequestRequest;
 use App\Http\Resources\PaymentMethodResource;
+use App\Http\Resources\RequestResource;
 use App\Interfaces\UserRepositoryInterface;
 use App\Models\Country;
-use App\Models\Financial;
+use App\Models\Request as RequestModel;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
-use App\Repositories\UserRepository;
 
 /**
  * @OA\Tag(
@@ -270,7 +266,7 @@ class RequestController extends Controller
                 'acceptance_threshold' => $validated_data['acceptance_threshold'],
                 'request_rate' => $validated_data['request_rate'],
                 'description' => $validated_data['description'],
-                'status' => \App\Enums\RequestStatusEnum::Pending ,
+                'status' => \App\Enums\old\RequestStatusEnum::Pending ,
                 'applicant_id' => $applicant->id
             ]);
 

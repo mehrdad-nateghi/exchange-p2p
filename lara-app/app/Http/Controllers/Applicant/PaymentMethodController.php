@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Applicant;
 
-use App\Enums\LinkedMethodStatusEnum;
+use App\Enums\old\LinkedMethodStatusEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LinkPaymentMethodRequest;
 use App\Models\LinkedMethod;

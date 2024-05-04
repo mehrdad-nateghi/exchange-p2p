@@ -71,7 +71,8 @@ class Handler extends ExceptionHandler
             if (request()->wantsJson() || $request->is('api/*')) {
                 return responseService()
                     ->setStatusToFailed()
-                    ->setMessage('UnprocessableEntity')
+                    ->setMessage($e->getMessage())
+                    ->setData(['errors' => $e->errors()])
                     ->setStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY)
                     ->getApiResponse();
             }

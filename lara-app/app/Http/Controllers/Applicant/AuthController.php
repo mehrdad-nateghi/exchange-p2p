@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Applicant;
 
-use App\Enums\UserRoleEnum;
+use App\Enums\old\UserRoleEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SetPasswordRequest;
 use App\Http\Requests\SignInRequest;
@@ -10,8 +10,6 @@ use App\Http\Resources\UserResource;
 use App\Interfaces\AuthRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
-use Laravel\Passport\Token;
 
 class AuthController extends Controller
 {

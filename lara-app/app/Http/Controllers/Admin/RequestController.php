@@ -2,15 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Enums\BidStatusEnum;
-use App\Enums\RequestStatusEnum;
+use App\Enums\old\BidStatusEnum;
+use App\Enums\old\RequestStatusEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateRequestRequest;
 use App\Http\Resources\PaymentMethodResource;
 use App\Interfaces\UserRepositoryInterface;
 use App\Models\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 /**
  * @OA\Tag(

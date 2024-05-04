@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Enums\UserRoleEnum;
+use App\Enums\old\UserRoleEnum;
 use App\Models\Bid;
 use App\Models\Email;
 use App\Models\EmailTemplate;
@@ -13,7 +13,6 @@ use App\Models\Request;
 use App\Models\Trade;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class BidTest extends TestCase

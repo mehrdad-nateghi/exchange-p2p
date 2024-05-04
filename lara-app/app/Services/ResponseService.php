@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Response;
+namespace App\Services;
 
 use Illuminate\Http\JsonResponse;
 
@@ -102,7 +102,7 @@ class ResponseService
     private function responseApi(string $status,$message = null,$data = null, int $code = 200, array $headers = []): JsonResponse
     {
         return response()->json(
-            compact('status', 'message', 'data'),
+            compact('status', 'code', 'message', 'data'),
             $code,
             $headers,
             JSON_UNESCAPED_UNICODE

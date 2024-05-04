@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\Applicant;
 
-use App\Enums\BidStatusEnum;
-use App\Enums\BidTypeEnum;
-use App\Enums\LinkedMethodStatusEnum;
-use App\Enums\RequestStatusEnum;
-use App\Enums\RequestTypeEnum;
+use App\Enums\old\BidStatusEnum;
+use App\Enums\old\BidTypeEnum;
+use App\Enums\old\LinkedMethodStatusEnum;
+use App\Enums\old\RequestStatusEnum;
+use App\Enums\old\RequestTypeEnum;
+use App\Enums\old\TradeStatusEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AcceptBidRequest;
 use App\Http\Requests\RegisterBidRequest;
-use App\Interfaces\BidRepositoryInterface;
 use App\Models\Bid as BidModel;
 use App\Models\Request as RequestModel;
 use Exception;
@@ -18,15 +18,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
-
 class BidController extends Controller
 {
-    private $bidRepository;
-
-    public function __construct(BidRepositoryInterface $bidRepository)
-    {
-        $this->bidRepository = $bidRepository;
-    }
 
     /**
      * @OA\Post(
@@ -166,17 +159,9 @@ class BidController extends Controller
                     ]);
                 }
 
-                // Check automatic new_bid confirmation potential
-                $auto_bid_confirmation = $this->bidRepository->autoConfirmBid($req, $new_bid);
-                if($auto_bid_confirmation['status'] == 200) {
-                    DB::commit();
-                    return response(['message' => 'New bid registered successfully and confirmed automatically.'], 200);
-                } elseif($auto_bid_confirmation['status'] == 422) {
-                    DB::commit();
-                    return response(['message' => 'New bid registered successfully.'], 200);
-                } else{
-                    throw new Exception($auto_bid_confirmation['message']);
-                }
+                DB::commit();
+
+                return response(['message' => 'New bid registered successfully.'], 200);
             }
             else {
                 throw new Exception('An error occurred while registering the new bid.');
@@ -185,8 +170,9 @@ class BidController extends Controller
             DB::rollBack();
             return response(['message' => $e->getMessage()], 500);
         }
-    }
 
+
+    }
 
      /**
      * @OA\Post(
@@ -247,11 +233,51 @@ class BidController extends Controller
             return response(['message' => 'Bid not found or not associated with any request of the applicant.'], 404);
         }
 
-        $bid_acceptance = $this->bidRepository->confirmBid($bid->request, $bid);
+        $request = $bid->request;
 
-        return response(['message' => $bid_acceptance['message']],$bid_acceptance['status']);
+        DB::beginTransaction();
 
+        try {
+
+            // Proceed with the bid acceptance process
+            $request->acceptBid($bid);
+
+            // Create a trade entry
+            $trade = Trade::create([
+                'support_id' => Str::uuid(),
+                'trade_fee' => 0,
+                'request_id' => $request->id,
+                'bid_id' =>$bid->id,
+                'status' => TradeStatusEnum::RialPending,
+            ]);
+
+            if ($trade) {
+                // Set the support_id using the pattern 'TR' + id
+                $trade->update([
+                    'support_id' => config('constants.SupportId_Prefixes.Trade_Pr') . $trade->id
+                ]);
+
+                // Set system fee
+                $system_fee_set_status = $trade->setSystemFee();
+                if (!$system_fee_set_status) {
+                    throw new \Exception("An error occurred while confirming the bid, specifically setting the system fee to the trade.");
+                }
+
+                // Change the request's status
+                $request->update([
+                    'status' => RequestStatusEnum::InTrade
+                ]);
+
+                DB::commit();
+
+                return response(['message' => 'Bid confirmed successfully.'], 200);
+            }
+            else {
+                throw new \Exception("An error occurred while confirming the bid, specifically creating the trade.");
+            }
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response(['message' => 'An error occurred while confirming the bid.'], 500);
+        }
     }
-
-
 }

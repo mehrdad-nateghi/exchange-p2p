@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use App\Enums\BidStatusEnum;
-use App\Enums\BidTypeEnum;
+use App\Enums\old\BidStatusEnum;
+use App\Enums\old\BidTypeEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 

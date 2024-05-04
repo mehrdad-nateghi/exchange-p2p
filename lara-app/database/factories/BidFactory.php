@@ -22,9 +22,9 @@ class BidFactory extends Factory
     {
         return [
             'support_id' => config('constants.SupportId_Prefixes.Bid_Pr'). Str::uuid(),
-            'type' => \App\Enums\BidTypeEnum::Sell,
+            'type' => \App\Enums\old\BidTypeEnum::Sell,
             'bid_rate' => fake()->randomFloat($nbMaxDecimals = 2 , $min = 0, $max = 99,999,999,999.99),
-            'status' => \App\Enums\BidStatusEnum::Registered,
+            'status' => \App\Enums\old\BidStatusEnum::Registered,
             'description' => fake()->text($maxNbChars = 50),
             'request_id' => Request::factory(),
             'applicant_id' => User::factory(),

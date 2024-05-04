@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Enums\LinkedMethodStatusEnum;
-use App\Enums\UserRoleEnum;
+use App\Enums\old\LinkedMethodStatusEnum;
+use App\Enums\old\UserRoleEnum;
 use App\Http\Controllers\Controller;
 use App\Models\LinkedMethod;
 use App\Models\PaymentMethod;

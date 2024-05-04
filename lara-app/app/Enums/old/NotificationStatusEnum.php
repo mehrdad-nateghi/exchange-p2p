@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Enums;
+namespace App\Enums\old;
 
 enum NotificationStatusEnum: int{
     case Unseen = 0;

@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
      * Seed the application's database.
      *
      * @return void
+     * @throws \Exception
      */
     public function run()
     {
@@ -27,7 +28,7 @@ class DatabaseSeeder extends Seeder
         try{
             $this->call([
                 UserSeeder::class,
-                FinancialSeeder::class,
+                /*FinancialSeeder::class,
                 TradeConstraintSeeder::class,
                 FrequentQuestionSeeder::class,
                 SocialNetworkSeeder::class,
@@ -47,7 +48,7 @@ class DatabaseSeeder extends Seeder
                 TransactionMethodSeeder::class,
                 EmailTemplateSeeder::class,
                 EmailSeeder::class,
-                FileSeeder::class
+                FileSeeder::class*/
             ]);
 
             DB::commit();

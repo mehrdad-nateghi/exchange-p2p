@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Enums;
+namespace App\Enums\old;
 
 enum TransactionStatusEnum: int{
     case Unsuccessful = 0;

@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Enums\UserRoleEnum;
+use App\Enums\old\UserRoleEnum;
 use App\Models\Bid;
 use App\Models\Country;
 use App\Models\File;
@@ -15,7 +15,6 @@ use App\Models\Transaction;
 use App\Models\TransactionMethod;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class FileTest extends TestCase

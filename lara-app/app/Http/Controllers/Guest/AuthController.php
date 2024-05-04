@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Guest;
 
-use App\Enums\UserRoleEnum;
+use App\Enums\old\UserRoleEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PreForgetPasswordRequest;
 use App\Http\Requests\PreResetPasswordRequest;
@@ -13,7 +13,6 @@ use App\Http\Requests\VerifyResetPasswordRequest;
 use App\Models\EmailVerification;
 use App\Models\User;
 use Carbon\Carbon;
-use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 
@@ -30,7 +29,7 @@ class AuthController extends Controller
         $emailVerification = EmailVerification::Create(
             [
                 'email' => $email,
-                'code' => Crypt::encryptString($code),
+                'code' => Crypt::decryptString($code),
                 'expired_at' => Carbon::now()->addMinutes(config('constants.Verification_Code_Expiration_Per_Minutes'))
             ]
         );

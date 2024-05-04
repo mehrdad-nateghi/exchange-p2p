@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Enums;
+namespace App\Enums\old;
 
 enum RequestStatusEnum: int{
     case Pending = 0;

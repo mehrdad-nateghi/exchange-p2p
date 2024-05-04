@@ -19,20 +19,15 @@ class RouteServiceProvider extends ServiceProvider
      */
     public const HOME = '/home';
 
-    protected $namespace = 'App\Http\Controllers';
-
-    protected array $namespaces = [
-        'v1' => 'v1',
-    ];
-
     protected array $api_middlewares = [
         'api',
     ];
 
-    protected array $routes = [
-        'v1' => [
+    protected $routes = [
+        'V1' => [
             'swagger',
-            'user',
+            'auth',
+            //'user',
         ],
     ];
 
@@ -41,7 +36,7 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         $this->configureRateLimiting();
 
@@ -50,11 +45,10 @@ class RouteServiceProvider extends ServiceProvider
             foreach ($this->routes as $version => $fileNames) {
                 foreach ($fileNames as $fileName) {
                     Route::middleware($this->api_middlewares)
-                        ->namespace($this->namespace . '\\' . $this->namespaces[$version])
                         ->prefix('api/' . strtolower($version))
                         ->as($version . ".")
                         ->group(
-                            base_path('routes/api/' . $this->namespaces[$version] . '/' . $fileName . '.php')
+                            base_path('routes/api/' . strtolower($version) . '/' . $fileName . '.php')
                         );
                 }
             }
@@ -71,7 +65,7 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    protected function configureRateLimiting()
+    protected function configureRateLimiting(): void
     {
         RateLimiter::for('api', function (Request $request) {
             return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());

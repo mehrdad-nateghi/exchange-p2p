@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Enums\NotificationClassEnum;
-use App\Enums\NotificationStatusEnum;
+use App\Enums\old\NotificationStatusEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 

@@ -2,7 +2,7 @@
 
 namespace App\Http\Middleware;
 
-use App\Enums\UserRoleEnum;
+use App\Enums\old\UserRoleEnum;
 use Closure;
 use Illuminate\Http\Request;
 

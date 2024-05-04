@@ -2,16 +2,16 @@
 
 namespace App\Models;
 
-use App\Enums\LinkedMethodStatusEnum;
-use App\Enums\UserRoleEnum;
-use App\Enums\UserStatusEnum;
+use App\Enums\old\LinkedMethodStatusEnum;
+use App\Enums\old\UserRoleEnum;
+use App\Enums\old\UserStatusEnum;
 use App\Traits\UUID;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Laravel\Passport\HasApiTokens;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
+use Laravel\Passport\HasApiTokens;
 
 class User extends Authenticatable
 {

@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Enums\UserRoleEnum;
+use App\Enums\old\UserRoleEnum;
 use App\Http\Controllers\Applicant\RequestController as ApplicantRequestController;
 use App\Models\Bid;
 use App\Models\Country;
