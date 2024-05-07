@@ -74,10 +74,11 @@ spec:
             - name: REDIS_HOST
               value: redis-headless
             - name: REDIS_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: redis
-                  key: redis-password
+              value: TfHMhIRcw1
+              # valueFrom:
+              #   secretKeyRef:
+              #     name: redis
+              #     key: redis-password
             - name: REDIS_PORT
               value: '6379'
 
@@ -158,11 +159,13 @@ spec:
 
             - name: REDIS_HOST
               value: redis-headless
+            
             - name: REDIS_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: redis
-                  key: redis-password
+              value: TfHMhIRcw1
+              # valueFrom:
+              #   secretKeyRef:
+              #     name: redis
+              #     key: redis-password
             - name: REDIS_PORT
               value: '6379'
 
