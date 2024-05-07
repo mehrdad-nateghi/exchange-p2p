@@ -1,13 +1,13 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: pex-app
+  name: pex-admin
 spec:
   replicas: 1
   template:
     spec:
       containers:
-        - name: pex-app
+        - name: pex-admin
           resources:
             requests:
               memory: "256Mi"

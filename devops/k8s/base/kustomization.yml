@@ -5,6 +5,7 @@ resources:
   - services/mysql.yml
   - services/core-laravel.yml
   - services/pex-app.yml
+  - services/pex-admin.yml
   - services/pex-storybook.yml
 
   - deployments/core-laravel.yml

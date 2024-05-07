@@ -61,6 +61,18 @@ spec:
             path: /api
             pathType: ImplementationSpecific
 
+    - host: nightly.admin.paylibero.ir
+      http:
+        paths:
+          - backend:
+              service:
+                name: pex-app
+                port:
+                  number: 8000
+            path: /
+            pathType: ImplementationSpecific
+
+
     - host: storybook.paylibero.ir
       http:
         paths:
