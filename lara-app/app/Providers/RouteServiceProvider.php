@@ -48,7 +48,7 @@ class RouteServiceProvider extends ServiceProvider
                         ->prefix('api/' . strtolower($version))
                         ->as($version . ".")
                         ->group(
-                            base_path('routes/API/' . strtolower($version) . '/' . $fileName . '.php')
+                            base_path('routes/API/' . $version . '/' . $fileName . '.php')
                         );
                 }
             }
