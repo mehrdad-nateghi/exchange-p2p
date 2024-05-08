@@ -1,0 +1,62 @@
+"/auth/signup/send-code":
+  post:
+    tags:
+      - Auth-Signup
+    summary: Send Verification Code
+    description: Send a verification code to the provided email for setting a new password.
+    requestBody:
+      required: true
+      content:
+        application/x-www-form-urlencoded:
+          schema:
+            type: object
+            properties:
+              email:
+                type: string
+                format: email
+                description: The email address to send the verification code to.
+                default: example@example.com
+              g-recaptcha-response:
+                type: string
+                description: The reCAPTCHA response from the client.
+                default: 03AGdBq24XvxmBsQ8jd2LhfQhPUwUGJx_6PxqY3GQxNM6xXX6xXXpqYjZhgA
+            required:
+              - email
+              - g-recaptcha-response
+    responses:
+      '201':
+        description: Created Successful
+        content:
+          application/json:
+            schema:
+              properties:
+                status:
+                  type: string
+                  example: success
+                code:
+                  type: integer
+                  example: 201
+                message:
+                  type: string
+                  example: Verification code sent successfully
+                data:
+                  type: null
+                  example: null
+      '422':
+        description: Unprocessable Entity
+        content:
+          application/json:
+            schema:
+              type: object
+      '500':
+        description: Internal Server Error
+        content:
+          application/json:
+            schema:
+              type: object
+      default:
+        description: Unexpected error
+        content:
+          application/json:
+            schema:
+              type: object

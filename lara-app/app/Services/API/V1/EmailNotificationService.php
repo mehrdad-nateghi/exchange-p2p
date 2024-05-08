@@ -10,6 +10,6 @@ class EmailNotificationService
 {
     public function verificationCode($verificationCode, $code): void
     {
-        $verificationCode->notify(new VerificationCodeNotification($code));
+        $verificationCode->notify(new VerificationCodeNotification($verificationCode->to, $code));
     }
 }
