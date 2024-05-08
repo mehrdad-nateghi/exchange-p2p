@@ -1,8 +1,10 @@
-FROM php:8.2
+FROM hub.hamdocker.ir/library/php:8.2
 
 RUN apt-get update -y
 RUN apt-get install -y unzip libpq-dev libcurl4-gnutls-dev
 RUN docker-php-ext-install pdo pdo_mysql bcmath
+RUN pecl install redis
+RUN docker-php-ext-enable redis
 
 WORKDIR /var/www
 

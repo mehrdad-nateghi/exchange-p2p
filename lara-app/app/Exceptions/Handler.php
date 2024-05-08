@@ -49,40 +49,41 @@ class Handler extends ExceptionHandler
     {
         $this->renderable(function (ModelNotFoundException $e, $request) {
             if (request()->wantsJson() || $request->is('api/*')) {
-                return responseService()
-                    ->setStatusToFailed()
-                    ->setMessage('Item Not Found')
-                    ->setStatusCode(Response::HTTP_NOT_FOUND)
+                return apiResponse()
+                    ->failed()
+                    ->message(trans('api-message.item_not_found'))
+                    ->notFound()
                     ->getApiResponse();
             }
         });
 
         $this->renderable(function (AuthenticationException $e, $request) {
             if (request()->wantsJson() || $request->is('api/*')) {
-                return responseService()
-                    ->setStatusToFailed()
-                    ->setMessage('unAuthenticated')
-                    ->setStatusCode(Response::HTTP_UNAUTHORIZED)
+                return apiResponse()
+                    ->failed()
+                    ->message(trans('api-message.un_authenticated'))
+                    ->unAuthorized()
                     ->getApiResponse();
             }
         });
 
         $this->renderable(function (ValidationException $e, $request) {
             if (request()->wantsJson() || $request->is('api/*')) {
-                return responseService()
-                    ->setStatusToFailed()
-                    ->setMessage('UnprocessableEntity')
-                    ->setStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY)
+                return apiResponse()
+                    ->failed()
+                    ->message($e->getMessage())
+                    ->data(['errors' => $e->errors()])
+                    ->unProcessableEntity()
                     ->getApiResponse();
             }
         });
 
         $this->renderable(function (NotFoundHttpException $e, $request) {
             if (request()->wantsJson() || $request->is('api/*')) {
-                return responseService()
-                    ->setStatusToFailed()
-                    ->setMessage('The requested link does not exist')
-                    ->setStatusCode(Response::HTTP_BAD_REQUEST)
+                return apiResponse()
+                    ->failed()
+                    ->message(trans('api-message.requested_link_does_not_exist'))
+                    ->badRequest()
                     ->getApiResponse();
             }
         });

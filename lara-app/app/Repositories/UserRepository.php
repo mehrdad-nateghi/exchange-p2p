@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\Enums\LinkedMethodStatusEnum;
+use App\Enums\Legacy\LinkedMethodStatusEnum;
 use App\Interfaces\UserRepositoryInterface;
 use App\Models\User;
 

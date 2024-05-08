@@ -21,7 +21,7 @@ class NotificationFactory extends Factory
         return [
             'title' => fake()->word,
             'body' => fake()->text($maxNbChars = 50) ,
-            'status' => \App\Enums\NotificationStatusEnum:: Unseen,
+            'status' => \App\Enums\Legacy\NotificationStatusEnum:: Unseen,
             'user_id' => User::factory(),
             'notifiable_type' => 'App\Models\Request',
             'notifiable_id' => Request::factory(),

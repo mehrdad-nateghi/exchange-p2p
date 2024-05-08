@@ -2,6 +2,11 @@
 
 
 return [
+    'verification_code_expiration_time_per_minutes' => env('VERIFICATION_CODE_EXPIRATION_TIME_PER_MINUTES', 60),
+
+
+
+
     'Euro_Daily_Rate' => '54000', // Keep the Euro Daily Rate Value in Toman to Serve in Create Request Process
 
     'SupportId_Prefixes' => [ // Keep the Constant Prefixes to Generate Support Id for Requests, Bids, Trades, Transactions, and Invoices
@@ -12,7 +17,7 @@ return [
         'Invoice_Pr' => 'IN-'
     ],
 
-    'Verification_Code_Expiration_Per_Minutes' => '60',
+    //'Verification_Code_Expiration_Per_Minutes' => '60',
 
     'PASSPORT_ACCESS_TOKEN_EXPIRES_IN_PER_HOUR' => '24',
 

@@ -23,7 +23,7 @@ class TransactionFactory extends Factory
             'support_id' => config('constants.SupportId_Prefixes.Transaction_Pr'). Str::uuid(),
             'amount' => fake()->randomFloat($nbMaxDecimals = 2 , $min = 0, $max = 99,999,999,999.99),
             'description' => fake()->text($maxNbChars = 50),
-            'status' => \App\Enums\TransactionStatusEnum::Successful,
+            'status' => \App\Enums\Legacy\TransactionStatusEnum::Successful,
             'invoice_id' => Invoice::factory(),
             'transaction_method_id' => TransactionMethod::factory(),
             'created_at' => fake()->dateTime()

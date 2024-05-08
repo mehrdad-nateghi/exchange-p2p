@@ -2,11 +2,9 @@
 
 namespace Database\Seeders;
 
-use App\Enums\UserRoleEnum;
+use App\Enums\Legacy\UserRoleEnum;
 use App\Enums\UserTypeEnum;
-use App\Models\Request;
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 

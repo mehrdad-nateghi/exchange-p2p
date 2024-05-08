@@ -2,10 +2,9 @@
 
 namespace App\Models;
 
-use App\Enums\TradeStatusEnum;
+use App\Enums\Legacy\TradeStatusEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Log;
 
 class Trade extends Model
 {

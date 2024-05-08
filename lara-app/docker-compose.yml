@@ -1,6 +1,6 @@
 version: "3.8"
 services:
-    # PHP Service
+    ######## PHP ########
     php:
         build:
             context: .
@@ -15,10 +15,11 @@ services:
             - ./:/var/www
         ports:
             - 8000:8000
+        hostname: php
         depends_on:
             - database
 
-    # Database Server
+    ######## Database ########
     database:
         image: mysql:8.2.0
         restart: always
@@ -33,17 +34,32 @@ services:
             - MYSQL_PASSWORD=${DB_PASSWORD}
             - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
 
+    ######## Redis ########
     redis:
-        image: bitnami/redis:7.2.4
-        logging:
-            driver: none
+        image: redis:latest
         volumes:
             - redis_data:/bitnami/redis/data
         ports:
             - 6379:6379
         environment:
             - ALLOW_EMPTY_PASSWORD=yes
-    
+
+    ######## Queue ########
+    queue:
+      build:
+        context: .
+        dockerfile: dockerfiles/queues/queue.dockerfile
+      working_dir: /var/www
+      volumes:
+        - ./:/var/www
+      environment:
+        - APP_ENV=${APP_ENV}
+      restart: unless-stopped
+      depends_on:
+        - php
+        - redis
+
+    ######## Database Admin: Phpmyadmin ########
     databaseAdmin:
         depends_on:
             - database
@@ -58,6 +74,7 @@ services:
             - MYSQL_PASSWORD=${DB_PASSWORD}
             - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
 
+    ######## Mailhog ########
     mailhog:
         image: mailhog/mailhog
         container_name: 'mailhog'
