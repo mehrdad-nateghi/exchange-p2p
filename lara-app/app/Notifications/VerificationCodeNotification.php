@@ -11,6 +11,7 @@ use Illuminate\Notifications\Notification;
 class VerificationCodeNotification extends Notification implements ShouldQueue
 {
     use Queueable;
+    private string $email;
     private string $verificationCode;
 
     /**
@@ -18,8 +19,9 @@ class VerificationCodeNotification extends Notification implements ShouldQueue
      *
      * @return void
      */
-    public function __construct($verificationCode)
+    public function __construct($email, $verificationCode)
     {
+        $this->email = $email;
         $this->verificationCode = $verificationCode;
     }
 
@@ -38,7 +40,7 @@ class VerificationCodeNotification extends Notification implements ShouldQueue
     public function toMail($notifiable): VerificationCodeEmail
     {
         return (new VerificationCodeEmail($this->verificationCode))
-            ->to('test@test.com');
+            ->to($this->email);
     }
 
     /**

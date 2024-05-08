@@ -7,12 +7,12 @@
 */
 
 
-use App\Http\Controllers\API\V1\Auth\Signup\SendCode\SendCodeController;
-use App\Http\Controllers\API\V1\Auth\Signup\SignupController;
+use App\Http\Controllers\API\V1\Auth\Signup\SendCodeController;
+//use App\Http\Controllers\API\V1\Auth\Signup\SignupController;
 
 Route::name('auth.')->prefix('auth')->group(function () {
-    Route::post('/signup',SignupController::class)->name('signup');
-    //Route::get('/signup/send-code',SendCodeController::class)->name('signup.send-code');
+    //Route::post('/signup',SignupController::class)->name('signup');
+    Route::post('/signup/send-code',SendCodeController::class)->name('signup.send-code');
 });
 
 ///*Route:: group(['prefix' => 'auth'],function () {

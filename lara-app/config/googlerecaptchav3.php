@@ -12,7 +12,7 @@ return [
     | please read document.
     |
     */
-    'request_method' => 'curl',
+    'request_method' => 'guzzle',
     /*
     |--------------------------------------------------------------------------
     | Enable/Disable Service
@@ -24,7 +24,7 @@ return [
     | Supported: true, false
     |
     */
-    'is_service_enabled' => true,
+    'is_service_enabled' => env('RECAPTCHA_V3_ENABLE', true),
     /*
     |--------------------------------------------------------------------------
     | Host Name
@@ -109,7 +109,7 @@ return [
     */
     'setting' => [
         [
-            'action' => 'signup',
+            'action' => 'signup-send-code',
             'threshold' => 0.2,
             'score_comparison' => true
         ],

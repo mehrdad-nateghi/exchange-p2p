@@ -6,17 +6,17 @@ use App\Data\API\V1\VerificationCodeData;
 use App\Enums\API\V1\VerificationCodeTypeEnum;
 use App\Enums\API\V1\VerificationCodeViaEnum;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\API\V1\Auth\Signup\SignupRequest;
+use App\Http\Requests\API\V1\Auth\Signup\SendCodeRequest;
 use App\Services\API\V1\EmailNotificationService;
 use App\Services\API\V1\VerificationCodeService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-class SignupController extends Controller
+class SendCodeController extends Controller
 {
     public function __invoke(
-        SignupRequest $request,
+        SendCodeRequest $request,
         VerificationCodeService $verificationCodeService,
         EmailNotificationService $emailNotificationService
     ): JsonResponse {
