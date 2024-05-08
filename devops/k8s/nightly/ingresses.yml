@@ -66,7 +66,7 @@ spec:
         paths:
           - backend:
               service:
-                name: pex-app
+                name: pex-admin
                 port:
                   number: 8000
             path: /
