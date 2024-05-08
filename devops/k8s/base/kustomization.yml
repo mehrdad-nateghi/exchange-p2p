@@ -10,6 +10,7 @@ resources:
 
   - deployments/core-laravel.yml
   - deployments/pex-app.yml
+  - deployments/pex-admin.yml
   - deployments/pex-storybook.yml
 
   - statefulsets/mysql.yml
