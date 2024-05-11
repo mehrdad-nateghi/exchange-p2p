@@ -26,3 +26,15 @@ spec:
                 secretKeyRef:
                   name: core-laravel-mysql-db
                   key: password
+            - name: RECAPTCHA_V3_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: google-recaptcha
+                  key: secret_key
+            - name: RECAPTCHA_V3_SITE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: google-recaptcha
+                  key: site_key
+            - name: RECAPTCHA_V3_ENABLE
+              value: 'true'
