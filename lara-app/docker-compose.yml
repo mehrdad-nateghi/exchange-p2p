@@ -21,7 +21,7 @@ services:
 
     ######## Database ########
     database:
-        image: mysql:8.2.0
+        image: hub.hamdocker.ir/library/mysql:8.2.0
         restart: always
         volumes:
             - ./dockerfiles/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
@@ -36,7 +36,7 @@ services:
 
     ######## Redis ########
     redis:
-        image: redis:latest
+        image: hub.hamdocker.ir/library/redis:latest
         volumes:
             - redis_data:/bitnami/redis/data
         ports:
@@ -63,7 +63,7 @@ services:
     databaseAdmin:
         depends_on:
             - database
-        image: phpmyadmin
+        image: hub.hamdocker.ir/library/phpmyadmin
         restart: always
         ports:
             - "8090:80"
@@ -76,7 +76,7 @@ services:
 
     ######## Mailhog ########
     mailhog:
-        image: mailhog/mailhog
+        image: hub.hamdocker.ir/mailhog/mailhog
         container_name: 'mailhog'
         ports:
             - "1025:1025"
