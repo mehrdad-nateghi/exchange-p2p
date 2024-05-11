@@ -45,14 +45,8 @@ class SendCodeController extends Controller
                 ->getApiResponse();
         } catch (\Throwable $t) {
             DB::rollBack();
-
             Log::error($t);
-
-            return apiResponse()
-                ->failed()
-                ->serverError()
-                ->message(trans('api-message.internal_server_error'))
-                ->getApiResponse();
+            return internalServerError();
         }
     }
 }

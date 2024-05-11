@@ -5,8 +5,8 @@ namespace App\Exceptions;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class Handler extends ExceptionHandler
@@ -84,6 +84,18 @@ class Handler extends ExceptionHandler
                     ->failed()
                     ->message(trans('api-message.requested_link_does_not_exist'))
                     ->badRequest()
+                    ->getApiResponse();
+            }
+        });
+
+        $this->reportable(function (Throwable $t) {
+            if (app()->bound('sentry')) {
+                Log::error($t);
+
+                return apiResponse()
+                    ->failed()
+                    ->serverError()
+                    ->message(trans('api-message.internal_server_error'))
                     ->getApiResponse();
             }
         });

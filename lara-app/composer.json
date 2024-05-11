@@ -17,6 +17,7 @@
     "laravel/sanctum": "^3.0",
     "laravel/tinker": "^2.7",
     "predis/predis": "^2.2",
+    "sentry/sentry-laravel": "^4.5",
     "spatie/laravel-data": "^3.12",
     "timehunter/laravel-google-recaptcha-v3": "~2.5"
   },

@@ -1,6 +1,7 @@
 <?php
 
 use App\Services\Global\ApiResponseService;
+use Illuminate\Http\JsonResponse;
 
 /////////////////////////////////////////////////////
 if (!function_exists('apiResponse')) {
@@ -10,13 +11,14 @@ if (!function_exists('apiResponse')) {
     }
 }
 /////////////////////////////////////////////////////
-//if (!function_exists('generateVerificationCode')) {
-//    /**
-//     * @throws Exception
-//     */
-//    function generateVerificationCode(): string
-//    {
-//        return Crypt::encryptString(random_int(100000, 999999));
-//    }
-//}
+if (!function_exists('internalServerError')) {
+    function internalServerError(): JsonResponse
+    {
+        return apiResponse()
+            ->failed()
+            ->serverError()
+            ->message(trans('api-message.internal_server_error'))
+            ->getApiResponse();
+    }
+}
 /////////////////////////////////////////////////////
