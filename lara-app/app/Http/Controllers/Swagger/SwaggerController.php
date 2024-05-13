@@ -15,7 +15,7 @@ class SwaggerController extends Controller
         $directories = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(base_path('/swagger/api')));
         foreach ($directories as $directory) {
             if ($directory->getExtension() === 'yaml' && $directory->getFileName() !== 'opener.yaml') {
-                $swagger['paths'] = Yaml::parse(file_get_contents($directory));
+                $swagger['paths'] = array_merge_recursive($swagger['paths'] ?? [], Yaml::parse(file_get_contents($directory)) ?? []);
             }
         }
         return collect($swagger)->toArray();

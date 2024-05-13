@@ -14,6 +14,10 @@ return [
     'item_not_found' => 'Item Not Found',
     'requested_link_does_not_exist' => 'requested link does not exist',
 
+    // Health check
+    'system_health_check_passed' => 'System health check passed successfully.',
+    'system_health_check_failed' => 'System health check failed.',
+
     // Verification Code
     'verification_code_sent_successfully' => 'Verification code sent successfully'
 ];
