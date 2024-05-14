@@ -8,6 +8,6 @@
 
 use App\Http\Controllers\API\V1\Public\HealthCheckController;
 
-Route::name('public.')->prefix('public')->group(function () {
-    Route::get('/health/check',HealthCheckController::class)->name('health.check');
+Route::name('global.')->group(function () {
+    Route::get('/health',HealthCheckController::class)->name('health.check');
 });
