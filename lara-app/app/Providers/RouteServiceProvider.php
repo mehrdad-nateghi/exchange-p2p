@@ -27,7 +27,6 @@ class RouteServiceProvider extends ServiceProvider
         'V1' => [
             'swagger',
             'auth',
-            'public',
         ],
     ];
 
@@ -41,7 +40,7 @@ class RouteServiceProvider extends ServiceProvider
         $this->configureRateLimiting();
 
         $this->routes(function () {
-            // api
+            // API versioning
             foreach ($this->routes as $version => $fileNames) {
                 foreach ($fileNames as $fileName) {
                     Route::middleware($this->api_middlewares)
@@ -52,6 +51,13 @@ class RouteServiceProvider extends ServiceProvider
                         );
                 }
             }
+
+            // Global api
+            Route::middleware($this->api_middlewares)
+                ->prefix('api/')
+                ->group(
+                    base_path('routes/API/global.php')
+                );
 
             // web
             Route::middleware('web')
