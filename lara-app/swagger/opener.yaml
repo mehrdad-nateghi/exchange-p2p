@@ -19,5 +19,8 @@ security:
   - bearer: []
 servers:
   - url: http://localhost:8000/api/v1
+  - url: http://localhost:8000/api
   - url: https://core-lara-33e1254e7d-paylibero-nightly.apps.ir-thr-ba1.arvancaas.ir/api/v1
+  - url: https://core-lara-33e1254e7d-paylibero-nightly.apps.ir-thr-ba1.arvancaas.ir/api
   - url: https://nightly.paylibero.ir/api/v1
+  - url: https://nightly.paylibero.ir/api
