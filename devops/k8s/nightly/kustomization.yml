@@ -9,6 +9,7 @@ resources:
 
 patches:
   - path: deployments/core-laravel.yml
+  - path: deployments/queue-worker.yml
   - path: deployments/pex-app.yml
   - path: deployments/pex-admin.yml
   - path: deployments/pex-storybook.yml
@@ -23,4 +24,6 @@ images:
   - name: registry.hamdocker.ir/paylibero/pex-storybook
     newTag: ${DEPLOY_COMMIT_SHORT_SHA}
   - name: registry.hamdocker.ir/paylibero/pex-admin
+    newTag: ${DEPLOY_COMMIT_SHORT_SHA}
+  - name: registry.hamdocker.ir/paylibero/queue-worker
     newTag: ${DEPLOY_COMMIT_SHORT_SHA}

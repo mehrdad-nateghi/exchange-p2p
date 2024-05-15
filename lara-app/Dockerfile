@@ -8,9 +8,7 @@ RUN docker-php-ext-enable redis
 
 WORKDIR /var/www
 
-ARG CI_COMMIT_SHORT_SHA
-ARG CI_COMMIT_MESSAGE
-ARG CI_PIPELINE_CREATED_AT
+
 
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
@@ -18,6 +16,7 @@ COPY ./dockerfiles/entrypoint.sh /usr/local/bin/entrypoint.sh
 
 # Image metadata:
 ARG CI_COMMIT_SHORT_SHA
+ARG CI_COMMIT_MESSAGE
 ARG CI_PIPELINE_CREATED_AT
 ARG CI_PIPELINE_URL
 

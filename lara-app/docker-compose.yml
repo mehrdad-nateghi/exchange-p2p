@@ -18,6 +18,7 @@ services:
         hostname: php
         depends_on:
             - database
+            - redis
 
     ######## Database ########
     database:
@@ -47,7 +48,6 @@ services:
     ######## Queue ########
     queue:
       build:
-        context: .
         dockerfile: dockerfiles/queues/queue.dockerfile
       working_dir: /var/www
       volumes:

@@ -20,6 +20,7 @@ trigger-core-laravel:
         - .gitlab-ci.templates.yml
         - devops/build/*
         - devops/k8s/**/core-laravel.yml
+        - devops/k8s/**/queue-worker.yml
         - devops/k8s/**/kustomization.yml
         - devops/k8s/**/ingresses.yml
 

@@ -6,6 +6,7 @@
     "hamdocker",
     "interruptiable",
     "interruptible",
+    "kustomization",
     "kustomize",
     "laravel",
     "nextjs",
