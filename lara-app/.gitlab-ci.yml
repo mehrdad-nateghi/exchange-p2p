@@ -99,7 +99,7 @@ deploy-nightly:
   stage: Deploy
   extends: .deploy_job_template
   variables:
-    SERVICE_NAME: "core-laravel, queue-worker, mysql, mysql_backup"
+    SERVICE_NAME: "core-laravel,queue-worker,mysql,mysql_backup"
     ENVIRONMENT_NAME: nightly
     KUBE_CONFIG_NAME: $ARVAN_KUBE_CONFIG_NIGHTLY
   rules:
