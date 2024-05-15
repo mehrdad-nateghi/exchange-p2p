@@ -9,11 +9,6 @@ RUN apt-get update && apt-get install -y supervisor
 # Create a directory for Supervisor logs
 RUN mkdir -p /var/log/supervisor
 
-# Copy the Laravel application code
-COPY .. .
-
-RUN ls -lah
-
 # Copy the Supervisor configuration file
 COPY ./dockerfiles/queues/supervisord.conf /etc/supervisor/supervisord.conf
 
@@ -36,6 +31,9 @@ LABEL org.opencontainers.image.source=${CI_PIPELINE_URL}
 ENV CI_COMMIT_SHORT_SHA ${CI_COMMIT_SHORT_SHA}
 ENV CI_PIPELINE_CREATED_AT ${CI_PIPELINE_CREATED_AT}
 ENV CI_PIPELINE_URL ${CI_PIPELINE_URL}
+
+# Copy the Laravel application code
+COPY .. .
 
 ENV PORT=8000
 EXPOSE 8000
