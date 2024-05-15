@@ -78,7 +78,7 @@ build-nightly:
   rules:
     - if: '$CI_MERGE_REQUEST_ID == null && $CI_COMMIT_REF_NAME == "main"'
   environment:
-    name: $SERVICE_NAME-nightly
+    name: core-nightly
     deployment_tier: staging
     action: prepare
 
@@ -91,7 +91,7 @@ build-queue-nightly:
   rules:
     - if: '$CI_MERGE_REQUEST_ID == null && $CI_COMMIT_REF_NAME == "main"'
   environment:
-    name: $SERVICE_NAME-nightly
+    name: core-nightly
     deployment_tier: staging
     action: prepare
 
@@ -105,5 +105,5 @@ deploy-nightly:
   rules:
     - if: '$CI_MERGE_REQUEST_ID == null && $CI_COMMIT_REF_NAME == "main"'
   environment:
-    name: $SERVICE_NAME-nightly
+    name: core-nightly
     deployment_tier: staging
