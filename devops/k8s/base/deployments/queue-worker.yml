@@ -16,16 +16,15 @@ spec:
       restartPolicy: Always
       imagePullSecrets:
        - name: hamdocker
+      volumes:
+        - name: worker-logs
+          emptyDir: {}
       containers:
         - image: registry.hamdocker.ir/paylibero/queue-worker
           name: queue-worker
-          command:
-            - php
-          args:
-            - artisan
-            - queue:work
-            - --tries=3
-            - --backoff=5
+          volumeMounts:
+            - name: worker-logs
+              mountPath: /var/log/supervisor
           ports:
             - containerPort: 8000
               protocol: TCP
