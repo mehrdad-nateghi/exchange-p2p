@@ -37,5 +37,6 @@ COPY .. .
 
 ENV PORT=8000
 EXPOSE 8000
+
 # Run Supervisor
-CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisor/supervisord.conf"]
+ENTRYPOINT ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisor/supervisord.conf"]
