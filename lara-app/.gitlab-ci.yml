@@ -95,24 +95,11 @@ build-queue-nightly:
     deployment_tier: staging
     action: prepare
 
-deploy-queue-nightly:
-  stage: Deploy
-  extends: .deploy_job_template
-  variables:
-    SERVICE_NAME: queue-worker
-    ENVIRONMENT_NAME: nightly
-    KUBE_CONFIG_NAME: $ARVAN_KUBE_CONFIG_NIGHTLY
-  rules:
-    - if: '$CI_MERGE_REQUEST_ID == null && $CI_COMMIT_REF_NAME == "main"'
-  environment:
-    name: $SERVICE_NAME-nightly
-    deployment_tier: staging
-
 deploy-nightly:
   stage: Deploy
   extends: .deploy_job_template
   variables:
-    SERVICE_NAME: core-laravel
+    SERVICE_NAME: core-laravel, queue-worker, mysql, mysql_backup
     ENVIRONMENT_NAME: nightly
     KUBE_CONFIG_NAME: $ARVAN_KUBE_CONFIG_NIGHTLY
   rules:

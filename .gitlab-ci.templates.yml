@@ -40,9 +40,11 @@ variables:
 
 .base-deploy-scripts:
   &base_deploy_scripts # remove all deployments excluding current service
-  - sed -i "/- deployments\/$SERVICE_NAME\.yml/p;/- deployments\/\(.*\)\.yml/d" devops/k8s/base/kustomization.yml
+  - export SERVICE_NAMES_STRING_NO_SPACE=$(echo "$SERVICE_NAME" | sed 's/, /,/g')
+  - CONVERTED_SERVICE_NAMES_STRING_NO_SPACE=${initial_string_no_space//,/\\|}
+  - sed -i "/- .*\/\($CONVERTED_SERVICE_NAMES_STRING_NO_SPACE\)\.yml/p;/- .*\/\(.*\)\.yml/d" devops/k8s/base/kustomization.yml
   - >
-    sed -i "/- path: deployments\/$SERVICE_NAME\.yml/p;/- path: deployments\/\(.*\)\.yml/d" devops/k8s/${ENVIRONMENT_NAME}/kustomization.yml
+    sed -i "/- path: .*\/\($CONVERTED_SERVICE_NAMES_STRING_NO_SPACE\)\.yml/p;/- path: .*\/\(.*\)\.yml/d" devops/k8s/${ENVIRONMENT_NAME}/kustomization.yml
 
   - kubectl config get-contexts
   - kubectl config set-context --current --namespace=${ENVIRONMENT_PREFIX:-paylibero}-${ENVIRONMENT_NAME}
@@ -80,3 +82,4 @@ variables:
     # kubectl wait has issues for now. it is being under consideration in Arvan.
     #- kubectl wait --for=condition=ready --timeout=200s pod -l app=${SERVICE_NAME},commit-short-sha=commit_${DEPLOY_COMMIT_SHORT_SHA}
     - echo "--- successfully deployed ${SERVICE_NAME} for the commit ${DEPLOY_COMMIT_SHORT_SHA} ---"
+
