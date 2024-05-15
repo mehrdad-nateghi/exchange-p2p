@@ -12,6 +12,8 @@ RUN mkdir -p /var/log/supervisor
 # Copy the Laravel application code
 COPY .. .
 
+RUN ls -lah
+
 # Copy the Supervisor configuration file
 COPY ./dockerfiles/queues/supervisord.conf /etc/supervisor/supervisord.conf
 
