@@ -17,8 +17,8 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        // Create 10 Applicant user
-        User::factory(10)
+        /*// Create 10 Applicant user
+        User::factory(1)
             ->create(['role'=>UserRoleEnum::Applicant]);
 
         // Create 10 Admin user
@@ -38,7 +38,7 @@ class UserSeeder extends Seeder
             User::factory(1)
             ->create(['role'=> UserRoleEnum::Admin, 'email'=>'admin@paylibero.com', 'password'=>Hash::make('123456')]);
 
-        }
+        }*/
 
     }
 }

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\API\V1\Auth\Signup;
+namespace App\Http\Controllers\API\V1\Auth;
 
-use App\Data\API\V1\VerificationCodeData;
-use App\Enums\API\V1\VerificationCodeTypeEnum;
-use App\Enums\API\V1\VerificationCodeViaEnum;
+use App\Data\VerificationCodeData;
+use App\Enums\VerificationCodeTypeEnum;
+use App\Enums\VerificationCodeViaEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\Auth\Signup\SendCodeRequest;
 use App\Services\API\V1\EmailNotificationService;

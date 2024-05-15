@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Enums\API\V1;
+namespace App\Enums;
 
 enum VerificationCodeViaEnum: int{
     case EMAIL = 1;

@@ -18,6 +18,11 @@ return [
     'system_health_check_passed' => 'System health check passed successfully.',
     'system_health_check_failed' => 'System health check failed.',
 
-    // Verification Code
-    'verification_code_sent_successfully' => 'Verification code sent successfully'
+    // Send verification Code
+    'verification_code_sent_successfully' => 'Verification code sent successfully',
+
+    // Sign Up
+    'email_already_verified' => 'This email address has already been verified.',
+    'invalid_verification_code' => 'The verification code provided is invalid.',
+    'user_signed_up_successfully' => 'User signed up successfully.',
 ];

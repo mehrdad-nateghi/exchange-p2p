@@ -1,9 +1,10 @@
-"/auth/signup/send-code":
+"/auth/send-code":
   post:
     tags:
       - Auth-Signup
     summary: Send Verification Code
     description: Send a verification code to the provided email for setting a new password.
+    parameters: []
     requestBody:
       required: true
       content:
@@ -42,6 +43,110 @@
                 data:
                   type: null
                   example: null
+      '422':
+        description: Unprocessable Entity
+        content:
+          application/json:
+            schema:
+              type: object
+      '500':
+        description: Internal Server Error
+        content:
+          application/json:
+            schema:
+              type: object
+      default:
+        description: Unexpected error
+        content:
+          application/json:
+            schema:
+              type: object
+
+"/auth/signup":
+  post:
+    tags:
+      - Auth-Signup
+    summary: Verify and sign up a new user.
+    description: Verify and sign up a new user.
+    parameters: []
+    requestBody:
+      required: true
+      content:
+        application/x-www-form-urlencoded:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                description: "Verification code sent to the user. This code is typically a 6-digit."
+                example: 541236
+              to:
+                type: string
+                description: "User's email address or mobile number where the verification code was sent. Must be a valid email address or mobile number format depending on the chosen 'via' method. Not support mobile yet!"
+                example: a@a.com
+              via:
+                type: integer
+                description: "Verification via. **Possible Values:**  1: EMAIL"
+                enum:
+                  - 1
+              type:
+                description: "Type of verification. **Possible Values:**  1: SET_PASSWORD"
+                enum:
+                  - 1
+            required:
+              - code
+              - to
+              - via
+              - type
+    responses:
+      '200':
+        description: Created Successful
+        content:
+          application/json:
+            schema:
+              properties:
+                status:
+                  type: string
+                  example: success
+                code:
+                  type: integer
+                  example: 200
+                message:
+                  type: string
+                  example: User signed up successfully.
+                data:
+                  type: object
+                  properties:
+                    user:
+                      type: object
+                      properties:
+                        uuid:
+                          type: string
+                          example: 0bdca82b-d762-46d8-aac8-f5a7e3c2c684
+                        first_name:
+                          type: string
+                          example: null
+                        last_name:
+                          type: string
+                          example: null
+                        email:
+                          type: string
+                          example: a@b.com
+                        created_at:
+                          type: string
+                          example: 2024-05-15T06:56:46+00:00
+                        updated_at:
+                          type: string
+                          example: 2024-05-15T06:56:46+00:00
+                    token:
+                      type: object
+                      properties:
+                        access_token:
+                          type: string
+                          example: "eyJ0eXAiOiJKV1QiLC..."
+                        type:
+                          type: string
+                          example: Bearer
       '422':
         description: Unprocessable Entity
         content:
