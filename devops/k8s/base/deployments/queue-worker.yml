@@ -32,3 +32,15 @@ spec:
           env:
             - name: REDIS_PORT
               value: '6379'
+  volumeClaimTemplates:
+    - metadata:
+        name: worker-logs
+        labels:
+          app.kubernetes.io/instance: paylibero-queue-worker
+          app.kubernetes.io/name: queue-worker
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi
