@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install -y supervisor
 RUN mkdir -p /var/log/supervisor
 
 # Copy the Supervisor configuration file
-COPY ./dockerfiles/queues/supervisord.conf /etc/supervisor/supervisord.conf
+COPY /dockerfiles/queues/supervisord.conf /etc/supervisor/supervisord.conf
 
 # Set the working directory
 WORKDIR /var/www
