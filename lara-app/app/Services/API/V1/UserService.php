@@ -4,7 +4,9 @@ namespace App\Services\API\V1;
 
 use App\Data\UserData;
 use App\Models\User;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class UserService
 {
@@ -20,9 +22,9 @@ class UserService
         return $this->model->create($data);
     }
 
-    public function createToken(User $model): array
+    public function createToken(User $user): array
     {
-        $accessToken = $model->createToken('access_token')->accessToken;
+        $accessToken = $user->createToken('access_token')->accessToken;
         $tokenType = 'Bearer';
 
         return [
@@ -33,22 +35,29 @@ class UserService
 
     public function isEmailVerified(string $email): bool
     {
-        $user = User::where('email', $email)->first();
+        $user = $this->model->where('email', $email)->first();
         return !empty($user) && $user->email_verified_at;
     }
 
-    public function assignRoleToUser($user, $roleName): void
+    public function assignRoleToUser(User $user, $roleName): void
     {
         $user->assignRole($roleName);
     }
 
-    public function authenticateUser($user): void
+    public function authenticateUser(User $user): void
     {
         Auth::login($user);
     }
 
-    public function createResource(User $model): UserData
+    public function createResource(User $user): UserData
     {
-        return UserData::from($model);
+        return UserData::from($user);
+    }
+
+    public function setPassword(User $user, $password): bool
+    {
+        return $user->update([
+            'password' => bcrypt($password)
+        ]);
     }
 }

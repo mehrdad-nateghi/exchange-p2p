@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Requests\API\V1\Auth\Signup;
+namespace App\Http\Requests\API\V1\Auth;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Password;
 use TimeHunter\LaravelGoogleReCaptchaV3\Validations\GoogleReCaptchaV3ValidationRule;
 
-class VerifyCodeRequest extends FormRequest
+class SetPasswordRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,8 +26,9 @@ class VerifyCodeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => ['required','email:filter','unique:users,email'],
-            'g-recaptcha-response' => ['required',new GoogleReCaptchaV3ValidationRule('signup-send-code')],
+            'password' => [
+                'required', 'string', Password::min(8)->letters(), Password::min(8)->numbers(), 'confirmed'
+            ],
         ];
     }
 }
