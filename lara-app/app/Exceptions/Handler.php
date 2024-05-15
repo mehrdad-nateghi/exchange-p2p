@@ -99,5 +99,17 @@ class Handler extends ExceptionHandler
                     ->getApiResponse();
             }
         });
+
+        $this->reportable(function (\Error $e) {
+            if (app()->bound('sentry')) {
+                Log::error($e);
+
+                return apiResponse()
+                    ->failed()
+                    ->serverError()
+                    ->message(trans('api-message.internal_server_error'))
+                    ->getApiResponse();
+            }
+        });
     }
 }

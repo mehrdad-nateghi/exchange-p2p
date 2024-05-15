@@ -1,0 +1,82 @@
+<?php
+
+namespace App\Http\Controllers\API\V1\Auth;
+
+use App\Data\UserData;
+use App\Data\VerificationCodeData;
+use App\Enums\RoleNameEnum;
+use App\Http\Controllers\Controller;
+use App\Services\API\V1\EmailNotificationService;
+use App\Services\API\V1\UserService;
+use App\Services\API\V1\VerificationCodeService;
+use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+
+class SignUpController extends Controller
+{
+    public function __invoke(
+        VerificationCodeData $verificationCodeData,
+        UserService $userService,
+        VerificationCodeService $verificationCodeService,
+        EmailNotificationService $emailNotificationService
+    ): JsonResponse {
+        try {
+            DB::beginTransaction();
+
+            // User's email already verified?
+            $isEmailVerified = $userService->isEmailVerified($verificationCodeData->to);
+
+            if ($isEmailVerified) {
+                return apiResponse()
+                    ->message(trans('api-message.email_already_verified'))
+                    ->unProcessableEntity()
+                    ->getApiResponse();
+            }
+
+            // Is code valid?
+            $isValidCode = $verificationCodeService->isValidCode($verificationCodeData);
+
+            if (!$isValidCode) {
+                return apiResponse()
+                    ->message(trans('api-message.invalid_verification_code'))
+                    ->unProcessableEntity()
+                    ->getApiResponse();
+            }
+
+            // Create user
+            $user = $userService->create([
+                'email' => $verificationCodeData->to,
+                'email_verified_at' => Carbon::now(),
+            ]);
+
+            // Assign applicant role to user
+            $userService->assignRoleToUser($user, RoleNameEnum::APPLICANT->value);
+
+            // Log in the user after successful signup
+            $userService->authenticateUser($user);
+
+            // Create a personal access token for the user
+            $tokenData = $userService->createToken($user);
+
+            // Prepare data
+            $data = [
+                'user' =>  $userService->createResource($user),
+                'token' => $tokenData,
+            ];
+
+            DB::commit();
+
+            return apiResponse()
+                ->message(trans('api-message.user_signed_up_successfully'))
+                ->data($data)
+                ->getApiResponse();
+        } catch (\Throwable $t) {
+            DB::rollBack();
+            Log::error($t);
+            return internalServerError();
+        }
+    }
+}

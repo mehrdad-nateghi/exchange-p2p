@@ -27,7 +27,9 @@ class DatabaseSeeder extends Seeder
 
         try{
             $this->call([
+                RoleSeeder::class,
                 UserSeeder::class,
+                //
                 /*FinancialSeeder::class,
                 TradeConstraintSeeder::class,
                 FrequentQuestionSeeder::class,

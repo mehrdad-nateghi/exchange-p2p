@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('verification_codes', function (Blueprint $table) {
             $table->id();
             $table->uuid();
-            $table->string('code');
+            $table->text('code')->nullable();
             $table->string('to')->nullable();
             $table->tinyInteger('via')->nullable();
             $table->tinyInteger('type')->nullable();

@@ -6,24 +6,17 @@
 |--------------------------------------------------------------------------
 */
 
+use App\Http\Controllers\API\V1\Auth\SendCodeController;
+use App\Http\Controllers\API\V1\Auth\SetPasswordController;
+use App\Http\Controllers\API\V1\Auth\SignUpController;
 
-use App\Http\Controllers\API\V1\Auth\Signup\SendCodeController;
-//use App\Http\Controllers\API\V1\Auth\Signup\SignupController;
-
+// Guest
 Route::name('auth.')->prefix('auth')->group(function () {
-    //Route::post('/signup',SignupController::class)->name('signup');
-    Route::post('/signup/send-code',SendCodeController::class)->name('signup.send-code');
+    Route::post('/send-code',SendCodeController::class)->name('send-code');
+    Route::post('/signup',SignUpController::class)->name('signup');
 });
 
-///*Route:: group(['prefix' => 'auth'],function () {
-//    Route::get('/signup/send-code',[SendCodeController::class])->name('');
-//    // /captcha
-//    // /verify-code
-//    // /set-password
-//    /* Route::post('/login',[// Your login controller or closure]);
-//         Route::post('/logout',[// Your logout controller or closure]);
-//
-//             // Password Reset Routes
-//             Route::get('/password/reset',[// Your forgot password form controller or closure]);
-//                 Route::post('/password/reset',[// Your password reset controller or closure]);*/
-//})->as;*/
+// Auth
+Route::middleware('auth:api')->name('auth.')->prefix('auth')->group(function () {
+    Route::post('/set-password',SetPasswordController::class)->name('set-password');
+});

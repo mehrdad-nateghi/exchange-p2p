@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Enums\API\V1;
+namespace App\Enums;
 
 enum VerificationCodeTypeEnum: int{
     case SET_PASSWORD = 1;
