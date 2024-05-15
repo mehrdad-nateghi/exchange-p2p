@@ -30,8 +30,7 @@ spec:
             - containerPort: 8000
               protocol: TCP
           resources: {}
-          envFrom:
-           env:
+          env:
             - name: APP_NAME
               value: Laravel
             - name: APP_ENV

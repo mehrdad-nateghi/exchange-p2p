@@ -21,16 +21,13 @@ spec:
                 secretKeyRef:
                   name: core-laravel-mysql-db
                   key: username
-           
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: core-laravel-mysql-db
                   key: password
-            
             - name: REDIS_HOST
               value: redis-headless
-            
             - name: REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
