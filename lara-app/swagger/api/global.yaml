@@ -1,7 +1,7 @@
-"/public/health/check":
+"/health":
   get:
     tags:
-      - Public
+      - Global
     summary: Check system health
     description: Performs a series of checks to ensure the system is functioning correctly.
     responses:
