@@ -13,11 +13,13 @@ class VerificationCode extends Model
 {
     use HasFactory, SoftDeletes, UUID, Notifiable;
 
+
+
     protected $fillable = [
         'code','to', 'via', 'type', 'expired_at',
     ];
 
     protected $casts = [
-        'expire_at' => 'datetime',
+        'expired_at' => 'datetime',
     ];
 }
