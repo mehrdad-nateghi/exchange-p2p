@@ -62,6 +62,59 @@
             schema:
               type: object
 
+"/auth/resend-code":
+  post:
+    tags:
+      - Auth-Signup
+    summary: "Resend Verification Code"
+    description: "Resend a verification code to the specified recipient."
+    parameters: []
+    requestBody:
+      required: true
+      content:
+        application/x-www-form-urlencoded:
+          schema:
+            type: object
+            properties:
+              to:
+                type: string
+                default: "example@example.com"
+                description: "The recipient's email or mobile number(Not support yet)"
+              via:
+                type: string
+                enum:
+                  - 1
+                description: "The delivery method for the verification code. 1: EMAIL"
+              type:
+                type: string
+                enum:
+                  - 1
+                  - 2
+                description: "Type of verification. **Possible Values:**  1: SET_PASSWORD | 2: RESET_PASSWORD"
+            required:
+              - to
+              - via
+              - type
+    responses:
+      '200':
+        description: "Created Successful"
+        content:
+          application/json:
+            schema:
+              properties:
+                status:
+                  type: string
+                  example: "success"
+                code:
+                  type: integer
+                  example: 201
+                message:
+                  type: string
+                  example: "Verification code sent successfully"
+                data:
+                  type: null
+                  example: null
+
 "/auth/signup":
   post:
     tags:
@@ -255,3 +308,4 @@
           application/json:
             schema:
               type: object
+
