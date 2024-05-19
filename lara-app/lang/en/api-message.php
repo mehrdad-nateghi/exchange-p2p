@@ -31,4 +31,8 @@ return [
 
     // Me
     'user_info_retrieved_successfully' => 'User information retrieved successfully.',
+
+    // Login
+    'user_logged_in_successfully' => 'User logged in successfully',
+    'invalid_credentials' => 'Invalid credentials',
 ];
