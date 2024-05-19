@@ -1,7 +1,7 @@
 "/auth/send-code":
   post:
     tags:
-      - Auth-Signup
+      - Auth
     summary: "Send Verification Code"
     description: "Send a verification code to the provided email for setting a new password."
     parameters: []
@@ -65,7 +65,7 @@
 "/auth/resend-code":
   post:
     tags:
-      - Auth-Signup
+      - Auth
     summary: "Resend Verification Code"
     description: "Resend a verification code to the specified recipient."
     parameters: []
@@ -118,7 +118,7 @@
 "/auth/signup":
   post:
     tags:
-      - Auth-Signup
+      - Auth
     summary: "Verify and sign up a new user."
     description: "Verify and sign up a new user."
     parameters: []
@@ -224,7 +224,7 @@
 "/auth/set-password":
   post:
     tags:
-      - Auth-Signup
+      - Auth
     summary: "Set user password"
     description: "This endpoint allows an authenticated user to set a new password for their account."
     parameters: []
