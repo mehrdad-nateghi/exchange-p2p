@@ -1,0 +1,63 @@
+"/users/me":
+  get:
+    tags:
+      - Users
+    summary: "Get Current User Information"
+    description: "Retrieve information about the currently authenticated user."
+    parameters: []
+    requestBody: null
+    responses:
+      '200':
+        description: "User information retrieved successfully."
+        content:
+          application/json:
+            schema:
+              properties:
+                status:
+                  type: string
+                  example: "success"
+                code:
+                  type: integer
+                  example: 200
+                message:
+                  type: string
+                  example: "User information retrieved successfully."
+                data:
+                  type: object
+                  properties:
+                    uuid:
+                      type: string
+                      example: "0bdca82b-d762-46d8-aac8-f5a7e3c2c684"
+                    first_name:
+                      type: string
+                      example: "Ali"
+                    last_name:
+                      type: string
+                      example: "Karimi"
+                    email:
+                      type: string
+                      example: "a@b.com"
+                    created_at:
+                      type: string
+                      format: date-time
+                      example: "2024-05-15T06:56:46+00:00"
+                    updated_at:
+                      type: string
+                      format: date-time
+                      example: "2024-05-15T06:56:46+00:00"
+                    roles:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          name:
+                            type: string
+                            example: "applicant"
+                          created_at:
+                            type: string
+                            format: date-time
+                            example: "2024-05-15T06:56:46+00:00"
+                          updated_at:
+                            type: string
+                            format: date-time
+                            example: "2024-05-15T06:56:46+00:00"

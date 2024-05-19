@@ -3,6 +3,7 @@
 namespace App\Services\API\V1;
 
 use App\Data\UserData;
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\Auth;
@@ -49,9 +50,10 @@ class UserService
         Auth::login($user);
     }
 
-    public function createResource(User $user): UserData
+    public function createResource(User $user): UserResource
     {
-        return UserData::from($user);
+        return new UserResource($user);
+        //return UserData::from($user);
     }
 
     public function setPassword(User $user, $password): bool

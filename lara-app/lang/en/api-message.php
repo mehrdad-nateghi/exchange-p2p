@@ -28,4 +28,7 @@ return [
 
     // Set Password
     'password_set_successfully' => 'Password has been set successfully.',
+
+    // Me
+    'user_info_retrieved_successfully' => 'User information retrieved successfully.',
 ];

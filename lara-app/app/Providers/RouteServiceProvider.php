@@ -27,6 +27,7 @@ class RouteServiceProvider extends ServiceProvider
         'V1' => [
             'swagger',
             'auth',
+            'user',
         ],
     ];
 
