@@ -43,24 +43,6 @@
                 data:
                   type: null
                   example: null
-      '422':
-        description: "Unprocessable Entity"
-        content:
-          application/json:
-            schema:
-              type: object
-      '500':
-        description: "Internal Server Error"
-        content:
-          application/json:
-            schema:
-              type: object
-      default:
-        description: "Unexpected error"
-        content:
-          application/json:
-            schema:
-              type: object
 
 "/auth/resend-code":
   post:
@@ -202,24 +184,6 @@
                         type:
                           type: string
                           example: "Bearer"
-      '422':
-        description: "Unprocessable Entity"
-        content:
-          application/json:
-            schema:
-              type: object
-      '500':
-        description: "Internal Server Error"
-        content:
-          application/json:
-            schema:
-              type: object
-      default:
-        description: "Unexpected error"
-        content:
-          application/json:
-            schema:
-              type: object
 
 "/auth/set-password":
   post:
@@ -275,10 +239,10 @@
                           example: "0bdca82b-d762-46d8-aac8-f5a7e3c2c684"
                         first_name:
                           type: string
-                          example: null
+                          example: "Ali"
                         last_name:
                           type: string
-                          example: null
+                          example: "Parvin"
                         email:
                           type: string
                           example: "a@b.com"
@@ -290,22 +254,119 @@
                           type: string
                           format: date-time
                           example: "2024-05-15T06:56:46+00:00"
-      '422':
-        description: "Unprocessable Entity"
-        content:
-          application/json:
-            schema:
-              type: object
-      '500':
-        description: "Internal Server Error"
-        content:
-          application/json:
-            schema:
-              type: object
-      default:
-        description: "Unexpected error"
-        content:
-          application/json:
-            schema:
-              type: object
+                        roles:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              name:
+                                type: string
+                                example: "applicant"
+                              created_at:
+                                type: string
+                                format: date-time
+                                example: "2024-05-15T06:56:46+00:00"
+                              updated_at:
+                                type: string
+                                format: date-time
+                                example: "2024-05-15T06:56:46+00:00"
 
+"/auth/login":
+  post:
+    tags:
+      - Auth
+    summary: "Login User"
+    description: "Allows a user to log in using their email and password."
+    parameters: []
+    requestBody:
+      required: true
+      content:
+        application/x-www-form-urlencoded:
+          schema:
+            type: object
+            properties:
+              email:
+                type: string
+                format: email
+                description: "The user's email."
+                default: "example@example.com"
+              password:
+                type: string
+                minLength: 8
+                description: "The user's password."
+                example: "123a456b"
+              g-recaptcha-response:
+                type: string
+                description: "The reCAPTCHA response from the client."
+                default: "03AGdBq24XvxmBsQ8jd2LhfQhPUwUGJx_6PxqY3GQxNM6xXX6xXXpqYjZhgA"
+            required:
+              - email
+              - password
+              - g-recaptcha-response
+    responses:
+      '200':
+        description: "User logged in successfully."
+        content:
+          application/json:
+            schema:
+              properties:
+                status:
+                  type: string
+                  example: "success"
+                code:
+                  type: integer
+                  example: "200"
+                message:
+                  type: string
+                  example: "User logged in successfully."
+                data:
+                  type: object
+                  properties:
+                    user:
+                      type: object
+                      properties:
+                        uuid:
+                          type: string
+                          example: "0bdca82b-d762-46d8-aac8-f5a7e3c2c684"
+                        first_name:
+                          type: string
+                          example: "Ali"
+                        last_name:
+                          type: string
+                          example: "Karimi"
+                        email:
+                          type: string
+                          example: "a@b.com"
+                        created_at:
+                          type: string
+                          format: date-time
+                          example: "2024-05-15T06:56:46+00:00"
+                        updated_at:
+                          type: string
+                          format: date-time
+                          example: "2024-05-15T06:56:46+00:00"
+                        roles:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              name:
+                                type: string
+                                example: "applicant"
+                              created_at:
+                                type: string
+                                format: date-time
+                                example: "2024-05-15T06:56:46+00:00"
+                              updated_at:
+                                type: string
+                                format: date-time
+                                example: "2024-05-15T06:56:46+00:00"
+                    token:
+                      type: object
+                      properties:
+                        access_token:
+                          type: string
+                          example: "eyJ0eXAiOiJKV1QiLC..."
+                        type:
+                          type: string
+                          example: "Bearer"
