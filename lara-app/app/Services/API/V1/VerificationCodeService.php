@@ -22,22 +22,38 @@ class VerificationCodeService
         return $this->model->create($data);
     }
 
-    public function isValidCode(\App\Data\VerificationCodeData $data): bool
+    public function findLatest(string $to,string $via,string $type)
     {
-        $verificationCode = $this->model->where('to', $data->to)
-            ->where('via', $data->via)
-            ->where('type', $data->type)
+        return $this->model->where('to',$to)
+            ->where('via',$via)
+            ->where('type',$type)
+            ->latest()
+            ->first();
+    }
+
+    public function expireCode(VerificationCode $verificationCode): bool
+    {
+        return $verificationCode->update([
+            'expired_at' => Carbon::now()
+        ]);
+    }
+
+    /*public function isValidCode(string $code, string $to, string $via,string $type): bool
+    {
+        $verificationCode = $this->model->where('to',$to)
+            ->where('via', $via)
+            ->where('type', $type)
             ->latest()
             ->first();
 
         return !empty($verificationCode) &&
-            $this->decryptCode($verificationCode->code) === $data->code &&
+            $this->decryptCode($verificationCode->code) === $code &&
             Carbon::now()->lessThan($verificationCode->expired_at);
-    }
+    }*/
 
     public function generateCode(): int
     {
-         return random_int(100000, 999999);
+        return random_int(100000,999999);
     }
 
     public function encryptCode($code): string

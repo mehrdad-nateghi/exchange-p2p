@@ -110,6 +110,94 @@
                   type: null
                   example: null
 
+"/auth/verify-code":
+  post:
+    tags:
+      - Auth
+    summary: "Verify verification code"
+    description: "Used to verify a verification code sent to the user's email or mobile number for resetting their password."
+    parameters: []
+    requestBody:
+      required: true
+      content:
+        application/x-www-form-urlencoded:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                description: "Verification code sent to the user. This code is typically a 6-digit."
+                example: "541236"
+              to:
+                type: string
+                description: "User's email address or mobile number where the verification code was sent. Must be a valid email address or mobile number format depending on the chosen 'via' method. Not support mobile yet!"
+                example: "a@a.com"
+              via:
+                type: integer
+                description: "Verification via. 1: EMAIL"
+                enum:
+                  - 1
+              type:
+                description: "Type of verification. 1: RESET_PASSWORD"
+                enum:
+                  - 2
+            required:
+              - code
+              - to
+              - via
+              - type
+    responses:
+      '200':
+        description: "Verification code verified successfully"
+        content:
+          application/json:
+            schema:
+              properties:
+                status:
+                  type: string
+                  example: "success"
+                code:
+                  type: integer
+                  example: "200"
+                message:
+                  type: string
+                  example: "Verification code verified successfully"
+                data:
+                  type: object
+                  properties:
+                    user:
+                      type: object
+                      properties:
+                        uuid:
+                          type: string
+                          example: "0bdca82b-d762-46d8-aac8-f5a7e3c2c684"
+                        first_name:
+                          type: string
+                          example: "Ali"
+                        last_name:
+                          type: string
+                          example: "Karimi"
+                        email:
+                          type: string
+                          example: "a@b.com"
+                        created_at:
+                          type: string
+                          format: date-time
+                          example: "2024-05-15T06:56:46+00:00"
+                        updated_at:
+                          type: string
+                          format: date-time
+                          example: "2024-05-15T06:56:46+00:00"
+                    token:
+                      type: object
+                      properties:
+                        access_token:
+                          type: string
+                          example: "eyJ0eXAiOiJKV1QiLC..."
+                        type:
+                          type: string
+                          example: "Bearer"
+
 "/auth/signup":
   post:
     tags:

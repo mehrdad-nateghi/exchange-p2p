@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Traits\Global\UUID;
+use App\Traits\VerificationCode\Scopes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -11,9 +12,7 @@ use Illuminate\Notifications\Notifiable;
 // ObservedBy VerificationCodeObserver::class
 class VerificationCode extends Model
 {
-    use HasFactory, SoftDeletes, UUID, Notifiable;
-
-
+    use HasFactory, SoftDeletes, UUID, Notifiable, Scopes;
 
     protected $fillable = [
         'code','to', 'via', 'type', 'expired_at',

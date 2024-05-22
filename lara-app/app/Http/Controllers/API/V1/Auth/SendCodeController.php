@@ -43,7 +43,7 @@ class SendCodeController extends Controller
             DB::commit();
 
             return apiResponse()
-                ->message(trans('api-message.verification_code_sent_successfully'))
+                ->message(trans('api-messages.verification_code_sent_successfully'))
                 ->created()
                 ->getApiResponse();
         } catch (\Throwable $t) {

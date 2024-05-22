@@ -32,7 +32,7 @@ class SetPasswordController extends Controller
             DB::commit();
 
             return apiResponse()
-                ->message(trans('api-message.password_set_successfully'))
+                ->message(trans('api-messages.password_set_successfully'))
                 ->data($data)
                 ->getApiResponse();
         } catch (\Throwable $t) {

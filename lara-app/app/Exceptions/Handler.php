@@ -51,7 +51,7 @@ class Handler extends ExceptionHandler
             if (request()->wantsJson() || $request->is('api/*')) {
                 return apiResponse()
                     ->failed()
-                    ->message(trans('api-message.item_not_found'))
+                    ->message(trans('api-messages.item_not_found'))
                     ->notFound()
                     ->getApiResponse();
             }
@@ -61,7 +61,7 @@ class Handler extends ExceptionHandler
             if (request()->wantsJson() || $request->is('api/*')) {
                 return apiResponse()
                     ->failed()
-                    ->message(trans('api-message.un_authenticated'))
+                    ->message(trans('api-messages.un_authenticated'))
                     ->unAuthorized()
                     ->getApiResponse();
             }
@@ -82,7 +82,7 @@ class Handler extends ExceptionHandler
             if (request()->wantsJson() || $request->is('api/*')) {
                 return apiResponse()
                     ->failed()
-                    ->message(trans('api-message.requested_link_does_not_exist'))
+                    ->message(trans('api-messages.requested_link_does_not_exist'))
                     ->badRequest()
                     ->getApiResponse();
             }
@@ -95,7 +95,7 @@ class Handler extends ExceptionHandler
                 return apiResponse()
                     ->failed()
                     ->serverError()
-                    ->message(trans('api-message.internal_server_error'))
+                    ->message(trans('api-messages.internal_server_error'))
                     ->getApiResponse();
             }
         });
@@ -107,7 +107,7 @@ class Handler extends ExceptionHandler
                 return apiResponse()
                     ->failed()
                     ->serverError()
-                    ->message(trans('api-message.internal_server_error'))
+                    ->message(trans('api-messages.internal_server_error'))
                     ->getApiResponse();
             }
         });

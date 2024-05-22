@@ -31,7 +31,7 @@ class LoginController extends Controller
                 DB::commit();
 
                 return apiResponse()
-                    ->message(trans('api-message.user_logged_in_successfully'))
+                    ->message(trans('api-messages.user_logged_in_successfully'))
                     ->data($data)
                     ->getApiResponse();
             }
@@ -40,7 +40,7 @@ class LoginController extends Controller
 
             return apiResponse()
                 ->failed()
-                ->message(trans('api-message.invalid_credentials'))
+                ->message(trans('api-messages.invalid_credentials'))
                 ->unAuthorized()
                 ->getApiResponse();
 
