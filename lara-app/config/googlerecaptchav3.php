@@ -109,7 +109,7 @@ return [
     */
     'setting' => [
         [
-            'action' => 'signup-send-code',
+            'action' => 'send-code',
             'threshold' => 0.2,
             'score_comparison' => true
         ],

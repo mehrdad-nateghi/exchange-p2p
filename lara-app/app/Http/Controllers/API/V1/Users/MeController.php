@@ -19,7 +19,7 @@ class MeController extends Controller
             ];
 
             return apiResponse()
-                ->message(trans('api-message.user_info_retrieved_successfully'))
+                ->message(trans('api-messages.user_info_retrieved_successfully'))
                 ->data($data)
                 ->getApiResponse();
         } catch (\Throwable $t) {

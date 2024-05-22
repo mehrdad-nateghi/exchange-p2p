@@ -17,7 +17,7 @@ if (!function_exists('internalServerError')) {
         return apiResponse()
             ->failed()
             ->serverError()
-            ->message(trans('api-message.internal_server_error'))
+            ->message(trans('api-messages.internal_server_error'))
             ->getApiResponse();
     }
 }

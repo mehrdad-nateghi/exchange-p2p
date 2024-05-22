@@ -2,8 +2,12 @@
 
 namespace App\Http\Requests\API\V1\Auth;
 
+use App\Enums\VerificationCodeTypeEnum;
+use App\Enums\VerificationCodeViaEnum;
+use App\Rules\CodeValid;
+use App\Rules\CodeValidRule;
 use Illuminate\Foundation\Http\FormRequest;
-use TimeHunter\LaravelGoogleReCaptchaV3\Validations\GoogleReCaptchaV3ValidationRule;
+use Illuminate\Validation\Rule;
 
 class VerifyCodeRequest extends FormRequest
 {
@@ -24,9 +28,21 @@ class VerifyCodeRequest extends FormRequest
      */
     public function rules(): array
     {
+        $to = $this->request->get('to');
+        $via = $this->request->getInt('via');
+        $type = $this->request->getInt('type');
+
         return [
-            'email' => ['required','email:filter','unique:users,email'],
-            'g-recaptcha-response' => ['required',new GoogleReCaptchaV3ValidationRule('signup-send-code')],
+            'code' => ['required','string',new CodeValidRule($to, $via, $type)],
+            'to' => [
+                'required',
+                Rule::when($via === VerificationCodeViaEnum::EMAIL->value,fn() => [
+                    'email:filter',
+                    'exists:users,email'
+                ])
+            ],
+            'via' => ['required',Rule::In(VerificationCodeViaEnum::EMAIL->value)],
+            'type' => ['required',Rule::In(VerificationCodeTypeEnum::RESET_PASSWORD->value)],
         ];
     }
 }

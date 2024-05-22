@@ -23,6 +23,11 @@ class UserService
         return $this->model->create($data);
     }
 
+    public function findBy($column, $value)
+    {
+        return $this->model->where($column,$value)->first();
+    }
+
     public function createToken(User $user): array
     {
         $accessToken = $user->createToken('access_token')->accessToken;
@@ -53,7 +58,6 @@ class UserService
     public function createResource(User $user): UserResource
     {
         return new UserResource($user);
-        //return UserData::from($user);
     }
 
     public function setPassword(User $user, $password): bool

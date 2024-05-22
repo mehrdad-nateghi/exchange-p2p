@@ -35,4 +35,7 @@ return [
     // Login
     'user_logged_in_successfully' => 'User logged in successfully',
     'invalid_credentials' => 'Invalid credentials',
+
+    // Verify Code
+    'code_verified_successfully' => 'Verification code verified successfully',
 ];

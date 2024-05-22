@@ -31,7 +31,7 @@ class SignUpController extends Controller
 
             if ($isEmailVerified) {
                 return apiResponse()
-                    ->message(trans('api-message.email_already_verified'))
+                    ->message(trans('api-messages.email_already_verified'))
                     ->unProcessableEntity()
                     ->getApiResponse();
             }
@@ -41,7 +41,7 @@ class SignUpController extends Controller
 
             if (!$isValidCode) {
                 return apiResponse()
-                    ->message(trans('api-message.invalid_verification_code'))
+                    ->message(trans('api-messages.invalid_verification_code'))
                     ->unProcessableEntity()
                     ->getApiResponse();
             }
@@ -70,7 +70,7 @@ class SignUpController extends Controller
             DB::commit();
 
             return apiResponse()
-                ->message(trans('api-message.user_signed_up_successfully'))
+                ->message(trans('api-messages.user_signed_up_successfully'))
                 ->data($data)
                 ->getApiResponse();
         } catch (\Throwable $t) {

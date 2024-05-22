@@ -11,51 +11,57 @@ use Illuminate\Support\Facades\Crypt;
 class VerificationCodeService
 {
     private VerificationCode $model;
-    public string $code;
 
     public function __construct(VerificationCode $model)
     {
         $this->model = $model;
     }
 
-    public function store(VerificationCodeData $data)
+    public function store(array $data)
     {
-        $this->setCode();
-        $data->additional([
-            'code' => $this->encryptCode()
-        ]);
-        return $this->model->create($data->toArray());
+        return $this->model->create($data);
     }
 
-    public function isValidCode(\App\Data\VerificationCodeData $data): bool
+    public function findLatest(string $to,string $via,string $type)
     {
-        $verificationCode = $this->model->where('to', $data->to)
-            ->where('via', $data->via)
-            ->where('type', $data->type)
+        return $this->model->where('to',$to)
+            ->where('via',$via)
+            ->where('type',$type)
+            ->latest()
+            ->first();
+    }
+
+    public function expireCode(VerificationCode $verificationCode): bool
+    {
+        return $verificationCode->update([
+            'expired_at' => Carbon::now()
+        ]);
+    }
+
+    /*public function isValidCode(string $code, string $to, string $via,string $type): bool
+    {
+        $verificationCode = $this->model->where('to',$to)
+            ->where('via', $via)
+            ->where('type', $type)
             ->latest()
             ->first();
 
         return !empty($verificationCode) &&
-            $this->decryptCode($verificationCode->code) === $data->code &&
+            $this->decryptCode($verificationCode->code) === $code &&
             Carbon::now()->lessThan($verificationCode->expired_at);
-    }
+    }*/
 
-    private function setCode(): void
+    public function generateCode(): int
     {
-         $this->code = random_int(100000, 999999);
+        return random_int(100000,999999);
     }
 
-    public function getCode(): string
+    public function encryptCode($code): string
     {
-        return $this->code;
+        return Crypt::encryptString($code);
     }
 
-    private function encryptCode(): string
-    {
-        return Crypt::encryptString($this->code);
-    }
-
-    private function decryptCode($code): string
+    public function decryptCode($code): string
     {
         return Crypt::decryptString($code);
     }

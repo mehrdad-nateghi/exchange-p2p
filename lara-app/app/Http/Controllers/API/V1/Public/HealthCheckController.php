@@ -59,13 +59,13 @@ class HealthCheckController extends Controller
 
             if ($overallStatus === 'ok') {
                 return apiResponse()
-                    ->message(trans('api-message.system_health_check_passed'))
+                    ->message(trans('api-messages.system_health_check_passed'))
                     ->data($data)
                     ->getApiResponse();
             }
 
             return apiResponse()
-                ->message(trans('api-message.system_health_check_failed'))
+                ->message(trans('api-messages.system_health_check_failed'))
                 ->data($data)
                 ->getApiResponse();
         } catch (\Throwable $t) {

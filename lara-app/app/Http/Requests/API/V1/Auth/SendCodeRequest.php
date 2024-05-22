@@ -2,7 +2,11 @@
 
 namespace App\Http\Requests\API\V1\Auth;
 
+use App\Enums\VerificationCodeTypeEnum;
+use App\Enums\VerificationCodeViaEnum;
+use App\Rules\VerificationCodeNotExpiredRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 use TimeHunter\LaravelGoogleReCaptchaV3\Validations\GoogleReCaptchaV3ValidationRule;
 
 class SendCodeRequest extends FormRequest
@@ -24,9 +28,31 @@ class SendCodeRequest extends FormRequest
      */
     public function rules(): array
     {
+
+        $via = $this->request->getInt('via');
+        $type = $this->request->getInt('type');
+
         return [
-            'email' => ['required','email:filter','unique:users,email'],
-            'g-recaptcha-response' => ['required',new GoogleReCaptchaV3ValidationRule('signup-send-code')],
+            'to' => [
+                'bail',
+                'required',
+                Rule::when(
+                    $via === VerificationCodeViaEnum::EMAIL->value,
+                    fn() => [
+                        'email:filter',
+                        new VerificationCodeNotExpiredRule($via, $type),
+                    ]
+                ),
+                Rule::when(
+                    $type === VerificationCodeTypeEnum::SET_PASSWORD->value,
+                    fn() => [
+                        'unique:users,email',
+                    ]
+                ),
+            ],
+            'via' => ['required', Rule::in([VerificationCodeViaEnum::EMAIL->value])],
+            'type' => ['required',Rule::enum(VerificationCodeTypeEnum::class)],
+            'g-recaptcha-response' => ['required',new GoogleReCaptchaV3ValidationRule('send-code')],
         ];
     }
 }
