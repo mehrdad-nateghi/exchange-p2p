@@ -3,7 +3,7 @@
     tags:
       - Auth
     summary: "Send Verification Code"
-    description: "Send a verification code to the provided email for setting a new password."
+    description: "Send a verification code to the specified email or mobile(Not support yet)"
     parameters: []
     requestBody:
       required: true
@@ -12,17 +12,30 @@
           schema:
             type: object
             properties:
-              email:
+              to:
                 type: string
                 format: email
-                description: "The email address to send the verification code to."
-                default: "example@example.com"
+                description: "The email or mobile(Not support yet) to send the verification code to."
+                example: example@email.com
+              via:
+                type: integer
+                enum:
+                  - 1
+                description: "The delivery method for the verification code. 1: EMAIL | 2: MOBILE"
+              type:
+                type: integer
+                enum:
+                  - 1
+                  - 2
+                description: "Type of verification. 1: SET_PASSWORD | 2: RESET_PASSWORD"
               g-recaptcha-response:
                 type: string
                 description: "The reCAPTCHA response from the client."
                 default: "03AGdBq24XvxmBsQ8jd2LhfQhPUwUGJx_6PxqY3GQxNM6xXX6xXXpqYjZhgA"
             required:
-              - email
+              - to
+              - via
+              - type
               - g-recaptcha-response
     responses:
       '201':

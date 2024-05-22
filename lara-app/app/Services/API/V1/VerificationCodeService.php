@@ -11,20 +11,15 @@ use Illuminate\Support\Facades\Crypt;
 class VerificationCodeService
 {
     private VerificationCode $model;
-    public string $code;
 
     public function __construct(VerificationCode $model)
     {
         $this->model = $model;
     }
 
-    public function store(VerificationCodeData $data)
+    public function store(array $data)
     {
-        $this->setCode();
-        $data->additional([
-            'code' => $this->encryptCode()
-        ]);
-        return $this->model->create($data->toArray());
+        return $this->model->create($data);
     }
 
     public function isValidCode(\App\Data\VerificationCodeData $data): bool
@@ -40,22 +35,17 @@ class VerificationCodeService
             Carbon::now()->lessThan($verificationCode->expired_at);
     }
 
-    private function setCode(): void
+    public function generateCode(): int
     {
-         $this->code = random_int(100000, 999999);
+         return random_int(100000, 999999);
     }
 
-    public function getCode(): string
+    public function encryptCode($code): string
     {
-        return $this->code;
+        return Crypt::encryptString($code);
     }
 
-    private function encryptCode(): string
-    {
-        return Crypt::encryptString($this->code);
-    }
-
-    private function decryptCode($code): string
+    public function decryptCode($code): string
     {
         return Crypt::decryptString($code);
     }
