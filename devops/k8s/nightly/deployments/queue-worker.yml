@@ -10,10 +10,10 @@ spec:
         - name: queue-worker
           resources:
             requests:
-              memory: '0.4GB'
+              memory: '128Mi'
               cpu: '64m'
             limits:
-              memory: '0.8GB'
+              memory: '256Mi'
               cpu: '128m'
           env:
             - name: REDIS_HOST
