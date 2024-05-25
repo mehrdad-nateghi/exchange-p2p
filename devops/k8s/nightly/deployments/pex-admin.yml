@@ -10,10 +10,10 @@ spec:
         - name: pex-admin
           resources:
             requests:
-              memory: '128Mi'
+              memory: '0.4GB'
               cpu: '64m'
             limits:
-              memory: '256Mi'
+              memory: '0.8GB'
               cpu: '128m'
             env:
               - name: DEPLOYMENT_ENV
