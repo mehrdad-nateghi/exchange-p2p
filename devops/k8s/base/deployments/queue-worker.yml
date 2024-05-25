@@ -18,7 +18,8 @@ spec:
        - name: hamdocker
       volumes:
         - name: worker-logs
-          emptyDir: {}
+          persistentVolumeClaim:
+            claimName: worker-logs-pvc
       containers:
         - image: registry.hamdocker.ir/paylibero/queue-worker
           name: queue-worker
@@ -32,15 +33,3 @@ spec:
           env:
             - name: REDIS_PORT
               value: '6379'
-  volumeClaimTemplates:
-    - metadata:
-        name: worker-logs
-        labels:
-          app.kubernetes.io/instance: paylibero-queue-worker
-          app.kubernetes.io/name: queue-worker
-      spec:
-        accessModes:
-          - ReadWriteOnce
-        resources:
-          requests:
-            storage: 1Gi
