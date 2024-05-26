@@ -23,3 +23,23 @@ spec:
                 secretKeyRef:
                   name: redis
                   key: redis-password
+
+            - name: MAIL_MAILER
+              value: mailgun
+            - name: MAIL_HOST
+              value: smtp.mailgun.org
+            - name: MAIL_PORT
+              value: '587'
+            - name: MAIL_USERNAME
+              value: postmaster@sandbox4a3798a69d06498199b46718ce00d304.mailgun.org
+            - name: MAIL_ENCRYPTION
+              value: SSL
+            - name: MAIL_FROM_ADDRESS
+              value: noreply@paylibero.ir
+            - name: MAIL_FROM_NAME
+              value: Laravel
+            - name: MAIL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mailgun
+                  key: password

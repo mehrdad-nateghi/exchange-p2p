@@ -9,6 +9,7 @@
     "kustomization",
     "kustomize",
     "laravel",
+    "mailgun",
     "nextjs",
     "paylibero",
     "RECAPTCHA",
