@@ -39,7 +39,7 @@ spec:
                   name: google-recaptcha
                   key: site_key
             - name: RECAPTCHA_V3_ENABLE
-              value: 'true'
+              value: 'false'
 
             - name: REDIS_HOST
               value: redis-headless
