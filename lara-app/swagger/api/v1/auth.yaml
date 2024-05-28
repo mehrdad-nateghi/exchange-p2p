@@ -4,6 +4,7 @@
       - Auth
     summary: "Send Verification Code"
     description: "Send a verification code to the specified email or mobile(Not support yet)"
+    operationId: "auth/send-code"
     parameters: []
     requestBody:
       required: true
@@ -63,6 +64,7 @@
       - Auth
     summary: "Resend Verification Code"
     description: "Resend a verification code to the specified recipient."
+    operationId: "auth/resend-code"
     parameters: []
     requestBody:
       required: true
@@ -116,6 +118,7 @@
       - Auth
     summary: "Verify verification code"
     description: "Used to verify a verification code sent to the user's email or mobile number for resetting their password."
+    operationId: "auth/verify-code"
     parameters: []
     requestBody:
       required: true
@@ -204,6 +207,7 @@
       - Auth
     summary: "Verify and sign up a new user."
     description: "Verify and sign up a new user."
+    operationId: "auth/signup"
     parameters: []
     requestBody:
       required: true
@@ -295,6 +299,7 @@
       - Auth
     summary: "Set user password"
     description: "This endpoint allows an authenticated user to set a new password for their account."
+    operationId: "auth/set-password"
     parameters: []
     requestBody:
       required: true
@@ -381,6 +386,7 @@
       - Auth
     summary: "Login User"
     description: "Allows a user to log in using their email and password."
+    operationId: "auth/login"
     parameters: []
     requestBody:
       required: true

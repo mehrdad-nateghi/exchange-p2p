@@ -4,6 +4,7 @@
       - Users
     summary: "Get Current User Information"
     description: "Retrieve information about the currently authenticated user."
+    operationId: "users/me"
     parameters: []
     requestBody: null
     responses:
