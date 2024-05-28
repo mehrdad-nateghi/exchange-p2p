@@ -4,7 +4,7 @@ namespace App\Models;
 
 use App\Enums\Legacy\LinkedMethodStatusEnum;
 use App\Enums\Legacy\UserRoleEnum;
-use App\Enums\Legacy\UserStatusEnum;
+use App\Enums\UserStatusEnum;
 use App\Traits\Global\UUID;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -26,9 +26,15 @@ class User extends Authenticatable
         'last_name',
         'email',
         'password',
+        'status',
         'email_verified_at',
         'created_at'
     ];
+
+    public function getStatusAttribute($value): ?string
+    {
+        return strtolower(UserStatusEnum::tryFrom($value)?->name);
+    }
 
     protected $hidden = [
         'password'

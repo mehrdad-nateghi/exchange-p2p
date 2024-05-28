@@ -5,7 +5,9 @@ namespace App\Http\Controllers\API\V1\Auth;
 use App\Data\UserData;
 use App\Data\VerificationCodeData;
 use App\Enums\RoleNameEnum;
+use App\Enums\UserStatusEnum;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\API\V1\Auth\SignUpRequest;
 use App\Services\API\V1\EmailNotificationService;
 use App\Services\API\V1\UserService;
 use App\Services\API\V1\VerificationCodeService;
@@ -18,7 +20,7 @@ use Illuminate\Support\Facades\Log;
 class SignUpController extends Controller
 {
     public function __invoke(
-        VerificationCodeData $verificationCodeData,
+        SignUpRequest $request,
         UserService $userService,
         VerificationCodeService $verificationCodeService,
         EmailNotificationService $emailNotificationService
@@ -26,30 +28,13 @@ class SignUpController extends Controller
         try {
             DB::beginTransaction();
 
-            // User's email already verified?
-            $isEmailVerified = $userService->isEmailVerified($verificationCodeData->to);
-
-            if ($isEmailVerified) {
-                return apiResponse()
-                    ->message(trans('api-messages.email_already_verified'))
-                    ->unProcessableEntity()
-                    ->getApiResponse();
-            }
-
-            // Is code valid?
-            $isValidCode = $verificationCodeService->isValidCode($verificationCodeData);
-
-            if (!$isValidCode) {
-                return apiResponse()
-                    ->message(trans('api-messages.invalid_verification_code'))
-                    ->unProcessableEntity()
-                    ->getApiResponse();
-            }
+            $validated = $request->validated();
 
             // Create user
             $user = $userService->create([
-                'email' => $verificationCodeData->to,
+                'email' => $validated['to'],
                 'email_verified_at' => Carbon::now(),
+                'status' => UserStatusEnum::ACTIVE->value,
             ]);
 
             // Assign applicant role to user
