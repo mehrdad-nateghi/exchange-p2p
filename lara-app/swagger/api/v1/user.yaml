@@ -1,10 +1,10 @@
 "/users/me":
   get:
     tags:
-      - Users
+      - users
     summary: "Get Current User Information"
     description: "Retrieve information about the currently authenticated user."
-    operationId: "users/me"
+    operationId: me
     parameters: []
     requestBody: null
     responses:
