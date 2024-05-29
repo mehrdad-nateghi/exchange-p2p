@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\API\V1\Public;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\TestJob;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Redis;
 
 class HealthCheckController extends Controller
@@ -43,8 +43,14 @@ class HealthCheckController extends Controller
 
             // Check queue connectivity
             try {
-                Queue::connection()->size();
-                $checks['queue'] = 'ok';
+                TestJob::dispatch();
+                sleep(3);
+
+                if (Cache::has('health_check_queue')) {
+                    $checks['queue'] = 'ok';
+                } else {
+                    $checks['queue'] = 'failed';
+                }
             } catch (\Exception $e) {
                 $checks['queue'] = 'failed';
             }
@@ -65,6 +71,8 @@ class HealthCheckController extends Controller
             }
 
             return apiResponse()
+                ->failed()
+                ->serverError()
                 ->message(trans('api-messages.system_health_check_failed'))
                 ->data($data)
                 ->getApiResponse();
