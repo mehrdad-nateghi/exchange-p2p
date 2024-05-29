@@ -1,10 +1,10 @@
 "/health":
   get:
     tags:
-      - Global
+      - global
     summary: "Check system health"
     description: "Performs a series of checks to ensure the system is functioning correctly."
-    operationId: "health"
+    operationId: healthCheck
     responses:
       '200':
         description: "Successful response"

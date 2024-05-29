@@ -1,10 +1,10 @@
 "/auth/send-code":
   post:
     tags:
-      - Auth
+      - auth
     summary: "Send Verification Code"
     description: "Send a verification code to the specified email or mobile(Not support yet)"
-    operationId: "auth/send-code"
+    operationId: sendCode
     parameters: []
     requestBody:
       required: true
@@ -61,10 +61,10 @@
 "/auth/resend-code":
   post:
     tags:
-      - Auth
+      - auth
     summary: "Resend Verification Code"
     description: "Resend a verification code to the specified recipient."
-    operationId: "auth/resend-code"
+    operationId: resendCode
     parameters: []
     requestBody:
       required: true
@@ -115,10 +115,10 @@
 "/auth/verify-code":
   post:
     tags:
-      - Auth
+      - auth
     summary: "Verify verification code"
     description: "Used to verify a verification code sent to the user's email or mobile number for resetting their password."
-    operationId: "auth/verify-code"
+    operationId: verifyCode
     parameters: []
     requestBody:
       required: true
@@ -204,10 +204,10 @@
 "/auth/signup":
   post:
     tags:
-      - Auth
+      - auth
     summary: "Verify and sign up a new user."
     description: "Verify and sign up a new user."
-    operationId: "auth/signup"
+    operationId: signup
     parameters: []
     requestBody:
       required: true
@@ -296,10 +296,10 @@
 "/auth/set-password":
   post:
     tags:
-      - Auth
+      - auth
     summary: "Set user password"
     description: "This endpoint allows an authenticated user to set a new password for their account."
-    operationId: "auth/set-password"
+    operationId: setPassword
     parameters: []
     requestBody:
       required: true
@@ -383,10 +383,10 @@
 "/auth/login":
   post:
     tags:
-      - Auth
+      - auth
     summary: "Login User"
     description: "Allows a user to log in using their email and password."
-    operationId: "auth/login"
+    operationId: login
     parameters: []
     requestBody:
       required: true
