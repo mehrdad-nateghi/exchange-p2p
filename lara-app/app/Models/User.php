@@ -5,7 +5,7 @@ namespace App\Models;
 use App\Enums\Legacy\LinkedMethodStatusEnum;
 use App\Enums\Legacy\UserRoleEnum;
 use App\Enums\UserStatusEnum;
-use App\Traits\Global\UUID;
+use App\Traits\Global\Ulid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -17,7 +17,7 @@ use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable
 {
 
-    use HasApiTokens,HasFactory,Notifiable,SoftDeletes, UUID, HasRoles;
+    use HasApiTokens,HasFactory,Notifiable,SoftDeletes, Ulid, HasRoles;
 
     protected $table = 'users';
 
