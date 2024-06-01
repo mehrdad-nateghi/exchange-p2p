@@ -4,7 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      *
@@ -12,15 +13,14 @@ return new class extends Migration {
      */
     public function up()
     {
-        Schema::create('users',function (Blueprint $table) {
+        Schema::create('foreign_bank_accounts', function (Blueprint $table) {
             $table->id();
             $table->ulid('ulid')->index();
-            $table->string('first_name',50)->nullable();
-            $table->string('last_name',50)->nullable();
-            $table->string('email')->unique()->index();
-            $table->string('password')->nullable();
-            $table->tinyInteger('status')->default(1);
-            $table->timestamp('email_verified_at')->nullable();
+            $table->string('holder_name',50);
+            $table->string('bank_name',50);
+            $table->string('iban', 50)->nullable(); // IBAN (International Bank Account Number)
+            $table->string('bic', 50)->nullable(); // BIC (Bank Identifier Code)
+            $table->boolean('is_active')->default(false);
             $table->timestamps();
             $table->softDeletes();
         });
@@ -33,6 +33,6 @@ return new class extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('user');
+        Schema::dropIfExists('foreign_bank_accounts');
     }
 };

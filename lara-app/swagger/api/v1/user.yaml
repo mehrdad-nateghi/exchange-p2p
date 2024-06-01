@@ -26,9 +26,9 @@
                 data:
                   type: object
                   properties:
-                    uuid:
+                    ulid:
                       type: string
-                      example: "0bdca82b-d762-46d8-aac8-f5a7e3c2c684"
+                      example: "01HZA0X41HX5CXY2YWD4GP0WAG"
                     first_name:
                       type: string
                       example: "Ali"

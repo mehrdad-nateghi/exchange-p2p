@@ -4,7 +4,7 @@ namespace App\Traits\Global;
 
 use Illuminate\Support\Str;
 
-trait UUID
+trait Ulid
 {
     /**
      * Boot function from laravel.
@@ -14,7 +14,7 @@ trait UUID
         parent::boot();
 
         static::creating(function ($model) {
-            $model->uuid = Str::uuid()->toString();
+            $model->ulid = Str::ulid();
         });
     }
 }
