@@ -30,7 +30,7 @@ spec:
             - name: DB_PORT
               value: '3306'
             - name: APP_KEY
-              value: "ggrz5rUpSYczpc"
+              value: "base64:yQhAdFdboNEdYLvoysezy0/gyKxDdwJM9SsqdtCzNhw="
             - name: APP_DEBUG
               value: 'false'
             - name: APP_URL
@@ -123,7 +123,7 @@ spec:
             - name: DB_PORT
               value: '3306'
             - name: APP_KEY
-              value: "ggrz5rUpSYczpc"
+              value: "base64:yQhAdFdboNEdYLvoysezy0/gyKxDdwJM9SsqdtCzNhw="
             - name: APP_DEBUG
               value: 'false'
             - name: APP_URL
