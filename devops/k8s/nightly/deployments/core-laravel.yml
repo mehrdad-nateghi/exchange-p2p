@@ -16,6 +16,8 @@ spec:
               memory: '256Mi'
               cpu: '128m'
           env:
+            - name: APP_ENV
+              value: nightly
 
             - name: DB_USERNAME
               valueFrom:

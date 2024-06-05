@@ -56,7 +56,7 @@ variables:
   - kubectl kustomize devops/k8s/${ENVIRONMENT_NAME} | envsubst | tee /tmp/manifest.yaml
   - kubectl apply --record -f /tmp/manifest.yaml
   # kubectl wait has issues for now. it is being under consideration in Arvan.
-  - kubectl wait --for=condition=available --timeout=200s deployment/${SERVICE_NAME}
+  # - kubectl wait --for=condition=available --timeout=200s deployment/${SERVICE_NAME}
 
 .base_deploy_job_template:
   image:

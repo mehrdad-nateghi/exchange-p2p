@@ -25,8 +25,7 @@ spec:
           env:
             - name: APP_NAME
               value: Laravel
-            - name: APP_ENV
-              value: production
+            
             - name: DB_PORT
               value: '3306'
             - name: APP_KEY
