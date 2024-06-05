@@ -25,7 +25,6 @@ spec:
           env:
             - name: APP_NAME
               value: Laravel
-            
             - name: DB_PORT
               value: '3306'
             - name: APP_KEY
@@ -122,8 +121,7 @@ spec:
           env:
             - name: APP_NAME
               value: Laravel
-            - name: APP_ENV
-              value: production
+
             - name: DB_PORT
               value: '3306'
             - name: APP_KEY
@@ -160,6 +158,12 @@ spec:
               value: '120'
             - name: MEMCACHED_HOST
               value: '127.0.0.1'
+            
+            - name: SENTRY_LARAVEL_DSN
+              value: https://2e6c8a38ddf48ff4820e3cd0e466a6e1@sentry.hamravesh.com/6536
+
+            - name: SENTRY_TRACES_SAMPLE_RATE
+              value: "1.0"
 
             - name: REDIS_HOST
               value: redis-headless
