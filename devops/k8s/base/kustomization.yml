@@ -17,5 +17,6 @@ resources:
   - statefulsets/mysql.yml
 
   - configs/mysql.yml
+  - configs/core-laravel.yml
 
   - cronjobs/mysql_backup.yml
