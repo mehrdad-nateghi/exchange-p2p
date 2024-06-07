@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Enums\PaymentMethodTypeEnum;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class RialBankAccountResource extends JsonResource
@@ -16,6 +17,7 @@ class RialBankAccountResource extends JsonResource
     {
         return [
             'ulid' => $this->ulid,
+            'type' => PaymentMethodTypeEnum::RIAL_BANK->getKeyLowercase(),
             'holder_name' => $this->holder_name,
             'bank_name' => $this->bank_name,
             'card_number' => $this->card_number,

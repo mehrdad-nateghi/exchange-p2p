@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Enums\PaymentMethodTypeEnum;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ForeignBankAccountResource extends JsonResource
@@ -16,6 +17,7 @@ class ForeignBankAccountResource extends JsonResource
     {
         return [
             'ulid' => $this->ulid,
+            'type' => PaymentMethodTypeEnum::FOREIGN_BANK->getKeyLowercase(),
             'holder_name' => $this->holder_name,
             'bank_name' => $this->bank_name,
             'iban' => $this->iban,

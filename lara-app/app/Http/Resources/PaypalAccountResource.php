@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Enums\PaymentMethodTypeEnum;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class PaypalAccountResource extends JsonResource
@@ -16,6 +17,7 @@ class PaypalAccountResource extends JsonResource
     {
         return [
             'ulid' => $this->ulid,
+            'type' => PaymentMethodTypeEnum::PAYPAL->getKeyLowercase(),
             'holder_name' => $this->holder_name,
             'email' => $this->email,
             'is_active' => $this->is_active,
