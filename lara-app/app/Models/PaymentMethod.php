@@ -18,6 +18,8 @@ class PaymentMethod extends Model
         'status',
     ];
 
+    protected $with = ['paymentMethod'];
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

@@ -3,6 +3,7 @@
 return [
     // Common messages (optional)
     'create_success' => 'The :attribute was created successfully.',
+    'retrieve_success' => 'The :attribute was retrieved successfully.',
     'read.success' => 'The resource was retrieved successfully.',
     'update.success' => 'The resource was updated successfully.',
     'delete.success' => 'The resource was deleted successfully.',
@@ -38,6 +39,10 @@ return [
 
     // Verify Code
     'code_verified_successfully' => 'Verification code verified successfully',
+
+
+    'payment_method' => 'payment method',
+    'payment_methods' => 'payment methods',
 
 
 
