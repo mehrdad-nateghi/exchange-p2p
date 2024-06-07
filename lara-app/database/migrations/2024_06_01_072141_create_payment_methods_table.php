@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->ulid('ulid')->index();
             $table->foreignId('user_id')->index()->constrained();
-            $table->tinyInteger('type');
+            $table->tinyInteger('type')->index();
             $table->morphs('payment_method');
             $table->timestamps();
             $table->softDeletes();

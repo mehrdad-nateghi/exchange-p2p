@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "56f4c0ed53b37e1dbeb471beef9e0fe9",
+    "content-hash": "5673553cf76a4e06874759ca508f203e",
     "packages": [
         {
             "name": "amphp/amp",
@@ -2419,6 +2419,77 @@
                 }
             ],
             "time": "2023-12-03T19:50:20+00:00"
+        },
+        {
+            "name": "intervention/validation",
+            "version": "3.3.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Intervention/validation.git",
+                "reference": "d3ab5280e35ec5e6ebcaa5cc9525b33abbb953d4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Intervention/validation/zipball/d3ab5280e35ec5e6ebcaa5cc9525b33abbb953d4",
+                "reference": "d3ab5280e35ec5e6ebcaa5cc9525b33abbb953d4",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/validation": "~7|~8|~9|~10",
+                "php": "^7.3|^7.4|^8.0"
+            },
+            "require-dev": {
+                "phpstan/phpstan": "^1",
+                "phpunit/phpunit": "^9.0",
+                "symfony/uid": "^5.1|^6.2"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Intervention\\Validation\\Laravel\\ValidationServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Intervention\\Validation\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Oliver Vogel",
+                    "email": "oliver@intervention.io",
+                    "homepage": "https://intervention.io/"
+                }
+            ],
+            "description": "Additional validation rules for the Laravel framework",
+            "homepage": "https://validation.intervention.io/",
+            "keywords": [
+                "BIC",
+                "IBAN",
+                "ISBN",
+                "ISIN",
+                "base64",
+                "creditcard",
+                "data-url",
+                "ean",
+                "gtin",
+                "laravel",
+                "luhn",
+                "ulid",
+                "validation",
+                "validator"
+            ],
+            "support": {
+                "issues": "https://github.com/Intervention/validation/issues",
+                "source": "https://github.com/Intervention/validation/tree/3.3.3"
+            },
+            "time": "2023-12-09T16:39:31+00:00"
         },
         {
             "name": "jean85/pretty-package-versions",
@@ -6009,6 +6080,65 @@
                 "source": "https://github.com/MyIntervals/PHP-CSS-Parser/tree/v8.5.1"
             },
             "time": "2024-02-15T16:41:13+00:00"
+        },
+        {
+            "name": "sadegh19b/laravel-persian-validation",
+            "version": "1.5.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sadegh19b/laravel-persian-validation.git",
+                "reference": "0ea3e59acb4a84845f349d7286ca11b120c31f59"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/sadegh19b/laravel-persian-validation/zipball/0ea3e59acb4a84845f349d7286ca11b120c31f59",
+                "reference": "0ea3e59acb4a84845f349d7286ca11b120c31f59",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "^6|^7|^8|^9|^10|^11",
+                "php": "~7.4|^8.0|^8.1|^8.2"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^8|^9|^10"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Sadegh19b\\LaravelPersianValidation\\PersianValidationServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Sadegh19b\\LaravelPersianValidation\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Sadegh Barzegar",
+                    "email": "sadegh19b@gmail.com"
+                }
+            ],
+            "description": "A persian alphabet, number and etc. validation package for laravel",
+            "keywords": [
+                "farsi",
+                "laravel",
+                "persian",
+                "validate",
+                "validation",
+                "validator"
+            ],
+            "support": {
+                "issues": "https://github.com/sadegh19b/laravel-persian-validation/issues",
+                "source": "https://github.com/sadegh19b/laravel-persian-validation/tree/1.5.1"
+            },
+            "time": "2024-03-15T23:41:37+00:00"
         },
         {
             "name": "sentry/sentry",

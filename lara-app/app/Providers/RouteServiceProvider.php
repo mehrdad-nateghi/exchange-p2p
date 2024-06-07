@@ -25,9 +25,10 @@ class RouteServiceProvider extends ServiceProvider
 
     protected $routes = [
         'V1' => [
-            'swagger',
-            'auth',
-            'user',
+            'SwaggerRoutes',
+            'AuthRoutes',
+            'UsersRoutes',
+            'PaymentMethodsRoutes',
         ],
     ];
 
@@ -57,7 +58,7 @@ class RouteServiceProvider extends ServiceProvider
             Route::middleware($this->api_middlewares)
                 ->prefix('api/')
                 ->group(
-                    base_path('routes/API/global.php')
+                    base_path('routes/API/GlobalRoutes.php')
                 );
 
             // web
