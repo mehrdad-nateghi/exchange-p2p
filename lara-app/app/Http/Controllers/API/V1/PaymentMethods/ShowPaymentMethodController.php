@@ -4,22 +4,20 @@ namespace App\Http\Controllers\API\V1\PaymentMethods;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\PaymentMethodCollection;
-use App\Http\Resources\PaymentMethodResource;
-use App\Models\PaymentMethod;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
-class IndexPaymentMethodController extends Controller
+class ShowPaymentMethodController extends Controller
 {
     public function __invoke(
-    ): JsonResponse
-    {
+        User $user
+    ): JsonResponse {
         try {
-            $paymentMethods = new PaymentMethodCollection(PaymentMethod::with('user')->paginate());
+            $paymentMethods = new PaymentMethodCollection($user->paymentMethods()->paginate());
 
             return apiResponse()
-                ->message(trans('api-messages.retrieve_success', ['attribute' => trans('api-messages.payment_methods')]))
+                ->message(trans('api-messages.retrieve_success', ['attribute' => trans('api-messages.user_payment_methods')]))
                 ->data($paymentMethods)
                 ->getApiResponse();
         } catch (\Throwable $t) {
