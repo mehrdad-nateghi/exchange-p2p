@@ -58,7 +58,7 @@ spec:
             - name: MAIL_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: mailgun
+                  name: najva
                   key: password
 
       containers:
@@ -121,7 +121,7 @@ spec:
             - name: MAIL_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: mailgun
+                  name: najva
                   key: password
             
 
