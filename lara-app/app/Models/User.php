@@ -7,6 +7,7 @@ use App\Enums\Legacy\UserRoleEnum;
 use App\Enums\UserStatusEnum;
 use App\Traits\Global\Ulid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -20,6 +21,10 @@ class User extends Authenticatable
     use HasApiTokens,HasFactory,Notifiable,SoftDeletes, Ulid, HasRoles;
 
     protected $table = 'users';
+
+    public function getRouteKeyName() {
+        return 'ulid';
+    }
 
     protected $fillable = [
         'first_name',
@@ -186,6 +191,11 @@ class User extends Authenticatable
         $this->save();
 
         return true;
+    }
+
+    public function paymentMethods(): HasMany
+    {
+        return $this->hasMany(PaymentMethod::class);
     }
 
     /*

@@ -43,6 +43,7 @@ return [
 
     'payment_method' => 'payment method',
     'payment_methods' => 'payment methods',
+    'user_payment_methods' => "user's payment methods",
 
 
 

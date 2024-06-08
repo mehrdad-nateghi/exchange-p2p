@@ -259,5 +259,56 @@
                       format: date-time
                       example: "2024-06-07T08:09:31.000000Z"
 
-
-
+"/users/{user}/payment-methods":
+  get:
+    tags:
+      - payment methods
+    summary: "Get all user's payment methods"
+    description: "This endpoint retrieve all user's payment methods."
+    operationId: getUserPaymentMethods
+    parameters:
+      - name: user
+        in: path
+        description: ULID of the user
+        required: true
+        schema:
+          type: string
+      - name: per_page
+        in: query
+        description: Number of items to return per page
+        required: false
+        schema:
+          type: integer
+          default: 15
+    responses:
+      '200':
+        description: Successful response
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: success
+                code:
+                  type: integer
+                  example: 200
+                message:
+                  type: string
+                  example: "The user's payment methods was retrieved successfully."
+                data:
+                  type: object
+                  properties:
+                    items:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          ulid:
+                            type: string
+                            example: "01HZVHD8J138CA88CEWGRNWXB1"
+                          payment_method:
+                            type: object
+                    pagination:
+                      type: object
