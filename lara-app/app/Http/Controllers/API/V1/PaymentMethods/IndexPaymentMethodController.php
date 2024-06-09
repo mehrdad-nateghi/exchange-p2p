@@ -16,7 +16,7 @@ class IndexPaymentMethodController extends Controller
     ): JsonResponse
     {
         try {
-            $paymentMethods = new PaymentMethodCollection(PaymentMethod::with('user')->paginate());
+            $paymentMethods = new PaymentMethodCollection(PaymentMethod::paginate());
 
             return apiResponse()
                 ->message(trans('api-messages.retrieve_success', ['attribute' => trans('api-messages.payment_methods')]))

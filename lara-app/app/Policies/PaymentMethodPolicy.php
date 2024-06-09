@@ -30,7 +30,7 @@ class PaymentMethodPolicy
      */
     public function view(User $user, PaymentMethod $paymentMethod)
     {
-        //
+        return $user->id === $paymentMethod->user_id;
     }
 
     /**
@@ -65,7 +65,7 @@ class PaymentMethodPolicy
      */
     public function delete(User $user, PaymentMethod $paymentMethod)
     {
-        //
+        return $user->id === $paymentMethod->user_id;
     }
 
     /**

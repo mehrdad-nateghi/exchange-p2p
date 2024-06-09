@@ -16,7 +16,7 @@ class ForeignBankAccountResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'ulid' => $this->ulid,
+            //'ulid' => $this->ulid,
             'type' => PaymentMethodTypeEnum::FOREIGN_BANK->getKeyLowercase(),
             'holder_name' => $this->holder_name,
             'bank_name' => $this->bank_name,
