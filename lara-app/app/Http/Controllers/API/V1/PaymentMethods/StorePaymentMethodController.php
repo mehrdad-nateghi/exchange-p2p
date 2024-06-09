@@ -5,6 +5,8 @@ namespace App\Http\Controllers\API\V1\PaymentMethods;
 use App\Enums\PaymentMethodTypeEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\PaymentMethod\StorePaymentMethodRequest;
+use App\Http\Resources\PaymentMethodResource;
+use App\Http\Resources\PaypalAccountResource;
 use App\Models\PaymentMethod;
 use App\Services\API\V1\ForeignBankAccountService;
 use App\Services\API\V1\PaymentMethodService;
@@ -29,7 +31,8 @@ class StorePaymentMethodController extends Controller
             DB::beginTransaction();
 
             $data = $request->validated();
-            $resource = [];
+
+            $paymentMethod = [];
 
             // RIAL ACCOUNT
             if($data['type'] == PaymentMethodTypeEnum::RIAL_BANK->value){
@@ -42,12 +45,10 @@ class StorePaymentMethodController extends Controller
                     'is_active' => $data['is_active'],
                 ]);
 
-                $rialBankAccountService->createPaymentMethod($rialBankAccount,[
+                $paymentMethod = $rialBankAccountService->createPaymentMethod($rialBankAccount,[
                     'user_id' => Auth::id(),
                     'type' => $data['type']
                 ]);
-
-                $resource = $rialBankAccountService->createResource($rialBankAccount);
             }
 
             // FOREIGN ACCOUNT
@@ -60,12 +61,10 @@ class StorePaymentMethodController extends Controller
                     'is_active' => $data['is_active'],
                 ]);
 
-                $foreignBankAccountService->createPaymentMethod($foreignBankAccount,[
+                $paymentMethod = $foreignBankAccountService->createPaymentMethod($foreignBankAccount,[
                     'user_id' => Auth::id(),
                     'type' => $data['type']
                 ]);
-
-                $resource = $foreignBankAccountService->createResource($foreignBankAccount);
             }
 
             // PAYPAL ACCOUNT
@@ -76,13 +75,13 @@ class StorePaymentMethodController extends Controller
                     'is_active' => $data['is_active'],
                 ]);
 
-                $paypalAccountService->createPaymentMethod($paypalAccount,[
+                $paymentMethod = $paypalAccountService->createPaymentMethod($paypalAccount,[
                     'user_id' => Auth::id(),
                     'type' => $data['type']
                 ]);
-
-                $resource = $paypalAccountService->createResource($paypalAccount);
             }
+
+            $resource =  new PaymentMethodResource($paymentMethod);
 
             DB::commit();
 

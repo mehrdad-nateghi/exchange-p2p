@@ -6,10 +6,11 @@ use App\Traits\Global\Ulid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class RialBankAccount extends Model
 {
-    use HasFactory,Ulid;
+    use HasFactory,Ulid, SoftDeletes;
 
     protected $fillable = [
         'holder_name',

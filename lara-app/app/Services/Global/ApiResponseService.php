@@ -78,6 +78,12 @@ class ApiResponseService
         return $this;
     }
 
+    public function noContent(): self
+    {
+        $this->statusCode(Response::HTTP_NO_CONTENT);
+        return $this;
+    }
+
     public function deleted(): self
     {
         $this->statusCode(Response::HTTP_NO_CONTENT);

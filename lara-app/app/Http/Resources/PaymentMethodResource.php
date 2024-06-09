@@ -16,13 +16,12 @@ class PaymentMethodResource extends JsonResource
           ];
     }
 
-    private function getPaymentMethodResource(): RialBankAccountResource|ForeignBankAccountResource|PaypalAccountResource|null
+    private function getPaymentMethodResource(): RialBankAccountResource|ForeignBankAccountResource|PaypalAccountResource
     {
-        return match ($this->type) {
+        return match (intval($this->type)) {
             PaymentMethodTypeEnum::RIAL_BANK->value => new RialBankAccountResource($this->paymentMethod),
             PaymentMethodTypeEnum::FOREIGN_BANK->value => new ForeignBankAccountResource($this->paymentMethod),
             PaymentMethodTypeEnum::PAYPAL->value => new PaypalAccountResource($this->paymentMethod),
-            default => null,
         };
     }
 }

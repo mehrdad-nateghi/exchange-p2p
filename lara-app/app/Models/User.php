@@ -22,7 +22,8 @@ class User extends Authenticatable
 
     protected $table = 'users';
 
-    public function getRouteKeyName() {
+    public function getRouteKeyName(): string
+    {
         return 'ulid';
     }
 

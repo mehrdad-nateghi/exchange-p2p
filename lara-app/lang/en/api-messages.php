@@ -6,11 +6,12 @@ return [
     'retrieve_success' => 'The :attribute was retrieved successfully.',
     'read.success' => 'The resource was retrieved successfully.',
     'update.success' => 'The resource was updated successfully.',
-    'delete.success' => 'The resource was deleted successfully.',
+    'delete_success' => 'The :attribute was deleted successfully.',
     'common.success' => 'The action was successful.',
     'common.error' => 'An error occurred.',
     'internal_server_error' => 'Internal Server Error!',
     'un_authenticated' => 'unAuthenticated',
+    'un_authorized' => 'unAuthorized',
     'un_processable_entity' => 'unAuthenticated',
     'item_not_found' => 'Item Not Found',
     'requested_link_does_not_exist' => 'requested link does not exist',
@@ -44,6 +45,7 @@ return [
     'payment_method' => 'payment method',
     'payment_methods' => 'payment methods',
     'user_payment_methods' => "user's payment methods",
+    'user_payment_method' => "user's payment method",
 
 
 
