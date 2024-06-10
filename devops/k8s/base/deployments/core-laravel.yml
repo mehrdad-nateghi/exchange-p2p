@@ -27,7 +27,6 @@ spec:
           args:
             - |
               cd /var/www
-              php artisan passport:install
               php artisan optimize:clear
               php artisan optimize
               php artisan migrate --force
