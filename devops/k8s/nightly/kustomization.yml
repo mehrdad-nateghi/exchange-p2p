@@ -5,6 +5,8 @@ namespace: paylibero-nightly
 
 resources:
   - ../base
+  - deployments/phpmyadmin.yml
+  - services/phpmyadmin.yml
   - ingresses.yml
 
 patches:

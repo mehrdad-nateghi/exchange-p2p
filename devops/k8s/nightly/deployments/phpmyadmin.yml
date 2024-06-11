@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: phpmyadmin
+  name: phpmyadmin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: phpmyadmin
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: phpmyadmin
+    spec:
+      containers:
+      - env:
+        - name: PMA_HOST
+          value: paylibero-db-mysql-headless
+        - name: PMA_PORT
+          value: "3306"
+        - name: PMA_USER
+          valueFrom:
+            secretKeyRef:
+              key: username
+              name: core-laravel-mysql-db
+        - name: PMA_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: core-laravel-mysql-db
+        image: phpmyadmin/phpmyadmin:latest
+        imagePullPolicy: Always
+        name: phpmyadmin
+        ports:
+        - containerPort: 80
+          protocol: TCP
+        resources:
+          limits:
+            cpu: 128m
+            memory: 256Mi
+          requests:
+            cpu: 64m
+            memory: 128Mi
+      restartPolicy: Always

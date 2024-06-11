@@ -5,7 +5,7 @@ metadata:
 data:
   APP_DEBUG: "false"
   APP_KEY: "base64:yQhAdFdboNEdYLvoysezy0/gyKxDdwJM9SsqdtCzNhw="
-  APP_NAME: paylibero
+  APP_NAME: Laravel
   APP_URL: https://core-lara-33e1254e7d-paylibero-nightly.apps.ir-thr-ba1.arvancaas.ir
   BROADCAST_DRIVER: log
   CACHE_DRIVER: file
@@ -17,7 +17,7 @@ data:
   LOG_LEVEL: debug
   MEMCACHED_HOST: "127.0.0.1"
   MYSQL_DATABASE: laravel
-  QUEUE_CONNECTION: redis
+  QUEUE_CONNECTION: sync
   SENTRY_LARAVEL_DSN: https://2e6c8a38ddf48ff4820e3cd0e466a6e1@sentry.hamravesh.com/6536
   SENTRY_TRACES_SAMPLE_RATE: "1.0"
   SESSION_DRIVER: file

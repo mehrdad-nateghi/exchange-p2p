@@ -123,7 +123,3 @@ spec:
                 secretKeyRef:
                   name: najva
                   key: password
-            
-
-            
-              
