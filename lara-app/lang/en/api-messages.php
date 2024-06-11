@@ -5,7 +5,7 @@ return [
     'create_success' => 'The :attribute was created successfully.',
     'retrieve_success' => 'The :attribute was retrieved successfully.',
     'read.success' => 'The resource was retrieved successfully.',
-    'update.success' => 'The resource was updated successfully.',
+    'update_success' => 'The :attribute was updated successfully.',
     'delete_success' => 'The :attribute was deleted successfully.',
     'common.success' => 'The action was successful.',
     'common.error' => 'An error occurred.',

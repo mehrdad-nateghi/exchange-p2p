@@ -1,11 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\API\V1\PaymentMethods;
+namespace App\Http\Controllers\API\V1\PaymentMethods\User;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\PaymentMethodCollection;
 use App\Models\PaymentMethod;
-use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
