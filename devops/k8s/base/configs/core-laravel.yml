@@ -17,7 +17,7 @@ data:
   LOG_LEVEL: debug
   MEMCACHED_HOST: "127.0.0.1"
   MYSQL_DATABASE: laravel
-  QUEUE_CONNECTION: sync
+  QUEUE_CONNECTION: redis
   SENTRY_LARAVEL_DSN: https://2e6c8a38ddf48ff4820e3cd0e466a6e1@sentry.hamravesh.com/6536
   SENTRY_TRACES_SAMPLE_RATE: "1.0"
   SESSION_DRIVER: file
