@@ -34,7 +34,5 @@ RUN composer install --no-interaction
 
 ENV PORT=8000
 EXPOSE 8000
-CMD [ "php","artisan","serve", "--port=8000" ,"--host=0.0.0.0","--env=.env" ]
-
 RUN chmod +x /usr/local/bin/entrypoint.prod.sh
 ENTRYPOINT [ "/usr/local/bin/entrypoint.prod.sh" ]
