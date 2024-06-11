@@ -53,7 +53,7 @@ class PaymentMethodPolicy
      */
     public function update(User $user, PaymentMethod $paymentMethod)
     {
-        //
+        return $user->id === $paymentMethod->user_id;
     }
 
     /**

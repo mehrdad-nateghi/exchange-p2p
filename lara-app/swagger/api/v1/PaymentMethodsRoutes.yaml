@@ -208,6 +208,96 @@
                   }
                 }
               }
+  put:
+    tags:
+      - payment methods
+    summary: "Update a user's payment method"
+    description: "Update a specific payment method of the authenticated user."
+    operationId: UpdateUserPaymentMethod
+    parameters:
+      - name: paymentMethod
+        in: path
+        required: true
+        description: "The ULID of the payment method to update."
+        schema:
+          type: string
+    requestBody:
+      required: true
+      content:
+        application/x-www-form-urlencoded:
+          schema:
+            type: object
+            required:
+              - holder_name
+              - is_active
+            properties:
+              card_number:
+                type: string
+                description: "The card number (required if type is Rial Bank)"
+                example: "6274129005473742"
+              sheba:
+                type: string
+                description: "The Sheba number (required if type is Rial Bank)"
+                example: "IR062960000000100324200001"
+              account_no:
+                type: string
+                description: "The account number"
+                example: "10996491"
+              iban:
+                type: string
+                description: "The IBAN (required if type is Foreign Bank)"
+                example: "DE89370400440532013000"
+              bic:
+                type: string
+                description: "The BIC (required if type is Foreign Bank)"
+                example: "DEUTDEFF"
+              email:
+                type: string
+                format: email
+                description: "The email address (required if type is Paypal)"
+                example: "john.doe@example.com"
+              holder_name:
+                type: string
+                description: "The name of the account holder"
+                example: "John Doe"
+              bank_name:
+                type: string
+                description: "The name of the bank (required if type is Rial Bank or Foreign Bank)"
+                example: "Bank Melli Iran"
+              is_active:
+                type: integer
+                enum:
+                  - 0
+                  - 1
+                description: "Indicates if the payment method is active. Inactive: 0 | Active: 1"
+                example: 1
+    responses:
+      '200':
+        description: "The payment method was updated successfully."
+        content:
+          application/json:
+            schema:
+              type: object
+              example: {
+                "status": "success",
+                "code": 200,
+                "message": "The payment method was updated successfully.",
+                "data": {
+                  "ulid": "01J03T8BFA0FMRB3S3D75FB900",
+                  "payment_method": {
+                    "type": "rial_bank",
+                    "holder_name": "Mehrdad Nateghi",
+                    "bank_name": "Resalat",
+                    "card_number": "5041951019781245",
+                    "sheba": "IR410200030500111099649001",
+                    "account_no": "109964910",
+                    "icon": "not-defined",
+                    "is_active": true,
+                    "created_at": "2024-06-11T14:11:58.000000Z",
+                    "updated_at": "2024-06-11T15:02:17.000000Z"
+                  }
+                }
+              }
 
   delete:
     tags:
@@ -236,56 +326,4 @@
                 "data": null
               }
 
-"/users/{user}/payment-methods":
-  get:
-    tags:
-      - payment methods
-    summary: "Get all user's payment methods"
-    description: "This endpoint retrieve all user's payment methods."
-    operationId: getUserPaymentMethods
-    parameters:
-      - name: user
-        in: path
-        description: ULID of the user
-        required: true
-        schema:
-          type: string
-      - name: per_page
-        in: query
-        description: Number of items to return per page
-        required: false
-        schema:
-          type: integer
-          default: 15
-    responses:
-      '200':
-        description: Successful response
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                status:
-                  type: string
-                  example: success
-                code:
-                  type: integer
-                  example: 200
-                message:
-                  type: string
-                  example: "The user's payment methods was retrieved successfully."
-                data:
-                  type: object
-                  properties:
-                    items:
-                      type: array
-                      items:
-                        type: object
-                        properties:
-                          ulid:
-                            type: string
-                            example: "01HZVHD8J138CA88CEWGRNWXB1"
-                          payment_method:
-                            type: object
-                    pagination:
-                      type: object
+

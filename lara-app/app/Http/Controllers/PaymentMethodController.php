@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\API\V1\PaymentMethod\StorePaymentMethodRequest;
+use App\Http\Requests\API\V1\PaymentMethod\User\StorePaymentMethodRequest;
 use App\Http\Requests\UpdatePaymentMethodRequest;
 use App\Models\PaymentMethod;
 
@@ -21,7 +21,7 @@ class PaymentMethodController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\API\V1\PaymentMethod\StorePaymentMethodRequest  $request
+     * @param  \App\Http\Requests\API\V1\PaymentMethod\User\StorePaymentMethodRequest  $request
      * @return \Illuminate\Http\Response
      */
     public function store(StorePaymentMethodRequest $request)
