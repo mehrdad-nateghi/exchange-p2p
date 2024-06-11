@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-gui
+  labels:
+    app: redis-gui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis-gui
+  template:
+    metadata:
+      labels:
+        app: redis-gui
+    spec:
+      containers:
+      - name: redis-gui
+        image: rediscommander/redis-commander:latest
+        resources:
+          limits:
+            cpu: 128m
+            memory: 256Mi
+          requests:
+            cpu: 64m
+            memory: 128Mi
+        ports:
+        - containerPort: 8081
+        env:
+        - name: REDIS_HOST
+          value: redis-headless
+        - name: REDIS_PORT
+          value: "6379"
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: redis
+              key: redis-password

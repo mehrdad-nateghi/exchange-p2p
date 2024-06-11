@@ -30,6 +30,6 @@ spec:
             - containerPort: 8000
               protocol: TCP
           resources: {}
-          env:
-            - name: REDIS_PORT
-              value: '6379'
+          envFrom:
+            - configMapRef:
+                name: core-laravel

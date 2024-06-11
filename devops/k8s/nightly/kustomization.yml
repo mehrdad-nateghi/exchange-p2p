@@ -7,6 +7,8 @@ resources:
   - ../base
   - deployments/phpmyadmin.yml
   - services/phpmyadmin.yml
+  - deployments/redis-gui.yml
+  - services/redis-gui.yml
   - ingresses.yml
 
 patches:

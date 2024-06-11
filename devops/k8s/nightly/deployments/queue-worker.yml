@@ -16,30 +16,54 @@ spec:
               memory: '256Mi'
               cpu: '128m'
           env:
+# APP--------------------------------------
+            - name: APP_ENV
+              value: nightly
+
+# DB--------------------------------------
+            - name: DB_HOST
+              value: paylibero-db-mysql-headless
+            - name: DB_PORT
+              value: "3306"
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: core-laravel-mysql-db
+                  key: username
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: core-laravel-mysql-db
+                  key: password
+
+# RECAPTCHA--------------------------------------
+            - name: RECAPTCHA_V3_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: google-recaptcha
+                  key: secret_key
+            - name: RECAPTCHA_V3_SITE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: google-recaptcha
+                  key: site_key
+            - name: RECAPTCHA_V3_ENABLE
+              value: 'false'
+
+# REDIS--------------------------------------
             - name: REDIS_HOST
               value: redis-headless
+            - name: REDIS_PORT
+              value: "6379"
             - name: REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: redis
                   key: redis-password
 
-            - name: MAIL_MAILER
-              value: mailgun
-            - name: MAIL_HOST
-              value: smtp.mailgun.org
-            - name: MAIL_PORT
-              value: '587'
-            - name: MAIL_USERNAME
-              value: postmaster@sandbox4a3798a69d06498199b46718ce00d304.mailgun.org
-            - name: MAIL_ENCRYPTION
-              value: SSL
-            - name: MAIL_FROM_ADDRESS
-              value: noreply@paylibero.ir
-            - name: MAIL_FROM_NAME
-              value: Laravel
+# MAIL--------------------------------------
             - name: MAIL_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: mailgun
+                  name: najva
                   key: password
