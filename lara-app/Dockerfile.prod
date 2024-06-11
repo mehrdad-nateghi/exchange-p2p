@@ -10,7 +10,6 @@ WORKDIR /var/www
 
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-COPY ./dockerfiles/entrypoint.prod.sh /usr/local/bin/entrypoint.prod.sh
 
 # Image metadata:
 ARG CI_COMMIT_SHORT_SHA
@@ -34,5 +33,4 @@ RUN composer install --no-interaction
 
 ENV PORT=8000
 EXPOSE 8000
-RUN chmod +x /usr/local/bin/entrypoint.prod.sh
-ENTRYPOINT [ "/usr/local/bin/entrypoint.prod.sh" ]
+CMD [ "php","artisan","serve", "--port=8000" ,"--host=0.0.0.0" ]
