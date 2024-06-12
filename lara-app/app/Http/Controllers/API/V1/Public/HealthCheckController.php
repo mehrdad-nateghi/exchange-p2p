@@ -22,6 +22,7 @@ class HealthCheckController extends Controller
                 DB::selectOne('SELECT 1');
                 $checks['database'] = 'ok';
             } catch (\Exception $e) {
+                Log::error($e);
                 $checks['database'] = 'failed';
             }
 
@@ -30,6 +31,7 @@ class HealthCheckController extends Controller
                 Redis::ping();
                 $checks['redis'] = 'ok';
             } catch (\Exception $e) {
+                Log::error($e);
                 $checks['redis'] = 'failed';
             }
 
@@ -38,11 +40,12 @@ class HealthCheckController extends Controller
                 Cache::store()->get('test_cache_key');
                 $checks['cache'] = 'ok';
             } catch (\Exception $e) {
+                Log::error($e);
                 $checks['cache'] = 'failed';
             }
 
             // Check queue connectivity
-            /*try {
+            try {
                 TestJob::dispatch();
                 sleep(3);
 
@@ -52,8 +55,9 @@ class HealthCheckController extends Controller
                     $checks['queue'] = 'failed';
                 }
             } catch (\Exception $e) {
+                Log::error($e);
                 $checks['queue'] = 'failed';
-            }*/
+            }
 
             // Determine the overall status
             $overallStatus = array_search('failed', $checks) ? 'failed' : 'ok';
