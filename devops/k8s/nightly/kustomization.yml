@@ -5,10 +5,17 @@ namespace: paylibero-nightly
 
 resources:
   - ../base
+
   - deployments/phpmyadmin.yml
   - services/phpmyadmin.yml
+
+  - deployments/redis.yml
+  - services/redis.yml
+  - config/redis.yml
+  
   - deployments/redis-gui.yml
   - services/redis-gui.yml
+
   - ingresses.yml
 
 patches:

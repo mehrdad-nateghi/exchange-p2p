@@ -45,13 +45,13 @@ spec:
 
 # REDIS--------------------------------------
             - name: REDIS_HOST
-              value: redis-headless
+              value: redis
             - name: REDIS_PORT
               value: "6379"
             - name: REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: redis
+                  name: redis-auth
                   key: redis-password
 
 # MAIL--------------------------------------
@@ -108,13 +108,13 @@ spec:
 
 # REDIS--------------------------------------
             - name: REDIS_HOST
-              value: redis-headless
+              value: redis
             - name: REDIS_PORT
               value: "6379"
             - name: REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: redis
+                  name: redis-auth
                   key: redis-password
 
 # MAIL--------------------------------------

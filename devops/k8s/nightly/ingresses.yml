@@ -43,6 +43,28 @@ spec:
             path: /
             pathType: ImplementationSpecific
 
+    - host: redis-33e1254e7d-paylibero-nightly.apps.ir-thr-ba1.arvancaas.ir
+      http:
+        paths:
+          - backend:
+              service:
+                name: redis-gui
+                port:
+                  number: 80
+            path: /
+            pathType: ImplementationSpecific
+   
+    - host: phpmyadmin-33e1254e7d-paylibero-nightly.apps.ir-thr-ba1.arvancaas.ir
+      http:
+        paths:
+        - backend:
+            service:
+              name: phpmyadmin
+              port:
+                number: 80
+          path: /
+          pathType: ImplementationSpecific
+
     - host: nightly.paylibero.ir
       http:
         paths:
