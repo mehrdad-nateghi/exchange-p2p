@@ -42,7 +42,7 @@ class HealthCheckController extends Controller
             }
 
             // Check queue connectivity
-            try {
+            /*try {
                 TestJob::dispatch();
                 sleep(3);
 
@@ -53,7 +53,7 @@ class HealthCheckController extends Controller
                 }
             } catch (\Exception $e) {
                 $checks['queue'] = 'failed';
-            }
+            }*/
 
             // Determine the overall status
             $overallStatus = array_search('failed', $checks) ? 'failed' : 'ok';
