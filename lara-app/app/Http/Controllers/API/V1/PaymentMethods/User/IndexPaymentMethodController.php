@@ -1,13 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\API\V1\PaymentMethods;
+namespace App\Http\Controllers\API\V1\PaymentMethods\User;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\PaymentMethodCollection;
-use App\Http\Resources\PaymentMethodResource;
 use App\Models\PaymentMethod;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class IndexPaymentMethodController extends Controller

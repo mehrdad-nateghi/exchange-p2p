@@ -1,9 +1,13 @@
 <?php
 
-namespace App\Http\Requests\API\V1\PaymentMethod;
+namespace App\Http\Requests\API\V1\PaymentMethod\User;
 
 use App\Enums\PaymentMethodTypeEnum;
+<<<<<<< Updated upstream:lara-app/app/Http/Requests/API/V1/PaymentMethod/StorePaymentMethodRequest.php
 use App\Enums\VerificationCodeTypeEnum;
+=======
+use App\Rules\AlphaSpace;
+>>>>>>> Stashed changes:lara-app/app/Http/Requests/API/V1/PaymentMethod/User/StorePaymentMethodRequest.php
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Intervention\Validation\Rules\Bic;
@@ -87,8 +91,8 @@ class StorePaymentMethodRequest extends FormRequest
             ],
             'bank_name' => [
                 'bail',
-                Rule::requiredIf(function () {
-                    return in_array(request('type'), [
+                Rule::requiredIf(function () use($type){
+                    return in_array($type, [
                         PaymentMethodTypeEnum::RIAL_BANK->value,
                         PaymentMethodTypeEnum::FOREIGN_BANK->value,
                     ]);

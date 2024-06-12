@@ -1,18 +1,15 @@
 <?php
 
-namespace App\Http\Controllers\API\V1\PaymentMethods;
+namespace App\Http\Controllers\API\V1\PaymentMethods\User;
 
 use App\Enums\PaymentMethodTypeEnum;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\API\V1\PaymentMethod\StorePaymentMethodRequest;
+use App\Http\Requests\API\V1\PaymentMethod\User\StorePaymentMethodRequest;
 use App\Http\Resources\PaymentMethodResource;
-use App\Http\Resources\PaypalAccountResource;
-use App\Models\PaymentMethod;
 use App\Services\API\V1\ForeignBankAccountService;
 use App\Services\API\V1\PaymentMethodService;
 use App\Services\API\V1\PaypalAccountService;
 use App\Services\API\V1\RialBankAccountService;
-use App\Services\API\V1\UserService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
