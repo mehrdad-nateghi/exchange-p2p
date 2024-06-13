@@ -56,11 +56,10 @@ spec:
             - name: REDIS_PORT
               value: "6379"
             - name: REDIS_PASSWORD
-              value: paylibero0100
-              # valueFrom:
-              #   secretKeyRef:
-              #     name: redis-auth
-              #     key: redis-password
+              valueFrom:
+                secretKeyRef:
+                  name: redis-auth
+                  key: redis-password
 
 # MAIL--------------------------------------
             - name: MAIL_PASSWORD
