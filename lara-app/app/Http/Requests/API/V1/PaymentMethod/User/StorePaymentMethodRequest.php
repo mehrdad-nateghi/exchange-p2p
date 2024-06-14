@@ -3,11 +3,7 @@
 namespace App\Http\Requests\API\V1\PaymentMethod\User;
 
 use App\Enums\PaymentMethodTypeEnum;
-<<<<<<< Updated upstream:lara-app/app/Http/Requests/API/V1/PaymentMethod/StorePaymentMethodRequest.php
-use App\Enums\VerificationCodeTypeEnum;
-=======
 use App\Rules\AlphaSpace;
->>>>>>> Stashed changes:lara-app/app/Http/Requests/API/V1/PaymentMethod/User/StorePaymentMethodRequest.php
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Intervention\Validation\Rules\Bic;
@@ -32,6 +28,8 @@ class StorePaymentMethodRequest extends FormRequest
      */
     public function rules()
     {
+        $type = $this->request->getInt('type');
+
         return [
             // PAYMENT METHODS
             'type' => [
