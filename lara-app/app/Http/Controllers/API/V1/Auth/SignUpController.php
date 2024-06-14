@@ -6,6 +6,7 @@ use App\Data\UserData;
 use App\Data\VerificationCodeData;
 use App\Enums\RoleNameEnum;
 use App\Enums\UserStatusEnum;
+use App\Events\SignUpEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\Auth\SignUpRequest;
 use App\Services\API\V1\EmailNotificationService;
@@ -45,6 +46,9 @@ class SignUpController extends Controller
 
             // Create a personal access token for the user
             $tokenData = $userService->createToken($user);
+
+            // Dispatch Events
+            SignUpEvent::dispatch($user);
 
             // Prepare data
             $data = [

@@ -4,8 +4,8 @@ namespace App\Http\Controllers\API\V1\PaymentMethods\User;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\PaymentMethodCollection;
-use App\Models\PaymentMethod;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class IndexPaymentMethodController extends Controller
@@ -14,7 +14,8 @@ class IndexPaymentMethodController extends Controller
     ): JsonResponse
     {
         try {
-            $paymentMethods = new PaymentMethodCollection(PaymentMethod::paginate());
+            $user = Auth::user();
+            $paymentMethods = new PaymentMethodCollection($user->paymentMethods()->paginate());
 
             return apiResponse()
                 ->message(trans('api-messages.retrieve_success', ['attribute' => trans('api-messages.payment_methods')]))
