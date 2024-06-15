@@ -15,9 +15,6 @@ RUN mkdir -p /var/log/supervisor
 # Copy the Supervisor configuration file
 COPY /dockerfiles/queues/supervisord.conf /etc/supervisor/supervisord.conf
 
-# Set the working directory
-WORKDIR /var/www
-
 # Image metadata:
 ARG CI_COMMIT_SHORT_SHA
 ARG CI_COMMIT_MESSAGE
