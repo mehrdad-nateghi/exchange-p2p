@@ -33,3 +33,6 @@ spec:
           envFrom:
             - configMapRef:
                 name: core-laravel
+          env:
+            - name: HOSTNAME
+              value: queue

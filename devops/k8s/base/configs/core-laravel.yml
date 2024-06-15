@@ -30,3 +30,4 @@ data:
   MAIL_FROM_ADDRESS: "noreply@paylibero.ir"
   MAIL_FROM_NAME: "Paylibero"
   REDIS_CLIENT: predis
+  DEPLOY_MODE: "true"

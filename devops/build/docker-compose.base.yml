@@ -5,7 +5,7 @@ services:
     image: registry.hamdocker.ir/paylibero/build-core-laravel:${CI_COMMIT_SHORT_SHA}
     build:
       context: ../../lara-app
-      dockerfile: Dockerfile.prod
+      dockerfile: Dockerfile
       args:
         - CI_COMMIT_SHORT_SHA
         - CI_COMMIT_MESSAGE
@@ -16,10 +16,9 @@ services:
     image: registry.hamdocker.ir/paylibero/queue-worker:${CI_COMMIT_SHORT_SHA}
     build:
       context: ../../lara-app
-      dockerfile: dockerfiles/queues/queue.dockerfile
+      dockerfile: Dockerfile
       args:
         - CI_COMMIT_SHORT_SHA
         - CI_COMMIT_MESSAGE
         - CI_PIPELINE_CREATED_AT
         - CI_PIPELINE_URL
-

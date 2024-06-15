@@ -33,6 +33,9 @@ spec:
           envFrom:
             - configMapRef:
                 name: core-laravel
+          env:
+            - name: HOSTNAME
+              value: php
       containers:
         - image: registry.hamdocker.ir/paylibero/build-core-laravel
           imagePullPolicy: Always
