@@ -27,7 +27,7 @@ if [[ "$HOSTNAME" == "php" ]]; then
     COMMAND="php artisan serve --port=$PORT --host=0.0.0.0 --env=.env"
     
     elif [[ "$HOSTNAME" == "queue" ]]; then
-    COMMAND="php /var/www/artisan queue:work --tries=3 --backoff=3"
+    COMMAND="/usr/bin/supervisord -n -c dockerfiles/queues/supervisord.conf"
 else
     echo "[ ENTRYPOINT ] 'HOSTNAME' env is not set"
     exit 1
