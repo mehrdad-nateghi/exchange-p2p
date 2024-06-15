@@ -10,6 +10,7 @@ services:
             - APP_ENV=${APP_ENV}
             - CONTAINER_ROLE=app
             - HOSTNAME=php
+            - DEPLOY_MODE=false
             - RUN_SETUP_COMMANDS=${RUN_SETUP_COMMANDS}
         working_dir: /var/www
         volumes:
@@ -56,6 +57,7 @@ services:
         environment:
             - APP_ENV=${APP_ENV}
             - HOSTNAME=queue
+            - DEPLOY_MODE=false
         restart: unless-stopped
         depends_on:
             - php
