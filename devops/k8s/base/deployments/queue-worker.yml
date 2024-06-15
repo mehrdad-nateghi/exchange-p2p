@@ -21,7 +21,7 @@ spec:
           persistentVolumeClaim:
             claimName: worker-logs-pvc
       containers:
-        - image: registry.hamdocker.ir/paylibero/queue-worker
+        - image: registry.hamdocker.ir/paylibero/build-core-laravel
           name: queue-worker
           volumeMounts:
             - name: worker-logs

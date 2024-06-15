@@ -82,19 +82,6 @@ build-nightly:
     deployment_tier: staging
     action: prepare
 
-build-queue-nightly:
-  stage: Build
-  extends: .build_job_template
-  variables:
-    SERVICE_NAME: queue-worker
-    ENVIRONMENT_NAME: nightly
-  rules:
-    - if: '$CI_MERGE_REQUEST_ID == null && $CI_COMMIT_REF_NAME == "main"'
-  environment:
-    name: core-nightly
-    deployment_tier: staging
-    action: prepare
-
 deploy-nightly:
   stage: Deploy
   extends: .deploy_job_template
