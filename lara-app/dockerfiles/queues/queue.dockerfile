@@ -1,10 +1,13 @@
 FROM hub.hamdocker.ir/library/php:8.2
 
-# Install required PHP extensions
-RUN docker-php-ext-install pdo pdo_mysql
+RUN apt-get update -y
+RUN apt-get install -y unzip libpq-dev libcurl4-gnutls-dev supervisor
+RUN docker-php-ext-install pdo pdo_mysql bcmath
+RUN pecl install redis
+RUN docker-php-ext-enable redis
 
-# Install Supervisor
-RUN apt-get update && apt-get install -y supervisor
+# Install composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Create a directory for Supervisor logs
 RUN mkdir -p /var/log/supervisor
@@ -34,9 +37,10 @@ ENV CI_PIPELINE_URL ${CI_PIPELINE_URL}
 
 # Copy the Laravel application code
 COPY .. .
+RUN composer install --no-interaction
 
 ENV PORT=8000
 EXPOSE 8000
 
 # Run Supervisor
-ENTRYPOINT ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisor/supervisord.conf"]
+CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisor/supervisord.conf"]
