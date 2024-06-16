@@ -8,6 +8,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Redis;
 
 class HealthCheckController extends Controller
@@ -45,7 +46,7 @@ class HealthCheckController extends Controller
             }
 
             // Check queue connectivity
-            try {
+            /*try {
                 TestJob::dispatch();
                 sleep(3);
 
@@ -57,7 +58,7 @@ class HealthCheckController extends Controller
             } catch (\Exception $e) {
                 Log::error($e);
                 $checks['queue'] = 'failed';
-            }
+            }*/
 
             // Determine the overall status
             $overallStatus = array_search('failed', $checks) ? 'failed' : 'ok';
