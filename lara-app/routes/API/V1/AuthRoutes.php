@@ -7,6 +7,8 @@
 */
 
 use App\Http\Controllers\API\V1\Auth\LoginController;
+use App\Http\Controllers\API\V1\Auth\LogOutController;
+use App\Http\Controllers\API\V1\Auth\RefreshTokenController;
 use App\Http\Controllers\API\V1\Auth\ResendCodeController;
 use App\Http\Controllers\API\V1\Auth\SendCodeController;
 use App\Http\Controllers\API\V1\Auth\SetPasswordController;
@@ -25,4 +27,6 @@ Route::name('auth.')->prefix('auth')->group(function () {
 // Auth
 Route::middleware('auth:api')->name('auth.')->prefix('auth')->group(function () {
     Route::post('/set-password',SetPasswordController::class)->name('set-password');
+    Route::post('/refresh-token',RefreshTokenController::class)->name('refresh-token');
+    Route::post('/logout',LogOutController::class)->name('logout');
 });

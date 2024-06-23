@@ -46,6 +46,8 @@ class SignUpController extends Controller
 
             // Create a personal access token for the user
             $tokenData = $userService->createToken($user);
+            // Create a refresh token and set in cookie
+            $refreshToken = $userService->createRefreshToken($user);
 
             // Dispatch Events
             SignUpEvent::dispatch($user);
@@ -61,7 +63,7 @@ class SignUpController extends Controller
             return apiResponse()
                 ->message(trans('api-messages.user_signed_up_successfully'))
                 ->data($data)
-                ->getApiResponse();
+                ->getApiResponseWithCookie($refreshToken['cookie']);
         } catch (\Throwable $t) {
             DB::rollBack();
             Log::error($t);
