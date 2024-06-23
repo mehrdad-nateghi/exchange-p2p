@@ -24,8 +24,8 @@ spec:
         - name: laravel-setup
           image: registry.hamdocker.ir/paylibero/build-core-laravel
           volumeMounts:
-            - mountPath: /var/www/storage
-              name: storage-volume
+            - mountPath: /var/www/storage/oauth
+              name: passport-oauth-volume
           command: ["/bin/sh", "-c"]
           args:
             - |
@@ -40,16 +40,16 @@ spec:
             - name: HOSTNAME
               value: php
       volumes:
-        - name: storage-volume
+        - name: passport-oauth-volume
           persistentVolumeClaim:
-            claimName: core-laravel-storage-pvc
+            claimName: core-laravel-passport-oauth-pvc
       containers:
         - image: registry.hamdocker.ir/paylibero/build-core-laravel
           imagePullPolicy: Always
           name: core-laravel
           volumeMounts:
-            - mountPath: /var/www/storage
-              name: storage-volume
+            - mountPath: /var/www/storage/oauth
+              name: passport-oauth-volume
           ports:
             - containerPort: 8000
               protocol: TCP
