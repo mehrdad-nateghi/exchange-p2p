@@ -171,7 +171,7 @@
               - type
     responses:
       '200':
-        description: "Verification code verified successfully"
+        description: "Created Successful"
         content:
           application/json:
             schema:
@@ -188,7 +188,7 @@
                 message:
                   type: string
                   description: "A descriptive message about the operation result"
-                  example: "Verification code verified successfully"
+                  example: "User signed up successfully."
                 data:
                   type: object
                   description: "Object containing user information and access token"
@@ -204,15 +204,19 @@
                         first_name:
                           type: string
                           description: "User's first name"
-                          example: "Ali"
+                          example: null
                         last_name:
                           type: string
                           description: "User's last name"
-                          example: "Karimi"
+                          example: null
                         email:
                           type: string
                           description: "User's email address"
                           example: "a@b.com"
+                        status:
+                          type: string
+                          description: "User's account status"
+                          example: "active"
                         created_at:
                           type: string
                           format: date-time
@@ -223,23 +227,48 @@
                           format: date-time
                           description: "Timestamp of last user update"
                           example: "2024-05-15T06:56:46+00:00"
+                      required:
+                        - ulid
+                        - first_name
+                        - last_name
+                        - email
+                        - status
+                        - created_at
+                        - updated_at
                     token:
                       type: object
                       description: "Authentication token information"
                       properties:
                         access_token:
                           type: string
-                          description: "access token"
-                          example: "eyJ0eXAiOiJKV1QiLC..."
+                          description: "New access token"
+                          example: "eyJ0eXAiOiJKV1..."
                         type:
                           type: string
                           description: "Token type"
                           example: "Bearer"
+                        expires_at:
+                          type: string
+                          format: date-time
+                          description: "Token expiration timestamp"
+                          example: "2024-06-23 06:31:30"
+                      required:
+                        - access_token
+                        - type
+                        - expires_at
+                  required:
+                    - user
+                    - token
               required:
                 - status
                 - code
                 - message
                 - data
+        headers:
+          Set-Cookie:
+            schema:
+              type: string
+              example: refresh_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9...; Path=/; HttpOnly; Secure; SameSite=Strict
 
 "/auth/signup":
   post:
@@ -336,18 +365,38 @@
                           format: date-time
                           description: "Timestamp of last user update"
                           example: "2024-05-15T06:56:46+00:00"
+                      required:
+                        - ulid
+                        - first_name
+                        - last_name
+                        - email
+                        - status
+                        - created_at
+                        - updated_at
                     token:
                       type: object
                       description: "Authentication token information"
                       properties:
                         access_token:
                           type: string
-                          description: "access token"
-                          example: "eyJ0eXAiOiJKV1QiLC..."
+                          description: "New access token"
+                          example: "eyJ0eXAiOiJKV1..."
                         type:
                           type: string
                           description: "Token type"
                           example: "Bearer"
+                        expires_at:
+                          type: string
+                          format: date-time
+                          description: "Token expiration timestamp"
+                          example: "2024-06-23 06:31:30"
+                      required:
+                        - access_token
+                        - type
+                        - expires_at
+                  required:
+                    - user
+                    - token
               required:
                 - status
                 - code
@@ -465,6 +514,21 @@
                                 format: date-time
                                 description: "Timestamp of last role update"
                                 example: "2024-06-22T13:46:57.000000Z"
+                            required:
+                              - name
+                              - created_at
+                              - updated_at
+                      required:
+                        - ulid
+                        - first_name
+                        - last_name
+                        - email
+                        - status
+                        - created_at
+                        - updated_at
+                        - roles
+                  required:
+                    - user
               required:
                 - status
                 - code
@@ -582,6 +646,19 @@
                                 format: date-time
                                 description: "Timestamp of last role update"
                                 example: "2024-06-22T13:46:57.000000Z"
+                            required:
+                              - name
+                              - created_at
+                              - updated_at
+                      required:
+                        - ulid
+                        - first_name
+                        - last_name
+                        - email
+                        - status
+                        - created_at
+                        - updated_at
+                        - roles
                     token:
                       type: object
                       description: "Authentication token information"
@@ -599,6 +676,13 @@
                           format: date-time
                           description: "Token expiration timestamp"
                           example: "2024-06-23 07:17:15"
+                      required:
+                        - access_token
+                        - type
+                        - expires_at
+                  required:
+                    - user
+                    - token
               required:
                 - status
                 - code
@@ -658,6 +742,12 @@
                           format: date-time
                           description: "Token expiration timestamp"
                           example: "2024-06-23 06:31:30"
+                      required:
+                        - access_token
+                        - type
+                        - expires_at
+                  required:
+                    - token
               required:
                 - status
                 - code
