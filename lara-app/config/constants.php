@@ -24,5 +24,5 @@ return [
     'COOKIE_EXPIRES_IN_PER_MIN' => '100',
 
     'access_token_expiration_time_per_minutes' => env('ACCESS_TOKEN_EXPIRATION_TIME_PER_MINUTES', 3),
-    'refresh_token_expiration_time_per_minutes' => env('REFRESH_TOKEN_EXPIRATION_TIME_PER_MINUTES', 60),
+    'refresh_token_expiration_time_per_minutes' => env('REFRESH_TOKEN_EXPIRATION_TIME_PER_MINUTES', 14400),
 ];

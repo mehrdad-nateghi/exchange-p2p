@@ -25,17 +25,20 @@ class ResendCodeController extends Controller
 
             DB::beginTransaction();
 
-            $verificationCodeData = VerificationCodeData::from([
-                    'to' => $validated['to'],
-                    'via' => $validated['via'],
-                    'type' => $validated['type']
-                ]
-            );
+            $code = $verificationCodeService->generateCode();
+            $encryptCode = $verificationCodeService->encryptCode($code);
 
-            $verificationCode = $verificationCodeService->store($verificationCodeData);
+            $data = [
+                'to' => $validated['to'],
+                'via' => $validated['via'],
+                'type' => $validated['type'],
+                'code' => $encryptCode,
+            ];
+
+            $verificationCode = $verificationCodeService->store($data);
 
             // send code via email
-            $emailNotificationService->verificationCode($verificationCode,$verificationCodeService->getCode());
+            $emailNotificationService->verificationCode($verificationCode,$code);
 
             DB::commit();
 
