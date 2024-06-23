@@ -45,12 +45,28 @@
           application/json:
             schema:
               type: object
-              example: {
-                "status": "success",
-                "code": 201,
-                "message": "Verification code sent successfully",
-                "data": null
-              }
+              properties:
+                status:
+                  type: string
+                  description: "The status of the operation"
+                  example: "success"
+                code:
+                  type: integer
+                  description: "The HTTP status code"
+                  example: 201
+                message:
+                  type: string
+                  description: "A descriptive message about the operation result"
+                  example: "Verification code sent successfully"
+                data:
+                  type: null
+                  description: "Additional data (null in this case)"
+                  example: null
+              required:
+                - status
+                - code
+                - message
+                - data
 
 "/auth/resend-code":
   post:
@@ -93,12 +109,28 @@
           application/json:
             schema:
               type: object
-              example: {
-                "status": "success",
-                "code": 201,
-                "message": "Verification code sent successfully",
-                "data": null
-              }
+              properties:
+                status:
+                  type: string
+                  description: "The status of the operation"
+                  example: "success"
+                code:
+                  type: integer
+                  description: "The HTTP status code"
+                  example: 201
+                message:
+                  type: string
+                  description: "A descriptive message about the operation result"
+                  example: "Verification code sent successfully"
+                data:
+                  type: null
+                  description: "Additional data (null in this case)"
+                  example: null
+              required:
+                - status
+                - code
+                - message
+                - data
 
 "/auth/verify-code":
   post:
@@ -143,51 +175,71 @@
         content:
           application/json:
             schema:
+              type: object
               properties:
                 status:
                   type: string
+                  description: "The status of the operation"
                   example: "success"
                 code:
                   type: integer
-                  example: "200"
+                  description: "The HTTP status code"
+                  example: 200
                 message:
                   type: string
+                  description: "A descriptive message about the operation result"
                   example: "Verification code verified successfully"
                 data:
                   type: object
+                  description: "Object containing user information and access token"
                   properties:
                     user:
                       type: object
+                      description: "User details"
                       properties:
                         ulid:
                           type: string
+                          description: "Unique identifier for the user"
                           example: "01HZA0X41HX5CXY2YWD4GP0WAG"
                         first_name:
                           type: string
+                          description: "User's first name"
                           example: "Ali"
                         last_name:
                           type: string
+                          description: "User's last name"
                           example: "Karimi"
                         email:
                           type: string
+                          description: "User's email address"
                           example: "a@b.com"
                         created_at:
                           type: string
                           format: date-time
+                          description: "Timestamp of user creation"
                           example: "2024-05-15T06:56:46+00:00"
                         updated_at:
                           type: string
                           format: date-time
+                          description: "Timestamp of last user update"
                           example: "2024-05-15T06:56:46+00:00"
                     token:
                       type: object
+                      description: "Authentication token information"
                       properties:
                         access_token:
                           type: string
+                          description: "access token"
                           example: "eyJ0eXAiOiJKV1QiLC..."
                         type:
                           type: string
+                          description: "Token type"
                           example: "Bearer"
+              required:
+                - status
+                - code
+                - message
+                - data
 
 "/auth/signup":
   post:
@@ -232,54 +284,75 @@
         content:
           application/json:
             schema:
+              type: object
               properties:
                 status:
                   type: string
+                  description: "The status of the operation"
                   example: "success"
                 code:
                   type: integer
-                  example: "200"
+                  description: "The HTTP status code"
+                  example: 200
                 message:
                   type: string
+                  description: "A descriptive message about the operation result"
                   example: "User signed up successfully."
                 data:
                   type: object
+                  description: "Object containing user information and access token"
                   properties:
                     user:
                       type: object
+                      description: "User details"
                       properties:
                         ulid:
                           type: string
+                          description: "Unique identifier for the user"
                           example: "01HZA0X41HX5CXY2YWD4GP0WAG"
                         first_name:
                           type: string
+                          description: "User's first name"
                           example: null
                         last_name:
                           type: string
+                          description: "User's last name"
                           example: null
                         email:
                           type: string
+                          description: "User's email address"
                           example: "a@b.com"
                         status:
                           type: string
+                          description: "User's account status"
                           example: "active"
                         created_at:
                           type: string
                           format: date-time
+                          description: "Timestamp of user creation"
                           example: "2024-05-15T06:56:46+00:00"
                         updated_at:
                           type: string
                           format: date-time
+                          description: "Timestamp of last user update"
                           example: "2024-05-15T06:56:46+00:00"
                     token:
                       type: object
+                      description: "Authentication token information"
                       properties:
                         access_token:
                           type: string
+                          description: "access token"
                           example: "eyJ0eXAiOiJKV1QiLC..."
                         type:
                           type: string
+                          description: "Token type"
                           example: "Bearer"
+              required:
+                - status
+                - code
+                - message
+                - data
         headers:
           Set-Cookie:
             schema:
@@ -321,29 +394,82 @@
           application/json:
             schema:
               type: object
-              example: {
-                "status": "success",
-                "code": 200,
-                "message": "Password has been set successfully.",
-                "data": {
-                  "user": {
-                    "ulid": "01J11WDAS03P9W7JE2X3TZEJ7R",
-                    "first_name": null,
-                    "last_name": null,
-                    "email": "2@gmail.com",
-                    "status": "active",
-                    "created_at": "2024-06-23T06:26:51.000000Z",
-                    "updated_at": "2024-06-23T06:27:23.000000Z",
-                    "roles": [
-                      {
-                        "name": "applicant",
-                        "created_at": "2024-06-22T13:46:57.000000Z",
-                        "updated_at": "2024-06-22T13:46:57.000000Z"
-                      }
-                    ]
-                  }
-                }
-              }
+              properties:
+                status:
+                  type: string
+                  description: "The status of the operation"
+                  example: "success"
+                code:
+                  type: integer
+                  description: "The HTTP status code"
+                  example: 200
+                message:
+                  type: string
+                  description: "A descriptive message about the operation result"
+                  example: "Password has been set successfully."
+                data:
+                  type: object
+                  description: "Object containing user information"
+                  properties:
+                    user:
+                      type: object
+                      description: "User details"
+                      properties:
+                        ulid:
+                          type: string
+                          description: "Unique identifier for the user"
+                          example: "01J11WDAS03P9W7JE2X3TZEJ7R"
+                        first_name:
+                          type: string
+                          description: "User's first name"
+                          example: null
+                        last_name:
+                          type: string
+                          description: "User's last name"
+                          example: null
+                        email:
+                          type: string
+                          description: "User's email address"
+                          example: "2@gmail.com"
+                        status:
+                          type: string
+                          description: "User's account status"
+                          example: "active"
+                        created_at:
+                          type: string
+                          format: date-time
+                          description: "Timestamp of user creation"
+                          example: "2024-06-23T06:26:51.000000Z"
+                        updated_at:
+                          type: string
+                          format: date-time
+                          description: "Timestamp of last user update"
+                          example: "2024-06-23T06:27:23.000000Z"
+                        roles:
+                          type: array
+                          description: "User's roles"
+                          items:
+                            type: object
+                            properties:
+                              name:
+                                type: string
+                                description: "Name of the role"
+                                example: "applicant"
+                              created_at:
+                                type: string
+                                format: date-time
+                                description: "Timestamp of role creation"
+                                example: "2024-06-22T13:46:57.000000Z"
+                              updated_at:
+                                type: string
+                                format: date-time
+                                description: "Timestamp of last role update"
+                                example: "2024-06-22T13:46:57.000000Z"
+              required:
+                - status
+                - code
+                - message
+                - data
 
 "/auth/login":
   post:
@@ -384,46 +510,100 @@
         content:
           application/json:
             schema:
+              type: object
               properties:
                 status:
                   type: string
+                  description: "The status of the operation"
                   example: "success"
                 code:
                   type: integer
-                  example: "200"
+                  description: "The HTTP status code"
+                  example: 200
                 message:
                   type: string
+                  description: "A descriptive message about the operation result"
                   example: "User logged in successfully."
                 data:
                   type: object
-                  example: {
-                    "status": "success",
-                    "code": 200,
-                    "message": "User logged in successfully",
-                    "data": {
-                      "user": {
-                        "ulid": "01J11WDAS03P9W7JE2X3TZEJ7R",
-                        "first_name": null,
-                        "last_name": null,
-                        "email": "example@example.com",
-                        "status": "active",
-                        "created_at": "2024-06-23T06:26:51.000000Z",
-                        "updated_at": "2024-06-23T06:27:23.000000Z",
-                        "roles": [
-                          {
-                            "name": "applicant",
-                            "created_at": "2024-06-22T13:46:57.000000Z",
-                            "updated_at": "2024-06-22T13:46:57.000000Z"
-                          }
-                        ]
-                      },
-                      "token": {
-                        "access_token": "eyJ0eXAiOiJKV1...",
-                        "type": "Bearer",
-                        "expires_at": "2024-06-23 07:17:15"
-                      }
-                    }
-                  }
+                  description: "Object containing user information and token"
+                  properties:
+                    user:
+                      type: object
+                      description: "User details"
+                      properties:
+                        ulid:
+                          type: string
+                          description: "Unique identifier for the user"
+                          example: "01J11WDAS03P9W7JE2X3TZEJ7R"
+                        first_name:
+                          type: string
+                          description: "User's first name"
+                          example: null
+                        last_name:
+                          type: string
+                          description: "User's last name"
+                          example: null
+                        email:
+                          type: string
+                          description: "User's email address"
+                          example: "example@example.com"
+                        status:
+                          type: string
+                          description: "User's account status"
+                          example: "active"
+                        created_at:
+                          type: string
+                          format: date-time
+                          description: "Timestamp of user creation"
+                          example: "2024-06-23T06:26:51.000000Z"
+                        updated_at:
+                          type: string
+                          format: date-time
+                          description: "Timestamp of last user update"
+                          example: "2024-06-23T06:27:23.000000Z"
+                        roles:
+                          type: array
+                          description: "User's roles"
+                          items:
+                            type: object
+                            properties:
+                              name:
+                                type: string
+                                description: "Name of the role"
+                                example: "applicant"
+                              created_at:
+                                type: string
+                                format: date-time
+                                description: "Timestamp of role creation"
+                                example: "2024-06-22T13:46:57.000000Z"
+                              updated_at:
+                                type: string
+                                format: date-time
+                                description: "Timestamp of last role update"
+                                example: "2024-06-22T13:46:57.000000Z"
+                    token:
+                      type: object
+                      description: "Authentication token information"
+                      properties:
+                        access_token:
+                          type: string
+                          description: "access token"
+                          example: "eyJ0eXAiOiJKV1..."
+                        type:
+                          type: string
+                          description: "Token type"
+                          example: "Bearer"
+                        expires_at:
+                          type: string
+                          format: date-time
+                          description: "Token expiration timestamp"
+                          example: "2024-06-23 07:17:15"
+              required:
+                - status
+                - code
+                - message
+                - data
         headers:
           Set-Cookie:
             schema:
@@ -444,18 +624,45 @@
           application/json:
             schema:
               type: object
-              example: {
-                "status": "success",
-                "code": 200,
-                "message": "Access token has been successfully refreshed.",
-                "data": {
-                  "token": {
-                    "access_token": "eyJ0eXAiOiJKV1...",
-                    "type": "Bearer",
-                    "expires_at": "2024-06-23 06:31:30"
-                  }
-                }
-              }
+              properties:
+                status:
+                  type: string
+                  description: "The status of the operation"
+                  example: "success"
+                code:
+                  type: integer
+                  description: "The HTTP status code"
+                  example: 200
+                message:
+                  type: string
+                  description: "A descriptive message about the operation result"
+                  example: "Access token has been successfully refreshed."
+                data:
+                  type: object
+                  description: "Object containing the refreshed token information"
+                  properties:
+                    token:
+                      type: object
+                      description: "Refreshed authentication token information"
+                      properties:
+                        access_token:
+                          type: string
+                          description: "New access token"
+                          example: "eyJ0eXAiOiJKV1..."
+                        type:
+                          type: string
+                          description: "Token type"
+                          example: "Bearer"
+                        expires_at:
+                          type: string
+                          format: date-time
+                          description: "Token expiration timestamp"
+                          example: "2024-06-23 06:31:30"
+              required:
+                - status
+                - code
+                - message
+                - data
         headers:
           Set-Cookie:
             schema:
@@ -476,9 +683,25 @@
           application/json:
             schema:
               type: object
-              example: {
-                "status": "success",
-                "code": 200,
-                "message": "You have been successfully logged out.",
-                "data": null
-              }
+              properties:
+                status:
+                  type: string
+                  description: "The status of the operation"
+                  example: "success"
+                code:
+                  type: integer
+                  description: "The HTTP status code"
+                  example: 200
+                message:
+                  type: string
+                  description: "A descriptive message about the operation result"
+                  example: "You have been successfully logged out."
+                data:
+                  type: null
+                  description: "Additional data (null in this case)"
+                  example: null
+              required:
+                - status
+                - code
+                - message
+                - data
