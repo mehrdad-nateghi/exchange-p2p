@@ -44,19 +44,13 @@
         content:
           application/json:
             schema:
-              properties:
-                status:
-                  type: string
-                  example: "success"
-                code:
-                  type: integer
-                  example: 201
-                message:
-                  type: string
-                  example: "Verification code sent successfully"
-                data:
-                  type: null
-                  example: null
+              type: object
+              example: {
+                "status": "success",
+                "code": 201,
+                "message": "Verification code sent successfully",
+                "data": null
+              }
 
 "/auth/resend-code":
   post:
@@ -93,24 +87,18 @@
               - via
               - type
     responses:
-      '200':
+      '201':
         description: "Created Successful"
         content:
           application/json:
             schema:
-              properties:
-                status:
-                  type: string
-                  example: "success"
-                code:
-                  type: integer
-                  example: 201
-                message:
-                  type: string
-                  example: "Verification code sent successfully"
-                data:
-                  type: null
-                  example: null
+              type: object
+              example: {
+                "status": "success",
+                "code": 201,
+                "message": "Verification code sent successfully",
+                "data": null
+              }
 
 "/auth/verify-code":
   post:
@@ -141,7 +129,7 @@
                 enum:
                   - 1
               type:
-                description: "Type of verification. 1: RESET_PASSWORD"
+                description: "Type of verification. 2: RESET_PASSWORD"
                 enum:
                   - 2
             required:
@@ -292,6 +280,11 @@
                         type:
                           type: string
                           example: "Bearer"
+        headers:
+          Set-Cookie:
+            schema:
+              type: string
+              example: refresh_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9...; Path=/; HttpOnly; Secure; SameSite=Strict
 
 "/auth/set-password":
   post:
@@ -327,58 +320,30 @@
         content:
           application/json:
             schema:
-              properties:
-                status:
-                  type: string
-                  example: "success"
-                code:
-                  type: integer
-                  example: "200"
-                message:
-                  type: string
-                  example: "Password has been set successfully."
-                data:
-                  type: object
-                  properties:
-                    user:
-                      type: object
-                      properties:
-                        ulid:
-                          type: string
-                          example: "01HZA0X41HX5CXY2YWD4GP0WAG"
-                        first_name:
-                          type: string
-                          example: "Ali"
-                        last_name:
-                          type: string
-                          example: "Parvin"
-                        email:
-                          type: string
-                          example: "a@b.com"
-                        created_at:
-                          type: string
-                          format: date-time
-                          example: "2024-05-15T06:56:46+00:00"
-                        updated_at:
-                          type: string
-                          format: date-time
-                          example: "2024-05-15T06:56:46+00:00"
-                        roles:
-                          type: array
-                          items:
-                            type: object
-                            properties:
-                              name:
-                                type: string
-                                example: "applicant"
-                              created_at:
-                                type: string
-                                format: date-time
-                                example: "2024-05-15T06:56:46+00:00"
-                              updated_at:
-                                type: string
-                                format: date-time
-                                example: "2024-05-15T06:56:46+00:00"
+              type: object
+              example: {
+                "status": "success",
+                "code": 200,
+                "message": "Password has been set successfully.",
+                "data": {
+                  "user": {
+                    "ulid": "01J11WDAS03P9W7JE2X3TZEJ7R",
+                    "first_name": null,
+                    "last_name": null,
+                    "email": "2@gmail.com",
+                    "status": "active",
+                    "created_at": "2024-06-23T06:26:51.000000Z",
+                    "updated_at": "2024-06-23T06:27:23.000000Z",
+                    "roles": [
+                      {
+                        "name": "applicant",
+                        "created_at": "2024-06-22T13:46:57.000000Z",
+                        "updated_at": "2024-06-22T13:46:57.000000Z"
+                      }
+                    ]
+                  }
+                }
+              }
 
 "/auth/login":
   post:
@@ -431,52 +396,89 @@
                   example: "User logged in successfully."
                 data:
                   type: object
-                  properties:
-                    user:
-                      type: object
-                      properties:
-                        ulid:
-                          type: string
-                          example: "01HZA0X41HX5CXY2YWD4GP0WAG"
-                        first_name:
-                          type: string
-                          example: "Ali"
-                        last_name:
-                          type: string
-                          example: "Karimi"
-                        email:
-                          type: string
-                          example: "a@b.com"
-                        created_at:
-                          type: string
-                          format: date-time
-                          example: "2024-05-15T06:56:46+00:00"
-                        updated_at:
-                          type: string
-                          format: date-time
-                          example: "2024-05-15T06:56:46+00:00"
-                        roles:
-                          type: array
-                          items:
-                            type: object
-                            properties:
-                              name:
-                                type: string
-                                example: "applicant"
-                              created_at:
-                                type: string
-                                format: date-time
-                                example: "2024-05-15T06:56:46+00:00"
-                              updated_at:
-                                type: string
-                                format: date-time
-                                example: "2024-05-15T06:56:46+00:00"
-                    token:
-                      type: object
-                      properties:
-                        access_token:
-                          type: string
-                          example: "eyJ0eXAiOiJKV1QiLC..."
-                        type:
-                          type: string
-                          example: "Bearer"
+                  example: {
+                    "status": "success",
+                    "code": 200,
+                    "message": "User logged in successfully",
+                    "data": {
+                      "user": {
+                        "ulid": "01J11WDAS03P9W7JE2X3TZEJ7R",
+                        "first_name": null,
+                        "last_name": null,
+                        "email": "example@example.com",
+                        "status": "active",
+                        "created_at": "2024-06-23T06:26:51.000000Z",
+                        "updated_at": "2024-06-23T06:27:23.000000Z",
+                        "roles": [
+                          {
+                            "name": "applicant",
+                            "created_at": "2024-06-22T13:46:57.000000Z",
+                            "updated_at": "2024-06-22T13:46:57.000000Z"
+                          }
+                        ]
+                      },
+                      "token": {
+                        "access_token": "eyJ0eXAiOiJKV1...",
+                        "type": "Bearer",
+                        "expires_at": "2024-06-23 07:17:15"
+                      }
+                    }
+                  }
+        headers:
+          Set-Cookie:
+            schema:
+              type: string
+              example: refresh_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9...; Path=/; HttpOnly; Secure; SameSite=Strict
+
+"/auth/refresh-token":
+  post:
+    tags:
+      - auth
+    summary: "Refresh access token"
+    description: "Refreshes the user's access token using the refresh token stored in an HTTP-only cookie"
+    operationId: refreshToken
+    responses:
+      '200':
+        description: "The payment methods was retrieved successfully."
+        content:
+          application/json:
+            schema:
+              type: object
+              example: {
+                "status": "success",
+                "code": 200,
+                "message": "Access token has been successfully refreshed.",
+                "data": {
+                  "token": {
+                    "access_token": "eyJ0eXAiOiJKV1...",
+                    "type": "Bearer",
+                    "expires_at": "2024-06-23 06:31:30"
+                  }
+                }
+              }
+        headers:
+          Set-Cookie:
+            schema:
+              type: string
+              example: refresh_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9...; Path=/; HttpOnly; Secure; SameSite=Strict
+
+"/auth/logout":
+  post:
+    tags:
+      - auth
+    summary: "Log out user"
+    description: "Logs out the current user."
+    operationId: logout
+    responses:
+      '200':
+        description: "Successful logout"
+        content:
+          application/json:
+            schema:
+              type: object
+              example: {
+                "status": "success",
+                "code": 200,
+                "message": "You have been successfully logged out.",
+                "data": null
+              }

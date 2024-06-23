@@ -130,6 +130,16 @@ class ApiResponseService
         );
     }
 
+    public function getApiResponseWithCookie($cookie = null): JsonResponse
+    {
+        return $this->responseApi(
+            status: $this->status,
+            message: $this->message,
+            data: $this->data,
+            code: $this->statusCode
+        )->cookie($cookie);
+    }
+
     public function getApiResponseCollection(string $collectionName): JsonResponse
     {
         return $this->responseApi(

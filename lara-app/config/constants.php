@@ -21,5 +21,8 @@ return [
 
     'PASSPORT_ACCESS_TOKEN_EXPIRES_IN_PER_HOUR' => '24',
 
-    'COOKIE_EXPIRES_IN_PER_MIN' => '100'
+    'COOKIE_EXPIRES_IN_PER_MIN' => '100',
+
+    'access_token_expiration_time_per_minutes' => env('ACCESS_TOKEN_EXPIRATION_TIME_PER_MINUTES', 3),
+    'refresh_token_expiration_time_per_minutes' => env('REFRESH_TOKEN_EXPIRATION_TIME_PER_MINUTES', 60),
 ];

@@ -46,7 +46,8 @@ return [
     'payment_methods' => 'payment methods',
     'user_payment_methods' => "user's payment methods",
     'user_payment_method' => "user's payment method",
-
+    'token_refreshed_successfully' => 'Access token has been successfully refreshed.',
+    'logout_successful' => 'You have been successfully logged out.',
 
 
 ];

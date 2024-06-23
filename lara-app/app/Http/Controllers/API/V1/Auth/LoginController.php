@@ -22,6 +22,7 @@ class LoginController extends Controller
             if (Auth::attempt($credentials)) {
                 $user = Auth::user();
                 $tokenData = $userService->createToken($user);
+                $refreshToken = $userService->createRefreshToken($user);
 
                 $data = [
                     'user' =>  $userService->createResource($user),
@@ -33,7 +34,7 @@ class LoginController extends Controller
                 return apiResponse()
                     ->message(trans('api-messages.user_logged_in_successfully'))
                     ->data($data)
-                    ->getApiResponse();
+                    ->getApiResponseWithCookie($refreshToken['cookie']);
             }
 
             DB::rollBack();
