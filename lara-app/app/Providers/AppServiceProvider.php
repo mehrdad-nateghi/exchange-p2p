@@ -8,6 +8,7 @@ use App\Observers\VerificationCodeObserver;
 use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
+use Laravel\Passport\Passport;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -35,5 +36,7 @@ class AppServiceProvider extends ServiceProvider
 
         // Register Observers
         VerificationCode::observe(VerificationCodeObserver::class);
+
+        Passport::loadKeysFrom(storage_path('oauth'));
     }
 }
