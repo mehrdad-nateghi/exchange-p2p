@@ -23,6 +23,9 @@ spec:
       initContainers:
         - name: laravel-setup
           image: registry.hamdocker.ir/paylibero/build-core-laravel
+          volumeMounts:
+            - mountPath: /var/www/storage
+              name: storage-volume
           command: ["/bin/sh", "-c"]
           args:
             - |
@@ -36,10 +39,17 @@ spec:
           env:
             - name: HOSTNAME
               value: php
+      volumes:
+        - name: storage-volume
+          persistentVolumeClaim:
+            claimName: core-laravel-storage-pvc
       containers:
         - image: registry.hamdocker.ir/paylibero/build-core-laravel
           imagePullPolicy: Always
           name: core-laravel
+          volumeMounts:
+            - mountPath: /var/www/storage
+              name: storage-volume
           ports:
             - containerPort: 8000
               protocol: TCP
