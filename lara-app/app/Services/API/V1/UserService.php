@@ -52,7 +52,7 @@ class UserService
         $token->expires_at = Carbon::now()->addMinutes($minutes);
         $token->save();
 
-        $refreshToken = $tokenResult->accessToken;
+        $refreshToken = 'Bearer ' . $tokenResult->accessToken;
 
         $refreshTokenCookie = Cookie::make('refresh_token',$refreshToken,$minutes,null,null,true,true,false,null);
 
