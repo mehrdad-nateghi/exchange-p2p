@@ -27,6 +27,8 @@ Route::name('auth.')->prefix('auth')->group(function () {
 // Auth
 Route::middleware('auth:api')->name('auth.')->prefix('auth')->group(function () {
     Route::post('/set-password',SetPasswordController::class)->name('set-password');
-    Route::post('/refresh-token',RefreshTokenController::class)->name('refresh-token');
     Route::post('/logout',LogOutController::class)->name('logout');
 });
+
+Route::post('/refresh-token',RefreshTokenController::class)->name('refresh-token');
+
