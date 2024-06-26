@@ -31,10 +31,6 @@ spec:
               value: production
             - name: NEXT_PUBLIC_API_SERVER_ADDRESS
               value: http://core-laravel:8000
-            - name: NEXT_PUBLIC_SITE_SECRET
-              value: 6Lc_s1QpAAAAAIQhxFfqYkcgTvwfPjdQ-sumzg6L
-            - name: NEXT_PUBLIC_REACT_APP_SITE_KEY
-              value: 6Lc_s1QpAAAAAG7VQZxe9zddFwX_CHXAJ1t7oN9Q
             - name: NEXT_PUBLIC_AUTH_TOKEN
               value: pl-auth-token
             - name: PUBLIC_BUILD_COMMIT_SHA
