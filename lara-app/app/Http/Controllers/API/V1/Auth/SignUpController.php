@@ -27,6 +27,7 @@ class SignUpController extends Controller
         EmailNotificationService $emailNotificationService
     ): JsonResponse {
         try {
+
             DB::beginTransaction();
 
             $validated = $request->validated();
@@ -47,7 +48,7 @@ class SignUpController extends Controller
             // Create a personal access token for the user
             $tokenData = $userService->createToken($user);
             // Create a refresh token and set in cookie
-            $refreshToken = $userService->createRefreshToken($user);
+            //$refreshToken = $userService->createRefreshToken($tokenData);
 
             // Dispatch Events
             SignUpEvent::dispatch($user);
@@ -63,7 +64,8 @@ class SignUpController extends Controller
             return apiResponse()
                 ->message(trans('api-messages.user_signed_up_successfully'))
                 ->data($data)
-                ->getApiResponseWithCookie($refreshToken['cookie']);
+                ->getApiResponse();
+                //->getApiResponseWithCookie($refreshToken['cookie']);
         } catch (\Throwable $t) {
             DB::rollBack();
             Log::error($t);

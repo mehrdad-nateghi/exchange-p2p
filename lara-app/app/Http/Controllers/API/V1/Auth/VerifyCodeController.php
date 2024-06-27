@@ -31,7 +31,7 @@ class VerifyCodeController extends Controller
             // Create a personal access token for the user
             $tokenData = $userService->createToken($user);
             // Create a refresh token and set in cookie
-            $refreshToken = $userService->createRefreshToken($user);
+            //$refreshToken = $userService->createRefreshToken($user);
 
             // Expire the code
             $verificationCode = $verificationCodeService->findLatest($validated['to'], $validated['via'], $validated['type']);
@@ -48,7 +48,8 @@ class VerifyCodeController extends Controller
             return apiResponse()
                 ->message(trans('api-messages.code_verified_successfully'))
                 ->data($data)
-                ->getApiResponseWithCookie($refreshToken['cookie']);
+                ->getApiResponse();
+                //->getApiResponseWithCookie($refreshToken['cookie']);
         } catch (\Throwable $t) {
             DB::rollBack();
             Log::error($t);

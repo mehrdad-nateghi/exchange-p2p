@@ -41,7 +41,8 @@ class Kernel extends HttpKernel
         ],
 
         'api' => [
-            // \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+            //\App\Http\Middleware\ValidateTokenInCookie::class,
+            \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             'throttle:api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
@@ -69,6 +70,6 @@ class Kernel extends HttpKernel
         'is.applicant' => \App\Http\Middleware\IsApplicant::class,
         'is.admin' => \App\Http\Middleware\IsAdmin::class,
         'email.is.verified' => \App\Http\Middleware\EmailVerifiedMiddleware::class,
-        'validate.token.in.cookie' => \App\Http\Middleware\ValidateTokenInCookie::class,
+        //'validate.token.in.cookie' => \App\Http\Middleware\ValidateTokenInCookie::class,
     ];
 }

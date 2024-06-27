@@ -12,27 +12,30 @@ use Illuminate\Support\Facades\Log;
 class LogOutController extends Controller
 {
     public function __invoke(
+        UserService $userService,
     ): JsonResponse {
         try {
             DB::beginTransaction();
 
             $user = Auth::user();
 
-            foreach ($user->tokens as $token){
+            /*foreach ($user->tokens as $token){
                 $token->revoke();
-            }
+            }*/
+
+            $userService->logout($user);
 
             //Auth::logout();
 
             DB::commit();
 
-            $cookie = cookie()->forget('refresh_token');
+            //$cookie = cookie()->forget('refresh_token');
 
             return apiResponse()
                 ->success()
                 ->message(trans('api-messages.logout_successful'))
-                ->getApiResponse()
-                ->withCookie($cookie);
+                ->getApiResponse();
+                //->withCookie($cookie);
 
         } catch (\Throwable $t) {
             DB::rollBack();
