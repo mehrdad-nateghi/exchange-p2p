@@ -29,24 +29,40 @@ class UserService
 
     public function createToken(User $user): array
     {
-        $tokenResult = $user->createToken('access_token');
+        $minutes = config('constants.access_token_expiration_time_per_minutes');
+        $expirationMinutes = now()->addMinutes($minutes);
+        $accessToken = $user->createToken('access_token',['*'], $expirationMinutes)->plainTextToken;
+
+        /*$tokenResult = $user->createToken('access_token');
         $token = $tokenResult->token;
         $minutes = config('constants.access_token_expiration_time_per_minutes');
         $token->expires_at = Carbon::now()->addMinutes($minutes);
         $token->save();
 
-        $accessToken = $tokenResult->accessToken;
+        $accessToken = $tokenResult->accessToken;*/
 
         return [
             'access_token' => $accessToken,
             'type' => 'Bearer',
-            'expires_at' => Carbon::parse($token->expires_at)->toDateTimeString(),
+            'expires_at' => $expirationMinutes->toDateTimeString(), // todo-mn: must remvoe
         ];
     }
 
-    public function createRefreshToken(User $user): array
+    public function createRefreshToken($tokenData): array
     {
-        $tokenResult = $user->createToken('refresh_token');
+       // $token = $user->tokens()->latest()->first()->token;
+
+        $minutes = config('constants.refresh_token_expiration_time_per_minutes');
+
+        //$refreshTokenCookie = Cookie::make('refresh_token',$token,$minutes,null,null,true,true,false,null);
+        $refreshTokenCookie = Cookie::make('access_token',$tokenData['access_token'],$minutes,null,null,true,true,false,null);
+
+        return [
+            'cookie' => $refreshTokenCookie,
+        ];
+
+
+        /*$tokenResult = $user->createToken('refresh_token');
         $token = $tokenResult->token;
         $minutes = config('constants.refresh_token_expiration_time_per_minutes');
         $token->expires_at = Carbon::now()->addMinutes($minutes);
@@ -58,7 +74,7 @@ class UserService
 
         return [
             'cookie' => $refreshTokenCookie,
-        ];
+        ];*/
     }
 
     public function isEmailVerified(string $email): bool
@@ -75,6 +91,11 @@ class UserService
     public function authenticateUser(User $user): void
     {
         Auth::login($user);
+    }
+
+    public function logout(User $user): void
+    {
+        $user->tokens()->delete();
     }
 
     public function createResource(User $user): UserResource

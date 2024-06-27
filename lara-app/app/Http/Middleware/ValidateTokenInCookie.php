@@ -21,7 +21,8 @@ class ValidateTokenInCookie
     {
         if ($request->hasCookie('access_token')) {
             $token = $request->cookie('access_token');
-
+            $request->headers->set('Authorization', 'Bearer ' . $token);
+            // set this cookie in authorization header
             return $next($request);
         }
 

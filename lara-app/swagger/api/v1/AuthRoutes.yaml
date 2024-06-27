@@ -264,11 +264,6 @@
                 - code
                 - message
                 - data
-        headers:
-          Set-Cookie:
-            schema:
-              type: string
-              example: refresh_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9...; Path=/; HttpOnly; Secure; SameSite=Strict
 
 "/auth/signup":
   post:
@@ -402,11 +397,6 @@
                 - code
                 - message
                 - data
-        headers:
-          Set-Cookie:
-            schema:
-              type: string
-              example: refresh_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9...; Path=/; HttpOnly; Secure; SameSite=Strict
 
 "/auth/set-password":
   post:
@@ -688,11 +678,6 @@
                 - code
                 - message
                 - data
-        headers:
-          Set-Cookie:
-            schema:
-              type: string
-              example: refresh_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9...; Path=/; HttpOnly; Secure; SameSite=Strict
 
 "/auth/refresh-token":
   post:
@@ -753,11 +738,6 @@
                 - code
                 - message
                 - data
-        headers:
-          Set-Cookie:
-            schema:
-              type: string
-              example: refresh_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9...; Path=/; HttpOnly; Secure; SameSite=Strict
 
 "/auth/logout":
   post:
