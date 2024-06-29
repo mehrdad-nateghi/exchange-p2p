@@ -34,3 +34,4 @@ data:
   ACCESS_TOKEN_EXPIRATION_TIME_PER_MINUTES: "3"
   REFRESH_TOKEN_EXPIRATION_TIME_PER_MINUTES: "14400"
   SANCTUM_STATEFUL_DOMAINS: "localhost:4000,core-lara-33e1254e7d-paylibero-nightly.apps.ir-thr-ba1.arvancaas.ir,nightly.paylibero.ir"
+  SESSION_DOMAIN: ".paylibero.ir"
