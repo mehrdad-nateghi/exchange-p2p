@@ -74,7 +74,14 @@ spec:
                 port:
                   number: 8000
             path: /
-            pathType: ImplementationSpecific
+            pathType: Prefix
+          - backend:
+              service:
+                name: core-laravel
+                port:
+                  number: 8000
+            path: /sanctum/csrf-cookie
+            pathType: Prefix
           - backend:
               service:
                 name: core-laravel
