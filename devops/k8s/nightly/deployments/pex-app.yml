@@ -16,9 +16,11 @@ spec:
             - name: NEXT_PUBLIC_REACT_APP_SITE_KEY
               value: 6LfVge4pAAAAANnXqccl7kEI6sxeXSLYUuDYKeSp
           resources:
-            requests:
-              memory: '128Mi'
-              cpu: '64m'
             limits:
-              memory: '256Mi'
-              cpu: '128m'
+              cpu: 500m
+              ephemeral-storage: 200M
+              memory: 1G
+            requests:
+              cpu: 500m
+              ephemeral-storage: 200M
+              memory: 1G
