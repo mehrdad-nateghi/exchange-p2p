@@ -6,12 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\Auth\LoginRequest;
 use App\Services\API\V1\UserService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 class LogOutController extends Controller
 {
     public function __invoke(
+        Request $request,
         UserService $userService,
     ): JsonResponse {
         try {
@@ -24,6 +26,10 @@ class LogOutController extends Controller
             }*/
 
             $userService->logout($user);
+
+            $request->session()->invalidate();
+
+            $request->session()->regenerateToken();
 
             //Auth::logout();
 
