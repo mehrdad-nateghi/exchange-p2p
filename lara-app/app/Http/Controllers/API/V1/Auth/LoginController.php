@@ -15,6 +15,7 @@ class LoginController extends Controller
         LoginRequest $request,
         UserService $userService,
     ): JsonResponse {
+        //dd($request->all());
         try {
             DB::beginTransaction();
 

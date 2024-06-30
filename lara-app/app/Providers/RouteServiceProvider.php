@@ -20,7 +20,7 @@ class RouteServiceProvider extends ServiceProvider
     public const HOME = '/home';
 
     protected array $api_middlewares = [
-        'api',
+        'web',
     ];
 
     protected $routes = [
