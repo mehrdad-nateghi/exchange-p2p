@@ -93,9 +93,16 @@ class UserService
         Auth::login($user);
     }
 
-    public function logout(User $user): void
+    public function logout($request, User $user): void
     {
+        // Revoke all tokens
         $user->tokens()->delete();
+
+        // Clear session data
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        Auth::guard('web')->logout();
     }
 
     public function createResource(User $user): UserResource
