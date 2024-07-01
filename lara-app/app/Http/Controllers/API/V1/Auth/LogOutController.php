@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\V1\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\Auth\LoginRequest;
+use App\Models\User;
 use App\Services\API\V1\UserService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -19,30 +20,18 @@ class LogOutController extends Controller
         try {
             DB::beginTransaction();
 
+            /**
+             * @var User $user
+             */
             $user = Auth::user();
-
-            /*foreach ($user->tokens as $token){
-                $token->revoke();
-            }*/
-
-            $userService->logout($user);
-
-            $request->session()->invalidate();
-
-            $request->session()->regenerateToken();
-
-            //Auth::logout();
+            $userService->logout($request,$user);
 
             DB::commit();
-
-            //$cookie = cookie()->forget('refresh_token');
 
             return apiResponse()
                 ->success()
                 ->message(trans('api-messages.logout_successful'))
                 ->getApiResponse();
-                //->withCookie($cookie);
-
         } catch (\Throwable $t) {
             DB::rollBack();
             Log::error($t);
