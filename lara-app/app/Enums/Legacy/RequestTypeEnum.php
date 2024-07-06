@@ -3,6 +3,6 @@
 namespace App\Enums\Legacy;
 
 enum RequestTypeEnum: int{
-    case Sell = 0;
-    case Buy = 1;
+    case SELL = 0;
+    case BUY = 1;
 }

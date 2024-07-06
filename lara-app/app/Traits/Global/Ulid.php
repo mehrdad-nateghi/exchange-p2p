@@ -9,10 +9,8 @@ trait Ulid
     /**
      * Boot function from laravel.
      */
-    protected static function boot(): void
+    protected static function bootUlid(): void
     {
-        parent::boot();
-
         static::creating(function ($model) {
             $model->ulid = Str::ulid();
         });

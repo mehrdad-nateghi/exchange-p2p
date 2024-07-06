@@ -3,40 +3,39 @@
 namespace App\Models;
 
 use App\Enums\Legacy\BidStatusEnum;
-use App\Enums\Legacy\RequestStatusEnum;
-use App\Enums\Legacy\RequestTypeEnum;
+use App\Enums\RequestStatusEnum;
+use App\Enums\RequestTypeEnum;
+use App\Traits\Global\Number;
+use App\Traits\Global\Ulid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Request extends Model
 {
-    use HasFactory;
+    use HasFactory, Ulid, Number;
 
     protected $table = 'requests';
+    public function getRouteKeyName(): string
+    {
+        return 'ulid';
+    }
 
     protected $fillable = [
-        'support_id',
+        'volume',
         'type',
         'status',
-        'description',
-        'trade_volume',
-        'lower_bound_feasibility_threshold',
-        'upper_bound_feasibility_threshold',
-        'acceptance_threshold',
-        'request_rate',
-        'payment_reason',
-        'applicant_id',
-        'created_at',
-        'updated_at'
+        'price',
+        // 'description', todo-mn: need to add it?
+        'min_allowed_price',
+        'max_allowed_price',
     ];
 
     public $timestamps = true;
 
-    /*
-    * Get the PaymentMethods for the Request
-    */
-    public function linkedMethods(){
-        return $this->belongsToMany(LinkedMethod::class, 'request_linkedmethod', 'request_id', 'linked_method_id');
+    public function paymentMethods(): BelongsToMany
+    {
+        return $this->belongsToMany(PaymentMethod::class, 'payment_method_request')->withTimestamps();
     }
 
     /*

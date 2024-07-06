@@ -1,0 +1,329 @@
+"/users/requests":
+#  get:
+#    tags:
+#      - payment methods
+#    summary: "Get all payment methods"
+#    description: "This endpoint retrieve all payment methods."
+#    operationId: getUserPaymentMethods
+#    parameters:
+#      - name: per_page
+#        in: query
+#        description: "Number of items to return per page"
+#        required: false
+#        schema:
+#          type: integer
+#          default: 15
+#      - name: page
+#        in: query
+#        description: "page number"
+#        required: false
+#        schema:
+#          type: integer
+#          default: 1
+#    responses:
+#      '200':
+#        description: "The payment methods was retrieved successfully."
+#        content:
+#          application/json:
+#            schema:
+#              type: object
+#              example: {
+#                "status": "success",
+#                "code": 200,
+#                "message": "The payment methods was retrieved successfully.",
+#                "data": {
+#                  "items": [
+#                    {
+#                      "ulid": "01HZYTZ1EGA71BRQ9E844VMD52",
+#                      "payment_method": {
+#                        "type": "rial_bank",
+#                        "holder_name": "122222",
+#                        "bank_name": "رسالت",
+#                        "card_number": "6274129005473742",
+#                        "sheba": "IR062960000000100324200001",
+#                        "account_no": "10996491",
+#                        "is_active": true,
+#                        "created_at": "2024-06-09T15:48:09.000000Z",
+#                        "updated_at": "2024-06-09T15:48:09.000000Z"
+#                      }
+#                    },
+#                    {
+#                      "ulid": "01HZYTZV0BMEB0JMXZW7MBF3SD",
+#                      "payment_method": {
+#                        "type": "paypal",
+#                        "holder_name": "122222",
+#                        "email": "test@test.com",
+#                        "is_active": true,
+#                        "created_at": "2024-06-09T15:48:35.000000Z",
+#                        "updated_at": "2024-06-09T15:48:35.000000Z"
+#                      }
+#                    }
+#                  ],
+#                  "pagination": {
+#                    "current_page": 1,
+#                    "first_page_url": "http://localhost:8000/api/v1/users/payment-methods?page=1",
+#                    "from": 1,
+#                    "last_page": 1,
+#                    "last_page_url": "http://localhost:8000/api/v1/users/payment-methods?page=1",
+#                    "next_page_url": null,
+#                    "path": "http://localhost:8000/api/v1/users/payment-methods",
+#                    "per_page": 15,
+#                    "prev_page_url": null,
+#                    "to": 2,
+#                    "total": 2
+#                  }
+#                }
+#              }
+
+  post:
+    tags:
+      - requests
+    summary: "Create a new payment method"
+    description: "This endpoint allows users to create a new payment method by providing the necessary details based on the selected payment method type (Rial bank, Foreign bank, or paypal)."
+    operationId: createRequest
+    parameters: []
+    requestBody:
+      required: true
+      content:
+        application/x-www-form-urlencoded:
+          schema:
+            type: object
+            required:
+              - type
+              - holder_name
+              - is_active
+            properties:
+              type:
+                type: string
+                description: "The type of payment method, Rial Bank: 1 | Foreign Bank:2 | Paypal: 3"
+                enum:
+                  - 1
+                  - 2
+                  - 3
+                example: 1
+              card_number:
+                type: string
+                description: "The card number (required if type is Rial Bank)"
+                example: "6274129005473742"
+              sheba:
+                type: string
+                description: "The Sheba number (required if type is Rial Bank)"
+                example: "IR062960000000100324200001"
+              account_no:
+                type: string
+                description: "The account number"
+                example: "10996491"
+              iban:
+                type: string
+                description: "The IBAN (required if type is Foreign Bank)"
+                example: "DE89370400440532013000"
+              bic:
+                type: string
+                description: "The BIC (required if type is Foreign Bank)"
+                example: "DEUTDEFF"
+              email:
+                type: string
+                format: email
+                description: "The email address (required if type is Paypal)"
+                example: "john.doe@example.com"
+              holder_name:
+                type: string
+                description: "The name of the account holder"
+                example: "John Doe"
+              bank_name:
+                type: string
+                description: "The name of the bank (required if type is Rial Bank or Foreign Bank)"
+                example: "Bank Melli Iran"
+              is_active:
+                type: integer
+                enum:
+                  - 0
+                  - 1
+                description: "Indicates if the payment method is active. Inactive: 0 | Active: 1"
+                example: 1
+    responses:
+      '201':
+        description: "Payment method created successfully"
+        content:
+          application/json:
+            schema:
+              type: object
+              example: {
+                "status": "success",
+                "code": 201,
+                "message": "The payment method was created successfully.",
+                "data": {
+                  "ulid": "01HZYR20ZBGKWCBGQDVG0TCFED",
+                  "payment_method": {
+                    "type": "rial_bank",
+                    "holder_name": "Ali Parvin",
+                    "bank_name": "Resalat",
+                    "card_number": "6274129005473742",
+                    "sheba": "IR062960000000100324200001",
+                    "account_no": "10996491",
+                    "is_active": true,
+                    "created_at": "2024-06-09T14:57:21.000000Z",
+                    "updated_at": "2024-06-09T14:57:21.000000Z"
+                  }
+                }
+              }
+
+#"/users/payment-methods/{paymentMethod}":
+#  get:
+#    tags:
+#      - payment methods
+#    summary: "Get a payment method by ULID"
+#    description: "This endpoint retrieve a payment method by ULID."
+#    operationId: getUserPaymentMethod
+#    parameters:
+#      - name: paymentMethod
+#        in: path
+#        required: true
+#        description: "The ULID of the payment method."
+#        schema:
+#          type: string
+#    responses:
+#      '200':
+#        description: "The user's payment method was retrieved successfully."
+#        content:
+#          application/json:
+#            schema:
+#              type: object
+#              example: {
+#                "status": "success",
+#                "code": 200,
+#                "message": "The user's payment method was retrieved successfully.",
+#                "data": {
+#                  "ulid": "01HZYR20ZBGKWCBGQDVG0TCFED",
+#                  "payment_method": {
+#                    "type": "rial_bank",
+#                    "holder_name": "122222",
+#                    "bank_name": "Resalat",
+#                    "card_number": "6274129005473742",
+#                    "sheba": "IR062960000000100324200001",
+#                    "account_no": "10996491",
+#                    "is_active": true,
+#                    "created_at": "2024-06-09T14:57:21.000000Z",
+#                    "updated_at": "2024-06-09T15:05:48.000000Z"
+#                  }
+#                }
+#              }
+#  put:
+#    tags:
+#      - payment methods
+#    summary: "Update a user's payment method"
+#    description: "Update a specific payment method of the authenticated user."
+#    operationId: UpdateUserPaymentMethod
+#    parameters:
+#      - name: paymentMethod
+#        in: path
+#        required: true
+#        description: "The ULID of the payment method to update."
+#        schema:
+#          type: string
+#    requestBody:
+#      required: true
+#      content:
+#        application/x-www-form-urlencoded:
+#          schema:
+#            type: object
+#            required:
+#              - holder_name
+#              - is_active
+#            properties:
+#              card_number:
+#                type: string
+#                description: "The card number (required if type is Rial Bank)"
+#                example: "6274129005473742"
+#              sheba:
+#                type: string
+#                description: "The Sheba number (required if type is Rial Bank)"
+#                example: "IR062960000000100324200001"
+#              account_no:
+#                type: string
+#                description: "The account number"
+#                example: "10996491"
+#              iban:
+#                type: string
+#                description: "The IBAN (required if type is Foreign Bank)"
+#                example: "DE89370400440532013000"
+#              bic:
+#                type: string
+#                description: "The BIC (required if type is Foreign Bank)"
+#                example: "DEUTDEFF"
+#              email:
+#                type: string
+#                format: email
+#                description: "The email address (required if type is Paypal)"
+#                example: "john.doe@example.com"
+#              holder_name:
+#                type: string
+#                description: "The name of the account holder"
+#                example: "John Doe"
+#              bank_name:
+#                type: string
+#                description: "The name of the bank (required if type is Rial Bank or Foreign Bank)"
+#                example: "Bank Melli Iran"
+#              is_active:
+#                type: integer
+#                enum:
+#                  - 0
+#                  - 1
+#                description: "Indicates if the payment method is active. Inactive: 0 | Active: 1"
+#                example: 1
+#    responses:
+#      '200':
+#        description: "The payment method was updated successfully."
+#        content:
+#          application/json:
+#            schema:
+#              type: object
+#              example: {
+#                "status": "success",
+#                "code": 200,
+#                "message": "The payment method was updated successfully.",
+#                "data": {
+#                  "ulid": "01J03T8BFA0FMRB3S3D75FB900",
+#                  "payment_method": {
+#                    "type": "rial_bank",
+#                    "holder_name": "Mehrdad Nateghi",
+#                    "bank_name": "Resalat",
+#                    "card_number": "5041951019781245",
+#                    "sheba": "IR410200030500111099649001",
+#                    "account_no": "109964910",
+#                    "icon": "not-defined",
+#                    "is_active": true,
+#                    "created_at": "2024-06-11T14:11:58.000000Z",
+#                    "updated_at": "2024-06-11T15:02:17.000000Z"
+#                  }
+#                }
+#              }
+#
+#  delete:
+#    tags:
+#      - payment methods
+#    summary: "Delete a user's payment method"
+#    description: "Deletes a specific payment method of the authenticated user."
+#    operationId: deleteUserPaymentMethod
+#    parameters:
+#      - name: paymentMethod
+#        in: path
+#        required: true
+#        description: "The ULID of the payment method to delete."
+#        schema:
+#          type: string
+#    responses:
+#      '200':
+#        description: "The user's payment methods was deleted successfully."
+#        content:
+#          application/json:
+#            schema:
+#              type: object
+#              example: {
+#                "status": "success",
+#                "code": 200,
+#                "message": "The user's payment method was deleted successfully.",
+#                "data": null
+#              }
+
+
