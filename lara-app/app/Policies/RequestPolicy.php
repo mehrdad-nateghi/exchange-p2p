@@ -30,7 +30,7 @@ class RequestPolicy
      */
     public function view(User $user, Request $request)
     {
-        //
+        return $user->id === $request->user_id;
     }
 
     /**
