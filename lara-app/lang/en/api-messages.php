@@ -42,6 +42,8 @@ return [
     'code_verified_successfully' => 'Verification code verified successfully',
 
 
+    'request' => 'request',
+    'requests' => 'requests',
     'payment_method' => 'payment method',
     'payment_methods' => 'payment methods',
     'user_payment_methods' => "user's payment methods",

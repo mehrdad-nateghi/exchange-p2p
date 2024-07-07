@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class PaymentMethodCollection extends ResourceCollection
+class RequestCollection extends ResourceCollection
 {
     /**
      * Transform the resource collection into an array.
@@ -15,7 +15,7 @@ class PaymentMethodCollection extends ResourceCollection
     public function toArray($request)
     {
         return [
-            'items' =>  PaymentMethodResource::collection($this),
+            'items' =>  RequestResource::collection($this),
             'pagination' => generatePaginationParams($this),
         ];
     }

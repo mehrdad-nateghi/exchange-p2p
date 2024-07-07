@@ -29,6 +29,7 @@ class RouteServiceProvider extends ServiceProvider
             'AuthRoutes',
             'UsersRoutes',
             'PaymentMethodsRoutes',
+            'RequestsRoutes',
         ],
     ];
 
