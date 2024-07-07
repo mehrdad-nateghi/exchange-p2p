@@ -2,8 +2,8 @@
   get:
     tags:
       - requests
-    summary: "Get all payment methods"
-    description: "Get all payment methods of a user"
+    summary: "Get all requests"
+    description: "Get all requests of a user"
     operationId: getRequests
     parameters: []
     responses:
@@ -145,11 +145,6 @@
                                           format: date-time
                                           description: "Last update timestamp"
                                           example: "2024-07-07T06:38:04.000000Z"
-                              pagination:
-                                type: object
-                                nullable: true
-                                description: "Pagination information for payment methods"
-                                example: null
                     pagination:
                       type: object
                       required:
@@ -291,10 +286,12 @@
                       example: "2000"
                     type:
                       type: string
+                      enum: ["BUY", "SELL"],
                       description: "Type of the request"
                       example: "BUY"
                     status:
                       type: string
+                      enum: ["PROCESSING", "TRADING", "CANCELED"]
                       description: "Status of the request"
                       example: "PROCESSING"
                     payment_methods:
