@@ -96,9 +96,12 @@ class StoreRequestRequest extends FormRequest
 
     protected function prepareForValidation(): void
     {
+        // get min & max allowed price
+        $prices = getMinMaxAllowedPrice();
+
         $this->merge([
-            'min_allowed_price' => 1000, // todo-mn: use third party to get value
-            'max_allowed_price' => 2000,
+            'min_allowed_price' => $prices['min'],
+            'max_allowed_price' => $prices['max'],
             'status' => RequestStatusEnum::PROCESSING->value,
         ]);
     }

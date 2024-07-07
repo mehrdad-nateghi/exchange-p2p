@@ -2,6 +2,9 @@
 
 use App\Services\Global\ApiResponseService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 /////////////////////////////////////////////////////
 if (!function_exists('apiResponse')) {
@@ -49,5 +52,38 @@ if (!function_exists('generatePaginationParams')) {
         } catch (Throwable $e) {
             return null;
         }
+    }
+}
+/////////////////////////////////////////////////////
+if (!function_exists('getMinMaxAllowedPrice')) {
+    function getMinMaxAllowedPrice(): ?array
+    {
+        // call third party to get current euro price
+        // if there's in cache get it if not add it
+        return Cache::remember('min_max_allowed_price', now()->addHours(1), function () {
+            try {
+                $response = Http::retry(10)->get('http://api.navasan.tech/latest/', [
+                    'api_key' => 'freeEgW0lQWS0DE1pFyUoPLQgln1aLzu',
+                    'item' => 'eur'
+                ]);
+
+                if ($response->successful()) {
+                    $data = $response->json();
+                    $euroPrice = $data['eur']['value'] ?? null;
+
+                    if ($euroPrice === null) {
+                        return [];
+                    }
+
+                    return [
+                        'min' => $euroPrice * 0.9,  // Example: 10% below current price
+                        'max' => $euroPrice * 1.1,  // Example: 10% above current price
+                    ];
+                }
+            } catch (\Throwable $t) {
+                Log::error($t);
+                return [];
+            }
+        });
     }
 }
