@@ -33,6 +33,7 @@ spec:
               php artisan optimize:clear
               php artisan optimize
               php artisan migrate --force
+              php artisan generate:swagger
           envFrom:
             - configMapRef:
                 name: core-laravel

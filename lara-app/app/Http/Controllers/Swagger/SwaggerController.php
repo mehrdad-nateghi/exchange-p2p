@@ -18,6 +18,11 @@ class SwaggerController extends Controller
                 $swagger['paths'] = array_merge_recursive($swagger['paths'] ?? [], Yaml::parse(file_get_contents($directory)) ?? []);
             }
         }
+
+        // Create the consolidated swagger.yaml file
+        $consolidatedYaml = Yaml::dump($swagger/*, 10, 2*/); // 10 is the inline level, 2 is the indentation
+        file_put_contents(base_path('/swagger/swagger.yaml'), $consolidatedYaml);
+
         return collect($swagger)->toArray();
     }
 }
