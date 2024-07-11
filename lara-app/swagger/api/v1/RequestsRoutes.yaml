@@ -5,7 +5,21 @@
     summary: "Get all requests"
     description: "Get all requests of a user"
     operationId: getRequests
-    parameters: []
+    parameters: 
+      - name: per_page
+        in: query
+        description: "Number of items to return per page"
+        required: false
+        schema:
+          type: integer
+          default: 15
+      - name: page
+        in: query
+        description: "page number"
+        required: false
+        schema:
+          type: integer
+          default: 1
     responses:
       '200':
         description: "The requests was retrieved successfully."
