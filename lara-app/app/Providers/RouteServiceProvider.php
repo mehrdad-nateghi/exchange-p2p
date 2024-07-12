@@ -26,6 +26,7 @@ class RouteServiceProvider extends ServiceProvider
     protected $routes = [
         'V1' => [
             'SwaggerRoutes',
+            'GuestsRoutes',
             'AuthRoutes',
             'UsersRoutes',
             'PaymentMethodsRoutes',
