@@ -89,7 +89,7 @@ class StoreRequestRequest extends FormRequest
             'status' => [
                 'required',
                 'numeric',
-                Rule::in([RequestStatusEnum::PROCESSING->value])
+                Rule::in([RequestStatusEnum::PENDING->value])
             ],
         ];
     }
@@ -102,7 +102,7 @@ class StoreRequestRequest extends FormRequest
         $this->merge([
             'min_allowed_price' => $prices['min'],
             'max_allowed_price' => $prices['max'],
-            'status' => RequestStatusEnum::PROCESSING->value,
+            'status' => RequestStatusEnum::PENDING->value,
         ]);
     }
 }

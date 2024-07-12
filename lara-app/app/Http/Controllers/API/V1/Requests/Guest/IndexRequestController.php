@@ -1,13 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\API\V1\Requests\User;
+namespace App\Http\Controllers\API\V1\Requests\Guest;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\API\V1\Request\User\IndexRequestRequest;
+use App\Http\Requests\API\V1\Request\Guest\IndexRequestRequest;
+use App\Http\Resources\RequestCollection;
+use App\Models\Request;
 use App\QueryFilters\RequestStatusFilter;
 use App\QueryFilters\RequestTypeFilter;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -19,12 +20,7 @@ class IndexRequestController extends Controller
     ): JsonResponse
     {
         try {
-            // old
-            $user = Auth::user();
-            //$requests = new RequestCollection($user->requests()->paginate());
-
-            // replace this with old
-            $requests = QueryBuilder::for($user->requests())
+            $requests = QueryBuilder::for(Request::class)
                 ->allowedFilters([
                     AllowedFilter::custom('type', new RequestTypeFilter),
                     AllowedFilter::custom('status', new RequestStatusFilter),
@@ -32,6 +28,8 @@ class IndexRequestController extends Controller
                 ->defaultSort(['-created_at','-price'])
                 ->allowedSorts('created_at','price')
                 ->paginate();
+
+            $requests = new RequestCollection($requests);
 
             return apiResponse()
                 ->message(trans('api-messages.retrieve_success', ['attribute' => trans('api-messages.requests')]))

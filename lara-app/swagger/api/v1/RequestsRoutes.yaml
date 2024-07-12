@@ -5,7 +5,7 @@
     summary: "Get all requests"
     description: "Get all requests of a user"
     operationId: getRequests
-    parameters: 
+    parameters:
       - name: per_page
         in: query
         description: "Number of items to return per page"
@@ -88,7 +88,7 @@
                           status:
                             type: string
                             description: "Status of the request"
-                            example: "PROCESSING"
+                            example: "PENDING"
                           payment_methods:
                             type: object
                             required:
@@ -305,9 +305,8 @@
                       example: "BUY"
                     status:
                       type: string
-                      enum: ["PROCESSING", "TRADING", "CANCELED"]
                       description: "Status of the request"
-                      example: "PROCESSING"
+                      example: "PENDING"
                     payment_methods:
                       type: object
                       properties:
@@ -468,7 +467,7 @@
                     status:
                       type: string
                       description: "Status of the request"
-                      example: "PROCESSING"
+                      example: "PENDING"
                     payment_methods:
                       type: object
                       required:
