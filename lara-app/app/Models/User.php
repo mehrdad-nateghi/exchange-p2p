@@ -8,13 +8,15 @@ use App\Enums\UserStatusEnum;
 use App\Traits\Global\Ulid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
-//use Laravel\Passport\HasApiTokens;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
+
+//use Laravel\Passport\HasApiTokens;
 
 class User extends Authenticatable
 {
@@ -84,9 +86,9 @@ class User extends Authenticatable
     /*
     * Get the Bids for the User
     */
-    public function bids()
+    public function bids(): HasManyThrough
     {
-        return $this->hasMany(Bid::class,'applicant_id');
+        return $this->hasManyThrough(Bid::class, Request::class);
     }
 
     /*

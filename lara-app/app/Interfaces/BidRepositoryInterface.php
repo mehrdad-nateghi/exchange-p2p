@@ -2,7 +2,7 @@
 
 namespace App\Interfaces;
 
-use App\Models\Bid;
+use App\Models\Legacy\Bid;
 use App\Models\Request;
 
 interface BidRepositoryInterface

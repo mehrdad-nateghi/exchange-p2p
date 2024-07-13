@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\Bid;
+use App\Models\Legacy\Bid;
 use App\Models\Request;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;

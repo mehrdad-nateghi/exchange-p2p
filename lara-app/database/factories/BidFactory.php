@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Bid>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Legacy\Bid>
  */
 class BidFactory extends Factory
 {

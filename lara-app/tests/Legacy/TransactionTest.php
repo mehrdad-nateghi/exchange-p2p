@@ -3,10 +3,10 @@
 namespace Tests\Feature;
 
 use App\Enums\Legacy\UserRoleEnum;
-use App\Models\Bid;
 use App\Models\Country;
 use App\Models\File;
 use App\Models\Invoice;
+use App\Models\Legacy\Bid;
 use App\Models\LinkedMethod;
 use App\Models\PaymentMethod;
 use App\Models\Request;

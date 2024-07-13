@@ -11,7 +11,7 @@ use App\Enums\Legacy\TradeStatusEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Legacy\AcceptBidRequest;
 use App\Http\Requests\Legacy\RegisterBidRequest;
-use App\Models\Bid as BidModel;
+use App\Models\Legacy\Bid as BidModel;
 use App\Models\Request as RequestModel;
 use Exception;
 use Illuminate\Support\Facades\Auth;
