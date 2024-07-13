@@ -4,8 +4,32 @@
       - requests
     summary: "Get all requests"
     description: "Get all requests of a user"
-    operationId: getRequests
+    operationId: getUserRequests
     parameters:
+      - name: filter[type]
+        in: query
+        description: The type of request
+        required: false
+        schema:
+          type: string
+          enum: [buy, sell]
+          example: buy
+      - name: filter[status]
+        in: query
+        description: The status of the request
+        required: false
+        schema:
+          type: string
+          enum: [pending, processing, trading, canceled]
+          example: pending
+      - name: sort
+        in: query
+        description: The sort order of the results
+        required: false
+        schema:
+          type: string
+          enum: [created_at, -created_at,price,-price]
+          example: -created_at
       - name: per_page
         in: query
         description: "Number of items to return per page"
@@ -300,7 +324,7 @@
                       example: "2000"
                     type:
                       type: string
-                      enum: ["BUY", "SELL"],
+                      enum: ["BUY", "SELL"]
                       description: "Type of the request"
                       example: "BUY"
                     status:
