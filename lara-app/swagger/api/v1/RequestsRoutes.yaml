@@ -28,7 +28,7 @@
         required: false
         schema:
           type: string
-          enum: [created_at, -created_at,price,-price]
+          enum: [created_at, -created_at, price, -price]
           example: -created_at
       - name: per_page
         in: query
@@ -45,7 +45,7 @@
           type: integer
           default: 1
     responses:
-      '200':
+      "200":
         description: "The requests was retrieved successfully."
         content:
           application/json:
@@ -282,9 +282,10 @@
                 description: "Array of payment method ULIDs"
                 items:
                   type: string
-                example: [ "01J25YKXXAS0KX1W4383HE65GR", "01J25YKY0C2GHB2Y4BAESSTXQ6" ]
+                example:
+                  ["01J25YKXXAS0KX1W4383HE65GR", "01J25YKY0C2GHB2Y4BAESSTXQ6"]
     responses:
-      '201':
+      "201":
         description: "Created Successfully"
         content:
           application/json:
@@ -433,7 +434,7 @@
         schema:
           type: string
     responses:
-      '200':
+      "200":
         description: "The user's request was retrieved successfully."
         content:
           application/json:

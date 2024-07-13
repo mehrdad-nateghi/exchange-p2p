@@ -1,7 +1,7 @@
 "/requests":
   get:
     tags:
-      - requests
+      - guests
     summary: "Get all system requests"
     description: "Get all requests"
     operationId: getAllRequests
@@ -28,7 +28,7 @@
         required: false
         schema:
           type: string
-          enum: [created_at, -created_at,price,-price]
+          enum: [created_at, -created_at, price, -price]
           example: -created_at
       - name: per_page
         in: query
@@ -45,7 +45,7 @@
           type: integer
           default: 1
     responses:
-      '200':
+      "200":
         description: "The requests was retrieved successfully."
         content:
           application/json:
@@ -107,12 +107,15 @@
                             example: "2000.00"
                           type:
                             type: string
+                            enum: ["buy", "sell"]
                             description: "Type of the request (BUY or SELL)"
                             example: "BUY"
                           status:
                             type: string
+                            enum:
+                              ["pending", "processing", "trading", "canceled"]
                             description: "Status of the request"
-                            example: "PENDING"
+                            example: "pending"
                           payment_methods:
                             type: object
                             required:
@@ -244,176 +247,3 @@
                           type: integer
                           description: "Total number of items"
                           example: 6
-  post:
-    tags:
-      - requests
-    summary: "Create a new request"
-    description: "Create a new request with the specified details"
-    operationId: createRequest
-    requestBody:
-      required: true
-      content:
-        application/json:
-          schema:
-            type: object
-            required:
-              - type
-              - volume
-              - price
-              - payment_methods
-            properties:
-              type:
-                type: integer
-                description: "The type of request, Buy: 1 | Sell:2"
-                enum:
-                  - 1
-                  - 2
-                example: 1
-              volume:
-                type: integer
-                description: "Volume of the request"
-                example: "250"
-              price:
-                type: integer
-                description: "Price of the request"
-                example: "2000"
-              payment_methods:
-                type: array
-                description: "Array of payment method ULIDs"
-                items:
-                  type: string
-                example: [ "01J25YKXXAS0KX1W4383HE65GR", "01J25YKY0C2GHB2Y4BAESSTXQ6" ]
-    responses:
-      '201':
-        description: "Created Successfully"
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                status:
-                  type: string
-                  description: "The status of the operation"
-                  example: "success"
-                code:
-                  type: integer
-                  description: "The HTTP status code"
-                  example: 201
-                message:
-                  type: string
-                  description: "A descriptive message about the operation result"
-                  example: "The request was created successfully."
-                data:
-                  type: object
-                  properties:
-                    ulid:
-                      type: string
-                      description: "Unique identifier for the request"
-                      example: "01J25YP7C2MTHAXNREE7FNPY85"
-                    number:
-                      type: string
-                      description: "Request number"
-                      example: "RE-953539"
-                    volume:
-                      type: string
-                      description: "Volume of the request"
-                      example: "250"
-                    price:
-                      type: string
-                      description: "Price of the request"
-                      example: "2000"
-                    type:
-                      type: string
-                      enum: ["BUY", "SELL"]
-                      description: "Type of the request"
-                      example: "BUY"
-                    status:
-                      type: string
-                      description: "Status of the request"
-                      example: "PENDING"
-                    payment_methods:
-                      type: object
-                      properties:
-                        items:
-                          type: array
-                          items:
-                            type: object
-                            properties:
-                              ulid:
-                                type: string
-                                description: "Unique identifier for the payment method"
-                                example: "01J25YKXXAS0KX1W4383HE65GR"
-                              payment_method:
-                                type: object
-                                properties:
-                                  type:
-                                    type: string
-                                    description: "Type of payment method"
-                                    example: "rial_bank"
-                                  holder_name:
-                                    type: string
-                                    description: "Name of the account holder"
-                                    example: ""
-                                  bank_name:
-                                    type: string
-                                    description: "Name of the bank"
-                                    example: ""
-                                  card_number:
-                                    type: string
-                                    description: "Card number"
-                                    example: ""
-                                  sheba:
-                                    type: string
-                                    description: "SHEBA number"
-                                    example: ""
-                                  account_no:
-                                    type: string
-                                    description: "Account number"
-                                    example: ""
-                                  email:
-                                    type: string
-                                    description: "Email for PayPal payment method"
-                                    example: "test@gmail.com"
-                                  is_active:
-                                    type: boolean
-                                    description: "Whether the payment method is active"
-                                    example: false
-                                  created_at:
-                                    type: string
-                                    format: date-time
-                                    description: "Creation date of the payment method"
-                                    example: "2024-07-07T06:38:04.000000Z"
-                                  updated_at:
-                                    type: string
-                                    format: date-time
-                                    description: "Creation date of the payment method"
-                                    example: "2024-07-07T06:38:04.000000Z"
-                                required:
-                                  - type
-                                  - holder_name
-                                  - bank_name
-                                  - card_number
-                                  - sheba
-                                  - account_no
-                                  - email
-                                  - is_active
-                                  - created_at
-                                  - updated_at
-                            required:
-                              - ulid
-                              - payment_method
-                      required:
-                        - items
-                  required:
-                    - ulid
-                    - number
-                    - volume
-                    - price
-                    - type
-                    - status
-                    - payment_methods
-              required:
-                - status
-                - code
-                - message
-                - data
