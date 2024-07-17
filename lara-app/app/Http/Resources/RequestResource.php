@@ -21,6 +21,8 @@ class RequestResource extends JsonResource
             'price' => $this->price,
             'type' => $this->type->name, // how to get value of according type?
             'status' => $this->status->name,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
             'payment_methods' => PaymentMethodCollection::make($this->paymentMethods),
         ];
     }
