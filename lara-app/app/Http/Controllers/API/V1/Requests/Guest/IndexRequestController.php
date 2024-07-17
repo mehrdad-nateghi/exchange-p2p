@@ -9,6 +9,7 @@ use App\Models\Request;
 use App\QueryFilters\RequestPaymentMethodFilter;
 use App\QueryFilters\RequestStatusFilter;
 use App\QueryFilters\RequestTypeFilter;
+use App\QueryFilters\RequestVolumeFilter;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -26,6 +27,8 @@ class IndexRequestController extends Controller
                     AllowedFilter::custom('type', new RequestTypeFilter),
                     AllowedFilter::custom('status', new RequestStatusFilter),
                     AllowedFilter::custom('payment_method', new RequestPaymentMethodFilter),
+                    AllowedFilter::custom('volume_from', new RequestVolumeFilter),
+                    AllowedFilter::custom('volume_to', new RequestVolumeFilter),
                 ])
                 ->defaultSort(['-created_at','-price'])
                 ->allowedSorts('created_at','price')
