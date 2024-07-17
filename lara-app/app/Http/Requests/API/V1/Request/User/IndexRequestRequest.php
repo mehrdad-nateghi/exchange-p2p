@@ -69,7 +69,7 @@ class IndexRequestRequest extends FormRequest
 
             'sort' => [
                 'nullable',
-                'in:created_at,-created_at',
+                'in:created_at,-created_at,price,-price',
             ]
         ];
     }
