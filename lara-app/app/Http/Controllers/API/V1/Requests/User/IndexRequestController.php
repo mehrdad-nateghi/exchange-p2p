@@ -4,6 +4,8 @@ namespace App\Http\Controllers\API\V1\Requests\User;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\Request\User\IndexRequestRequest;
+use App\Http\Resources\RequestCollection;
+use App\QueryFilters\RequestPaymentMethodFilter;
 use App\QueryFilters\RequestStatusFilter;
 use App\QueryFilters\RequestTypeFilter;
 use Illuminate\Http\JsonResponse;
@@ -23,10 +25,13 @@ class IndexRequestController extends Controller
                 ->allowedFilters([
                     AllowedFilter::custom('type', new RequestTypeFilter),
                     AllowedFilter::custom('status', new RequestStatusFilter),
+                    AllowedFilter::custom('payment_method', new RequestPaymentMethodFilter),
                 ])
                 ->defaultSort(['-created_at','-price'])
                 ->allowedSorts('created_at','price')
                 ->paginateWithDefault();
+
+            $requests = new RequestCollection($requests);
 
             return apiResponse()
                 ->message(trans('api-messages.retrieve_success', ['attribute' => trans('api-messages.requests')]))

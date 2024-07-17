@@ -48,6 +48,11 @@ class IndexRequestRequest extends FormRequest
                 'in:pending,processing,trading,canceled'
             ],
 
+            'filter.payment_method' => [
+                'nullable',
+                Rule::in([PaymentMethodTypeEnum::PAYPAL->getKeyLowercase(),PaymentMethodTypeEnum::FOREIGN_BANK->getKeyLowercase()])
+            ],
+
             'sort' => [
                 'nullable',
                 'in:created_at,-created_at',

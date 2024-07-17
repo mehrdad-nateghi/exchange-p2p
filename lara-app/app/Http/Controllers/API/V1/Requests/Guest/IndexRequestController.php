@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\Request\Guest\IndexRequestRequest;
 use App\Http\Resources\RequestCollection;
 use App\Models\Request;
+use App\QueryFilters\RequestPaymentMethodFilter;
 use App\QueryFilters\RequestStatusFilter;
 use App\QueryFilters\RequestTypeFilter;
 use Illuminate\Http\JsonResponse;
@@ -24,6 +25,7 @@ class IndexRequestController extends Controller
                 ->allowedFilters([
                     AllowedFilter::custom('type', new RequestTypeFilter),
                     AllowedFilter::custom('status', new RequestStatusFilter),
+                    AllowedFilter::custom('payment_method', new RequestPaymentMethodFilter),
                 ])
                 ->defaultSort(['-created_at','-price'])
                 ->allowedSorts('created_at','price')
