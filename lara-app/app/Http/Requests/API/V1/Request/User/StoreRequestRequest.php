@@ -64,6 +64,7 @@ class StoreRequestRequest extends FormRequest
                 'lte:max_allowed_price'
             ],
 
+            // todo: in: paypal and foreign bank
             'payment_methods' => [
                 'required', 'array'
             ],
