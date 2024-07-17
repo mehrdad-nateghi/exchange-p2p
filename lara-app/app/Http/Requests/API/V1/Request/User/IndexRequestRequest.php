@@ -53,6 +53,20 @@ class IndexRequestRequest extends FormRequest
                 Rule::in([PaymentMethodTypeEnum::PAYPAL->getKeyLowercase(),PaymentMethodTypeEnum::FOREIGN_BANK->getKeyLowercase()])
             ],
 
+            'filter.volume_from' => [
+                'nullable',
+                'numeric',
+                'min:0',
+                'max:100000',
+            ],
+
+            'filter.volume_to' => [
+                'nullable',
+                'numeric',
+                'min:0',
+                'max:100000',
+            ],
+
             'sort' => [
                 'nullable',
                 'in:created_at,-created_at',
