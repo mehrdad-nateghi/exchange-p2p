@@ -22,6 +22,7 @@ class ForeignBankAccountResource extends JsonResource
             'bank_name' => $this->bank_name,
             'iban' => $this->iban,
             'bic' => $this->bic,
+            'icon' => $this->icon,
             'is_active' => $this->is_active,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
