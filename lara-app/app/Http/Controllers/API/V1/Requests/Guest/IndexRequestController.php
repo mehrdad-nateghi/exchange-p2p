@@ -27,7 +27,7 @@ class IndexRequestController extends Controller
                 ])
                 ->defaultSort(['-created_at','-price'])
                 ->allowedSorts('created_at','price')
-                ->paginate();
+                ->paginateWithDefault();
 
             $requests = new RequestCollection($requests);
 

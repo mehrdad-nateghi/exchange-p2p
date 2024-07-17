@@ -6,6 +6,7 @@ use App\Enums\Legacy\BidStatusEnum;
 use App\Enums\RequestStatusEnum;
 use App\Enums\RequestTypeEnum;
 use App\Traits\Global\Number;
+use App\Traits\Global\Paginatable;
 use App\Traits\Global\Ulid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -14,7 +15,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Request extends Model
 {
-    use HasFactory, Ulid, Number;
+    use HasFactory, Ulid, Number,Paginatable;
 
     protected $casts = [
         'status' => RequestStatusEnum::class,

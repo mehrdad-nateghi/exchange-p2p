@@ -19,19 +19,14 @@ class IndexRequestController extends Controller
     ): JsonResponse
     {
         try {
-            // old
-            $user = Auth::user();
-            //$requests = new RequestCollection($user->requests()->paginate());
-
-            // replace this with old
-            $requests = QueryBuilder::for($user->requests())
+            $requests = QueryBuilder::for(Auth::user()->requests())
                 ->allowedFilters([
                     AllowedFilter::custom('type', new RequestTypeFilter),
                     AllowedFilter::custom('status', new RequestStatusFilter),
                 ])
                 ->defaultSort(['-created_at','-price'])
                 ->allowedSorts('created_at','price')
-                ->paginate();
+                ->paginateWithDefault();
 
             return apiResponse()
                 ->message(trans('api-messages.retrieve_success', ['attribute' => trans('api-messages.requests')]))
