@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\PaymentMethodTypeEnum;
 use App\Traits\Global\Ulid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -27,5 +28,10 @@ class ForeignBankAccount extends Model
     public function paymentMethod(): MorphOne
     {
         return $this->morphOne(PaymentMethod::class,'payment_method');
+    }
+
+    public function getIconAttribute(): string
+    {
+        return config('app.url') . '/images/' . PaymentMethodTypeEnum::FOREIGN_BANK->getKeyLowercase();
     }
 }

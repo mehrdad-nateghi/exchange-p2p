@@ -20,6 +20,7 @@ class PaypalAccountResource extends JsonResource
             'type' => PaymentMethodTypeEnum::PAYPAL->getKeyLowercase(),
             'holder_name' => $this->holder_name,
             'email' => $this->email,
+            'icon' => $this->icon,
             'is_active' => $this->is_active,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
