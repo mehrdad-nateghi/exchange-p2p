@@ -44,12 +44,20 @@ return [
 
     'request' => 'request',
     'requests' => 'requests',
+    'bid' => 'bid',
+    'bids' => 'bids',
     'payment_method' => 'payment method',
     'payment_methods' => 'payment methods',
     'user_payment_methods' => "user's payment methods",
     'user_payment_method' => "user's payment method",
     'token_refreshed_successfully' => 'Access token has been successfully refreshed.',
     'logout_successful' => 'You have been successfully logged out.',
+    'price' => 'price',
+
+    'not_valid' => 'The selected :attribute is invalid.',
+    'bid_price_gte_min_allowed_price' => 'The bid price must be at least :attribute.',
+    'bid_price_must_between' => 'The bid price must between :min and :max.',
+    'bid_price_must_gt' => 'The bid price must be greater than :price.',
 
 
 ];

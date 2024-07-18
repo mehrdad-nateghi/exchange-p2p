@@ -31,6 +31,7 @@ class RouteServiceProvider extends ServiceProvider
             'UsersRoutes',
             'PaymentMethodsRoutes',
             'RequestsRoutes',
+            'BidsRoutes',
         ],
     ];
 
