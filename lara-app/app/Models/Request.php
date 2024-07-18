@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Enums\Legacy\BidStatusEnum;
 use App\Enums\RequestStatusEnum;
 use App\Enums\RequestTypeEnum;
 use App\Traits\Global\Number;
@@ -12,10 +11,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Request extends Model
 {
-    use HasFactory, Ulid, Number,Paginatable;
+    use HasFactory, Ulid, Number,Paginatable, SoftDeletes;
 
     protected $casts = [
         'status' => RequestStatusEnum::class,
@@ -45,5 +46,10 @@ class Request extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function bids(): HasMany
+    {
+        return $this->hasMany(Bid::class);
     }
 }

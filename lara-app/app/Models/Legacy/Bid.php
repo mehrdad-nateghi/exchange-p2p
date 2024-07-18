@@ -1,0 +1,89 @@
+<?php
+
+namespace App\Models\Legacy;
+
+use App\Enums\Legacy\BidStatusEnum;
+use App\Enums\Legacy\BidTypeEnum;
+use App\Models\Email;
+use App\Models\LinkedMethod;
+use App\Models\Notification;
+use App\Models\Request;
+use App\Models\Trade;
+use App\Models\User;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Bid extends Model
+{
+    use HasFactory;
+
+    protected $table = 'bids';
+
+    protected $fillable = [
+        'request_id',
+        'applicant_id',
+        'target_account_id',
+        'bid_rate',
+        'created_at',
+        'support_id',
+        'type',
+        'status',
+        'description'
+    ];
+
+    public $timestamps = true;
+
+
+    /**
+     * Get the User that owns the Bid
+     */
+    public function user(){
+        return $this->belongsTo(User::class, 'applicant_id');
+    }
+
+
+    /**
+     * Get the Request that owns the Bid
+     */
+    public function request(){
+        return $this->belongsTo(Request::class, 'request_id');
+    }
+
+    /*
+    * Get the Trade for the Bid
+    */
+    public function trade(){
+        return $this->hasOne(Trade::class);
+    }
+
+    /*
+    * Get the Emails related to the Bid
+    */
+    public function emails(){
+        return $this->morphMany(Email::class, 'emailable');
+    }
+
+    /*
+    * Get the Notifications related to the Bid
+    */
+    public function notifications(){
+        return $this->morphMany(Notification::class, 'notifiable');
+    }
+
+    /*
+    * Get the LinkedMethod belongs to the Bid
+    */
+    public function linkedMethod(){
+        return $this->belongsTo(LinkedMethod::class, 'target_account_id');
+    }
+
+    /*
+    * Enum casting for the status and type fields
+    */
+    protected $casts = [
+        'status' => BidStatusEnum::class,
+        'type' => BidTypeEnum::class
+    ];
+
+
+}

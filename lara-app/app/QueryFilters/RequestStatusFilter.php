@@ -11,7 +11,7 @@ class RequestStatusFilter implements Filter
 {
     public function __invoke(Builder $query, $value, string $property): void
     {
-        $type = RequestStatusEnum::fromName($value);
+        $type = RequestStatusEnum::fromName($value)->value;
 
         if ($type) {
             $query->where('status', $type->value);

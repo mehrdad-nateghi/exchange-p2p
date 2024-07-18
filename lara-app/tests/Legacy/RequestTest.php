@@ -4,11 +4,11 @@ namespace Tests\Feature;
 
 use App\Enums\Legacy\UserRoleEnum;
 use App\Http\Controllers\Applicant\RequestController as ApplicantRequestController;
-use App\Models\Bid;
 use App\Models\Country;
 use App\Models\Email;
 use App\Models\EmailTemplate;
 use App\Models\Financial;
+use App\Models\Legacy\Bid;
 use App\Models\LinkedMethod;
 use App\Models\Notification;
 use App\Models\PaymentMethod;

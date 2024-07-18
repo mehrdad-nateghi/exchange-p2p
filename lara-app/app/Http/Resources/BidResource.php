@@ -15,16 +15,11 @@ class BidResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id' => $this->id,
-            'support_id' => $this->support_id,
-            'type' => $this->type,
-            'bid_rate' => $this->bid_rate,
-            'status' => $this->status,
-            'description' => $this->description,
-            'request_id' => $this->request_id,
-            'applicant_id' => $this->applicant_id,
+            'ulid' => $this->ulid,
+            'price' => $this->price,
+            'status' => $this->status->key(),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at
-          ];
+        ];
     }
 }

@@ -7,11 +7,10 @@ use App\Enums\RequestStatusEnum;
 use App\Enums\RequestTypeEnum;
 use App\Enums\TradeStatusEnum;
 use App\Interfaces\BidRepositoryInterface;
-use App\Models\Bid;
+use App\Models\Legacy\Bid;
 use App\Models\Request;
 use App\Models\Trade;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 
