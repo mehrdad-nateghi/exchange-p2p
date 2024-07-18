@@ -32,20 +32,6 @@ class StoreRequestRequest extends FormRequest
      */
     public function rules()
     {
-        //$type = $this->request->getInt('type');
-
-        /*$rules = [
-            'user_id' => 'required|exists:users,id',
-            'ulid' => 'required|ulid|unique:requests,ulid',
-            'number' => 'required|string|unique:requests,number',
-            'volume' => 'required|numeric|min:0|decimal:0,2',
-            'price' => 'required|numeric|min:0|decimal:0,2',
-            'min_allowed_price' => 'required|numeric|min:0|decimal:0,2',
-            'max_allowed_price' => 'required|numeric|min:0|decimal:0,2|gte:min_allowed_price',
-            'type' => 'required|integer|min:0|max:255',
-            'status' => 'required|integer|min:0|max:255',
-        ];*/
-
         return [
             'type' => [
                 'required',
@@ -65,7 +51,7 @@ class StoreRequestRequest extends FormRequest
             ],
 
             'payment_methods' => [
-                'required', 'array'
+                'required', 'array' // todo: payment method is active?
             ],
 
             'payment_methods.*' => [

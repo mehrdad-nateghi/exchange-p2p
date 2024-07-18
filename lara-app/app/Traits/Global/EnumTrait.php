@@ -16,6 +16,16 @@ trait EnumTrait
         return array_column(self::cases(), 'value');
     }
 
+    public function key(): string
+    {
+        return strtolower($this->name);
+    }
+
+    public static function keys(): array
+    {
+        return array_map(fn($case) => $case->key(), self::cases());
+    }
+
     public static function array(): array
     {
         return array_combine(self::values(), self::names());
@@ -42,7 +52,7 @@ trait EnumTrait
     public static function fromName(string $name): ?self
     {
         foreach (self::cases() as $case) {
-            if ($case->name === $name) {
+            if (strcasecmp($case->name, $name) === 0) {
                 return $case;
             }
         }
@@ -76,7 +86,7 @@ trait EnumTrait
 
     public static function hasName(string $name): bool
     {
-        return in_array($name, self::names(), true);
+        return in_array(strtoupper($name), array_map('strtoupper', self::names()), true);
     }
 
     public static function description(): string
@@ -115,5 +125,10 @@ trait EnumTrait
             array_map(fn($case) => $case->value, self::cases()),
             array_map(fn($case) => $case->label(), self::cases())
         );
+    }
+
+    public static function fromKey(string $key): ?self
+    {
+        return self::fromName($key);
     }
 }
