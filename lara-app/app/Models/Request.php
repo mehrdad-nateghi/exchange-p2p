@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Enums\Legacy\BidStatusEnum;
 use App\Enums\RequestStatusEnum;
 use App\Enums\RequestTypeEnum;
 use App\Traits\Global\Number;
@@ -17,8 +16,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Request extends Model
 {
-    use HasFactory, Ulid, Number,Paginatable;
-    use HasFactory, Ulid, Number, SoftDeletes;
+    use HasFactory, Ulid, Number,Paginatable, SoftDeletes;
 
     protected $casts = [
         'status' => RequestStatusEnum::class,
