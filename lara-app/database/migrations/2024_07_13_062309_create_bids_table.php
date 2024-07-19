@@ -18,6 +18,7 @@ return new class extends Migration
             $table->ulid('ulid')->unique()->index();
             $table->foreignId('request_id')->constrained();
             $table->foreignId('payment_method_id')->constrained();
+            $table->string('number')->unique()->index();
             $table->decimal('price',13,2);
             $table->tinyInteger('status')->index();
             $table->timestamps();
