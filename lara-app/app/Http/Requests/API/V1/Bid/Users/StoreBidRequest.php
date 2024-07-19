@@ -56,8 +56,8 @@ class StoreBidRequest extends FormRequest
     protected function passedValidation(): void
     {
         $this->replace([
-            'request_id' => Request::find($this->input('request'))->id,
-            'payment_method_id' => PaymentMethod::find($this->input('payment_method'))->id,
+            'request_id' => Request::where('ulid', $this->input('request'))->first()->id,
+            'payment_method_id' => PaymentMethod::where('ulid', $this->input('payment_method'))->first()->id,
             'status' => $this->getStatus(),
         ]);
     }
