@@ -23,6 +23,8 @@ class Request extends Model
         'type' => RequestTypeEnum::class
     ];
 
+    protected static $prefixNumber = 'RE-';
+
     protected $fillable = [
         'volume',
         'type',

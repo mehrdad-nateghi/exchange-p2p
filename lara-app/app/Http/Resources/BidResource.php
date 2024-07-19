@@ -16,7 +16,9 @@ class BidResource extends JsonResource
     {
         return [
             'ulid' => $this->ulid,
+            'number' => $this->number,
             'price' => $this->price,
+            'icon' => $this->icon,
             'status' => $this->status->key(),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at
