@@ -50,7 +50,11 @@ class IndexRequestRequest extends FormRequest
 
             'filter.payment_method' => [
                 'nullable',
-                Rule::in([PaymentMethodTypeEnum::PAYPAL->getKeyLowercase(),PaymentMethodTypeEnum::FOREIGN_BANK->getKeyLowercase()])
+            ],
+
+            'filter.payment_method.*' => [
+                'nullable',
+                Rule::in([PaymentMethodTypeEnum::PAYPAL->key(),PaymentMethodTypeEnum::FOREIGN_BANK->key()])
             ],
 
             'filter.volume_from' => [
