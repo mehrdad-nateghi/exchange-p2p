@@ -22,6 +22,27 @@
           type: string
           enum: [pending, processing, trading, canceled]
           example: pending
+
+      - name: filter[volume_from]
+        in: query
+        description: The minimum volume range of the requests (0 - 100000)
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          maximum: 100000
+          example: 150
+
+      - name: filter[volume_to]
+        in: query
+        description: The maximum volume range of the requests (0 - 100000)
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          maximum: 100000
+          example: 150
+
       - name: sort
         in: query
         description: The sort order of the results
@@ -87,6 +108,8 @@
                           - price
                           - type
                           - status
+                          - created_at
+                          - updated_at
                           - payment_methods
                         properties:
                           ulid:
@@ -116,6 +139,16 @@
                               ["pending", "processing", "trading", "canceled"]
                             description: "Status of the request"
                             example: "pending"
+                          created_at:
+                            type: string
+                            format: date-time
+                            description: "Creation timestamp"
+                            example: "2024-07-07T06:38:04.000000Z"
+                          updated_at:
+                            type: string
+                            format: date-time
+                            description: "Last update timestamp"
+                            example: "2024-07-07T06:38:04.000000Z"
                           payment_methods:
                             type: object
                             required:
@@ -145,6 +178,7 @@
                                         - sheba
                                         - account_no
                                         - is_active
+                                        - icon
                                         - created_at
                                         - updated_at
                                       properties:
@@ -176,6 +210,9 @@
                                           type: boolean
                                           description: "Whether the payment method is active"
                                           example: false
+                                        icon:
+                                          type: string
+                                          description: "payment method icon url"
                                         created_at:
                                           type: string
                                           format: date-time
