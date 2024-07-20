@@ -9,11 +9,12 @@ spec:
       initContainers:
         - name: laravel-setup
           env:
-# APP--------------------------------------
+            # APP--------------------------------------
             - name: APP_ENV
               value: nightly
-
-# DB--------------------------------------
+            - name: APP_URL
+              value: https://nightly.paylibero.ir
+            # DB--------------------------------------
             - name: DB_HOST
               value: paylibero-db-mysql-headless
             - name: DB_PORT
@@ -29,7 +30,7 @@ spec:
                   name: core-laravel-mysql-db
                   key: password
 
-# RECAPTCHA--------------------------------------
+            # RECAPTCHA--------------------------------------
             - name: RECAPTCHA_V3_SECRET_KEY
               valueFrom:
                 secretKeyRef:
@@ -41,9 +42,9 @@ spec:
                   name: google-recaptcha
                   key: site_key
             - name: RECAPTCHA_V3_ENABLE
-              value: 'false'
+              value: "false"
 
-# REDIS--------------------------------------
+            # REDIS--------------------------------------
             - name: REDIS_HOST
               value: redis
             - name: REDIS_PORT
@@ -54,7 +55,7 @@ spec:
                   name: redis-auth
                   key: redis-password
 
-# MAIL--------------------------------------
+            # MAIL--------------------------------------
             - name: MAIL_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -74,11 +75,12 @@ spec:
               memory: 1G
 
           env:
-# APP--------------------------------------
+            # APP--------------------------------------
             - name: APP_ENV
               value: nightly
-
-# DB--------------------------------------
+            - name: APP_URL
+              value: https://nightly.paylibero.ir
+            # DB--------------------------------------
             - name: DB_HOST
               value: paylibero-db-mysql-headless
             - name: DB_PORT
@@ -94,7 +96,7 @@ spec:
                   name: core-laravel-mysql-db
                   key: password
 
-# RECAPTCHA--------------------------------------
+            # RECAPTCHA--------------------------------------
             - name: RECAPTCHA_V3_SECRET_KEY
               valueFrom:
                 secretKeyRef:
@@ -106,9 +108,9 @@ spec:
                   name: google-recaptcha
                   key: site_key
             - name: RECAPTCHA_V3_ENABLE
-              value: 'false'
+              value: "false"
 
-# REDIS--------------------------------------
+            # REDIS--------------------------------------
             - name: REDIS_HOST
               value: redis
             - name: REDIS_PORT
@@ -119,7 +121,7 @@ spec:
                   name: redis-auth
                   key: redis-password
 
-# MAIL--------------------------------------
+            # MAIL--------------------------------------
             - name: MAIL_PASSWORD
               valueFrom:
                 secretKeyRef:
