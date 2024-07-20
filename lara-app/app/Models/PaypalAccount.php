@@ -30,6 +30,6 @@ class PaypalAccount extends Model
 
     public function getIconAttribute(): string
     {
-        return config('app.url') . '/images/' . PaymentMethodTypeEnum::PAYPAL->getKeyLowercase();
+        return config('app.url') . '/images/' . PaymentMethodTypeEnum::PAYPAL->getKeyLowercase() . '.svg';
     }
 }

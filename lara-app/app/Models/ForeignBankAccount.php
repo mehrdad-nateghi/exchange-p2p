@@ -32,6 +32,6 @@ class ForeignBankAccount extends Model
 
     public function getIconAttribute(): string
     {
-        return config('app.url') . '/images/' . PaymentMethodTypeEnum::FOREIGN_BANK->getKeyLowercase();
+        return config('app.url') . '/images/' . PaymentMethodTypeEnum::FOREIGN_BANK->getKeyLowercase() . '.svg';
     }
 }
