@@ -10,12 +10,13 @@ class RequestPaymentMethodFilter implements Filter
 {
     public function __invoke(Builder $query, $value, string $property): void
     {
-        // todo: refactor
-        $type = PaymentMethodTypeEnum::FOREIGN_BANK->getKeyLowercase() === $value ? PaymentMethodTypeEnum::FOREIGN_BANK : PaymentMethodTypeEnum::PAYPAL;
+        $types = array_map(function($value) {
+            return PaymentMethodTypeEnum::fromName($value)->value;
+        }, (array)$value);
 
-        if ($type) {
-            $query->whereHas('paymentMethods', function ($query) use ($type) {
-                $query->where('type', $type);
+        if (!empty($types)) {
+            $query->whereHas('paymentMethods', function ($query) use ($types) {
+                $query->whereIn('type', $types);
             });
         }
     }

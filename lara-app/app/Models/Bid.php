@@ -41,7 +41,7 @@ class Bid extends Model
         return $this->hasOneThrough(User::class, Request::class);
     }
 
-    public function getIconAttribute()
+    /*public function getIconAttribute()
     {
         if ($this->status === BidStatusEnum::ACCEPTED->value) {
             return 'accepted';
@@ -61,5 +61,23 @@ class Bid extends Model
         }else{
             return 'not_highest_price';
         }
+    }*/
+
+    public function getIsHighestPriceAttribute()
+    {
+        if ($this->status === BidStatusEnum::ACCEPTED->value) {
+            return 'accepted';
+        }
+
+        if ($this->status === BidStatusEnum::REJECTED->value) {
+            return 'rejected';
+        }
+
+        $highestBid = Bid::query()
+            ->where('request_id', $this->request_id)
+            ->where('status', BidStatusEnum::REGISTERED->value)
+            ->max('price');
+
+        return $this->price == $highestBid;
     }
 }
