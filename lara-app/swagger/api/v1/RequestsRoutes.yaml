@@ -87,6 +87,8 @@
                           - price
                           - type
                           - status
+                          - created_at
+                          - updated_at
                           - payment_methods
                         properties:
                           ulid:
@@ -116,6 +118,16 @@
                               ["pending", "processing", "trading", "canceled"]
                             description: "Status of the request"
                             example: "pending"
+                          created_at:
+                            type: string
+                            format: date-time
+                            description: "Creation timestamp"
+                            example: "2024-07-07T06:38:04.000000Z"
+                          updated_at:
+                            type: string
+                            format: date-time
+                            description: "Last update timestamp"
+                            example: "2024-07-07T06:38:04.000000Z"
                           payment_methods:
                             type: object
                             required:
@@ -145,6 +157,7 @@
                                         - sheba
                                         - account_no
                                         - is_active
+                                        - icon
                                         - created_at
                                         - updated_at
                                       properties:
@@ -176,6 +189,9 @@
                                           type: boolean
                                           description: "Whether the payment method is active"
                                           example: false
+                                        icon:
+                                          type: string
+                                          description: "payment method icon url"
                                         created_at:
                                           type: string
                                           format: date-time
