@@ -6,7 +6,7 @@
     description: "Performs a series of checks to ensure the system is functioning correctly."
     operationId: healthCheck
     responses:
-      '200':
+      "200":
         description: "Successful response"
         content:
           application/json:
@@ -44,6 +44,40 @@
                           type: string
                           example: ok
 
+"/daily-rate-range":
+  get:
+    tags:
+      - global
+    summary: "Get daily rate range"
+    description: ""
+    operationId: getDailyRateRange
+    responses:
+      "200":
+        description: "Successful response"
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: success
+                code:
+                  type: integer
+                  example: 200
+                message:
+                  type: string
+                  example: "The daily rate range was retrieved successfully."
+                data:
+                  type: object
+                  properties:
+                    min:
+                      type: integer
+                      example: 56763
+                    max:
+                      type: integer
+                      example: 69377
+
 "/temp":
   get:
     tags:
@@ -52,7 +86,7 @@
     description: "Temp"
     operationId: healthTemp
     responses:
-      '200':
+      "200":
         description: "Successful response"
         content:
           application/json:
