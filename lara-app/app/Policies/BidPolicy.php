@@ -53,7 +53,7 @@ class BidPolicy
      */
     public function update(User $user, Bid $bid)
     {
-        //
+        return $user->id === $bid->request->user->id;
     }
 
     /**

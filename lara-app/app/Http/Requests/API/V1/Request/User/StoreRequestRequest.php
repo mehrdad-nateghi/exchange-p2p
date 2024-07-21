@@ -59,7 +59,7 @@ class StoreRequestRequest extends FormRequest
                 'required', 'string',
                 'exists:payment_methods,ulid',
                 Rule::exists('payment_methods', 'ulid')->where(function ($query) {
-                    $query->where('user_id', Auth::id());
+                    $query->where('user_id', Auth::id())->whereIn('type',[PaymentMethodTypeEnum::PAYPAL->value, PaymentMethodTypeEnum::FOREIGN_BANK->value]);
                 }),
             ],
 
