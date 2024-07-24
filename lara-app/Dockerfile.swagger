@@ -1,0 +1,23 @@
+FROM php:8.2
+
+RUN apt-get update -y
+RUN apt-get install -y unzip libpq-dev libcurl4-gnutls-dev
+
+# INSTALL NODE
+RUN curl -sL https://deb.nodesource.com/setup_20.x -o /tmp/nodesource_setup.sh
+RUN chmod +x /tmp/nodesource_setup.sh
+RUN /tmp/nodesource_setup.sh
+RUN apt-get update -y
+RUN apt install -y nodejs
+RUN npm install -g nodemon prettier
+
+WORKDIR /var/www
+
+# Install composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+COPY . .
+
+RUN composer install --no-interaction
+
+CMD ["nodemon", "--watch", "swagger/api", "--watch", "swagger/opener.yaml", "--ext", "yaml", "--exec", "php artisan generate:swagger && prettier swagger/swagger.yaml --write"]

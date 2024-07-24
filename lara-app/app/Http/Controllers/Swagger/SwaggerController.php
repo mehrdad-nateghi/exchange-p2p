@@ -19,9 +19,11 @@ class SwaggerController extends Controller
             }
         }
 
-        // Create the consolidated swagger.yaml file
-        $consolidatedYaml = Yaml::dump($swagger/*, 10, 2*/); // 10 is the inline level, 2 is the indentation
+        // Dump the consolidated swagger.yaml file with proper formatting
+        // Set the inline level to 10 and indent spaces to 2
+        $consolidatedYaml = Yaml::dump($swagger, 10, 2, Yaml::DUMP_MULTI_LINE_LITERAL_BLOCK | Yaml::DUMP_OBJECT_AS_MAP);
         file_put_contents(base_path('/swagger/swagger.yaml'), $consolidatedYaml);
+
 
         return collect($swagger)->toArray();
     }

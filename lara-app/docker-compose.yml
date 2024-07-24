@@ -22,6 +22,14 @@ services:
             - database
             - redis
 
+    ######## SWAGGER ########
+    swagger:
+        build:
+            context: .
+            dockerfile: Dockerfile.swagger
+        volumes:
+            - ./:/var/www
+
     ######## Database ########
     database:
         image: hub.hamdocker.ir/library/mysql:8.2.0
