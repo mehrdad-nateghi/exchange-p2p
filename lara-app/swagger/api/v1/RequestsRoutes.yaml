@@ -414,6 +414,8 @@
                     - price
                     - type
                     - status
+                    - created_at
+                    - updated_at
                     - payment_methods
                   properties:
                     ulid:
@@ -436,11 +438,21 @@
                       type: string
                       enum: ["buy", "sell"]
                       description: "Type of the request (BUY or SELL)"
-                      example: "BUY"
+                      example: "buy"
                     status:
                       type: string
                       enum: ["pending", "processing", "trading", "canceled"]
                       description: "Status of the request"
-                      example: "PENDING"
+                      example: "pending"
+                    created_at:
+                      type: string
+                      format: date-time
+                      description: "Creation timestamp"
+                      example: "2024-07-07T06:38:04.000000Z"
+                    updated_at:
+                      type: string
+                      format: date-time
+                      description: "Last update timestamp"
+                      example: "2024-07-07T06:38:04.000000Z"
                     payment_methods:
                       $ref: "#/components/schemas/PaymentMethods"
