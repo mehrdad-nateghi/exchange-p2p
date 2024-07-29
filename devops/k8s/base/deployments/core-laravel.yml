@@ -4,7 +4,7 @@ metadata:
   name: core-laravel
 spec:
   replicas: 1
-  revisionHistoryLimit: 2
+  revisionHistoryLimit: 0
   selector:
     matchLabels:
       app: core-laravel
