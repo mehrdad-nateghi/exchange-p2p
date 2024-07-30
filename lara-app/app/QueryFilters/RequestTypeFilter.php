@@ -10,10 +10,10 @@ class RequestTypeFilter implements Filter
 {
     public function __invoke(Builder $query, $value, string $property): void
     {
-        $type = RequestTypeEnum::fromName($value);
+        $type = RequestTypeEnum::fromName($value)->value;
 
         if ($type) {
-            $query->where('type', $type->value);
+            $query->where('type', $type);
         }
     }
 }

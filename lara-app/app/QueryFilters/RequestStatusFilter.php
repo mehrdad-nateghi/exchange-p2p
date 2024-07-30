@@ -14,7 +14,7 @@ class RequestStatusFilter implements Filter
         $type = RequestStatusEnum::fromName($value)->value;
 
         if ($type) {
-            $query->where('status', $type->value);
+            $query->where('status', $type);
         }
     }
 }
