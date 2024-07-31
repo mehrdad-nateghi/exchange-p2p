@@ -5,12 +5,91 @@ info:
   description: description...
 components:
   schemas:
+    Base200Response:
+      type: object
+      required:
+        - status
+        - code
+        - message
+      properties:
+        status:
+          type: string
+          description: "The status of the API response"
+          example: "success"
+        code:
+          type: integer
+          description: "The HTTP status code of the response"
+          example: 200
+        message:
+          type: string
+          description: "A descriptive message about the response"
+          example: "The requests were retrieved successfully."
+    Pagination:
+      type: object
+      required:
+        - current_page
+        - first_page_url
+        - from
+        - last_page
+        - last_page_url
+        - next_page_url
+        - path
+        - per_page
+        - prev_page_url
+        - to
+        - total
+      properties:
+        current_page:
+          type: integer
+          description: "Current page number"
+          example: 1
+        first_page_url:
+          type: string
+          description: "URL of the first page"
+        from:
+          type: integer
+          description: "Start index of items on current page"
+          example: 1
+        last_page:
+          type: integer
+          description: "Last page number"
+          example: 1
+        last_page_url:
+          type: string
+          description: "URL of the last page"
+        next_page_url:
+          type: string
+          nullable: true
+          description: "URL of the next page"
+          example: null
+        path:
+          type: string
+          description: "Base path for pagination URLs"
+        per_page:
+          type: integer
+          description: "Number of items per page"
+          example: 15
+        prev_page_url:
+          type: string
+          nullable: true
+          description: "URL of the previous page"
+          example: null
+        to:
+          type: integer
+          description: "End index of items on current page"
+          example: 6
+        total:
+          type: integer
+          description: "Total number of items"
+          example: 6
     PaymentMethods:
       type: object
       required:
         - items
         - pagination
       properties:
+        pagination:
+          $ref: "#/components/schemas/Pagination"
         items:
           type: array
           description: "Array of payment method items"
@@ -79,6 +158,118 @@ components:
                     format: date-time
                     description: "Last update timestamp"
                     example: "2024-07-07T06:38:04.000000Z"
+    Request:
+      type: object
+      required:
+        - ulid
+        - number
+        - volume
+        - price
+        - type
+        - status
+        - created_at
+        - updated_at
+        - payment_methods
+      properties:
+        ulid:
+          type: string
+          description: "Unique identifier for the request"
+          example: "01J26AAGQQ2HTYHZGR9PM6DGJD"
+        number:
+          type: string
+          description: "Request number"
+          example: "RE-550585"
+        volume:
+          type: string
+          description: "Volume of the request"
+          example: "250.00"
+        price:
+          type: string
+          description: "Price of the request"
+          example: "59193.00"
+        type:
+          type: string
+          enum: ["buy", "sell"]
+          description: "Type of the request (BUY or SELL)"
+          example: "buy"
+        status:
+          type: string
+          enum: ["pending", "processing", "trading", "canceled"]
+          description: "Status of the request"
+          example: "pending"
+        created_at:
+          type: string
+          format: date-time
+          description: "Creation timestamp"
+          example: "2024-07-07T06:38:04.000000Z"
+        updated_at:
+          type: string
+          format: date-time
+          description: "Last update timestamp"
+          example: "2024-07-07T06:38:04.000000Z"
+        payment_methods:
+          $ref: "#/components/schemas/PaymentMethods"
+    Bid:
+      type: object
+      required:
+        - ulid
+        - number
+        - price
+        - is_highest_price
+        - status
+        - request
+        - created_at
+        - updated_at
+      properties:
+        ulid:
+          type: string
+          description: "Unique identifier for the request"
+          example: "01J25YP7C2MTHAXNREE7FNPY85"
+        number:
+          type: integer
+          description: "Number of the bid"
+        price:
+          type: string
+          description: "Price of the bid"
+          example: "59193.00"
+        is_highest_price:
+          type: boolean
+          description: "indicates that the bid has highest price or not"
+        status:
+          type: string
+          enum: ["pending", "processing", "trading", "canceled"]
+          description: "Status of the request"
+          example: "pending"
+        created_at:
+          type: string
+          format: date-time
+          description: "Creation timestamp"
+          example: "2024-07-07T06:38:04.000000Z"
+        updated_at:
+          type: string
+          format: date-time
+          description: "Last update timestamp"
+          example: "2024-07-07T06:38:04.000000Z"
+        request:
+          $ref: "#/components/schemas/Request"
+
+  parameters:
+    pageSize:
+      name: per_page
+      in: query
+      description: "Number of items to return per page"
+      required: false
+      schema:
+        type: integer
+        default: 15
+    pageNumber:
+      name: page
+      in: query
+      description: "page number"
+      required: false
+      schema:
+        type: integer
+        default: 1
   securitySchemes:
     bearer:
       type: http
@@ -86,7 +277,7 @@ components:
 
   responses:
     default:
-      description: ''
+      description: ""
       content:
         application/json:
           schema:

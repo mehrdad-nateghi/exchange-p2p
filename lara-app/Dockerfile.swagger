@@ -20,4 +20,4 @@ COPY . .
 
 RUN composer install --no-interaction
 
-CMD ["nodemon", "--watch", "swagger/api", "--watch", "swagger/opener.yaml", "--ext", "yaml", "--exec", "php artisan generate:swagger && prettier swagger/swagger.yaml --write"]
+CMD ["nodemon", "--watch", "swagger/api", "--watch", "swagger/opener.yaml", "--ext", "yaml", "--exec", "php artisan generate:swagger && prettier swagger/swagger.yaml --write --parser yaml"]
