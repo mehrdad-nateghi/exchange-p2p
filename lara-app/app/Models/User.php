@@ -202,6 +202,10 @@ class User extends Authenticatable
         return $this->hasMany(PaymentMethod::class);
     }
 
+    public function trades(): HasManyThrough
+    {
+        return $this->hasManyThrough(Trade::class,Request::class);
+    }
     /*
     * Enum casting for the status and type fields
     */

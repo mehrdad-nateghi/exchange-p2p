@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\TradeStepOwnerEnum;
 use App\Enums\TradeStepsStatusEnum;
 use App\Traits\Global\Paginatable;
 use App\Traits\Global\Ulid;
@@ -17,5 +18,6 @@ class TradeStep extends Model
 
     protected $casts = [
         'status' => TradeStepsStatusEnum::class,
+        'owner' => TradeStepOwnerEnum::class,
     ];
 }

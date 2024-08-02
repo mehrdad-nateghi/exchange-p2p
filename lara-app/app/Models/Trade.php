@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\TradeStatusEnum;
+use App\Traits\Global\Number;
 use App\Traits\Global\Paginatable;
 use App\Traits\Global\Ulid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -13,9 +14,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Trade extends Model
 {
-    use HasFactory,Ulid, Paginatable, SoftDeletes;
+    use HasFactory,Ulid, Paginatable, Number, SoftDeletes;
 
     protected $fillable = ['request_id', 'bid_id', 'status', 'complete_at', 'canceled_at'];
+
+    protected static $prefixNumber = 'TR-';
+
 
     protected $casts = [
         'status' => TradeStatusEnum::class,

@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('trades', function (Blueprint $table) {
             $table->id();
             $table->ulid('ulid')->unique()->index();
+            $table->string('number')->unique()->index();
             $table->foreignId('request_id')->constrained();
             $table->foreignId('bid_id')->constrained();
             $table->tinyInteger('status')->index(); // processing, completed, canceled
