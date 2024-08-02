@@ -19,7 +19,6 @@ return new class extends Migration
             $table->string('name');
             $table->text('description');
             $table->integer('priority');
-            //$table->tinyInteger('type')->index(); // sell or buy
             $table->tinyInteger('owner')->index(); // buyer or seller
             $table->integer('duration_minutes'); // Duration in minutes for the step
             $table->boolean('is_active')->default(true);
