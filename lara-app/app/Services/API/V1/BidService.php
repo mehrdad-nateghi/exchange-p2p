@@ -3,6 +3,7 @@
 namespace App\Services\API\V1;
 
 use App\Enums\BidStatusEnum;
+use App\Enums\TradeStatusEnum;
 use App\Models\Bid;
 use App\Models\PaymentMethod;
 use App\Models\Request;

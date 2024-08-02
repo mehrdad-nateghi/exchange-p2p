@@ -50,6 +50,11 @@ class Request extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function trades(): HasMany
+    {
+        return $this->hasMany(Trade::class);
+    }
+
     public function bids(): HasMany
     {
         return $this->hasMany(Bid::class);

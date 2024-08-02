@@ -9,6 +9,7 @@ use App\Traits\Global\Ulid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -17,6 +18,11 @@ class Bid extends Model
     use HasFactory, Ulid, SoftDeletes, Paginatable, Number;
 
     protected static $prefixNumber = 'BI-';
+
+    public function getRouteKeyName(): string
+    {
+        return 'ulid';
+    }
 
     protected $fillable = [
         'request_id', 'payment_method_id', 'price', 'status'
@@ -79,5 +85,10 @@ class Bid extends Model
             ->max('price');
 
         return $this->price == $highestBid;
+    }
+
+    public function trades(): HasMany
+    {
+        return $this->hasMany(Trade::class);
     }
 }

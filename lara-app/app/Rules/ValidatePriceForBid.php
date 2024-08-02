@@ -26,6 +26,11 @@ class ValidatePriceForBid implements Rule
     {
         $request = Request::where('ulid', $this->requestUlid)->first();
 
+        if (!$request) {
+            $this->errorMessage = 'The selected request for price is invalid.';
+            return false;
+        }
+
         $latestBid = $request->bids()->latest()->first();
 
         if (empty($latestBid) && ($value < $request->min_allowed_price || $value > $request->price)) {
