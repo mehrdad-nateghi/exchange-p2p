@@ -13,9 +13,16 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('{{ table }}', function (Blueprint $table) {
+        Schema::create('steps', function (Blueprint $table) {
             $table->id();
             $table->ulid('ulid')->unique()->index();
+            $table->string('name');
+            $table->text('description');
+            $table->integer('priority');
+            //$table->tinyInteger('type')->index(); // sell or buy
+            $table->tinyInteger('owner')->index(); // buyer or seller
+            $table->integer('duration_minutes'); // Duration in minutes for the step
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
             $table->softDeletes();
         });
@@ -28,6 +35,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('{{ table }}');
+        Schema::dropIfExists('steps');
     }
 };
