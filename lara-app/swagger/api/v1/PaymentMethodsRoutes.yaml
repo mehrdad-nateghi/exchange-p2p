@@ -8,6 +8,16 @@
     parameters:
       - $ref: "#/components/parameters/pageSize"
       - $ref: "#/components/parameters/pageNumber"
+      - name: "filter[type]"
+        in: query
+        description: "The type of payment methods"
+        required: false
+        schema:
+          type: string
+          enum:
+            - rial
+            - currency
+          example: rial
     responses:
       "200":
         description: "The payment methods was retrieved successfully."
