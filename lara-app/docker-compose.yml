@@ -94,6 +94,21 @@ services:
             - "1025:1025"
             - "8025:8025"
 
+    minio:
+        image: bitnami/minio:2024.7.13
+        volumes:
+            - minio_buckets_data:/data
+        ports:
+            - 127.0.0.1:9000:9000
+            - 127.0.0.1:9001:9001
+        environment:
+            - MINIO_ROOT_USER=minio
+            - MINIO_ROOT_PASSWORD=minio123
+            - MINIO_DEFAULT_BUCKETS=core-lara
+            - MINIO_SCHEME=http
+            - MINIO_SERVER_URL=http://localhost:9000
+            - BITNAMI_DEBUG=true
 volumes:
     database_data:
     redis_data:
+    minio_buckets_data:
