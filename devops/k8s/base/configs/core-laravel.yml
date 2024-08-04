@@ -35,3 +35,7 @@ data:
   REFRESH_TOKEN_EXPIRATION_TIME_PER_MINUTES: "14400"
   SANCTUM_STATEFUL_DOMAINS: "localhost:4000,core-lara-33e1254e7d-paylibero-nightly.apps.ir-thr-ba1.arvancaas.ir,nightly.paylibero.ir"
   SESSION_DOMAIN: ".paylibero.ir"
+  AWS_ACCESS_KEY_ID: "9df70835-f9fd-425b-ba76-051fc737db6a"
+  AWS_SECRET_ACCESS_KEY: "2bbc941c0a3fd868d7e08e2bdd3ce35a91cad8adfcabfa8fd210a7bc5a35977d"
+  AWS_URL: "https://files.paylibero.ir/"
+  AWS_ENDPOINT: "s3.ir-thr-at1.arvanstorage.ir"

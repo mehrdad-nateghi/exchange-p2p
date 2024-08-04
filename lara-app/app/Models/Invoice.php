@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\InvoiceTypeEnum;
 use App\Enums\Legacy\InvoiceStatusEnum;
+use App\Models\Legacy\Transaction;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
