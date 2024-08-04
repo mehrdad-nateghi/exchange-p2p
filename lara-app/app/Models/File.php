@@ -2,30 +2,13 @@
 
 namespace App\Models;
 
-use App\Models\Legacy\Transaction;
+use App\Traits\Global\Paginatable;
+use App\Traits\Global\Ulid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class File extends Model
 {
-    use HasFactory;
-
-    protected $table = 'files';
-
-    protected $fillable = [
-        'url',
-        'alt',
-        'type',
-        'transaction_id'
-    ];
-
-    public $timestamps = false;
-
-
-    /*
-    * Get the Transaction that owns the File
-    */
-    public function transaction(){
-        return $this->belongsTo(Transaction::class);
-    }
+    use HasFactory,Ulid, Paginatable, SoftDeletes;
 }

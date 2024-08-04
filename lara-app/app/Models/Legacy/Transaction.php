@@ -3,7 +3,6 @@
 namespace App\Models\Legacy;
 
 use App\Enums\Legacy\TransactionStatusEnum;
-use App\Models\File;
 use App\Models\Invoice;
 use App\Models\TransactionMethod;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
