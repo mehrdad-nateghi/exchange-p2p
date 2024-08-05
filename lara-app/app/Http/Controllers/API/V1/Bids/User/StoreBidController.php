@@ -13,6 +13,7 @@ use App\Models\Step;
 use App\Services\API\V1\BidService;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -27,6 +28,7 @@ class StoreBidController extends Controller
             DB::beginTransaction();
 
             $bid = $bidService->create([
+                'user_id' => Auth::id(),
                 'request_id' => $request->input('request_id'),
                 'payment_method_id' => $request->input('payment_method_id'),
                 'price' => $request->input('price'),

@@ -25,7 +25,7 @@ class Bid extends Model
     }
 
     protected $fillable = [
-        'request_id', 'payment_method_id', 'price', 'status'
+        'user_id', 'request_id', 'payment_method_id', 'price', 'status'
     ];
 
     protected $casts = [
@@ -42,9 +42,9 @@ class Bid extends Model
         return $this->belongsTo(PaymentMethod::class);
     }
 
-    public function user(): HasOneThrough
+    public function user(): BelongsTo
     {
-        return $this->hasOneThrough(User::class, Request::class);
+        return $this->belongsTo(User::class);
     }
 
     /*public function getIconAttribute()

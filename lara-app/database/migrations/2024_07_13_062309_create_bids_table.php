@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('bids', function (Blueprint $table) {
             $table->id();
             $table->ulid('ulid')->unique()->index();
+            $table->foreignId('user_id')->index()->constrained();
             $table->foreignId('request_id')->constrained();
             $table->foreignId('payment_method_id')->constrained();
             $table->string('number')->unique()->index();
