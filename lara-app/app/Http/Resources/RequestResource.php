@@ -21,9 +21,10 @@ class RequestResource extends JsonResource
             'price' => $this->price,
             'type' => strtolower($this->type->name), // todo: refactor
             'status' => strtolower($this->status->name), // todo: refactor
+            'user' => new UserResource($this->user),
+            'payment_methods' => PaymentMethodCollection::make($this->paymentMethods),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            'payment_methods' => PaymentMethodCollection::make($this->paymentMethods),
         ];
     }
 }
