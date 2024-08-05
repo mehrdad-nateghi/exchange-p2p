@@ -50,13 +50,18 @@ class StoreBidRequest extends FormRequest
                 'required',
                 new ValidatePriceForBid($this->input('request'))
             ],
+
         ];
     }
 
     protected function passedValidation(): void
     {
+        $request = Request::where('ulid', $this->input('request'))->first();
+
         $this->replace([
-            'request_id' => Request::where('ulid', $this->input('request'))->first()->id,
+            //'request_model' => $request,
+            'request_id' => $request->id,
+            'must_accept_bid' => $this->integer('price') , (int) $request->price,
             'payment_method_id' => PaymentMethod::where('ulid', $this->input('payment_method'))->first()->id,
             'status' => $this->getStatus(),
         ]);
