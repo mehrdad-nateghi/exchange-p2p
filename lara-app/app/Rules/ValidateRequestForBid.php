@@ -8,14 +8,11 @@ use App\Models\Request;
 
 class ValidateRequestForBid implements Rule
 {
-    /**
-     * Create a new rule instance.
-     *
-     * @return void
-     */
-    public function __construct()
+    protected Request $request;
+
+    public function __construct(Request $request)
     {
-        //
+        $this->request = $request;
     }
 
     /**
@@ -27,8 +24,7 @@ class ValidateRequestForBid implements Rule
      */
     public function passes($attribute, $value): bool
     {
-        $request = Request::where('ulid', $value)->first();
-        return $request && in_array($request->status->value, [RequestStatusEnum::PENDING->value,RequestStatusEnum::PROCESSING->value]);
+        return !empty($this->request) && in_array($this->request->status->value, [RequestStatusEnum::PENDING->value,RequestStatusEnum::PROCESSING->value]);
     }
 
     /**

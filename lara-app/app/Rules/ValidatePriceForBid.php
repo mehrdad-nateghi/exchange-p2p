@@ -7,12 +7,13 @@ use Illuminate\Contracts\Validation\Rule;
 
 class ValidatePriceForBid implements Rule
 {
-    protected $requestUlid;
     private string $errorMessage = '';
 
-    public function __construct($requestUlid)
+    protected Request $request;
+
+    public function __construct(Request $request)
     {
-        $this->requestUlid = $requestUlid;
+        $this->request = $request;
     }
 
     /**
@@ -24,18 +25,16 @@ class ValidatePriceForBid implements Rule
      */
     public function passes($attribute, $value)
     {
-        $request = Request::where('ulid', $this->requestUlid)->first();
-
-        if (!$request) {
+        if (!$this->request) {
             $this->errorMessage = 'The selected request for price is invalid.';
             return false;
         }
 
-        $latestBid = $request->bids()->latest()->first();
+        $latestBid = $this->request->bids()->latest()->first();
 
         $value = (int) $value;
-        $requestPrice = (int) $request->price;
-        $minAllowedPrice = (int) $request->min_allowed_price;
+        $requestPrice = (int) $this->request->price;
+        $minAllowedPrice = (int) $this->request->min_allowed_price;
 
         if (empty($latestBid) && ($value < $minAllowedPrice || $value > $requestPrice)) {
             $this->errorMessage = __('api-messages.bid_price_must_between', ['min' => $minAllowedPrice, 'max' => $requestPrice]);
