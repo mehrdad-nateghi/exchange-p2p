@@ -6,31 +6,19 @@ use Closure;
 use Illuminate\Contracts\Validation\Rule;
 use App\Models\Request;
 use App\Models\PaymentMethod;
+use Illuminate\Support\Facades\Auth;
 
 class ValidatePaymentMethodForBid implements Rule
 {
-    protected $requestUlid;
-
-    public function __construct($requestUlid)
-    {
-        $this->requestUlid = $requestUlid;
-    }
-
     public function passes($attribute, $value)
     {
-        $request = Request::where('ulid', $this->requestUlid)->first();
-
-        if (!$request) {
-            return false;
-        }
-
         $paymentMethod = PaymentMethod::where('ulid', $value)->first();
 
-        if (!$paymentMethod || !$paymentMethod->paymentMethod->is_active) {
+        if (!$paymentMethod || !$paymentMethod->paymentMethod->is_active || $paymentMethod->user_id != Auth::id()) {
             return false;
         }
 
-        return $request->paymentMethods->contains($paymentMethod);
+        return true;
     }
 
     public function message()
