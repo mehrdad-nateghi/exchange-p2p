@@ -166,6 +166,7 @@ components:
         - volume
         - price
         - type
+        - user
         - status
         - created_at
         - updated_at
@@ -179,6 +180,8 @@ components:
           type: string
           description: "Request number"
           example: "RE-550585"
+        user:
+          $ref: "#/components/schemas/User"
         volume:
           type: string
           description: "Volume of the request"
@@ -209,6 +212,57 @@ components:
           example: "2024-07-07T06:38:04.000000Z"
         payment_methods:
           $ref: "#/components/schemas/PaymentMethods"
+    User:
+      type: object
+      required:
+        - ulid
+        - first_name
+        - last_name
+        - email
+        - created_at
+        - updated_at
+        - roles
+      properties:
+        ulid:
+          type: string
+          example: "01HZA0X41HX5CXY2YWD4GP0WAG"
+        first_name:
+          type: string
+          example: "Ali"
+        last_name:
+          type: string
+          example: "Karimi"
+        email:
+          type: string
+          example: "a@b.com"
+        created_at:
+          type: string
+          format: date-time
+          example: "2024-05-15T06:56:46+00:00"
+        updated_at:
+          type: string
+          format: date-time
+          example: "2024-05-15T06:56:46+00:00"
+        roles:
+          type: array
+          items:
+            type: object
+            required:
+              - name
+              - created_at
+              - updated_at
+            properties:
+              name:
+                type: string
+                example: "applicant"
+              created_at:
+                type: string
+                format: date-time
+                example: "2024-05-15T06:56:46+00:00"
+              updated_at:
+                type: string
+                format: date-time
+                example: "2024-05-15T06:56:46+00:00"
     Bid:
       type: object
       required:
@@ -217,6 +271,7 @@ components:
         - price
         - is_highest_price
         - status
+        - user
         - request
         - created_at
         - updated_at
@@ -228,6 +283,8 @@ components:
         number:
           type: integer
           description: "Number of the bid"
+        user:
+          $ref: "#/components/schemas/User"
         price:
           type: string
           description: "Price of the bid"

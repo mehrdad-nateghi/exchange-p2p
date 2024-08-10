@@ -50,147 +50,25 @@
         content:
           application/json:
             schema:
-              type: object
-              required:
-                - status
-                - code
-                - message
-                - data
-              properties:
-                status:
-                  type: string
-                  description: "The status of the API response"
-                  example: "success"
-                code:
-                  type: integer
-                  description: "The HTTP status code of the response"
-                  example: 200
-                message:
-                  type: string
-                  description: "A descriptive message about the response"
-                  example: "The requests were retrieved successfully."
-                data:
-                  type: object
+              allOf:
+                - $ref: "#/components/schemas/Base200Response"
+                - type: object
                   required:
-                    - items
-                    - pagination
+                    - data
                   properties:
-                    items:
-                      type: array
-                      description: "Array of request items"
-                      items:
-                        type: object
-                        required:
-                          - ulid
-                          - number
-                          - volume
-                          - price
-                          - type
-                          - status
-                          - created_at
-                          - updated_at
-                          - payment_methods
-                        properties:
-                          ulid:
-                            type: string
-                            description: "Unique identifier for the request"
-                            example: "01J25YP7C2MTHAXNREE7FNPY85"
-                          number:
-                            type: string
-                            description: "Request number"
-                            example: "RE-953539"
-                          volume:
-                            type: string
-                            description: "Volume of the request"
-                            example: "250.00"
-                          price:
-                            type: string
-                            description: "Price of the request"
-                            example: "2000.00"
-                          type:
-                            type: string
-                            enum: ["buy", "sell"]
-                            description: "Type of the request (BUY or SELL)"
-                            example: "BUY"
-                          status:
-                            type: string
-                            enum:
-                              ["pending", "processing", "trading", "canceled"]
-                            description: "Status of the request"
-                            example: "pending"
-                          created_at:
-                            type: string
-                            format: date-time
-                            description: "Creation timestamp"
-                            example: "2024-07-07T06:38:04.000000Z"
-                          updated_at:
-                            type: string
-                            format: date-time
-                            description: "Last update timestamp"
-                            example: "2024-07-07T06:38:04.000000Z"
-                          payment_methods:
-                            $ref: "#/components/schemas/PaymentMethods"
-                    pagination:
+                    data:
                       type: object
                       required:
-                        - current_page
-                        - first_page_url
-                        - from
-                        - last_page
-                        - last_page_url
-                        - next_page_url
-                        - path
-                        - per_page
-                        - prev_page_url
-                        - to
-                        - total
+                        - items
+                        - pagination
                       properties:
-                        current_page:
-                          type: integer
-                          description: "Current page number"
-                          example: 1
-                        first_page_url:
-                          type: string
-                          description: "URL of the first page"
-                          example: "http://localhost:8000/api/v1/users/requests?page=1"
-                        from:
-                          type: integer
-                          description: "Start index of items on current page"
-                          example: 1
-                        last_page:
-                          type: integer
-                          description: "Last page number"
-                          example: 1
-                        last_page_url:
-                          type: string
-                          description: "URL of the last page"
-                          example: "http://localhost:8000/api/v1/users/requests?page=1"
-                        next_page_url:
-                          type: string
-                          nullable: true
-                          description: "URL of the next page"
-                          example: null
-                        path:
-                          type: string
-                          description: "Base path for pagination URLs"
-                          example: "http://localhost:8000/api/v1/users/requests"
-                        per_page:
-                          type: integer
-                          description: "Number of items per page"
-                          example: 15
-                        prev_page_url:
-                          type: string
-                          nullable: true
-                          description: "URL of the previous page"
-                          example: null
-                        to:
-                          type: integer
-                          description: "End index of items on current page"
-                          example: 6
-                        total:
-                          type: integer
-                          description: "Total number of items"
-                          example: 6
+                        pagination:
+                          $ref: "#/components/schemas/Pagination"
+                        items:
+                          type: array
+                          description: "Array of request items"
+                          items:
+                            $ref: "#/components/schemas/Request"
   post:
     tags:
       - requests
@@ -237,134 +115,14 @@
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                status:
-                  type: string
-                  description: "The status of the operation"
-                  example: "success"
-                code:
-                  type: integer
-                  description: "The HTTP status code"
-                  example: 201
-                message:
-                  type: string
-                  description: "A descriptive message about the operation result"
-                  example: "The request was created successfully."
-                data:
-                  type: object
-                  properties:
-                    ulid:
-                      type: string
-                      description: "Unique identifier for the request"
-                      example: "01J25YP7C2MTHAXNREE7FNPY85"
-                    number:
-                      type: string
-                      description: "Request number"
-                      example: "RE-953539"
-                    volume:
-                      type: string
-                      description: "Volume of the request"
-                      example: "250"
-                    price:
-                      type: string
-                      description: "Price of the request"
-                      example: "2000"
-                    type:
-                      type: string
-                      enum: ["BUY", "SELL"]
-                      description: "Type of the request"
-                      example: "BUY"
-                    status:
-                      type: string
-                      description: "Status of the request"
-                      example: "PENDING"
-                    payment_methods:
-                      type: object
-                      properties:
-                        items:
-                          type: array
-                          items:
-                            type: object
-                            properties:
-                              ulid:
-                                type: string
-                                description: "Unique identifier for the payment method"
-                                example: "01J25YKXXAS0KX1W4383HE65GR"
-                              payment_method:
-                                type: object
-                                properties:
-                                  type:
-                                    type: string
-                                    description: "Type of payment method"
-                                    example: "rial_bank"
-                                  holder_name:
-                                    type: string
-                                    description: "Name of the account holder"
-                                    example: ""
-                                  bank_name:
-                                    type: string
-                                    description: "Name of the bank"
-                                    example: ""
-                                  card_number:
-                                    type: string
-                                    description: "Card number"
-                                    example: ""
-                                  sheba:
-                                    type: string
-                                    description: "SHEBA number"
-                                    example: ""
-                                  account_no:
-                                    type: string
-                                    description: "Account number"
-                                    example: ""
-                                  email:
-                                    type: string
-                                    description: "Email for PayPal payment method"
-                                    example: "test@gmail.com"
-                                  is_active:
-                                    type: boolean
-                                    description: "Whether the payment method is active"
-                                    example: false
-                                  created_at:
-                                    type: string
-                                    format: date-time
-                                    description: "Creation date of the payment method"
-                                    example: "2024-07-07T06:38:04.000000Z"
-                                  updated_at:
-                                    type: string
-                                    format: date-time
-                                    description: "Creation date of the payment method"
-                                    example: "2024-07-07T06:38:04.000000Z"
-                                required:
-                                  - type
-                                  - holder_name
-                                  - bank_name
-                                  - card_number
-                                  - sheba
-                                  - account_no
-                                  - email
-                                  - is_active
-                                  - created_at
-                                  - updated_at
-                            required:
-                              - ulid
-                              - payment_method
-                      required:
-                        - items
+              allOf:
+                - $ref: "#/components/schemas/Base200Response"
+                - type: object
                   required:
-                    - ulid
-                    - number
-                    - volume
-                    - price
-                    - type
-                    - status
-                    - payment_methods
-              required:
-                - status
-                - code
-                - message
-                - data
+                    - data
+                  properties:
+                    data:
+                      $ref: "#/components/schemas/Request"
 
 "/users/requests/{request}":
   get:
@@ -386,73 +144,11 @@
         content:
           application/json:
             schema:
-              type: object
-              required:
-                - status
-                - code
-                - message
-                - data
-              properties:
-                status:
-                  type: string
-                  description: "The status of the API response"
-                  example: "success"
-                code:
-                  type: integer
-                  description: "The HTTP status code of the response"
-                  example: 200
-                message:
-                  type: string
-                  description: "A descriptive message about the response"
-                  example: "The request was retrieved successfully."
-                data:
-                  type: object
+              allOf:
+                - $ref: "#/components/schemas/Base200Response"
+                - type: object
                   required:
-                    - ulid
-                    - number
-                    - volume
-                    - price
-                    - type
-                    - status
-                    - created_at
-                    - updated_at
-                    - payment_methods
+                    - data
                   properties:
-                    ulid:
-                      type: string
-                      description: "Unique identifier for the request"
-                      example: "01J26AAGQQ2HTYHZGR9PM6DGJD"
-                    number:
-                      type: string
-                      description: "Request number"
-                      example: "RE-550585"
-                    volume:
-                      type: string
-                      description: "Volume of the request"
-                      example: "250.00"
-                    price:
-                      type: string
-                      description: "Price of the request"
-                      example: "59193.00"
-                    type:
-                      type: string
-                      enum: ["buy", "sell"]
-                      description: "Type of the request (BUY or SELL)"
-                      example: "buy"
-                    status:
-                      type: string
-                      enum: ["pending", "processing", "trading", "canceled"]
-                      description: "Status of the request"
-                      example: "pending"
-                    created_at:
-                      type: string
-                      format: date-time
-                      description: "Creation timestamp"
-                      example: "2024-07-07T06:38:04.000000Z"
-                    updated_at:
-                      type: string
-                      format: date-time
-                      description: "Last update timestamp"
-                      example: "2024-07-07T06:38:04.000000Z"
-                    payment_methods:
-                      $ref: "#/components/schemas/PaymentMethods"
+                    data:
+                      $ref: "#/components/schemas/Request"
