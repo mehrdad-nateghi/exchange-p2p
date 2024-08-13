@@ -20,4 +20,19 @@ class TradeStep extends Model
         'status' => TradeStepsStatusEnum::class,
         'owner' => TradeStepOwnerEnum::class,
     ];
+
+    /*public function getActionsAttribute()
+    {
+        if($this->name === 'Pay Toman to System'){
+            return [
+                'deposit_reason' => !empty($this->trade->request->deposit_reason) ? 'done' : 'todo',
+            ];
+        }
+        return null;
+    }*/
+
+    public function trade()
+    {
+        return $this->belongsTo(Trade::class);
+    }
 }

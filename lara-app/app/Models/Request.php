@@ -33,6 +33,7 @@ class Request extends Model
         // 'description', todo-mn: need to add it?
         'min_allowed_price',
         'max_allowed_price',
+        'deposit_reason'
     ];
 
     public function getRouteKeyName(): string

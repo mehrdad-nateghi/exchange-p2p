@@ -202,10 +202,31 @@ class User extends Authenticatable
         return $this->hasMany(PaymentMethod::class);
     }
 
-    public function trades(): HasManyThrough
+    public function tradesAsRequester(): HasManyThrough
     {
         return $this->hasManyThrough(Trade::class,Request::class);
     }
+
+    public function tradesAsBidder(): HasMany
+    {
+        return $this->hasMany(Trade::class, 'bid_id')
+            ->whereHas('bid', function ($query) {
+                $query->where('user_id', $this->id);
+            });
+    }
+
+    public function trades()
+    {
+        return Trade::where(function ($query) {
+            $query->whereHas('request', function ($subQuery) {
+                $subQuery->where('user_id', $this->id);
+            })->orWhereHas('bid', function ($subQuery) {
+                $subQuery->where('user_id', $this->id);
+            });
+        });
+    }
+
+
     /*
     * Enum casting for the status and type fields
     */

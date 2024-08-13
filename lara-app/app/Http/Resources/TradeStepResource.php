@@ -19,6 +19,7 @@ class TradeStepResource extends JsonResource
             'description' => $this->description,
             'priority' => $this->priority,
             'owner' => $this->owner->key(),
+            //'actions' => $this->actions,
             'status' => $this->status->key(),
             'expire_at' => $this->expire_at,
             'completed_at' => $this->completed_at,
