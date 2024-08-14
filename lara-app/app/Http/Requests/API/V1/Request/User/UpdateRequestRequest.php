@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\API\V1\Request\User;
 
+use App\Enums\BidStatusEnum;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class UpdateRequestRequest extends FormRequest
 {
@@ -13,7 +15,7 @@ class UpdateRequestRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +26,7 @@ class UpdateRequestRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'deposit_reason' => 'required|string',
         ];
     }
 }
