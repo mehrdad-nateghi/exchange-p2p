@@ -14,7 +14,7 @@ class AuthServiceProvider extends ServiceProvider
      * @var array<class-string, class-string>
      */
     protected $policies = [
-        // 'App\Models\Model' => 'App\Policies\ModelPolicy',
+        //'App\Models\Request' => 'App\Policies\RequestPolicy',
     ];
 
     /**
@@ -26,6 +26,6 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        Passport::personalAccessTokensExpireIn(now()->addHours(config('constants.PASSPORT_ACCESS_TOKEN_EXPIRES_IN_PER_HOUR')));
+        //Passport::personalAccessTokensExpireIn(now()->addHours(config('constants.PASSPORT_ACCESS_TOKEN_EXPIRES_IN_PER_HOUR')));
     }
 }

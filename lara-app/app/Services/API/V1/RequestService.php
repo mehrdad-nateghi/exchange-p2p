@@ -19,6 +19,11 @@ class RequestService
         return $user->requests()->create($data);
     }
 
+    public function update($request,$data)
+    {
+        return $request->update($data);
+    }
+
     public function attachPaymentMethod($request,$paymentMethods)
     {
         $paymentMethodIds = PaymentMethod::whereIn('ulid', $paymentMethods)->pluck('id');
