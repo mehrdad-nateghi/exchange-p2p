@@ -82,82 +82,75 @@ components:
           type: integer
           description: "Total number of items"
           example: 6
-    PaymentMethods:
+    PaymentMethod:
       type: object
       required:
-        - items
-        - pagination
+        - ulid
+        - payment_method
       properties:
-        pagination:
-          $ref: "#/components/schemas/Pagination"
-        items:
-          type: array
-          description: "Array of payment method items"
-          items:
-            type: object
-            required:
-              - ulid
-              - payment_method
-            properties:
-              ulid:
-                type: string
-                description: "Unique identifier for the payment method"
-                example: "01J25YKXXAS0KX1W4383HE65GR"
-              payment_method:
-                type: object
-                required:
-                  - type
-                  - holder_name
-                  - bank_name
-                  - card_number
-                  - sheba
-                  - account_no
-                  - is_active
-                  - icon
-                  - created_at
-                  - updated_at
-                properties:
-                  type:
-                    type: string
-                    description: "Type of payment method"
-                    example: "rial_bank"
-                  holder_name:
-                    type: string
-                    description: "Name of the account holder"
-                    example: ""
-                  bank_name:
-                    type: string
-                    description: "Name of the bank"
-                    example: ""
-                  card_number:
-                    type: string
-                    description: "Card number"
-                    example: ""
-                  sheba:
-                    type: string
-                    description: "SHEBA number"
-                    example: ""
-                  account_no:
-                    type: string
-                    description: "Account number"
-                    example: ""
-                  is_active:
-                    type: boolean
-                    description: "Whether the payment method is active"
-                    example: false
-                  icon:
-                    type: string
-                    description: "payment method icon url"
-                  created_at:
-                    type: string
-                    format: date-time
-                    description: "Creation timestamp"
-                    example: "2024-07-07T06:38:04.000000Z"
-                  updated_at:
-                    type: string
-                    format: date-time
-                    description: "Last update timestamp"
-                    example: "2024-07-07T06:38:04.000000Z"
+        ulid:
+          type: string
+          description: "Unique identifier for the payment method"
+          example: "01J25YKXXAS0KX1W4383HE65GR"
+        payment_method:
+          type: object
+          required:
+            - type
+            - holder_name
+            - bank_name
+            - card_number
+            - sheba
+            - account_no
+            - is_active
+            - icon
+            - created_at
+            - updated_at
+          properties:
+            type:
+              type: string
+              enum:
+                - foreign_bank
+                - paypal
+                - rial_bank
+              description: "Type of payment method"
+              example: "rial_bank"
+            holder_name:
+              type: string
+              description: "Name of the account holder"
+              example: ""
+            bank_name:
+              type: string
+              description: "Name of the bank"
+              example: ""
+            card_number:
+              type: string
+              description: "Card number"
+              example: ""
+            sheba:
+              type: string
+              description: "SHEBA number"
+              example: ""
+            account_no:
+              type: string
+              description: "Account number"
+              example: ""
+            is_active:
+              type: boolean
+              description: "Whether the payment method is active"
+              example: false
+            icon:
+              type: string
+              description: "payment method icon url"
+            created_at:
+              type: string
+              format: date-time
+              description: "Creation timestamp"
+              example: "2024-07-07T06:38:04.000000Z"
+            updated_at:
+              type: string
+              format: date-time
+              description: "Last update timestamp"
+              example: "2024-07-07T06:38:04.000000Z"
     Request:
       type: object
       required:
@@ -211,7 +204,18 @@ components:
           description: "Last update timestamp"
           example: "2024-07-07T06:38:04.000000Z"
         payment_methods:
-          $ref: "#/components/schemas/PaymentMethods"
+          type: object
+          required:
+            - items
+            - pagination
+          properties:
+            pagination:
+              $ref: "#/components/schemas/Pagination"
+            items:
+              type: array
+              description: "Array of payment method items"
+              items:
+                $ref: "#/components/schemas/PaymentMethod"
     User:
       type: object
       required:

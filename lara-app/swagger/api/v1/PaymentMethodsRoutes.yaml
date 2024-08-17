@@ -31,7 +31,18 @@
                     - data
                   properties:
                     data:
-                      $ref: "#/components/schemas/PaymentMethods"
+                      type: object
+                      required:
+                        - items
+                        - pagination
+                      properties:
+                        pagination:
+                          $ref: "#/components/schemas/Pagination"
+                        items:
+                          type: array
+                          description: "Array of payment method items"
+                          items:
+                            $ref: "#/components/schemas/PaymentMethod"
 
   post:
     tags:
@@ -105,29 +116,14 @@
         content:
           application/json:
             schema:
-              type: object
-              example:
-                {
-                  "status": "success",
-                  "code": 201,
-                  "message": "The payment method was created successfully.",
-                  "data":
-                    {
-                      "ulid": "01HZYR20ZBGKWCBGQDVG0TCFED",
-                      "payment_method":
-                        {
-                          "type": "rial_bank",
-                          "holder_name": "Ali Parvin",
-                          "bank_name": "Resalat",
-                          "card_number": "6274129005473742",
-                          "sheba": "IR062960000000100324200001",
-                          "account_no": "10996491",
-                          "is_active": true,
-                          "created_at": "2024-06-09T14:57:21.000000Z",
-                          "updated_at": "2024-06-09T14:57:21.000000Z",
-                        },
-                    },
-                }
+              allOf:
+                - $ref: "#/components/schemas/Base200Response"
+                - type: object
+                  required:
+                    - data
+                  properties:
+                    data:
+                      $ref: "#/components/schemas/PaymentMethod"
 
 "/users/payment-methods/{paymentMethod}":
   get:
@@ -149,29 +145,14 @@
         content:
           application/json:
             schema:
-              type: object
-              example:
-                {
-                  "status": "success",
-                  "code": 200,
-                  "message": "The user's payment method was retrieved successfully.",
-                  "data":
-                    {
-                      "ulid": "01HZYR20ZBGKWCBGQDVG0TCFED",
-                      "payment_method":
-                        {
-                          "type": "rial_bank",
-                          "holder_name": "122222",
-                          "bank_name": "Resalat",
-                          "card_number": "6274129005473742",
-                          "sheba": "IR062960000000100324200001",
-                          "account_no": "10996491",
-                          "is_active": true,
-                          "created_at": "2024-06-09T14:57:21.000000Z",
-                          "updated_at": "2024-06-09T15:05:48.000000Z",
-                        },
-                    },
-                }
+              allOf:
+                - $ref: "#/components/schemas/Base200Response"
+                - type: object
+                  required:
+                    - data
+                  properties:
+                    data:
+                      $ref: "#/components/schemas/PaymentMethod"
   put:
     tags:
       - payment methods
@@ -244,31 +225,14 @@
         content:
           application/json:
             schema:
-              type: object
-              example:
-                {
-                  "status": "success",
-                  "code": 200,
-                  "message": "The payment method was updated successfully.",
-                  "data":
-                    {
-                      "ulid": "01J03T8BFA0FMRB3S3D75FB900",
-                      "payment_method":
-                        {
-                          "type": "rial_bank",
-                          "holder_name": "Mehrdad Nateghi",
-                          "bank_name": "Resalat",
-                          "card_number": "5041951019781245",
-                          "sheba": "IR410200030500111099649001",
-                          "account_no": "109964910",
-                          "icon": "not-defined",
-                          "is_active": true,
-                          "created_at": "2024-06-11T14:11:58.000000Z",
-                          "updated_at": "2024-06-11T15:02:17.000000Z",
-                        },
-                    },
-                }
-
+              allOf:
+                - $ref: "#/components/schemas/Base200Response"
+                - type: object
+                  required:
+                    - data
+                  properties:
+                    data:
+                      $ref: "#/components/schemas/PaymentMethod"
   delete:
     tags:
       - payment methods
@@ -288,11 +252,12 @@
         content:
           application/json:
             schema:
-              type: object
-              example:
-                {
-                  "status": "success",
-                  "code": 200,
-                  "message": "The user's payment method was deleted successfully.",
-                  "data": null,
-                }
+              allOf:
+                - $ref: "#/components/schemas/Base200Response"
+                - type: object
+                  required:
+                    - data
+                  properties:
+                    data:
+                      type: object
+                      nullable: true

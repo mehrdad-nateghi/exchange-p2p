@@ -16,7 +16,7 @@ spec:
     metadata:
       labels:
         app: pex-app
-        commit-short-sha: 'commit_${DEPLOY_COMMIT_SHORT_SHA}'
+        commit-short-sha: "commit_${DEPLOY_COMMIT_SHORT_SHA}"
     spec:
       restartPolicy: Always
       imagePullSecrets:
@@ -32,6 +32,8 @@ spec:
               value: production
             - name: NEXT_PUBLIC_API_SERVER_ADDRESS
               value: http://core-laravel:8000
+            - name: NEXT_PUBLIC_AUTH_SESSION_KEY
+              value: laravel_session
             - name: NEXT_PUBLIC_AUTH_TOKEN
               value: pl-auth-token
             - name: PUBLIC_BUILD_COMMIT_SHA
