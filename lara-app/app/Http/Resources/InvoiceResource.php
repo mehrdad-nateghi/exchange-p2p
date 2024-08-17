@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class TradeResource extends JsonResource
+class InvoiceResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,15 +17,13 @@ class TradeResource extends JsonResource
         return [
             'ulid' => $this->ulid,
             'number' => $this->number,
+            'amount' => $this->amount,
+            'fee' => $this->fee,
             'status' => $this->status->key(),
-            'bid' => new BidResource($this->bid),
-            'steps' => $this->whenLoaded('tradeSteps', function () {
-                return TradeStepResource::collection($this->tradeSteps);
-            }),
-            'invoices' => $this->whenLoaded('invoices', function () {
-                return InvoiceResource::collection($this->invoices);
-            }),
-            'completed_at' => $this->completed_at,
+            'type' => $this->type->key(),
+            /*'user' => $this->whenLoaded('user', function () {
+                return new UserResource($this->user);
+            }),*/
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

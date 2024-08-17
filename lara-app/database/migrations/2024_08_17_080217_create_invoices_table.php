@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('invoices', function (Blueprint $table) {
             $table->id();
             $table->ulid('ulid')->unique()->index();
+            $table->string('number')->unique()->index();
             $table->foreignId('user_id')->constrained();
             $table->morphs('invoiceable');
             $table->decimal('amount', 13, 2);

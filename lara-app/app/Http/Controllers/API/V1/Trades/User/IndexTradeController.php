@@ -29,6 +29,9 @@ class IndexTradeController extends Controller
                 ->with(['tradeSteps' => function($query) {
                     $query->select('*');
                 }])
+                ->with(['invoices' => function($query) {
+                    $query->select('*');
+                }])
                 ->select([
                     'trades.*',
                 ])
