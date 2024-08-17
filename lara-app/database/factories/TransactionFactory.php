@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\Invoice;
+use App\Models\Legacy\Invoice;
 use App\Models\TransactionMethod;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
