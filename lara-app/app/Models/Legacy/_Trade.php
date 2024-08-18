@@ -5,8 +5,6 @@ namespace App\Models\Legacy;
 use App\Enums\Legacy\TradeStatusEnum;
 use App\Models\Email;
 use App\Models\Financial;
-use App\Models\Invoice;
-use App\Models\Legacy\Bid;
 use App\Models\Notification;
 use App\Models\Request;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\API\V1\Bids\User;
 
+use App\Enums\InvoiceStatusEnum;
+use App\Enums\InvoiceTypeEnum;
 use App\Enums\RequestStatusEnum;
 use App\Enums\TradeStatusEnum;
 use App\Enums\TradeStepsStatusEnum;
@@ -66,6 +68,20 @@ class StoreBidController extends Controller
                 })->toArray();
 
                 $trade->tradeSteps()->createMany($stepsData);
+
+                // create invoice for trade
+                $amount = $bid->refresh()->price;
+                $feePercentage = config('constants.invoice_fee_percentage');
+                $fee = round($amount * ($feePercentage / 100), 2);
+
+                $trade->refresh()->invoices()->create([
+                    'user_id' => Auth::id(),
+                    'amount' => $amount,
+                    'fee' => $fee,
+                    'status' => InvoiceStatusEnum::PENDING->value,
+                    'type' => InvoiceTypeEnum::STEP_ONE_PAY_TOMAN_TO_SYSTEM->value,
+                ]);
+
             }
 
             $resource = new BidResource($bid->refresh());

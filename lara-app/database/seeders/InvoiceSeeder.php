@@ -2,8 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Invoice;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Legacy\Invoice;
 use Illuminate\Database\Seeder;
 
 class InvoiceSeeder extends Seeder

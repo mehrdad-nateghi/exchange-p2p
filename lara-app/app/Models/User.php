@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\Legacy\LinkedMethodStatusEnum;
 use App\Enums\Legacy\UserRoleEnum;
 use App\Enums\UserStatusEnum;
+use App\Models\Legacy\Invoice;
 use App\Traits\Global\Ulid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;

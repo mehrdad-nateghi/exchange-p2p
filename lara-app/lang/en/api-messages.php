@@ -61,6 +61,7 @@ return [
     'bid_price_must_between' => 'The bid price must between :min and :max.',
     'bid_price_must_gt' => 'The bid price must be greater than :price.',
     'daily_rate_range' => 'Daily rate range',
-
+    'payment_failed' => 'Payment failed.',
+    'payment_success' => 'Payment was successful.',
 
 ];

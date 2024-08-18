@@ -13,16 +13,16 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('transactions', function (Blueprint $table) {
+        Schema::create('invoices', function (Blueprint $table) {
             $table->id();
             $table->ulid('ulid')->unique()->index();
-            $table->morphs('transactionable');
+            $table->string('number')->unique()->index();
             $table->foreignId('user_id')->constrained();
-            $table->string('track_id')->index()->nullable();
-            $table->string('ref_id')->index()->nullable();
-            $table->decimal('amount', 13, 2)->nullable();
-            $table->string('currency', 3)->nullable();
-            $table->tinyInteger('status')->index(); // pending, completed, failed
+            $table->morphs('invoiceable');
+            $table->decimal('amount', 13, 2);
+            $table->decimal('fee', 13, 2)->default(0);
+            $table->tinyInteger('type');
+            $table->tinyInteger('status');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -35,6 +35,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('transactions');
+        Schema::dropIfExists('invoices');
     }
 };

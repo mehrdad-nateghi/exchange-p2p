@@ -4,9 +4,9 @@ namespace Tests\Feature;
 
 use App\Enums\Legacy\UserRoleEnum;
 use App\Models\Country;
-use App\Models\Invoice;
 use App\Models\Legacy\Bid;
 use App\Models\Legacy\File;
+use App\Models\Legacy\Invoice;
 use App\Models\Legacy\Transaction;
 use App\Models\LinkedMethod;
 use App\Models\PaymentMethod;
