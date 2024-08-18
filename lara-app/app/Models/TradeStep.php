@@ -14,7 +14,7 @@ class TradeStep extends Model
 {
     use HasFactory,Ulid, Paginatable, SoftDeletes;
 
-    protected $fillable = ['name', 'description', 'priority', 'owner', 'status', 'duration_minutes', 'expire_at'];
+    protected $fillable = ['name', 'description', 'priority', 'owner', 'status', 'duration_minutes', 'expire_at', 'completed_at'];
 
     protected $casts = [
         'status' => TradeStepsStatusEnum::class,

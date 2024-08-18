@@ -17,7 +17,7 @@ class Trade extends Model
 {
     use HasFactory,Ulid, Paginatable, Number, SoftDeletes;
 
-    protected $fillable = ['request_id', 'bid_id', 'status', 'complete_at', 'canceled_at'];
+    protected $fillable = ['request_id', 'bid_id', 'status', 'completed_at', 'canceled_at'];
 
     protected static $prefixNumber = 'TR-';
 

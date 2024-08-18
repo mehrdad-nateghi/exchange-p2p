@@ -18,8 +18,10 @@ return new class extends Migration
             $table->ulid('ulid')->unique()->index();
             $table->morphs('transactionable');
             $table->foreignId('user_id')->constrained();
-            $table->decimal('amount', 13, 2);
-            $table->string('currency', 3);
+            $table->string('track_id')->index()->nullable();
+            $table->string('ref_id')->index()->nullable();
+            $table->decimal('amount', 13, 2)->nullable();
+            $table->string('currency', 3)->nullable();
             $table->tinyInteger('status')->index(); // pending, completed, failed
             $table->timestamps();
             $table->softDeletes();

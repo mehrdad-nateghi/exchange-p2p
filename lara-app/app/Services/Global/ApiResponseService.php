@@ -120,6 +120,13 @@ class ApiResponseService
         return $this;
     }
 
+    public function paymentRequired(): self
+    {
+        $this->statusCode(Response::HTTP_PAYMENT_REQUIRED);
+        return $this;
+    }
+
+
     public function getApiResponse(): JsonResponse
     {
         return $this->responseApi(

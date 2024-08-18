@@ -28,7 +28,7 @@ class StepSeeder extends Seeder
             [
                 'name' => 'Transfer Currency and Upload Receipt',
                 'description' => "The seller must transfer the currency to the buyer\'s account and upload the receipt.",
-                'priority' => 3,
+                'priority' => 2,
                 'owner' => StepOwnerEnum::SELLER->value,
                 'duration_minutes' => 1440, // 24 hours
                 'is_active' => true,
@@ -36,11 +36,10 @@ class StepSeeder extends Seeder
             [
                 'name' => 'Confirm or Reject Currency Receipt',
                 'description' => 'The buyer must confirm or reject the receipt of the currency.',
-                'priority' => 2,
+                'priority' => 3,
                 'owner' => StepOwnerEnum::BUYER->value,
                 'duration_minutes' => 1440, // 24 hours
                 'is_active' => true,
-
             ],
             [
                 'name' => 'Pay Toman to Seller',
