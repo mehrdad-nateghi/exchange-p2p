@@ -4,14 +4,8 @@ namespace App\Http\Controllers\API\V1\Bids\User;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\Bid\Users\IndexBidRequest;
-use App\Http\Requests\API\V1\Request\User\IndexRequestRequest;
 use App\Http\Resources\BidCollection;
-use App\Http\Resources\RequestCollection;
 use App\QueryFilters\BidStatusFilter;
-use App\QueryFilters\RequestPaymentMethodFilter;
-use App\QueryFilters\RequestStatusFilter;
-use App\QueryFilters\RequestTypeFilter;
-use App\QueryFilters\RequestVolumeFilter;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
