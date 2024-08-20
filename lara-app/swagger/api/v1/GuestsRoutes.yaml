@@ -15,32 +15,27 @@
           enum: [buy, sell]
           example: buy
 
-      - name: filter[payment_method][0]
+      - name: filter[payment_method]
         in: query
         description: The type of payment_method
         required: false
         schema:
-          type: string
-          enum: [foreign_bank, paypal]
-          example: paypal
-
-      - name: filter[payment_method][1]
-        in: query
-        description: The type of payment_method
-        required: false
-        schema:
-          type: string
-          enum: [foreign_bank, paypal]
-          example: paypal
+          type: array
+          items:
+            type: string
+            enum: [foreign_bank, paypal]
+          example: [paypal]
 
       - name: filter[status]
         in: query
         description: The status of the request
         required: false
         schema:
-          type: string
-          enum: [pending, processing, trading, canceled]
-          example: pending
+          type: array
+          items:
+            type: string
+            enum: [pending, processing, trading, canceled]
+          example: ["pending", "trading"]
 
       - name: filter[volume_from]
         in: query

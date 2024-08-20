@@ -14,14 +14,18 @@
           type: string
           enum: [buy, sell]
           example: buy
+
       - name: filter[status]
         in: query
         description: The status of the request
         required: false
         schema:
-          type: string
-          enum: [pending, processing, trading, canceled]
-          example: pending
+          type: array
+          items:
+            type: string
+            enum: [pending, processing, trading, canceled]
+          example: ["pending", "trading"]
+
       - name: sort
         in: query
         description: The sort order of the results
@@ -30,6 +34,7 @@
           type: string
           enum: [created_at, -created_at, price, -price]
           example: -created_at
+
       - name: per_page
         in: query
         description: "Number of items to return per page"
@@ -37,6 +42,7 @@
         schema:
           type: integer
           default: 15
+
       - name: page
         in: query
         description: "page number"
