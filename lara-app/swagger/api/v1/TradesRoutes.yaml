@@ -1,0 +1,84 @@
+/trades:
+  get:
+    summary: Retrieve trades
+    description: Get a list of trades
+    operationId: getAllTrades
+    parameters:
+      - $ref: "#/components/parameters/pageSize"
+      - $ref: "#/components/parameters/pageNumber"
+      - name: filter[type]
+        in: query
+        description: Filter trades by type (buy or sell)
+        schema:
+          type: string
+          enum: [buy, sell]
+      - name: filter[status]
+        in: query
+        description: Filter trades by status
+        schema:
+          type: string
+          enum: [pending, processing, trading, canceled]
+    responses:
+      "200":
+        description: Successful response
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/Base200Response"
+                - type: object
+                  properties:
+                    data:
+                      type: object
+                      required:
+                        - items
+                        - pagination
+                      properties:
+                        items:
+                          type: array
+                          items:
+                            $ref: "#/components/schemas/Trade"
+                        pagination:
+                          $ref: "#/components/schemas/Pagination"
+/users/trades:
+  get:
+    summary: Retrieve user trades
+    operationId: getUserTrades
+    description: Get a list of trades for the authenticated user
+    parameters:
+      - name: filter[status]
+        in: query
+        description: Filter trades by status (active or inactive)
+        schema:
+          type: string
+          enum: [active, inactive]
+      - name: sort
+        in: query
+        description: Sort trades by creation date
+        schema:
+          type: string
+          enum: [created_at, -created_at]
+      - $ref: "#/components/parameters/pageSize"
+      - $ref: "#/components/parameters/pageNumber"
+    responses:
+      "200":
+        description: Successful response
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/Base200Response"
+                - type: object
+                  properties:
+                    data:
+                      type: object
+                      required:
+                        - items
+                        - pagination
+                      properties:
+                        items:
+                          type: array
+                          items:
+                            $ref: "#/components/schemas/Trade"
+                        pagination:
+                          $ref: "#/components/schemas/Pagination"

@@ -313,7 +313,45 @@ components:
           example: "2024-07-07T06:38:04.000000Z"
         request:
           $ref: "#/components/schemas/Request"
-
+    Trade:
+      type: object
+      required:
+        - ulid
+        - number
+        - status
+        - bid
+        - completed_at
+        - created_at
+        - updated_at
+      properties:
+        ulid:
+          type: string
+          description: "Unique identifier for the trade"
+          example: "01J5RR12N6A76MRDBTTMS07HY3"
+        number:
+          type: string
+          description: "Trade number"
+          example: "TR-357535"
+        status:
+          type: string
+          enum: ["processing", "completed", "canceled"]
+          description: "Status of the trade"
+          example: "processing"
+        bid:
+          $ref: "#/components/schemas/Bid"
+        completed_at:
+          type: string
+          format: date-time
+          nullable: true
+          description: "Completion timestamp"
+        created_at:
+          type: string
+          format: date-time
+          description: "Creation timestamp"
+        updated_at:
+          type: string
+          format: date-time
+          description: "Last update timestamp"
   parameters:
     pageSize:
       name: per_page
