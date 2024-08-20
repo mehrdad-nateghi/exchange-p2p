@@ -11,10 +11,12 @@ class RequestStatusFilter implements Filter
 {
     public function __invoke(Builder $query, $value, string $property): void
     {
-        $type = RequestStatusEnum::fromName($value)->value;
+        $statuses = array_map(function($value) {
+            return RequestStatusEnum::fromName($value)->value;
+        }, (array)$value);
 
-        if ($type) {
-            $query->where('status', $type);
+        if (!empty($statuses)) {
+            $query->whereIn('status', $statuses);
         }
     }
 }

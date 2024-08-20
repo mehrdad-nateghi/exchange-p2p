@@ -3,14 +3,8 @@
 namespace App\Http\Controllers\API\V1\Trades\User;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\API\V1\Request\User\IndexRequestRequest;
 use App\Http\Requests\API\V1\Trade\User\IndexTradeRequest;
-use App\Http\Resources\RequestCollection;
 use App\Http\Resources\TradeCollection;
-use App\QueryFilters\RequestPaymentMethodFilter;
-use App\QueryFilters\RequestStatusFilter;
-use App\QueryFilters\RequestTypeFilter;
-use App\QueryFilters\RequestVolumeFilter;
 use App\QueryFilters\TradeStatusFilter;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
