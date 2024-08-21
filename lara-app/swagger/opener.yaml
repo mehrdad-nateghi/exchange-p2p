@@ -352,6 +352,89 @@ components:
           type: string
           format: date-time
           description: "Last update timestamp"
+    UserTrade:
+      allOf:
+        - $ref: "#/components/schemas/Trade"
+        - type: object
+          required:
+            - steps
+            - invoices
+          properties:
+            steps:
+              type: array
+              items:
+                $ref: "#/components/schemas/TradeStep"
+            invoices:
+              type: array
+              items:
+                $ref: "#/components/schemas/Invoice"
+
+    TradeStep:
+      type: object
+      required:
+        - name
+        - description
+        - owner
+        - status
+        - created_at
+        - updated_at
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        owner:
+          type: string
+          enum: [buyer, seller, system]
+        status:
+          type: string
+          enum: [todo, doing, done]
+        expire_at:
+          type: string
+          format: date-time
+          nullable: true
+        completed_at:
+          type: string
+          format: date-time
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    Invoice:
+      type: object
+      required:
+        - ulid
+        - number
+        - amount
+        - fee
+        - status
+        - type
+        - created_at
+        - updated_at
+      properties:
+        ulid:
+          type: string
+        number:
+          type: string
+        amount:
+          type: string
+        fee:
+          type: string
+        status:
+          type: string
+          enum: [pending, paid, canceled]
+        type:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
   parameters:
     pageSize:
       name: per_page

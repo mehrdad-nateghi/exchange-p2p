@@ -87,6 +87,6 @@
                         items:
                           type: array
                           items:
-                            $ref: "#/components/schemas/Trade"
+                            $ref: "#/components/schemas/UserTrade"
                         pagination:
                           $ref: "#/components/schemas/Pagination"
