@@ -20,14 +20,11 @@
                 example: example@email.com
               via:
                 type: integer
-                enum:
-                  - 1
+                enum: [1]
                 description: "The delivery method for the verification code. 1: EMAIL | 2: MOBILE"
               type:
                 type: integer
-                enum:
-                  - 1
-                  - 2
+                enum: [1, 2]
                 description: "Type of verification. 1: SET_PASSWORD | 2: RESET_PASSWORD"
               g-recaptcha-response:
                 type: string
@@ -39,7 +36,7 @@
               - type
               - g-recaptcha-response
     responses:
-      '201':
+      "201":
         description: "Created Successful"
         content:
           application/json:
@@ -89,21 +86,18 @@
                 description: "The recipient's email or mobile number(Not support yet)"
               via:
                 type: string
-                enum:
-                  - 1
+                enum: ["1"]
                 description: "The delivery method for the verification code. 1: EMAIL"
               type:
                 type: string
-                enum:
-                  - 1
-                  - 2
+                enum: ["1", "2"]
                 description: "Type of verification. **Possible Values:**  1: SET_PASSWORD | 2: RESET_PASSWORD"
             required:
               - to
               - via
               - type
     responses:
-      '201':
+      "201":
         description: "Created Successful"
         content:
           application/json:
@@ -158,19 +152,17 @@
               via:
                 type: integer
                 description: "Verification via. 1: EMAIL"
-                enum:
-                  - 1
+                enum: ["1"]
               type:
                 description: "Type of verification. 2: RESET_PASSWORD"
-                enum:
-                  - 2
+                enum: ["2"]
             required:
               - code
               - to
               - via
               - type
     responses:
-      '200':
+      "200":
         description: "Created Successful"
         content:
           application/json:
@@ -291,19 +283,17 @@
               via:
                 type: integer
                 description: "Verification via. **Possible Values:**  1: EMAIL"
-                enum:
-                  - 1
+                enum: ["1"]
               type:
                 description: "Type of verification. **Possible Values:**  1: SET_PASSWORD"
-                enum:
-                  - 1
+                enum: ["1"]
             required:
               - code
               - to
               - via
               - type
     responses:
-      '200':
+      "200":
         description: "Created Successful"
         content:
           application/json:
@@ -427,7 +417,7 @@
               - password
               - password_confirmation
     responses:
-      '200':
+      "200":
         description: "Created Successful"
         content:
           application/json:
@@ -559,7 +549,7 @@
               - password
               - g-recaptcha-response
     responses:
-      '200':
+      "200":
         description: "User logged in successfully."
         content:
           application/json:
@@ -687,7 +677,7 @@
     description: "Refreshes the user's access token using the refresh token stored in an HTTP-only cookie"
     operationId: refreshToken
     responses:
-      '200':
+      "200":
         description: "The payment methods was retrieved successfully."
         content:
           application/json:
@@ -747,7 +737,7 @@
     description: "Logs out the current user."
     operationId: logout
     responses:
-      '200':
+      "200":
         description: "Successful logout"
         content:
           application/json:
