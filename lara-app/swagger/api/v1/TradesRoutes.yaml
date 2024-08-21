@@ -1,5 +1,7 @@
-/trades:
+"/trades":
   get:
+    tags:
+      - trades
     summary: Retrieve trades
     description: Get a list of trades
     operationId: getAllTrades
@@ -40,8 +42,10 @@
                             $ref: "#/components/schemas/Trade"
                         pagination:
                           $ref: "#/components/schemas/Pagination"
-/users/trades:
+"/users/trades":
   get:
+    tags:
+      - trades
     summary: Retrieve user trades
     operationId: getUserTrades
     description: Get a list of trades for the authenticated user
