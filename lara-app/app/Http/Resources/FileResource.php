@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class TradeStepResource extends JsonResource
+class FileResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,17 +15,15 @@ class TradeStepResource extends JsonResource
     public function toArray($request)
     {
         return [
+            'ulid' => $this->ulid,
             'name' => $this->name,
-            'description' => $this->description,
-            'priority' => $this->priority,
-            'owner' => $this->owner->key(),
-            //'actions' => $this->actions,
+            'path' => $this->path,
+            'mime_type' => $this->mime_type,
+            'size' => $this->size,
             'status' => $this->status->key(),
-            'files' => $this->whenLoaded('files', function () {
-                return FileResource::collection($this->files);
+            'uploader' => $this->whenLoaded('user', function () {
+                return new UserResource($this->user);
             }),
-            'expire_at' => $this->expire_at,
-            'completed_at' => $this->completed_at,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

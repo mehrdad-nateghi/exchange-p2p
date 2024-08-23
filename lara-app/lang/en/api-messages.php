@@ -2,6 +2,7 @@
 
 return [
     // Common messages (optional)
+    'upload_success' => 'The :attribute was uploaded successfully.',
     'create_success' => 'The :attribute was created successfully.',
     'retrieve_success' => 'The :attribute was retrieved successfully.',
     'read.success' => 'The resource was retrieved successfully.',

@@ -236,4 +236,9 @@ class User extends Authenticatable
         'role' => UserRoleEnum::class
     ];
 
+    public function files()
+    {
+        return $this->hasMany(File::class);
+    }
+
 }
