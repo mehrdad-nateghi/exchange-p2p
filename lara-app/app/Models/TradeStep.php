@@ -8,6 +8,7 @@ use App\Traits\Global\Paginatable;
 use App\Traits\Global\Ulid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class TradeStep extends Model
@@ -20,6 +21,11 @@ class TradeStep extends Model
         'status' => TradeStepsStatusEnum::class,
         'owner' => TradeStepOwnerEnum::class,
     ];
+
+    public function getRouteKeyName(): string
+    {
+        return 'ulid';
+    }
 
     /*public function getActionsAttribute()
     {
@@ -34,5 +40,10 @@ class TradeStep extends Model
     public function trade()
     {
         return $this->belongsTo(Trade::class);
+    }
+
+    public function files(): MorphMany
+    {
+        return $this->morphMany(File::class, 'fileable');
     }
 }

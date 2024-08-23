@@ -16,11 +16,13 @@ return new class extends Migration
         Schema::create('files', function (Blueprint $table) {
             $table->id();
             $table->ulid('ulid')->unique()->index();
+            $table->foreignId('user_id')->constrained();
             $table->morphs('fileable');
             $table->string('name');
             $table->string('path');
             $table->string('mime_type');
             $table->integer('size');
+            $table->tinyInteger('status')->default(1)->index();
             $table->timestamps();
             $table->softDeletes();
         });
