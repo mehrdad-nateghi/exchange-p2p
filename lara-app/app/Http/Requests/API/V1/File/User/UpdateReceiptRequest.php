@@ -3,17 +3,9 @@
 namespace App\Http\Requests\API\V1\File\User;
 
 use App\Enums\FileStatusEnum;
-use App\Enums\PaymentMethodTypeEnum;
-use App\Enums\RequestStatusEnum;
-use App\Enums\RequestTypeEnum;
-use App\Enums\TradeStepsStatusEnum;
-use App\Enums\VerificationCodeViaEnum;
-use App\Rules\AlphaSpace;
+use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\Rule;
-use Intervention\Validation\Rules\Bic;
-use Intervention\Validation\Rules\Iban;
+use Illuminate\Validation\ValidationException;
 
 class UpdateReceiptRequest extends FormRequest
 {
@@ -42,20 +34,39 @@ class UpdateReceiptRequest extends FormRequest
         ];
     }
 
-    /*protected function prepareForValidation(): void
+    protected function prepareForValidation(): void
     {
-        $step = $this->step;
+        if($this->status === 'reject'){
+            $step = $this->file->fileable;
+            $expireAt = Carbon::parse($step->expire_at);
+            $now = Carbon::now();
+            $createdAt = Carbon::parse($step->created_at);
 
-        $this->merge([
-            'step_status' => $step->status->value,
-        ]);
-    }*/
+            $totalLifetime = $expireAt->diffInSeconds($createdAt);
+            $timeUntilExpire = $expireAt->diffInSeconds($now);
+            $timeElapsed = $totalLifetime - $timeUntilExpire;
+
+            $percentageElapsed = ($timeElapsed / $totalLifetime) * 100;
+            //$percentageRemaining = 100 - $percentageElapsed; // اینو چرا جایی استفاده نکردی؟
+
+            $allowUpdate = $percentageElapsed >= 70 && $now->lessThan($expireAt);
+
+            //$allowUpdateTime = $createdAt->copy()->addSeconds($totalLifetime * 0.7);
+
+            if (!$allowUpdate) {
+                throw ValidationException::withMessages([
+                    'allow_update' => ['You can reject the receipt only after 70% of the expiration time has passed.'],
+                ]);
+            }
+        }
+    }
 
     protected function passedValidation(): void
     {
-        $v =  $this->status === 'accept' ? FileStatusEnum::ACCEPT_BY_BUYER->value : FileStatusEnum::REJECT_BY_BUYER->value;
+        $status =  $this->status === 'accept' ? FileStatusEnum::ACCEPT_BY_BUYER->value : FileStatusEnum::REJECT_BY_BUYER->value;
+
         $this->replace([
-            'status' => $v,
+            'status' => $status,
         ]);
     }
 
