@@ -24,6 +24,11 @@ class File extends Model
         'status'
     ];
 
+    public function getRouteKeyName(): string
+    {
+        return 'ulid';
+    }
+
     protected $casts = [
         'status' => FileStatusEnum::class
     ];
