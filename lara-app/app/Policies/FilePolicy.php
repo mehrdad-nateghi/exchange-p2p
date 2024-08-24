@@ -53,7 +53,7 @@ class FilePolicy
      */
     public function update(User $user, File $file)
     {
-        //
+        return $user->id == $file->user_id;
     }
 
     /**
