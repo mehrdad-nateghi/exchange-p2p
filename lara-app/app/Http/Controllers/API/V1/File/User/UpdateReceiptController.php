@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\API\V1\File\User;
 
+use App\Enums\FileStatusEnum;
+use App\Enums\TradeStepsStatusEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\File\User\UpdateReceiptRequest;
 use App\Http\Requests\API\V1\File\User\UploadReceiptRequest;
@@ -12,6 +14,7 @@ use App\Http\Resources\TradeStepResource;
 use App\Models\File;
 use App\Models\TradeStep;
 use App\Services\API\V1\RequestService;
+use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -33,6 +36,23 @@ class UpdateReceiptController extends Controller
             ]);
 
             $step = $file->fileable;
+            $trade = $step->trade;
+
+            if($request->input('status') === FileStatusEnum::ACCEPT_BY_BUYER->value){
+                // current step
+                $step->update([
+                    'status' => TradeStepsStatusEnum::DONE,
+                    'completed_at' => Carbon::now(),
+                ]);
+
+                // next step
+                $nextStep = $trade->tradeSteps()->where('priority', $step->priority + 1)->first();
+
+                $nextStep->update([
+                    'status' => TradeStepsStatusEnum::DOING,
+                    'expire_at' => Carbon::now()->addMinutes($nextStep->duration_minutes),
+                ]);
+            }
 
             $step->load('files.user');
             $resource =  new TradeStepResource($step);

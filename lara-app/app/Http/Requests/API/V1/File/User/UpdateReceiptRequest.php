@@ -36,6 +36,12 @@ class UpdateReceiptRequest extends FormRequest
 
     protected function prepareForValidation(): void
     {
+        if($this->file->status === FileStatusEnum::ACCEPT_BY_BUYER){
+            throw ValidationException::withMessages([
+                'allow_update' => ['This receipt has already been accepted by the buyer and cannot be updated.'],
+            ]);
+        }
+
         if($this->status === 'reject'){
             $step = $this->file->fileable;
             $expireAt = Carbon::parse($step->expire_at);
@@ -69,6 +75,4 @@ class UpdateReceiptRequest extends FormRequest
             'status' => $status,
         ]);
     }
-
-
 }
