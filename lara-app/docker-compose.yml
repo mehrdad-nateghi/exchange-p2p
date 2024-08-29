@@ -94,7 +94,7 @@ services:
             - "8025:8025"
 
     minio:
-        image: bitnami/minio:2024.7.13
+        image: bitnami/minio:latest
         volumes:
             - minio_buckets_data:/data
         ports:
