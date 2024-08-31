@@ -22,6 +22,7 @@ class BidResource extends JsonResource
             'status' => $this->status->key(),
             'request' => new RequestResource($this->request),
             'user' => new UserResource($this->user),
+            'payment_method' => new PaymentMethodResource($this->paymentMethod),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at
         ];
