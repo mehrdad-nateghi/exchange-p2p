@@ -162,6 +162,7 @@ components:
         - user
         - status
         - created_at
+        - deposit_reason
         - updated_at
         - payment_methods
       properties:
@@ -193,6 +194,10 @@ components:
           enum: ["pending", "processing", "trading", "canceled"]
           description: "Status of the request"
           example: "pending"
+        deposit_reason:
+          type: string
+          nullable: true
+          description: "reason of the deposit"
         created_at:
           type: string
           format: date-time
@@ -338,7 +343,14 @@ components:
           description: "Status of the trade"
           example: "processing"
         bid:
-          $ref: "#/components/schemas/Bid"
+          allOf:
+            - $ref: "#/components/schemas/Bid"
+            - type: object
+              required:
+                - payment_method
+              properties:
+                payment_method:
+                  $ref: "#/components/schemas/PaymentMethod"
         completed_at:
           type: string
           format: date-time
