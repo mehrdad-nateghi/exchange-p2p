@@ -5,6 +5,7 @@ return [
     'upload_success' => 'The :attribute was uploaded successfully.',
     'create_success' => 'The :attribute was created successfully.',
     'retrieve_success' => 'The :attribute was retrieved successfully.',
+    'request_failed' => 'The :attribute request failed.',
     'read.success' => 'The resource was retrieved successfully.',
     'update_success' => 'The :attribute was updated successfully.',
     'delete_success' => 'The :attribute was deleted successfully.',
@@ -64,5 +65,6 @@ return [
     'daily_rate_range' => 'Daily rate range',
     'payment_failed' => 'Payment failed.',
     'payment_success' => 'Payment was successful.',
+    'card_to_iban' => 'Card to IBAN',
 
 ];
