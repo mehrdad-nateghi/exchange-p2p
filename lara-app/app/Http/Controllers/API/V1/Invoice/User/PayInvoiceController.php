@@ -12,6 +12,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Redirect;
 use Shetabit\Multipay\Invoice as ShetabitInvoice;
 use Shetabit\Payment\Facade\Payment;
 
@@ -39,9 +40,8 @@ class PayInvoiceController extends Controller
 
             DB::commit();
 
-            //return $payment->pay()->toJson();
-            return $payment->pay()->render();
-
+            $paymentData = json_decode($payment->pay()->toJson(),true);
+            return Redirect::away($paymentData['action']);
         } catch (\Throwable $t) {
             DB::rollBack();
             Log::error($t);
