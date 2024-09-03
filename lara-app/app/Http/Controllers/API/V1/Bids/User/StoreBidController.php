@@ -5,12 +5,12 @@ namespace App\Http\Controllers\API\V1\Bids\User;
 use App\Enums\InvoiceStatusEnum;
 use App\Enums\InvoiceTypeEnum;
 use App\Enums\RequestStatusEnum;
+use App\Enums\RequestTypeEnum;
 use App\Enums\TradeStatusEnum;
 use App\Enums\TradeStepsStatusEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\Bid\Users\StoreBidRequest;
 use App\Http\Resources\BidResource;
-use App\Models\Request;
 use App\Models\Step;
 use App\Services\API\V1\BidService;
 use Carbon\Carbon;
@@ -42,7 +42,7 @@ class StoreBidController extends Controller
                 $bid = $bidService->acceptBid($bid);
 
                 // update request
-                $request = $bid->request()->update([
+                $bid->request()->update([
                     'status' => RequestStatusEnum::TRADING
                 ]);
 
@@ -74,14 +74,16 @@ class StoreBidController extends Controller
                 $feePercentage = config('constants.invoice_fee_percentage');
                 $fee = round($amount * ($feePercentage / 100), 2);
 
+                $request = $bid->request;
+                $userId = $request->type == RequestTypeEnum::BUY->value ? $request->user_id : $bid->user_id;
+
                 $trade->refresh()->invoices()->create([
-                    'user_id' => Auth::id(),
+                    'user_id' => $userId,
                     'amount' => $amount,
                     'fee' => $fee,
                     'status' => InvoiceStatusEnum::PENDING->value,
                     'type' => InvoiceTypeEnum::STEP_ONE_PAY_TOMAN_TO_SYSTEM->value,
                 ]);
-
             }
 
             $resource = new BidResource($bid->refresh());
