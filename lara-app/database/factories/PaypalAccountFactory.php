@@ -17,7 +17,9 @@ class PaypalAccountFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'holder_name' => $this->faker->name,
+            'email' => $this->faker->email,
+            'is_active' => true,
         ];
     }
 }

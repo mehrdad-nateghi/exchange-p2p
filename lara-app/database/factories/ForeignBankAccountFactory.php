@@ -17,7 +17,11 @@ class ForeignBankAccountFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'holder_name' => $this->faker->name,
+            'bank_name' => $this->faker->company,
+            'iban' => $this->faker->iban,
+            'bic' => $this->faker->swiftBicNumber,
+            'is_active' => true,
         ];
     }
 }
