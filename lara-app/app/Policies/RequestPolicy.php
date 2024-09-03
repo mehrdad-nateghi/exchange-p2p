@@ -3,6 +3,7 @@
 namespace App\Policies;
 
 use App\Enums\BidStatusEnum;
+use App\Enums\RequestTypeEnum;
 use App\Models\Request;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
@@ -54,12 +55,7 @@ class RequestPolicy
      */
     public function update(User $user, Request $request)
     {
-        $acceptedBid = $request->bids()
-            ->where('user_id', $user->id)
-            ->where('status', BidStatusEnum::ACCEPTED->value)
-            ->first();
-
-        return $acceptedBid !== null;
+        //
     }
 
     /**

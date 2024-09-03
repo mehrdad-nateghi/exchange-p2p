@@ -21,7 +21,6 @@ class RequestResource extends JsonResource
             'price' => $this->price,
             'type' => $this->type->key(),
             'status' => $this->status->key(),
-            'deposit_reason' => $this->deposit_reason,
             'user' => new UserResource($this->user),
             'payment_methods' => PaymentMethodCollection::make($this->paymentMethods),
             'created_at' => $this->created_at,

@@ -17,7 +17,12 @@ class RialBankAccountFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'holder_name' => $this->faker->name,
+            'bank_name' => $this->faker->company,
+            'card_number' => $this->faker->creditCardNumber(),
+            'sheba' => $this->faker->iban('IR'),
+            'account_no' => $this->faker->bankAccountNumber,
+            'is_active' => true,
         ];
     }
 }

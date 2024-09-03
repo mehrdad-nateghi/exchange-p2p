@@ -24,7 +24,8 @@ return new class extends Migration
             $table->decimal('min_allowed_price',13,2); // todo-mn: need to save it or just for validation?
             $table->decimal('max_allowed_price',13,2);
             //$table->text('description')->nullable();
-            $table->text('deposit_reason')->nullable();
+           /* $table->text('deposit_reason')->nullable();
+            $table->boolean('deposit_reason_accepted')->default(true);*/
             $table->tinyInteger('type')->index();
             $table->tinyInteger('status')->index();
             $table->timestamps();

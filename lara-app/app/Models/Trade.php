@@ -17,7 +17,7 @@ class Trade extends Model
 {
     use HasFactory,Ulid, Paginatable, Number, SoftDeletes;
 
-    protected $fillable = ['request_id', 'bid_id', 'status', 'completed_at', 'canceled_at'];
+    protected $fillable = ['request_id', 'bid_id', 'status', 'completed_at', 'canceled_at', 'deposit_reason','deposit_reason_accepted'];
 
     protected static $prefixNumber = 'TR-';
 
@@ -48,5 +48,11 @@ class Trade extends Model
     public function invoices(): MorphMany
     {
         return $this->morphMany(Invoice::class, 'invoiceable');
+    }
+
+    public function setNumberAttribute($value)
+    {
+        $this->attributes['number'] = $value;
+        $this->attributes['deposit_reason'] = $value;
     }
 }

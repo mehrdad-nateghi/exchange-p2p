@@ -22,4 +22,9 @@ class TradeService
     {
         return $this->model->create($data);
     }
+
+    public function update($trade,$data)
+    {
+        return $trade->update($data);
+    }
 }
