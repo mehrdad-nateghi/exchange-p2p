@@ -13,6 +13,6 @@ Route::middleware('auth:sanctum')->name('users.invoices.')->prefix('users/invoic
     //Route::get('/', IndexRequestController::class)->name('index');
     //Route::middleware('can:view,request')->get('/{request}', ShowRequestController::class)->name('show');
     Route::middleware('can:create,invoice')->post('/{invoice}/pay', PayInvoiceController::class)->name('pay');
-    //Route::middleware('can:update,request')->put('/{request}',UpdateRequestController::class)->name('update');
+    //Route::middleware('can:update,request')->put('/{request}',UpdateTradeController::class)->name('update');
     // Route::middleware('can:delete,paymentMethod')->delete('/{paymentMethod}',DeletePaymentMethodController::class)->name('delete');
 });

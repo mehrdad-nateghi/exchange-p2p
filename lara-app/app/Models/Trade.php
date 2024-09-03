@@ -49,4 +49,10 @@ class Trade extends Model
     {
         return $this->morphMany(Invoice::class, 'invoiceable');
     }
+
+    public function setNumberAttribute($value)
+    {
+        $this->attributes['number'] = $value;
+        $this->attributes['deposit_reason'] = $value;
+    }
 }

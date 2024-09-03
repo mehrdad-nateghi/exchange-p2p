@@ -55,20 +55,7 @@ class RequestPolicy
      */
     public function update(User $user, Request $request)
     {
-        if($request->type === RequestTypeEnum::BUY){
-            $userId = $request->user_id;
-        }
-
-        if($request->type === RequestTypeEnum::SELL){
-            $userId = $bid->user_id;
-        }
-
-        $acceptedBid = $request->bids()
-            ->where('user_id', $userId)
-            ->where('status', BidStatusEnum::ACCEPTED->value)
-            ->first();
-
-        return $acceptedBid !== null && $user->id === $userId;
+        //
     }
 
     /**

@@ -2,6 +2,8 @@
 
 namespace App\Policies;
 
+use App\Enums\BidStatusEnum;
+use App\Enums\RequestTypeEnum;
 use App\Models\Trade;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
@@ -53,7 +55,24 @@ class TradePolicy
      */
     public function update(User $user, Trade $trade)
     {
-        //
+        $request = $trade->request;
+
+        if($request->type === RequestTypeEnum::BUY){
+            dd('1');
+            $userId = $request->user_id;
+        }
+
+        if($request->type === RequestTypeEnum::SELL){
+            $bid = $trade->bid;
+            $userId = $bid->user_id;
+        }
+
+        $acceptedBid = $request->bids()
+            ->where('user_id', $userId)
+            ->where('status', BidStatusEnum::ACCEPTED->value)
+            ->first();
+
+        return $acceptedBid !== null && $user->id === $userId;
     }
 
     /**

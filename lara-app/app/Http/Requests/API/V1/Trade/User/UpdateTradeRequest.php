@@ -1,12 +1,10 @@
 <?php
 
-namespace App\Http\Requests\API\V1\Request\User;
+namespace App\Http\Requests\API\V1\Trade\User;
 
-use App\Enums\BidStatusEnum;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Auth;
 
-class UpdateRequestRequest extends FormRequest
+class UpdateTradeRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
