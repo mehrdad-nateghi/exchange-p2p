@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string('number')->unique()->index();
             $table->foreignId('request_id')->constrained();
             $table->foreignId('bid_id')->constrained();
+            $table->text('deposit_reason')->nullable();
+            $table->boolean('deposit_reason_accepted')->default(true);
             $table->tinyInteger('status')->index(); // processing, completed, canceled
             $table->timestamp('completed_at')->nullable();
             $table->timestamp('canceled_at')->nullable();

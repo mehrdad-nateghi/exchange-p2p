@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Enums\Legacy\UserRoleEnum;
+use App\Enums\RoleNameEnum;
 use App\Enums\UserTypeEnum;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -17,28 +18,25 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        /*// Create 10 Applicant user
-        User::factory(1)
-            ->create(['role'=>UserRoleEnum::Applicant]);
+        $this->createUser('bidder', RoleNameEnum::APPLICANT);
+        $this->createUser('requester', RoleNameEnum::APPLICANT);
+        $this->createUser('admin', RoleNameEnum::ADMIN);
+    }
 
-        // Create 10 Admin user
-        User::factory(10)
-            ->create(['role'=>UserRoleEnum::Admin]);
-
-        // Create an Applicant by real email and password credentials for testing purpose
-        $applicant = User::where('email','applicant@paylibero.com')->first();
-        if(!$applicant) {
-            User::factory(1)
-            ->create(['role'=> UserRoleEnum::Applicant, 'email'=>'applicant@paylibero.com', 'password'=>Hash::make('123456')]);
-        }
-
-        // Create an Admin by real email and password credentials for testing purpose
-        $admin = User::where('email','admin@paylibero.com')->first();
-        if(!$admin) {
-            User::factory(1)
-            ->create(['role'=> UserRoleEnum::Admin, 'email'=>'admin@paylibero.com', 'password'=>Hash::make('123456')]);
-
-        }*/
-
+    /**
+     * Create a user with given type and role.
+     *
+     * @param string $type
+     * @param RoleNameEnum $role
+     * @return User
+     */
+    private function createUser(string $type, RoleNameEnum $role): User
+    {
+        return User::factory()->create([
+            'first_name' => "$type first name",
+            'last_name' => "$type last name",
+            'email' => "$type@paylibero.com",
+            'password' => Hash::make('123456'),
+        ])->assignRole($role->value);
     }
 }

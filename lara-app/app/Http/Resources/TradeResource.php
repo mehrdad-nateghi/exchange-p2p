@@ -17,6 +17,8 @@ class TradeResource extends JsonResource
         return [
             'ulid' => $this->ulid,
             'number' => $this->number,
+            'deposit_reason' => $this->deposit_reason,
+            'deposit_reason_accepted' => $this->deposit_reason_accepted,
             'status' => $this->status->key(),
             'bid' => new BidResource($this->bid),
             'steps' => $this->whenLoaded('tradeSteps', function () {

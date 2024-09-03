@@ -3,6 +3,7 @@
 namespace App\Policies;
 
 use App\Enums\BidStatusEnum;
+use App\Enums\RequestTypeEnum;
 use App\Models\Request;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
@@ -54,12 +55,20 @@ class RequestPolicy
      */
     public function update(User $user, Request $request)
     {
+        if($request->type === RequestTypeEnum::BUY){
+            $userId = $request->user_id;
+        }
+
+        if($request->type === RequestTypeEnum::SELL){
+            $userId = $bid->user_id;
+        }
+
         $acceptedBid = $request->bids()
-            ->where('user_id', $user->id)
+            ->where('user_id', $userId)
             ->where('status', BidStatusEnum::ACCEPTED->value)
             ->first();
 
-        return $acceptedBid !== null;
+        return $acceptedBid !== null && $user->id === $userId;
     }
 
     /**
