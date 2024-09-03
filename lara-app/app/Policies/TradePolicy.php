@@ -30,7 +30,7 @@ class TradePolicy
      */
     public function view(User $user, Trade $trade)
     {
-        //
+        return $user->id == $trade->request->user_id || $user->id == $trade->bid->user_id;
     }
 
     /**

@@ -21,6 +21,10 @@ class Trade extends Model
 
     protected static $prefixNumber = 'TR-';
 
+    public function getRouteKeyName(): string
+    {
+        return 'ulid';
+    }
 
     protected $casts = [
         'status' => TradeStatusEnum::class,
