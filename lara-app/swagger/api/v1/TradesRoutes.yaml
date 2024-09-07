@@ -90,3 +90,44 @@
                             $ref: "#/components/schemas/UserTrade"
                         pagination:
                           $ref: "#/components/schemas/Pagination"
+
+"/users/trades/{trade}":
+  put:
+    tags:
+      - trades
+    summary: "update deposit reason of the trade by ULID"
+    description: "This endpoint update deposit reason of the trade by ULID."
+    operationId: updateDepositReason
+    parameters:
+      - name: trade
+        in: path
+        required: true
+        description: "The ULID of the trade."
+        schema:
+          type: string
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - deposit_reason
+            properties:
+              deposit_reason:
+                type: string
+                description: "the reason of the deposit"
+    responses:
+      "200":
+        description: "The deposit reason was updated successfully."
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/Base200Response"
+                - type: object
+                  required:
+                    - data
+                  properties:
+                    data:
+                      $ref: "#/components/schemas/UserTrade"
