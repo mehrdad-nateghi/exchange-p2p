@@ -1,0 +1,22 @@
+"/users/invoices/{invoiceID}/pay":
+  get:
+    tags:
+      - invoices
+    summary: "pay the invoice by invoiceID"
+    description: "This endpoint redirect user to payment page."
+    operationId: redirectToPaymentRoute
+    parameters:
+      - name: invoiceID
+        in: path
+        required: true
+        description: "The ULID of the invoice."
+        schema:
+          type: string
+    responses:
+      "302":
+        description: Redirect to the payment page
+        headers:
+          Location:
+            schema:
+              type: string
+            description: The URL to redirect to
