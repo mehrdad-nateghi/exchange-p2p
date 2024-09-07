@@ -130,3 +130,6 @@ spec:
                 secretKeyRef:
                   name: ahasend
                   key: password
+            # ZIBAL_CALLBACK_URL--------------------------------------
+            - name: ZIBAL_CALLBACK_URL
+              value: https://nightly.paylibero.ir/api/gateway/callback
