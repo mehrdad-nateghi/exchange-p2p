@@ -39,3 +39,4 @@ data:
   AWS_SECRET_ACCESS_KEY: "2bbc941c0a3fd868d7e08e2bdd3ce35a91cad8adfcabfa8fd210a7bc5a35977d"
   AWS_URL: "https://files.paylibero.ir/"
   AWS_ENDPOINT: "s3.ir-thr-at1.arvanstorage.ir"
+  ZIBAL_CALLBACK_URL: "https://nightly.paylibero.ir/api/gateway/callback"

@@ -330,7 +330,7 @@ return [
             'mode' => 'normal', // can be normal, direct
 
             'merchantId' => 'zibal',
-            'callbackUrl' => 'http://localhost:8000/api/gateway/callback',
+            'callbackUrl' => env('ZIBAL_CALLBACK_URL','http://localhost:8000/api/gateway/callback'),
             'description' => 'payment using zibal',
             'currency' => 'T', //Can be R, T (Rial, Toman)
         ],
