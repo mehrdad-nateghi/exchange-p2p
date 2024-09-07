@@ -58,7 +58,6 @@ class TradePolicy
         $request = $trade->request;
 
         if($request->type === RequestTypeEnum::BUY){
-            dd('1');
             $userId = $request->user_id;
         }
 

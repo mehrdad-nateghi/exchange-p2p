@@ -52,12 +52,11 @@ class GatewayCallbackController extends Controller
                 'status' => InvoiceStatusEnum::PAID,
             ]);
 
-            // trade COMPLETED
             $trade = $invoice->invoiceable;
-            $trade->update([
+            /*$trade->update([
                 'status' => TradeStatusEnum::COMPLETED,
                 'completed_at' => Carbon::now(),
-            ]);
+            ]);*/
 
             // trade step one DONE
             $trade->tradeSteps()->where('priority', 1)->first()->update([
