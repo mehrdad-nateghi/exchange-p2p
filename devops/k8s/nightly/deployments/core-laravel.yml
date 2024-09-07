@@ -61,6 +61,9 @@ spec:
                 secretKeyRef:
                   name: najva
                   key: password
+            # ZIBAL_CALLBACK_URL--------------------------------------
+            - name: ZIBAL_CALLBACK_URL
+              value: https://nightly.paylibero.ir/api/gateway/callback
 
       containers:
         - name: core-laravel
