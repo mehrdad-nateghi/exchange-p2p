@@ -75,7 +75,7 @@ class StoreBidController extends Controller
                 $fee = round($amount * ($feePercentage / 100), 2);
 
                 $request = $bid->request;
-                $userId = $request->type == RequestTypeEnum::BUY->value ? $request->user_id : $bid->user_id;
+                $userId = $request->type->value == RequestTypeEnum::BUY->value ? $request->user_id : $bid->user_id;
 
                 $trade->refresh()->invoices()->create([
                     'user_id' => $userId,
