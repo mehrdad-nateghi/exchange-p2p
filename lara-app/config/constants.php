@@ -24,4 +24,7 @@ return [
 
     'access_token_expiration_time_per_minutes' => env('ACCESS_TOKEN_EXPIRATION_TIME_PER_MINUTES', 14400),
     'refresh_token_expiration_time_per_minutes' => env('REFRESH_TOKEN_EXPIRATION_TIME_PER_MINUTES', 14400),
+
+
+    'frontend_url_after_payment' => env('FRONTEND_URL_AFTER_PAYMENT', 'http://localhost:8000/dashboard/trades'),
 ];

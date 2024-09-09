@@ -67,4 +67,8 @@ return [
     'payment_success' => 'Payment was successful.',
     'card_to_iban' => 'Card to IBAN',
 
+    'success' => 'success',
+    'failed' => 'failed',
+    'error' => 'error',
+
 ];
