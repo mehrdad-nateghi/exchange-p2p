@@ -14,6 +14,7 @@ spec:
               value: nightly
             - name: APP_URL
               value: https://nightly.paylibero.ir
+
             # DB--------------------------------------
             - name: DB_HOST
               value: paylibero-db-mysql-headless
@@ -56,14 +57,18 @@ spec:
                   key: redis-password
 
             # MAIL--------------------------------------
+            - name: MAIL_USERNAME
+              value: 10cSOoYX8R
             - name: MAIL_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: najva
                   key: password
+
             # ZIBAL_CALLBACK_URL--------------------------------------
             - name: ZIBAL_CALLBACK_URL
               value: https://nightly.paylibero.ir/api/gateway/callback
+
             # FINNOTECH--------------------------------------
             - name: FINNOTECH_BASE_URL
               value: https://sandboxapi.finnotech.ir
@@ -73,6 +78,28 @@ spec:
               value: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbklkIjoiZDQwZWVmZTctNjQzYy00YTQ3LThmODItYzA5MjMyOGE1ZDQyIiwicmVmcmVzaFRva2VuIjoiakZWdXhTSmo1MElCRlYwbEgyOWZnemtqOTQ4d3kzTm94R2NKU1dwNUFvVXpmcDNzTlJxSTZ2RU04M2M2SFk2V2IzSGo5UHVDV1JDQnlzMDRzTmxtblZyOEVBMWYwaGd1NUozQTVzeGMxcGxSN1lWZ2RuYThycnZQdVVyUWYyODlVOEhSVEVFcHF1Vkx4bHRaNW1MZm5DdHZLbEFDY0dGZFkwMDFKVmptUkVHNUNtNVlmNmRFSkhnRVhhVU1KUGZDamx6Nk9mbUVTdWY4VHN1NzN2R3R1djcwYkhwYWd5OEFRWGJuR3RsN1gxVWFmbTJReTRQT2NONVducE5jMmQxYiIsImNyZWF0aW9uRGF0ZSI6IjE0MDMwNjEwMTE1MDExIiwibGlmZVRpbWUiOjg2NDAwMDAwMCwiY2xpZW50SWQiOiJwYXlsaWJlcm8iLCJ1c2VySWQiOiI0Mjg1Nzg3NjUyIiwiYWN0aXZlIjp0cnVlLCJzY29wZXMiOlsiZmFjaWxpdHk6Y2FyZC10by1pYmFuOmdldCJdLCJ0eXBlIjoiQ0xJRU5ULUNSRURFTlRJQUwiLCJjbGllbnRJbmZvIjoid20zNGFMY2dDQitIT2UxZlN1eFNmWmdNWjB0RHc0UzVRVXYxakNNTyIsImJhbmsiOiIwNjIiLCJpYXQiOjE3MjUwODg4MTEsImV4cCI6MTcyNTk1MjgxMX0.pFYJvkj08QBfMXTgsfkSzIpHF3zNQITW82haZmKLNTv5ClVzlzNs2gV5BU6CpAxMbgjPQljAqXtmcPh5Y6r7Z3OyAo2Owm6kxNwBVGC8Wp5c5ZOzHvY9KRf-pD_eoYOcZU8_OWxUDY14TTEyQ56qJmAcJkey-3izSP-tqIPJp-ACp43rTG8K6zI1G4gwuRCZiVGF9mvCRDinHS-jqOiQWElmTgu0M5uyKJdfm8BIgbluYyvO6WYZNgF64VaUDfcZYJtxmh7IDAW5_Hc-l9YVPMpTSVhOWHk4V6I7sB5LgkDUV5qAEFya3REcwh4j0E7XYn9hw8aPiYhyZTukbG025Q
             - name: FRONTEND_URL_AFTER_PAYMENT
               value: https://nightly.paylibero.ir/dashboard/trades
+
+            # SANCTUM--------------------------------------
+            - name: SANCTUM_STATEFUL_DOMAINS
+              value: localhost:4000,core-lara-33e1254e7d-paylibero-nightly.apps.ir-thr-ba1.arvancaas.ir,nightly.paylibero.ir
+            - name: SESSION_DOMAIN
+              value: .paylibero.ir
+
+            # AWS--------------------------------------
+            - name: AWS_URL
+              value: https://files.paylibero.ir/
+            - name: AWS_ENDPOINT
+              value: s3.ir-thr-at1.arvanstorage.ir
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: file-storage
+                  key: id
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: file-storage
+                  key: access-key
 
       containers:
         - name: core-laravel
@@ -92,6 +119,7 @@ spec:
               value: nightly
             - name: APP_URL
               value: https://nightly.paylibero.ir
+
             # DB--------------------------------------
             - name: DB_HOST
               value: paylibero-db-mysql-headless
@@ -134,14 +162,18 @@ spec:
                   key: redis-password
 
             # MAIL--------------------------------------
+            - name: MAIL_USERNAME
+              value: 10cSOoYX8R
             - name: MAIL_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: ahasend
+                  name: najva
                   key: password
+
             # ZIBAL_CALLBACK_URL--------------------------------------
             - name: ZIBAL_CALLBACK_URL
               value: https://nightly.paylibero.ir/api/gateway/callback
+
             # FINNOTECH--------------------------------------
             - name: FINNOTECH_BASE_URL
               value: https://sandboxapi.finnotech.ir
@@ -151,3 +183,25 @@ spec:
               value: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbklkIjoiZDQwZWVmZTctNjQzYy00YTQ3LThmODItYzA5MjMyOGE1ZDQyIiwicmVmcmVzaFRva2VuIjoiakZWdXhTSmo1MElCRlYwbEgyOWZnemtqOTQ4d3kzTm94R2NKU1dwNUFvVXpmcDNzTlJxSTZ2RU04M2M2SFk2V2IzSGo5UHVDV1JDQnlzMDRzTmxtblZyOEVBMWYwaGd1NUozQTVzeGMxcGxSN1lWZ2RuYThycnZQdVVyUWYyODlVOEhSVEVFcHF1Vkx4bHRaNW1MZm5DdHZLbEFDY0dGZFkwMDFKVmptUkVHNUNtNVlmNmRFSkhnRVhhVU1KUGZDamx6Nk9mbUVTdWY4VHN1NzN2R3R1djcwYkhwYWd5OEFRWGJuR3RsN1gxVWFmbTJReTRQT2NONVducE5jMmQxYiIsImNyZWF0aW9uRGF0ZSI6IjE0MDMwNjEwMTE1MDExIiwibGlmZVRpbWUiOjg2NDAwMDAwMCwiY2xpZW50SWQiOiJwYXlsaWJlcm8iLCJ1c2VySWQiOiI0Mjg1Nzg3NjUyIiwiYWN0aXZlIjp0cnVlLCJzY29wZXMiOlsiZmFjaWxpdHk6Y2FyZC10by1pYmFuOmdldCJdLCJ0eXBlIjoiQ0xJRU5ULUNSRURFTlRJQUwiLCJjbGllbnRJbmZvIjoid20zNGFMY2dDQitIT2UxZlN1eFNmWmdNWjB0RHc0UzVRVXYxakNNTyIsImJhbmsiOiIwNjIiLCJpYXQiOjE3MjUwODg4MTEsImV4cCI6MTcyNTk1MjgxMX0.pFYJvkj08QBfMXTgsfkSzIpHF3zNQITW82haZmKLNTv5ClVzlzNs2gV5BU6CpAxMbgjPQljAqXtmcPh5Y6r7Z3OyAo2Owm6kxNwBVGC8Wp5c5ZOzHvY9KRf-pD_eoYOcZU8_OWxUDY14TTEyQ56qJmAcJkey-3izSP-tqIPJp-ACp43rTG8K6zI1G4gwuRCZiVGF9mvCRDinHS-jqOiQWElmTgu0M5uyKJdfm8BIgbluYyvO6WYZNgF64VaUDfcZYJtxmh7IDAW5_Hc-l9YVPMpTSVhOWHk4V6I7sB5LgkDUV5qAEFya3REcwh4j0E7XYn9hw8aPiYhyZTukbG025Q
             - name: FRONTEND_URL_AFTER_PAYMENT
               value: https://nightly.paylibero.ir/dashboard/trades
+
+            # SANCTUM--------------------------------------
+            - name: SANCTUM_STATEFUL_DOMAINS
+              value: localhost:4000,core-lara-33e1254e7d-paylibero-nightly.apps.ir-thr-ba1.arvancaas.ir,nightly.paylibero.ir
+            - name: SESSION_DOMAIN
+              value: .paylibero.ir
+
+            # AWS--------------------------------------
+            - name: AWS_URL
+              value: https://files.paylibero.ir/
+            - name: AWS_ENDPOINT
+              value: s3.ir-thr-at1.arvanstorage.ir
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: file-storage
+                  key: id
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: file-storage
+                  key: access-key
