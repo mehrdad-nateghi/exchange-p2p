@@ -11,6 +11,7 @@ use App\Http\Resources\TradeResource;
 use App\Models\Transaction;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -19,7 +20,9 @@ use Shetabit\Payment\Facade\Payment;
 
 class GatewayCallbackController extends Controller
 {
-    public function __invoke(Request $request): JsonResponse
+    private $tradeUlId;
+
+    public function __invoke(Request $request): RedirectResponse
     {
         try {
             DB::beginTransaction();
@@ -29,11 +32,15 @@ class GatewayCallbackController extends Controller
             $trackId = $request->input('trackId');
             $refId = $request->input('orderId');
 
+            $transaction = Transaction::where('track_id', $trackId)->first();
+            $invoice = $transaction->transactionable;
+            $trade = $invoice->invoiceable;
+            $this->tradeUlId = $trade->ulid;
+
             if ($success !== 1 && $status !== 2) {
                 throw new \Exception(trans('api-messages.payment_failed'));
             }
 
-            $transaction = Transaction::where('track_id', $trackId)->first();
 
             if ($transaction->status != TransactionStatusEnum::PENDING) {
                 throw new \Exception("This transaction is already processed");
@@ -47,12 +54,10 @@ class GatewayCallbackController extends Controller
             ]);
 
             // invoice PAID
-            $invoice = $transaction->transactionable;
             $invoice->update([
                 'status' => InvoiceStatusEnum::PAID,
             ]);
 
-            $trade = $invoice->invoiceable;
             /*$trade->update([
                 'status' => TradeStatusEnum::COMPLETED,
                 'completed_at' => Carbon::now(),
@@ -76,24 +81,38 @@ class GatewayCallbackController extends Controller
 
             DB::commit();
 
-            $resource = new TradeResource($trade->refresh()->load(['tradeSteps', 'invoices']));
+            return $this->redirectWithStatus(trans('api-messages.success'), trans('api-messages.payment_success'));
+
+            /*$resource = new TradeResource($trade->refresh()->load(['tradeSteps', 'invoices']));
 
             return apiResponse()
                 ->message(trans('api-messages.payment_success'))
                 ->data($resource)
-                ->getApiResponse();
+                ->getApiResponse();*/
         } catch (InvalidPaymentException $exception) {
             DB::rollBack();
             Log::error($exception->getMessage());
-            return apiResponse()
+
+            return $this->redirectWithStatus(trans('api-messages.failed'), trans('api-messages.payment_failed'));
+
+            /*return apiResponse()
                 ->failed()
                 ->paymentRequired()
                 ->message(trans('api-messages.payment_failed'))
-                ->getApiResponse();
+                ->getApiResponse();*/
         } catch (\Throwable $t) {
             DB::rollBack();
             Log::error($t);
-            return internalServerError();
+            return $this->redirectWithStatus(trans('api-messages.error'), trans('api-messages.internal_server_error'));
+
+            //return internalServerError();
         }
+    }
+
+    private function redirectWithStatus(string $status, string $message): RedirectResponse
+    {
+        $baseUrl = config('constants.frontend_url_after_payment');
+        $redirectUrl = "{$baseUrl}/{$this->tradeUlId}?status={$status}&message=" . urlencode(strtolower($message));
+        return redirect()->away($redirectUrl);
     }
 }
