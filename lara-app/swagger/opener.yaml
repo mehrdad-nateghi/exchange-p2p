@@ -100,6 +100,8 @@ components:
             - bank_name
             - card_number
             - sheba
+            - bic
+            - iban
             - account_no
             - is_active
             - icon
@@ -130,6 +132,14 @@ components:
               type: string
               description: "SHEBA number"
               example: ""
+            bic:
+              type: string
+              description: "Bank Identifier Code (BIC)"
+              example: "BKCHAEADXXX"
+            iban:
+              type: string
+              description: "International Bank Account Number (IBAN)"
+              example: "AE070331234567890123456"
             account_no:
               type: string
               description: "Account number"
@@ -151,6 +161,7 @@ components:
               format: date-time
               description: "Last update timestamp"
               example: "2024-07-07T06:38:04.000000Z"
+
     Request:
       type: object
       required:
@@ -196,7 +207,6 @@ components:
           example: "pending"
         deposit_reason:
           type: string
-          nullable: true
           description: "reason of the deposit"
         created_at:
           type: string
