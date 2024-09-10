@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\BidStatusEnum;
 use App\Enums\RequestStatusEnum;
 use App\Enums\RequestTypeEnum;
 use App\Traits\Global\Number;
@@ -13,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 
 class Request extends Model
 {
@@ -60,5 +62,38 @@ class Request extends Model
     public function bids(): HasMany
     {
         return $this->hasMany(Bid::class);
+    }
+
+    public function getIsUserSellerAttribute(): bool
+    {
+        return $this->isUserRole(RequestTypeEnum::SELL);
+    }
+
+    public function getIsUserBuyerAttribute(): bool
+    {
+        return $this->isUserRole(RequestTypeEnum::BUY);
+    }
+
+    private function isUserRole(RequestTypeEnum $requestType): bool
+    {
+        $userId = Auth::id();
+
+        if ($this->type->value !== $requestType->value) {
+            $bid = $this->bids()->where('status', BidStatusEnum::ACCEPTED)->first();
+            return $bid && $bid->user_id == $userId;
+        }
+
+        return $this->user_id == $userId;
+    }
+
+    public function getUserRoleOnRequestAttribute(): ?string
+    {
+        if ($this->is_user_seller) {
+            return 'seller';
+        }
+        if ($this->is_user_buyer) {
+            return 'buyer';
+        }
+        return null;
     }
 }

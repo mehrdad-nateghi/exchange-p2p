@@ -2,8 +2,7 @@
 
 namespace App\Policies;
 
-use App\Enums\BidStatusEnum;
-use App\Enums\RequestTypeEnum;
+use App\Models\PaymentMethod;
 use App\Models\Request;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
@@ -92,5 +91,10 @@ class RequestPolicy
     public function forceDelete(User $user, Request $request)
     {
         //
+    }
+
+    public function add(User $user, Request $request, PaymentMethod $paymentMethod)
+    {
+        return $user->id == $paymentMethod->user_id && $request->is_user_seller;
     }
 }
