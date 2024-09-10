@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\PaymentMethodTypeEnum;
 use App\Traits\Global\Paginatable;
 use App\Traits\Global\Ulid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -25,6 +26,10 @@ class PaymentMethod extends Model
         'user_id',
         'type',
         'status',
+    ];
+
+    protected $casts = [
+        'type' => PaymentMethodTypeEnum::class,
     ];
 
     protected $with = ['paymentMethod'];
