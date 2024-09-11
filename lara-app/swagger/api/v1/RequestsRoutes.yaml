@@ -158,3 +158,36 @@
                   properties:
                     data:
                       $ref: "#/components/schemas/Request"
+
+"users/requests/{request}/add/payment-method/{paymentMethod}":
+  post:
+    tags:
+      - requests
+    summary: Add payment method to a request
+    description: Add a specific payment method to an existing request
+    operationId: addPaymentMethodToRequest
+    parameters:
+      - name: request
+        in: path
+        required: true
+        description: The ULID of the request
+        schema:
+          type: string
+      - name: paymentMethod
+        in: path
+        required: true
+        description: The ULID of the payment method to add
+        schema:
+          type: string
+    responses:
+      "200":
+        description: Payment method successfully added to the request
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/Base200Response"
+                - type: object
+                  properties:
+                    data:
+                      $ref: "#/components/schemas/Request"
