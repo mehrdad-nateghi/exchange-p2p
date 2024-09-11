@@ -98,6 +98,7 @@ components:
             - type
             - holder_name
             - bank_name
+            - email
             - card_number
             - sheba
             - bic
@@ -119,6 +120,10 @@ components:
             holder_name:
               type: string
               description: "Name of the account holder"
+              example: ""
+            email:
+              type: string
+              description: "email of the account"
               example: ""
             bank_name:
               type: string

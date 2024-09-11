@@ -1,0 +1,30 @@
+"/users/files/steps/{tradeID}/upload":
+  post:
+    summary: Upload a file for a specific step
+    description: Uploads a file (receipt) for a given step ID
+    operationId: uploadFileForStep
+    tags:
+      - Files
+    parameters:
+      - name: tradeID
+        in: path
+        required: true
+        schema:
+          type: string
+    requestBody:
+      required: true
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            properties:
+              receipt:
+                type: string
+                format: binary
+                description: The file to upload
+          encoding:
+            receipt:
+              contentType: image/png, image/jpeg, image/gif, image/bmp, image/webp
+    responses:
+      "200":
+        $ref: "#/components/schemas/Base200Response"

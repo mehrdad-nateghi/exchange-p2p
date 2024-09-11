@@ -6,7 +6,7 @@
     description: Retrieve IBAN and associated information for a given card number
     operationId: getCardInfo
     parameters:
-      - name: card_number
+      - name: card
         in: query
         required: true
         description: The card number
