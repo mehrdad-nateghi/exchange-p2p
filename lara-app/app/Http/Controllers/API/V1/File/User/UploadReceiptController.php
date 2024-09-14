@@ -18,9 +18,8 @@ use Illuminate\Support\Facades\Storage;
 class UploadReceiptController extends Controller
 {
     public function __invoke(
-        TradeStep $step,
+        TradeStep $tradeStep,
         UploadReceiptRequest $request,
-        //RequestService $requestService,
     ): JsonResponse {
         try {
             DB::beginTransaction();
@@ -30,7 +29,7 @@ class UploadReceiptController extends Controller
 
             $path = Storage::putFile('uploads', $file);
 
-            $step->files()->create([
+            $tradeStep->files()->create([
                 'user_id' => Auth::id(),
                 'name' => $file->getClientOriginalName(),
                 'path' => $path,
@@ -38,8 +37,8 @@ class UploadReceiptController extends Controller
                 'size' => $file->getSize(),
             ]);
 
-            $step->load('files.user');
-            $resource =  new TradeStepResource($step);
+            $tradeStep->load('files.user');
+            $resource =  new TradeStepResource($tradeStep);
 
             DB::commit();
 
