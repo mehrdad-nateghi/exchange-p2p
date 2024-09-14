@@ -28,3 +28,34 @@
     responses:
       "200":
         $ref: "#/components/schemas/Base200Response"
+
+"/users/files/{fileID}":
+  patch:
+    summary: Update a file by ID
+    description: Updates a file by its ID
+    operationId: updateFileStatus
+    tags:
+      - Files
+    parameters:
+      - name: fileID
+        in: path
+        required: true
+        schema:
+          type: string
+    requestBody:
+      required: true
+      content:
+        application/x-www-form-urlencoded:
+          schema:
+            type: object
+            required:
+              - status
+            properties:
+              status:
+                type: string
+                description: "The status of the file, accept / reject"
+                enum: ["accept", "reject"]
+                example: "accept"
+    responses:
+      "200":
+        $ref: "#/components/schemas/Base200Response"

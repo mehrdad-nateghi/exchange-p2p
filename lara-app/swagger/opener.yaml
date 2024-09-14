@@ -97,13 +97,7 @@ components:
           required:
             - type
             - holder_name
-            - bank_name
             - email
-            - card_number
-            - sheba
-            - bic
-            - iban
-            - account_no
             - is_active
             - icon
             - created_at
@@ -166,7 +160,6 @@ components:
               format: date-time
               description: "Last update timestamp"
               example: "2024-07-07T06:38:04.000000Z"
-
     Request:
       type: object
       required:
@@ -178,7 +171,6 @@ components:
         - user
         - status
         - created_at
-        - deposit_reason
         - updated_at
         - payment_methods
       properties:
@@ -210,9 +202,6 @@ components:
           enum: ["pending", "processing", "trading", "canceled"]
           description: "Status of the request"
           example: "pending"
-        deposit_reason:
-          type: string
-          description: "reason of the deposit"
         created_at:
           type: string
           format: date-time
@@ -244,6 +233,7 @@ components:
         - last_name
         - email
         - created_at
+        - status
         - updated_at
         - roles
       properties:
@@ -263,6 +253,10 @@ components:
           type: string
           format: date-time
           example: "2024-05-15T06:56:46+00:00"
+        status:
+          type: string
+          enum: [active, inactive]
+          example: "active"
         updated_at:
           type: string
           format: date-time
@@ -305,8 +299,9 @@ components:
           description: "Unique identifier for the request"
           example: "01J25YP7C2MTHAXNREE7FNPY85"
         number:
-          type: integer
+          type: string
           description: "Number of the bid"
+          example: "BI-564311"
         user:
           $ref: "#/components/schemas/User"
         price:
@@ -318,7 +313,7 @@ components:
           description: "indicates that the bid has highest price or not"
         status:
           type: string
-          enum: ["pending", "processing", "trading", "canceled"]
+          enum: ["pending", "processing", "trading", "canceled", "accepted"]
           description: "Status of the request"
           example: "pending"
         created_at:
@@ -339,6 +334,8 @@ components:
         - ulid
         - number
         - status
+        - deposit_reason
+        - deposit_reason_accepted
         - bid
         - completed_at
         - created_at
@@ -357,6 +354,14 @@ components:
           enum: ["processing", "completed", "canceled"]
           description: "Status of the trade"
           example: "processing"
+        deposit_reason:
+          type: string
+          description: "reason of the deposit"
+          example: "TR-712974"
+        deposit_reason_accepted:
+          type: integer
+          description: "indicates that the deposit reason is accepted or not"
+          example: 0
         bid:
           allOf:
             - $ref: "#/components/schemas/Bid"
@@ -395,7 +400,6 @@ components:
               type: array
               items:
                 $ref: "#/components/schemas/Invoice"
-
     TradeStep:
       type: object
       required:
@@ -430,7 +434,6 @@ components:
         updated_at:
           type: string
           format: date-time
-
     Invoice:
       type: object
       required:
