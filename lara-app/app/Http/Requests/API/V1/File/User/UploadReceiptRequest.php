@@ -2,11 +2,13 @@
 
 namespace App\Http\Requests\API\V1\File\User;
 
+use App\Enums\FileStatusEnum;
 use App\Enums\PaymentMethodTypeEnum;
 use App\Enums\RequestStatusEnum;
 use App\Enums\RequestTypeEnum;
 use App\Enums\TradeStepsStatusEnum;
 use App\Enums\VerificationCodeViaEnum;
+use App\Models\RialBankAccount;
 use App\Rules\AlphaSpace;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
@@ -39,22 +41,48 @@ class UploadReceiptRequest extends FormRequest
                 'file',
                 'mimes:jpeg,png,jpg,pdf',
                 'max:10240', // 10MB max file size
+                $this->validateNoExistingReceipt(),
             ],
 
-            /*'step_status' => [
-                Rule::in([TradeStepsStatusEnum::DOING->value])
-            ]*/
+            'rial_bank_account' => [
+                'required',
+                'boolean',
+                Rule::in([true]),
+            ],
         ];
+    }
+
+    protected function validateNoExistingReceipt()
+    {
+        return function ($attribute, $value, $fail) {
+            $existingReceipt = $this->tradeStep->files()
+                ->where('status', FileStatusEnum::UPLOADED->value)
+                ->exists();
+
+            if ($existingReceipt) {
+                $fail('A receipt has already been uploaded for this step. You cannot upload another one.');
+            }
+        };
     }
 
     protected function prepareForValidation(): void
     {
-        $step = $this->step;
+        $tradeStep = $this->tradeStep;
+        $request = $tradeStep->request;
+
+        $hasRialBank = $request->paymentMethods()
+            ->where('payment_method_type', RialBankAccount::class)
+            ->exists();
 
         $this->merge([
-            'step_status' => $step->status->value,
+            'rial_bank_account' => $hasRialBank,
         ]);
     }
 
-
+    public function messages(): array
+    {
+        return [
+            'rial_bank_account.in' =>  'The request must have a rial bank account to allow you to upload a receipt.',
+        ];
+    }
 }

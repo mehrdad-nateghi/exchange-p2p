@@ -3,10 +3,11 @@
 namespace App\Policies;
 
 use App\Models\Step;
+use App\Models\TradeStep;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class StepPolicy
+class TradeStepPolicy
 {
     use HandlesAuthorization;
 
@@ -91,4 +92,10 @@ class StepPolicy
     {
         //
     }
+
+    public function upload(User $user, TradeStep $tradeStep)
+    {
+       return $tradeStep->request->is_user_seller;
+    }
+
 }

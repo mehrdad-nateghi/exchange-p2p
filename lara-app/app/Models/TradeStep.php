@@ -8,6 +8,8 @@ use App\Traits\Global\Paginatable;
 use App\Traits\Global\Ulid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -37,13 +39,28 @@ class TradeStep extends Model
         return null;
     }*/
 
-    public function trade()
+    public function trade(): BelongsTo
     {
         return $this->belongsTo(Trade::class);
+    }
+
+    // error:     "message": "App\\Models\\TradeStep::request must return a relationship instance.",
+    public function request(): HasOneThrough
+    {
+        return $this->hasOneThrough(
+            Request::class,
+            Trade::class,
+            'id', // Foreign key on Trade table
+            'id', // Foreign key on Request table
+            'trade_id', // Local key on TradeStep table
+            'request_id' // Local key on Trade table
+        );
     }
 
     public function files(): MorphMany
     {
         return $this->morphMany(File::class, 'fileable');
     }
+
+
 }
