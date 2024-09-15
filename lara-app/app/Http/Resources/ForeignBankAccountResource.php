@@ -17,7 +17,7 @@ class ForeignBankAccountResource extends JsonResource
     {
         return [
             //'ulid' => $this->ulid,
-            'type' => PaymentMethodTypeEnum::FOREIGN_BANK->getKeyLowercase(),
+            'type' => PaymentMethodTypeEnum::FOREIGN_BANK->key(),
             'holder_name' => $this->holder_name,
             'bank_name' => $this->bank_name,
             'iban' => $this->iban,

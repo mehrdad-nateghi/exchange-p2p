@@ -94,7 +94,7 @@ class Handler extends ExceptionHandler
                 return apiResponse()
                     ->failed()
                     ->message(trans('api-messages.requested_link_does_not_exist'))
-                    ->badRequest()
+                    ->notFound()
                     ->getApiResponse();
             }
         });

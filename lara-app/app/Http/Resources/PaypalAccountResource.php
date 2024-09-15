@@ -17,7 +17,7 @@ class PaypalAccountResource extends JsonResource
     {
         return [
             //'ulid' => $this->ulid,
-            'type' => PaymentMethodTypeEnum::PAYPAL->getKeyLowercase(),
+            'type' => PaymentMethodTypeEnum::PAYPAL->key(),
             'holder_name' => $this->holder_name,
             'email' => $this->email,
             'icon' => $this->icon,
