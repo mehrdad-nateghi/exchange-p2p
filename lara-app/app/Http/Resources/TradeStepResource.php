@@ -15,6 +15,7 @@ class TradeStepResource extends JsonResource
     public function toArray($request)
     {
         return [
+            'ulid' => $this->ulid,
             'name' => $this->name,
             'description' => $this->description,
             'priority' => $this->priority,
