@@ -7,6 +7,7 @@ use App\Enums\RequestTypeEnum;
 use App\Models\Trade;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Support\Facades\Auth;
 
 class TradePolicy
 {
@@ -57,21 +58,12 @@ class TradePolicy
     {
         $request = $trade->request;
 
-        if($request->type === RequestTypeEnum::BUY){
-            $userId = $request->user_id;
-        }
-
-        if($request->type === RequestTypeEnum::SELL){
-            $bid = $trade->bid;
-            $userId = $bid->user_id;
-        }
-
-        $acceptedBid = $request->bids()
-            ->where('user_id', $userId)
+        $hasAcceptedBid = $request->bids()
+            ->where('user_id', Auth::id())
             ->where('status', BidStatusEnum::ACCEPTED->value)
-            ->first();
+            ->exists();
 
-        return $acceptedBid !== null && $user->id === $userId;
+        return $hasAcceptedBid && $request->user_is_buyer;
     }
 
     /**
