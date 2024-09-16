@@ -404,12 +404,23 @@ components:
       type: object
       required:
         - name
+        - ulid
         - description
         - owner
+        - files
         - status
         - created_at
         - updated_at
       properties:
+        ulid:
+          type: string
+        files:
+          type: array
+          items:
+            type: object
+            required:
+              - ulid
+              - file
         name:
           type: string
         description:
