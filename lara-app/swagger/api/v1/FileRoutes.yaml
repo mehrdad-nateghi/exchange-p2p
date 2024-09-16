@@ -1,4 +1,4 @@
-"/users/files/steps/{tradeID}/upload":
+"/users/files/steps/{stepID}/upload":
   post:
     summary: Upload a file for a specific step
     description: Uploads a file (receipt) for a given step ID
@@ -6,7 +6,7 @@
     tags:
       - Files
     parameters:
-      - name: tradeID
+      - name: stepID
         in: path
         required: true
         schema:
