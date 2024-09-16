@@ -29,7 +29,7 @@ class UpdatePaymentMethodRequest extends FormRequest
      */
     public function rules()
     {
-        $type = $this->paymentMethod->type;
+        $type = $this->paymentMethod->type->value;
         $paymentMethodId = $this->paymentMethod->payment_method_id;
 
         return [
@@ -118,7 +118,7 @@ class UpdatePaymentMethodRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         $this->merge([
-            'type' => $this->paymentMethod->type,
+            'type' => $this->paymentMethod->type->value,
         ]);
     }
 
