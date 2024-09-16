@@ -30,7 +30,7 @@ class AddPaymentMethodOnRequestController extends Controller
             DB::commit();
 
             return apiResponse()
-                ->message(trans('api-messages.create_success', ['attribute' => trans('api-messages.request')]))
+                ->message(trans('api-messages.update_success', ['attribute' => trans('api-messages.request')]))
                 ->created()
                 ->data($resource)
                 ->getApiResponse();

@@ -22,9 +22,10 @@ class TradeStepResource extends JsonResource
             'owner' => $this->owner->key(),
             //'actions' => $this->actions,
             'status' => $this->status->key(),
-            'files' => $this->whenLoaded('files', function () {
+            'files' => FileResource::collection($this->files),
+            /*'files' => $this->whenLoaded('files', function () {
                 return FileResource::collection($this->files);
-            }),
+            }),*/
             'expire_at' => $this->expire_at,
             'completed_at' => $this->completed_at,
             'created_at' => $this->created_at,
