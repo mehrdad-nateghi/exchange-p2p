@@ -46,7 +46,7 @@ class AssignDefaultPaymentMethodToUserListener
             'holder_name' => '',
             'bank_name' => '',
             'card_number' => '',
-            'sheba' => '',
+            'iban' => '',
             'account_no' => '',
             'is_active' => false,
         ]);

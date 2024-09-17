@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('holder_name',50);
             $table->string('bank_name',50);
             $table->string('card_number', 50);
-            $table->string('sheba', 50)->nullable();
+            $table->string('iban', 50)->nullable();
             $table->string('account_no', 50)->nullable();
             $table->boolean('is_active')->default(false);
             $table->timestamps();

@@ -6,6 +6,7 @@ use App\Enums\PaymentMethodTypeEnum;
 use App\Rules\AlphaSpace;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Intervention\Validation\Rules\Bic;
 use Intervention\Validation\Rules\Iban;
@@ -46,12 +47,6 @@ class UpdatePaymentMethodRequest extends FormRequest
                 'ir_bank_card_number',
                 'unique:rial_bank_accounts,card_number,' . $paymentMethodId
             ],
-            'sheba' => [
-                'bail',
-                'required_if:type,' . PaymentMethodTypeEnum::RIAL_BANK->value,
-                'ir_sheba',
-                'unique:rial_bank_accounts,sheba,' . $paymentMethodId
-            ],
             'account_no' => [
                 'bail',
                 'nullable',
@@ -61,12 +56,6 @@ class UpdatePaymentMethodRequest extends FormRequest
             ],
 
             // FOREIGN ACCOUNTS
-            'iban' => [
-                'bail',
-                'required_if:type,' . PaymentMethodTypeEnum::FOREIGN_BANK->value,
-                new Iban(),
-                'unique:foreign_bank_accounts,iban,' . $paymentMethodId
-            ],
             'bic' => [
                 'bail',
                 'required_if:type,' . PaymentMethodTypeEnum::FOREIGN_BANK->value,
@@ -83,26 +72,53 @@ class UpdatePaymentMethodRequest extends FormRequest
             ],
 
             // COMMON
+            'iban' => [
+                'string',
+                'nullable',
+                'required_if:type,' . PaymentMethodTypeEnum::FOREIGN_BANK->value . ',' . PaymentMethodTypeEnum::RIAL_BANK->value,
+                function ($attribute, $value, $fail) use ($type, $paymentMethodId) {
+                    if ($type == PaymentMethodTypeEnum::RIAL_BANK->value) {
+                        $rules = [
+                            'ir_sheba',
+                            'unique:rial_bank_accounts,iban,' . $paymentMethodId,
+                            'size:26',
+                        ];
+                    } elseif ($type == PaymentMethodTypeEnum::FOREIGN_BANK->value) {
+                        $rules = [
+                            new Iban(),
+                            'unique:foreign_bank_accounts,iban,' . $paymentMethodId
+                        ];
+                    } else {
+                        return; // No validation if type doesn't match
+                    }
+
+                    $validator = Validator::make([$attribute => $value], [$attribute => $rules]);
+                    if ($validator->fails()) {
+                        $fail($validator->errors()->first($attribute));
+                    }
+                },
+            ],
+
             'holder_name' => [
                 'bail',
                 'required',
                 Rule::when(in_array($type, [
                     PaymentMethodTypeEnum::PAYPAL->value,
                     PaymentMethodTypeEnum::FOREIGN_BANK->value,
-                ]),fn() => [
+                ]), fn() => [
                     new AlphaSpace(),
                 ]),
                 'max:50',
             ],
             'bank_name' => [
                 'bail',
-                Rule::requiredIf(function () use($type){
+                Rule::requiredIf(function () use ($type) {
                     return in_array($type, [
                         PaymentMethodTypeEnum::RIAL_BANK->value,
                         PaymentMethodTypeEnum::FOREIGN_BANK->value,
                     ]);
                 }),
-                Rule::when($type === PaymentMethodTypeEnum::FOREIGN_BANK->value,fn() => [
+                Rule::when($type === PaymentMethodTypeEnum::FOREIGN_BANK->value, fn() => [
                     new AlphaSpace(),
                 ]),
                 'max:50',

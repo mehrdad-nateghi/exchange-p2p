@@ -20,7 +20,7 @@ class RialBankAccountFactory extends Factory
             'holder_name' => $this->faker->name,
             'bank_name' => $this->faker->company,
             'card_number' => $this->faker->creditCardNumber(),
-            'sheba' => $this->faker->iban('IR'),
+            'iban' => $this->faker->iban('IR'),
             'account_no' => $this->faker->bankAccountNumber,
             'is_active' => true,
         ];
