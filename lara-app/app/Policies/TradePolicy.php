@@ -58,12 +58,14 @@ class TradePolicy
     {
         $request = $trade->request;
 
-        $hasAcceptedBid = $request->bids()
+        return $request->user_is_buyer;
+
+/*        $hasAcceptedBid = $request->bids()
             ->where('user_id', Auth::id())
             ->where('status', BidStatusEnum::ACCEPTED->value)
             ->exists();
 
-        return $hasAcceptedBid && $request->user_is_buyer;
+        return $hasAcceptedBid && $request->user_is_buyer;*/
     }
 
     /**
