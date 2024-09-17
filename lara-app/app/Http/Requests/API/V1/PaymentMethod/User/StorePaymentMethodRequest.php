@@ -5,6 +5,7 @@ namespace App\Http\Requests\API\V1\PaymentMethod\User;
 use App\Enums\PaymentMethodTypeEnum;
 use App\Rules\AlphaSpace;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Intervention\Validation\Rules\Bic;
 use Intervention\Validation\Rules\Iban;
@@ -44,12 +45,7 @@ class StorePaymentMethodRequest extends FormRequest
                 'ir_bank_card_number',
                 'unique:rial_bank_accounts,card_number'
             ],
-            'sheba' => [
-                'bail',
-                'required_if:type,' . PaymentMethodTypeEnum::RIAL_BANK->value,
-                'ir_sheba',
-                'unique:rial_bank_accounts,sheba'
-            ],
+
             'account_no' => [
                 'bail',
                 'nullable',
@@ -59,12 +55,6 @@ class StorePaymentMethodRequest extends FormRequest
             ],
 
             // FOREIGN ACCOUNTS
-            'iban' => [
-                'bail',
-                'required_if:type,' . PaymentMethodTypeEnum::FOREIGN_BANK->value,
-                new Iban(),
-                'unique:foreign_bank_accounts,iban'
-            ],
             'bic' => [
                 'bail',
                 'required_if:type,' . PaymentMethodTypeEnum::FOREIGN_BANK->value,
@@ -81,12 +71,40 @@ class StorePaymentMethodRequest extends FormRequest
             ],
 
             // Common
+            'iban' => [
+                'string',
+                'nullable',
+                'required_if:type,' . PaymentMethodTypeEnum::FOREIGN_BANK->value . ',' . PaymentMethodTypeEnum::RIAL_BANK->value,
+                function ($attribute, $value, $fail) use ($type) {
+                    if ($type == PaymentMethodTypeEnum::RIAL_BANK->value) {
+                        $rules = [
+                            'ir_sheba',
+                            'unique:rial_bank_accounts,iban',
+                            'size:26',
+                        ];
+                    } elseif ($type == PaymentMethodTypeEnum::FOREIGN_BANK->value) {
+                        $rules = [
+                            new Iban(),
+                            'unique:foreign_bank_accounts,iban'
+                        ];
+                    } else {
+                        return; // No validation if type doesn't match
+                    }
+
+                    $validator = Validator::make([$attribute => $value], [$attribute => $rules]);
+                    if ($validator->fails()) {
+                        $fail($validator->errors()->first($attribute));
+                    }
+                },
+            ],
+
             'holder_name' => [
                 'bail',
                 'required',
                 'string',
                 'max:50',
             ],
+
             'bank_name' => [
                 'bail',
                 Rule::requiredIf(function () use($type){
@@ -98,6 +116,7 @@ class StorePaymentMethodRequest extends FormRequest
                 'string',
                 'max:50',
             ],
+
             'is_active' => [
                 'bail',
                 'required',

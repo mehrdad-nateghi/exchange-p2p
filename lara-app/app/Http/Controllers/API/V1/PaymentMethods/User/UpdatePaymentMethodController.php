@@ -28,7 +28,7 @@ class UpdatePaymentMethodController extends Controller
                     'holder_name' => $data['holder_name'],
                     'bank_name' => $data['bank_name'],
                     'card_number' => $data['card_number'],
-                    'sheba' => $data['sheba'],
+                    'iban' => $data['iban'],
                     'account_no' => $data['account_no'],
                     'is_active' => $data['is_active'],
                 ]);
