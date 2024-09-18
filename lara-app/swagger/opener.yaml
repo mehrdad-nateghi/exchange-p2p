@@ -417,10 +417,7 @@ components:
         files:
           type: array
           items:
-            type: object
-            required:
-              - ulid
-              - file
+            $ref: "#/components/schemas/File"
         name:
           type: string
         description:
@@ -476,6 +473,53 @@ components:
         updated_at:
           type: string
           format: date-time
+    File:
+      type: object
+      required:
+        - ulid
+        - name
+        - mime_type
+        - path
+        - size
+        - status
+        - created_at
+        - updated_at
+      properties:
+        ulid:
+          type: string
+          description: "Unique identifier for the file"
+          example: "01J8307D7QDCFCX0EYH66J2294"
+        name:
+          type: string
+          description: "Name of the file"
+          example: "Screenshot from 2024-09-18 19-31-50.png"
+        mime_type:
+          type: string
+          description: "MIME type of the file"
+          example: "image/png"
+        path:
+          type: string
+          description: "Path to the file"
+          example: "uploads/xkuGNf98Gu1Vj0purdRmTCbElmuwdsXQ3T8uqdR1.png"
+        size:
+          type: integer
+          description: "Size of the file in bytes"
+          example: 289573
+        status:
+          type: string
+          description: "Status of the file"
+          example: "uploaded"
+        created_at:
+          type: string
+          format: date-time
+          description: "Creation timestamp"
+          example: "2024-09-18T16:42:39.000000Z"
+        updated_at:
+          type: string
+          format: date-time
+          description: "Last update timestamp"
+          example: "2024-09-18T16:42:39.000000Z"
+
   parameters:
     pageSize:
       name: per_page

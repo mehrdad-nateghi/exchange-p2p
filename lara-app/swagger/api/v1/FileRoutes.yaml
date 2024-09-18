@@ -27,7 +27,55 @@
               contentType: image/png, image/jpeg, image/gif, image/bmp, image/webp
     responses:
       "200":
-        $ref: "#/components/schemas/Base200Response"
+        description: Upload a file successfully
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/Base200Response"
+                - type: object
+                  properties:
+                    data:
+                      type: object
+                      properties:
+                        ulid:
+                          type: string
+                          example: "01J6VNY4Y143V3XSV1V7PPSAY3"
+                        name:
+                          type: string
+                          example: "Confirm or Reject Currency Receipt"
+                        description:
+                          type: string
+                          example: "The buyer must confirm or reject the receipt of the currency."
+                        priority:
+                          type: integer
+                          example: 3
+                        owner:
+                          type: string
+                          example: "buyer"
+                        status:
+                          type: string
+                          example: "todo"
+                        files:
+                          type: array
+                          items:
+                            $ref: "#/components/schemas/File"
+                        expire_at:
+                          type: string
+                          format: date-time
+                          nullable: true
+                        completed_at:
+                          type: string
+                          format: date-time
+                          nullable: true
+                        created_at:
+                          type: string
+                          format: date-time
+                          example: "2024-09-03T10:12:27.000000Z"
+                        updated_at:
+                          type: string
+                          format: date-time
+                          example: "2024-09-03T10:12:27.000000Z"
 
 "/users/files/{fileID}":
   patch:
