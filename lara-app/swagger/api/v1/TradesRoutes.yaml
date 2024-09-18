@@ -91,6 +91,31 @@
                         pagination:
                           $ref: "#/components/schemas/Pagination"
 "/users/trades/{trade}":
+  get:
+    tags:
+      - trades
+    summary: Retrieve user trade by ULID
+    description: Get a trade by ULID for the authenticated user
+    operationId: getUserTrade
+    parameters:
+      - name: trade
+        in: path
+        required: true
+    responses:
+    "200":
+      description: "The deposit reason was updated successfully."
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: "#/components/schemas/Base200Response"
+              - type: object
+                required:
+                  - data
+                properties:
+                  data:
+                    $ref: "#/components/schemas/UserTrade"
+
   put:
     tags:
       - trades
