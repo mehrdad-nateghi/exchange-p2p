@@ -29,7 +29,7 @@ class UpdatePaymentMethodController extends Controller
                     'bank_name' => $data['bank_name'],
                     'card_number' => $data['card_number'],
                     'iban' => $data['iban'],
-                    'account_no' => $data['account_no'],
+                    'account_no' => $data['account_no'] ?? null,
                     'is_active' => $data['is_active'],
                 ]);
             }
