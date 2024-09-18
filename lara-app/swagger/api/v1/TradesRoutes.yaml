@@ -102,19 +102,19 @@
         in: path
         required: true
     responses:
-    "200":
-      description: "The deposit reason was updated successfully."
-      content:
-        application/json:
-          schema:
-            allOf:
-              - $ref: "#/components/schemas/Base200Response"
-              - type: object
-                required:
-                  - data
-                properties:
-                  data:
-                    $ref: "#/components/schemas/UserTrade"
+      "200":
+        description: "The user trade was retrieved successfully."
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/Base200Response"
+                - type: object
+                  required:
+                    - data
+                  properties:
+                    data:
+                      $ref: "#/components/schemas/UserTrade"
 
   put:
     tags:
