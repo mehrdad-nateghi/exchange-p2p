@@ -7,8 +7,10 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
+use Spatie\Permission\Exceptions\UnauthorizedException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Throwable;
 
 class Handler extends ExceptionHandler
 {
@@ -63,13 +65,15 @@ class Handler extends ExceptionHandler
                 return apiResponse()
                     ->failed()
                     ->message(trans('api-messages.un_authenticated'))
-                    ->unAuthorized()
+                    ->unAuthenticated()
                     ->getApiResponse();
             }
         });
 
-        $this->renderable(function (AccessDeniedHttpException  $e, $request) {
-            if (request()->wantsJson() || $request->is('api/*')) {
+
+        $this->renderable(function (Throwable $e, $request) {
+            if (($e instanceof AccessDeniedHttpException || $e instanceof UnauthorizedException)
+                && (request()->wantsJson() || $request->is('api/*'))) {
                 return apiResponse()
                     ->failed()
                     ->message(trans('api-messages.un_authorized'))

@@ -102,9 +102,15 @@ class ApiResponseService
         return $this;
     }
 
-    public function unAuthorized(): self
+    public function unAuthenticated(): self
     {
         $this->statusCode(Response::HTTP_UNAUTHORIZED);
+        return $this;
+    }
+
+    public function unAuthorized(): self
+    {
+        $this->statusCode(Response::HTTP_FORBIDDEN);
         return $this;
     }
 

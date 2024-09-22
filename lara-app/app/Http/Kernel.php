@@ -71,5 +71,8 @@ class Kernel extends HttpKernel
         'is.admin' => \App\Http\Middleware\IsAdmin::class,
         'email.is.verified' => \App\Http\Middleware\EmailVerifiedMiddleware::class,
         //'validate.token.in.cookie' => \App\Http\Middleware\ValidateTokenInCookie::class,
+        'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
+        //'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
+        //'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
     ];
 }
