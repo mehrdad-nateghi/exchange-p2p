@@ -11,8 +11,13 @@ spec:
           env:
             - name: DEPLOYMENT_ENV
               value: nightly
+
+            - name: NEXT_PUBLIC_FILE_STORAGE_URL
+              value: https://files.paylibero.ir
+
             - name: NEXT_PUBLIC_SITE_SECRET
               value: 6Lc_s1QpAAAAAIQhxFfqYkcgTvwfPjdQ-sumzg6L
+
             - name: NEXT_PUBLIC_REACT_APP_SITE_KEY
               value: 6LfVge4pAAAAANnXqccl7kEI6sxeXSLYUuDYKeSp
           resources:
