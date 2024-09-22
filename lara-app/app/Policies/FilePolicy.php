@@ -53,7 +53,8 @@ class FilePolicy
      */
     public function update(User $user, File $file)
     {
-        return $user->id == $file->user_id;
+        $step = $file->fileable;
+        return $step->request->is_user_buyer;
     }
 
     /**
