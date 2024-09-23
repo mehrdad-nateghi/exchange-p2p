@@ -21,7 +21,7 @@ class IndexTradeController extends Controller
         //dd($request->all());
         try {
             $trades = QueryBuilder::for(Trade::class)
-                /*->with(['tradeSteps' => function($query) {
+                ->with(['tradeSteps' => function($query) {
                     $query->select('*');
                 }])
                 ->with(['invoices' => function($query) {
@@ -29,7 +29,7 @@ class IndexTradeController extends Controller
                 }])
                 ->select([
                     'trades.*',
-                ])*/
+                ])
                 ->allowedFilters([
                     AllowedFilter::custom('status', new TradeStatusFilter()),
                     'number'
