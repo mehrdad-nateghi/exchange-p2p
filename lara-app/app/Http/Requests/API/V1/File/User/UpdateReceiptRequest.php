@@ -36,7 +36,7 @@ class UpdateReceiptRequest extends FormRequest
 
     protected function prepareForValidation(): void
     {
-        if($this->file->status === FileStatusEnum::ACCEPT_BY_BUYER){
+        if($this->file->status === FileStatusEnum::ACCEPT_BY_BUYER->value){
             throw ValidationException::withMessages([
                 'allow_update' => ['This receipt has already been accepted by the buyer and cannot be updated.'],
             ]);
