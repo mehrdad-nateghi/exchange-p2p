@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Storage;
 
 class FileResource extends JsonResource
 {
@@ -18,6 +19,7 @@ class FileResource extends JsonResource
             'ulid' => $this->ulid,
             'name' => $this->name,
             'path' => $this->path,
+            'url' => $this->when($this->shouldIncludeUrl(), $this->url),
             'mime_type' => $this->mime_type,
             'size' => $this->size,
             'status' => $this->status->key(),
@@ -27,5 +29,10 @@ class FileResource extends JsonResource
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
+    }
+
+    protected function shouldIncludeUrl()
+    {
+        return request()->route()->getName() === 'V1.users.files.show';
     }
 }

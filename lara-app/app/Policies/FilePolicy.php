@@ -30,7 +30,7 @@ class FilePolicy
      */
     public function view(User $user, File $file)
     {
-        //
+        return $user->id === $file->user_id;
     }
 
     /**

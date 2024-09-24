@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Storage;
 
 class File extends Model
 {
@@ -32,6 +33,11 @@ class File extends Model
     protected $casts = [
         'status' => FileStatusEnum::class
     ];
+
+    public function getUrlAttribute(): string
+    {
+        return Storage::temporaryUrl($this->path, now()->addMinutes(5));
+    }
 
     public function user(): BelongsTo
     {
