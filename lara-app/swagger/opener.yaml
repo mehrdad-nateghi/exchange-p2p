@@ -351,7 +351,7 @@ components:
           example: "TR-357535"
         status:
           type: string
-          enum: ["processing", "completed", "canceled"]
+          enum: ["processing", "completed", "canceled", "failed"]
           description: "Status of the trade"
           example: "processing"
         deposit_reason:
@@ -411,6 +411,8 @@ components:
         - status
         - created_at
         - updated_at
+        - expire_at
+        - completed_at
       properties:
         ulid:
           type: string
