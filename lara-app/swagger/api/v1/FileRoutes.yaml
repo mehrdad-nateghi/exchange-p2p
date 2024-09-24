@@ -107,3 +107,30 @@
     responses:
       "200":
         $ref: "#/components/schemas/Base200Response"
+
+  get:
+    summary: get a file
+    description: get a file
+    operationId: getFile
+    tags:
+      - Files
+    parameters:
+      - name: fileID
+        in: path
+        required: true
+        schema:
+          type: string
+    responses:
+      "200":
+        description: Upload a file successfully
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/Base200Response"
+                - type: object
+                  required:
+                    - data
+                  properties:
+                    data:
+                      $ref: "#/components/schemas/File"

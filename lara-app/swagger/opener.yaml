@@ -480,6 +480,7 @@ components:
         - name
         - mime_type
         - path
+        - url
         - size
         - status
         - created_at
@@ -493,6 +494,9 @@ components:
           type: string
           description: "Name of the file"
           example: "Screenshot from 2024-09-18 19-31-50.png"
+        url:
+          type: string
+          description: "url of the file"
         mime_type:
           type: string
           description: "MIME type of the file"
