@@ -31,6 +31,7 @@ class TradeResource extends JsonResource
                 return InvoiceResource::collection($this->invoices);
             }),
             'completed_at' => $this->completed_at,
+            'canceled_at' => $this->canceled_at,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
