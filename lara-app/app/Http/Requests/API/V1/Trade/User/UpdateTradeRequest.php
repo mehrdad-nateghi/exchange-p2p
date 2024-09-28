@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests\API\V1\Trade\User;
 
+use App\Models\DepositReason;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateTradeRequest extends FormRequest
 {
@@ -23,8 +25,14 @@ class UpdateTradeRequest extends FormRequest
      */
     public function rules()
     {
+        $validReasons = DepositReason::pluck('title')->push($this->trade->number)->toArray();
+
         return [
-            'deposit_reason' => 'required|string',
+            'deposit_reason' => [
+                'required',
+                'string',
+                Rule::in($validReasons),
+            ],
         ];
     }
 }

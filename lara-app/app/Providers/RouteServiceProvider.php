@@ -37,6 +37,7 @@ class RouteServiceProvider extends ServiceProvider
             'FilesRoutes',
             'ThirdPartyRoutes',
             'AdminTradesRoutes',
+            'AdminDepositReasonRoutes',
         ],
     ];
 

@@ -70,5 +70,6 @@ return [
     'success' => 'success',
     'failed' => 'failed',
     'error' => 'error',
+    'deposit_reason' => 'Deposit reason',
 
 ];

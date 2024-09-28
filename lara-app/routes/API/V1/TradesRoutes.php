@@ -18,5 +18,5 @@ use App\Http\Controllers\API\V1\Trades\User\UpdateTradeController;
 Route::middleware('auth:sanctum')->name('users.trades.')->prefix('users/trades')->group(function () {
     Route::get('/', IndexTradeController::class)->name('index');
     Route::middleware('can:view,trade')->get('/{trade}', ShowTradeController::class)->name('show');
-    Route::middleware('can:update,trade')->put('/{trade}',UpdateTradeController::class)->name('update');
+    Route::middleware('can:update,trade')->patch('/{trade}',UpdateTradeController::class)->name('update');
 });

@@ -2,14 +2,11 @@
 
 namespace App\Policies;
 
-use App\Enums\BidStatusEnum;
-use App\Enums\RequestTypeEnum;
-use App\Models\Trade;
+use App\Models\DepositReason;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
-use Illuminate\Support\Facades\Auth;
 
-class TradePolicy
+class DepositReasonPolicy
 {
     use HandlesAuthorization;
 
@@ -28,12 +25,12 @@ class TradePolicy
      * Determine whether the user can view the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Trade  $trade
+     * @param  \App\Models\DepositReason  $depositReason
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, Trade $trade)
+    public function view(User $user, DepositReason $depositReason)
     {
-        return $user->id == $trade->request->user_id || $user->id == $trade->bid->user_id;
+        //
     }
 
     /**
@@ -51,29 +48,22 @@ class TradePolicy
      * Determine whether the user can update the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Trade  $trade
+     * @param  \App\Models\DepositReason  $depositReason
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User $user, Trade $trade)
+    public function update(User $user, DepositReason $depositReason)
     {
-        return $trade->request->is_user_buyer;
-
-/*        $hasAcceptedBid = $request->bids()
-            ->where('user_id', Auth::id())
-            ->where('status', BidStatusEnum::ACCEPTED->value)
-            ->exists();
-
-        return $hasAcceptedBid && $request->is_user_buyer;*/
+        //
     }
 
     /**
      * Determine whether the user can delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Trade  $trade
+     * @param  \App\Models\DepositReason  $depositReason
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(User $user, Trade $trade)
+    public function delete(User $user, DepositReason $depositReason)
     {
         //
     }
@@ -82,10 +72,10 @@ class TradePolicy
      * Determine whether the user can restore the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Trade  $trade
+     * @param  \App\Models\DepositReason  $depositReason
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function restore(User $user, Trade $trade)
+    public function restore(User $user, DepositReason $depositReason)
     {
         //
     }
@@ -94,10 +84,10 @@ class TradePolicy
      * Determine whether the user can permanently delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Trade  $trade
+     * @param  \App\Models\DepositReason  $depositReason
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function forceDelete(User $user, Trade $trade)
+    public function forceDelete(User $user, DepositReason $depositReason)
     {
         //
     }

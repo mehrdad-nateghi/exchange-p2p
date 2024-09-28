@@ -22,7 +22,7 @@ class UpdateTradeController extends Controller
             DB::beginTransaction();
 
             $data = $request->validated();
-            $data['deposit_reason_accepted'] = false;
+            //$data['deposit_reason_accepted'] = false;
 
             $tradeService->update($trade, $data);
 
