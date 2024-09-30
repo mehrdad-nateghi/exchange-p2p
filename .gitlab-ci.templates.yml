@@ -51,8 +51,9 @@ variables:
   # - sed -i 's/deb.debian.org/debian.hostiran.ir/g' /etc/apt/sources.list
   # - sed -i '/debian-security/d' /etc/apt/sources.list
   # for envsubst to not replace the value of $MYSQL_ROOT_PASSWORD so that probes would succeed.
-  - export MYSQL_ROOT_PASSWORD='$MYSQL_ROOT_PASSWORD' 
+  - export MYSQL_ROOT_PASSWORD='$MYSQL_ROOT_PASSWORD'
   - which envsubst || (apt-get update && apt-get install -y gettext)
+  - rm -f /tmp/manifest.yaml
   - kubectl kustomize devops/k8s/${ENVIRONMENT_NAME} | envsubst | tee /tmp/manifest.yaml
   - kubectl apply --record -f /tmp/manifest.yaml
   # kubectl wait has issues for now. it is being under consideration in Arvan.
@@ -82,4 +83,3 @@ variables:
     # kubectl wait has issues for now. it is being under consideration in Arvan.
     #- kubectl wait --for=condition=ready --timeout=200s pod -l app=${SERVICE_NAME},commit-short-sha=commit_${DEPLOY_COMMIT_SHORT_SHA}
     - echo "--- successfully deployed ${SERVICE_NAME} for the commit ${DEPLOY_COMMIT_SHORT_SHA} ---"
-

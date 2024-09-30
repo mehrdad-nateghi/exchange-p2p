@@ -91,8 +91,16 @@ spec:
             # AWS--------------------------------------
             - name: AWS_URL
               value: https://files.paylibero.ir/
+            - name: AWS_DEFAULT_REGION
+              value: Simin
+            - name: AWS_BUCKET
+              value: paylibero-nightly-core
+            - name: FILESYSTEM_DISK
+              value: s3
+            - name: AWS_USE_PATH_STYLE_ENDPOINT
+              value: "false"
             - name: AWS_ENDPOINT
-              value: s3.ir-thr-at1.arvanstorage.ir
+              value: https://s3.ir-thr-at1.arvanstorage.ir
             - name: AWS_ACCESS_KEY_ID
               valueFrom:
                 secretKeyRef:
@@ -199,14 +207,16 @@ spec:
             # AWS--------------------------------------
             - name: AWS_URL
               value: https://files.paylibero.ir/
-            - name: AWS_BUCKET
-              value: paylibero-nightly-core
-            - name: AWS_USE_PATH_STYLE_ENDPOINT
-              value: "true"
             - name: AWS_DEFAULT_REGION
               value: Simin
+            - name: AWS_BUCKET
+              value: paylibero-nightly-core
+            - name: FILESYSTEM_DISK
+              value: s3
+            - name: AWS_USE_PATH_STYLE_ENDPOINT
+              value: "false"
             - name: AWS_ENDPOINT
-              value: s3.ir-thr-at1.arvanstorage.ir
+              value: https://s3.ir-thr-at1.arvanstorage.ir
             - name: AWS_ACCESS_KEY_ID
               valueFrom:
                 secretKeyRef:
