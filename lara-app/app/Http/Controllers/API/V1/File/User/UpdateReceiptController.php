@@ -24,10 +24,11 @@ use Illuminate\Support\Facades\Storage;
 class UpdateReceiptController extends Controller
 {
     public function __invoke(
-        File $file,
+        File                 $file,
         UpdateReceiptRequest $request,
         //RequestService $requestService,
-    ): JsonResponse {
+    ): JsonResponse
+    {
         try {
             DB::beginTransaction();
 
@@ -38,7 +39,7 @@ class UpdateReceiptController extends Controller
             $step = $file->fileable;
             $trade = $step->trade;
 
-            if($request->input('status') === FileStatusEnum::ACCEPT_BY_BUYER->value){
+            if ($request->input('status') === FileStatusEnum::ACCEPT_BY_BUYER->value) {
                 // current step
                 $step->update([
                     'status' => TradeStepsStatusEnum::DONE,
@@ -52,10 +53,13 @@ class UpdateReceiptController extends Controller
                     'status' => TradeStepsStatusEnum::DOING,
                     'expire_at' => Carbon::now()->addMinutes($nextStep->duration_minutes),
                 ]);
+                Log::info('condition is true');
+            } else {
+                Log::info('condition is false');
             }
 
             $step->load('files.user');
-            $resource =  new TradeStepResource($step);
+            $resource = new TradeStepResource($step);
 
             DB::commit();
 
