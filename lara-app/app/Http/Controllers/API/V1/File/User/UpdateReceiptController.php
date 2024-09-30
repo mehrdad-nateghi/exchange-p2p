@@ -41,21 +41,19 @@ class UpdateReceiptController extends Controller
 
             if ($request->input('status') === FileStatusEnum::ACCEPT_BY_BUYER->value) {
                 // current step
-                $step->update([
+                $currentStep = $trade->tradeSteps()->where('status', TradeStepsStatusEnum::DOING->value)->first();
+
+                $currentStep->update([
                     'status' => TradeStepsStatusEnum::DONE,
                     'completed_at' => Carbon::now(),
                 ]);
 
                 // next step
-                $nextStep = $trade->tradeSteps()->where('priority', $step->priority + 1)->first();
-
+                $nextStep = $trade->tradeSteps()->where('priority', $currentStep->priority + 1)->first();
                 $nextStep->update([
                     'status' => TradeStepsStatusEnum::DOING,
                     'expire_at' => Carbon::now()->addMinutes($nextStep->duration_minutes),
                 ]);
-                Log::info('condition is true');
-            } else {
-                Log::info('condition is false');
             }
 
             $step->load('files.user');
