@@ -13,7 +13,7 @@ class FilePolicy
     /**
      * Determine whether the user can view any models.
      *
-     * @param  \App\Models\User  $user
+     * @param \App\Models\User $user
      * @return \Illuminate\Auth\Access\Response|bool
      */
     public function viewAny(User $user)
@@ -24,19 +24,21 @@ class FilePolicy
     /**
      * Determine whether the user can view the model.
      *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\File  $file
+     * @param \App\Models\User $user
+     * @param \App\Models\File $file
      * @return \Illuminate\Auth\Access\Response|bool
      */
     public function view(User $user, File $file)
     {
-        return $user->id === $file->user_id;
+        $request = $file->fileable->request;
+        $bid = $file->fileable->trade->bid;
+        return $request->user_id == $user->id || $bid->user_id == $user->id;
     }
 
     /**
      * Determine whether the user can create models.
      *
-     * @param  \App\Models\User  $user
+     * @param \App\Models\User $user
      * @return \Illuminate\Auth\Access\Response|bool
      */
     public function create(User $user)
@@ -47,8 +49,8 @@ class FilePolicy
     /**
      * Determine whether the user can update the model.
      *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\File  $file
+     * @param \App\Models\User $user
+     * @param \App\Models\File $file
      * @return \Illuminate\Auth\Access\Response|bool
      */
     public function update(User $user, File $file)
@@ -60,8 +62,8 @@ class FilePolicy
     /**
      * Determine whether the user can delete the model.
      *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\File  $file
+     * @param \App\Models\User $user
+     * @param \App\Models\File $file
      * @return \Illuminate\Auth\Access\Response|bool
      */
     public function delete(User $user, File $file)
@@ -72,8 +74,8 @@ class FilePolicy
     /**
      * Determine whether the user can restore the model.
      *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\File  $file
+     * @param \App\Models\User $user
+     * @param \App\Models\File $file
      * @return \Illuminate\Auth\Access\Response|bool
      */
     public function restore(User $user, File $file)
@@ -84,8 +86,8 @@ class FilePolicy
     /**
      * Determine whether the user can permanently delete the model.
      *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\File  $file
+     * @param \App\Models\User $user
+     * @param \App\Models\File $file
      * @return \Illuminate\Auth\Access\Response|bool
      */
     public function forceDelete(User $user, File $file)
