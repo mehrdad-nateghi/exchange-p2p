@@ -44,14 +44,14 @@ class UpdateReceiptController extends Controller
                 $currentStep = $trade->tradeSteps()->where('status', TradeStepsStatusEnum::DOING->value)->first();
 
                 $currentStep->update([
-                    'status' => TradeStepsStatusEnum::DONE,
+                    'status' => TradeStepsStatusEnum::DONE->value,
                     'completed_at' => Carbon::now(),
                 ]);
 
                 // next step
                 $nextStep = $trade->tradeSteps()->where('priority', $currentStep->priority + 1)->first();
                 $nextStep->update([
-                    'status' => TradeStepsStatusEnum::DOING,
+                    'status' => TradeStepsStatusEnum::DOING->value,
                     'expire_at' => Carbon::now()->addMinutes($nextStep->duration_minutes),
                 ]);
             }
