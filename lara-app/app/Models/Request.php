@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\BidStatusEnum;
 use App\Enums\RequestStatusEnum;
 use App\Enums\RequestTypeEnum;
+use App\Enums\TradeStepOwnerEnum;
 use App\Traits\Global\Number;
 use App\Traits\Global\Paginatable;
 use App\Traits\Global\Ulid;
@@ -89,10 +90,10 @@ class Request extends Model
     public function getUserRoleOnRequestAttribute(): ?string
     {
         if ($this->is_user_seller) {
-            return 'seller';
+            return TradeStepOwnerEnum::SELLER->key();
         }
         if ($this->is_user_buyer) {
-            return 'buyer';
+            return TradeStepOwnerEnum::BUYER->key();
         }
         return null;
     }

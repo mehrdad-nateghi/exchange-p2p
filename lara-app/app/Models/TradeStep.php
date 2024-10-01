@@ -29,6 +29,17 @@ class TradeStep extends Model
         return 'ulid';
     }
 
+    public function scopeByOwner($query, Request $request)
+    {
+        // Is seller
+        if($request->user_role_on_request === TradeStepOwnerEnum::SELLER->key()){
+            return $query->whereIn('owner', [TradeStepOwnerEnum::SELLER->value, TradeStepOwnerEnum::SYSTEM->value]);
+        };
+
+        // Is Buyer
+        return $query->where('owner', TradeStepOwnerEnum::BUYER->value);
+    }
+
     /*public function getActionsAttribute()
     {
         if($this->name === 'Pay Toman to System'){

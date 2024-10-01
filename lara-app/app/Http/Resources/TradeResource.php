@@ -21,8 +21,8 @@ class TradeResource extends JsonResource
             'deposit_reason_accepted' => $this->deposit_reason_accepted,
             'status' => $this->status->key(),
             'bid' => new BidResource($this->bid),
-            'steps' => $this->whenLoaded('tradeSteps', function () {
-                return TradeStepResource::collection($this->tradeSteps);
+            'steps' => $this->whenLoaded('tradeSteps', function (){
+                return TradeStepResource::collection($this->tradeSteps()->byOwner($this->bid->request)->get());
             }),
             'invoices' => $this->whenLoaded('invoices', function () {
                 return InvoiceResource::collection($this->invoices);
