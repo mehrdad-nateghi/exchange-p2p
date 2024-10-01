@@ -29,10 +29,10 @@ class TradeStep extends Model
         return 'ulid';
     }
 
-    public function scopeByOwner($query, Request $request)
+    public function scopeByOwner($query, $owner)
     {
         // Is seller
-        if($request->user_role_on_request === TradeStepOwnerEnum::SELLER->key()){
+        if($owner === TradeStepOwnerEnum::SELLER->key()){
             return $query->whereIn('owner', [TradeStepOwnerEnum::SELLER->value, TradeStepOwnerEnum::SYSTEM->value]);
         };
 

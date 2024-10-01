@@ -22,7 +22,7 @@ class TradeResource extends JsonResource
             'status' => $this->status->key(),
             'bid' => new BidResource($this->bid),
             'steps' => $this->whenLoaded('tradeSteps', function (){
-                return TradeStepResource::collection($this->tradeSteps()->byOwner($this->bid->request)->get());
+                return TradeStepResource::collection($this->tradeSteps()->byOwner($this->bid->request->user_role_on_request)->get());
             }),
             'invoices' => $this->whenLoaded('invoices', function () {
                 return InvoiceResource::collection($this->invoices);
