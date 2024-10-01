@@ -44,6 +44,7 @@
                             $ref: "#/components/schemas/Trade"
                         pagination:
                           $ref: "#/components/schemas/Pagination"
+
 "/users/trades":
   get:
     tags:
@@ -90,6 +91,7 @@
                             $ref: "#/components/schemas/UserTrade"
                         pagination:
                           $ref: "#/components/schemas/Pagination"
+
 "/users/trades/{trade}":
   get:
     tags:
@@ -115,8 +117,7 @@
                   properties:
                     data:
                       $ref: "#/components/schemas/UserTrade"
-
-  put:
+  patch:
     tags:
       - trades
     summary: "update deposit reason of the trade by ULID"
