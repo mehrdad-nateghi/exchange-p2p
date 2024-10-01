@@ -37,7 +37,7 @@ class RouteServiceProvider extends ServiceProvider
             'FilesRoutes',
             'ThirdPartyRoutes',
             'AdminTradesRoutes',
-            'AdminDepositReasonRoutes',
+            'UserDepositReasonRoutes',
         ],
     ];
 
@@ -73,7 +73,6 @@ class RouteServiceProvider extends ServiceProvider
             // web
             Route::middleware('web')
                 ->group(base_path('routes/web.php'));
-
         });
     }
 
