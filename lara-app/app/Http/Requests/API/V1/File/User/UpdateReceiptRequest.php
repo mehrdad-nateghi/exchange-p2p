@@ -47,18 +47,11 @@ class UpdateReceiptRequest extends FormRequest
             $expireAt = Carbon::parse($step->expire_at);
             $now = Carbon::now();
             $createdAt = Carbon::parse($step->created_at);
-
             $totalLifetime = $expireAt->diffInSeconds($createdAt);
             $timeUntilExpire = $expireAt->diffInSeconds($now);
             $timeElapsed = $totalLifetime - $timeUntilExpire;
-
             $percentageElapsed = ($timeElapsed / $totalLifetime) * 100;
-            //$percentageRemaining = 100 - $percentageElapsed; // اینو چرا جایی استفاده نکردی؟
-
             $allowUpdate = $percentageElapsed >= 70 && $now->lessThan($expireAt);
-
-            //$allowUpdateTime = $createdAt->copy()->addSeconds($totalLifetime * 0.7);
-
             if (!$allowUpdate) {
                 throw ValidationException::withMessages([
                     'allow_update' => ['You can reject the receipt only after 70% of the expiration time has passed.'],

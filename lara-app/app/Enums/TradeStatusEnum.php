@@ -12,4 +12,5 @@ enum TradeStatusEnum: int{
     case COMPLETED = 2;
     case CANCELED = 3;
     case FAILED = 4;
+    case SUSPEND = 5;
 }

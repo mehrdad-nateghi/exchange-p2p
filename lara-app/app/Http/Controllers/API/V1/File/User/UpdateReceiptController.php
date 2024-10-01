@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\V1\File\User;
 
 use App\Enums\FileStatusEnum;
+use App\Enums\TradeStatusEnum;
 use App\Enums\TradeStepsStatusEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\File\User\UpdateReceiptRequest;
@@ -39,6 +40,7 @@ class UpdateReceiptController extends Controller
             $step = $file->fileable;
             $trade = $step->trade;
 
+            // Accept
             if ($request->input('status') === FileStatusEnum::ACCEPT_BY_BUYER->value) {
                 // current step
                 $currentStep = $trade->tradeSteps()->where('status', TradeStepsStatusEnum::DOING->value)->first();
@@ -53,6 +55,13 @@ class UpdateReceiptController extends Controller
                 $nextStep->update([
                     'status' => TradeStepsStatusEnum::DOING->value,
                     'expire_at' => Carbon::now()->addMinutes($nextStep->duration_minutes),
+                ]);
+            }
+
+            // Reject
+            if ($request->input('status') === FileStatusEnum::REJECT_BY_BUYER->value) {
+                $trade->update([
+                    'status' => TradeStatusEnum::SUSPEND->value
                 ]);
             }
 
