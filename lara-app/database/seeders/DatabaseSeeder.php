@@ -30,28 +30,7 @@ class DatabaseSeeder extends Seeder
                 RoleSeeder::class,
                 UserSeeder::class,
                 StepSeeder::class,
-                //
-                /*FinancialSeeder::class,
-                TradeConstraintSeeder::class,
-                FrequentQuestionSeeder::class,
-                SocialNetworkSeeder::class,
-                CountrySeeder::class,
-                PaymentMethodSeeder::class,
-                MethodAttributeSeeder::class,
-                LinkedMethodSeeder::class,
-                LinkedmethodMethodattributeSeeder::class,
-                NotificationSeeder::class,
-                AuthenticationLogSeeder::class,
-                RequestSeeder::class,
-                RequestPaymentMethodSeeder::class,
-                BidSeeder::class,
-                TradeSeeder::class,
-                InvoiceSeeder::class,
-                TransactionSeeder::class,
-                TransactionMethodSeeder::class,
-                EmailTemplateSeeder::class,
-                EmailSeeder::class,
-                FileSeeder::class*/
+                DepositReasonSeeder::class
             ]);
 
             DB::commit();
