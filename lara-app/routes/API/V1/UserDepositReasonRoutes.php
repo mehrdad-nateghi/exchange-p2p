@@ -7,7 +7,7 @@
 */
 
 
-use App\Http\Controllers\API\V1\DepositReason\Admin\IndexDepositReasonController;
+use App\Http\Controllers\API\V1\DepositReason\User\IndexDepositReasonController;
 
 Route::middleware('auth:sanctum')->name('users.deposit-reasons.')->prefix('users/deposit-reasons')->group(function () {
     Route::get('/', IndexDepositReasonController::class)->name('index');

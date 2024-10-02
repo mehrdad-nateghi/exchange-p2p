@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\API\V1\DepositReason\Admin;
+namespace App\Http\Controllers\API\V1\DepositReason\User;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\DepositReason\Admin\IndexDepositReasonRequest;

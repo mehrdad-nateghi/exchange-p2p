@@ -25,7 +25,11 @@ class UpdateTradeRequest extends FormRequest
      */
     public function rules()
     {
-        $validReasons = DepositReason::pluck('title')->push($this->trade->number)->toArray();
+        $tradeNumber = $this->trade->number;
+        $validReasons = DepositReason::pluck('title')
+            ->map(fn($reason) => "{$tradeNumber} / {$reason}")
+            ->push($tradeNumber)
+            ->toArray();
 
         return [
             'deposit_reason' => [
