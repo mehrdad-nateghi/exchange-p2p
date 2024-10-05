@@ -156,3 +156,74 @@
                   properties:
                     data:
                       $ref: "#/components/schemas/UserTrade"
+"/admins/trades":
+  get:
+    tags:
+      - trades
+    summary: Retrieve all of trades
+    operationId: getAdminTrades
+    description: Get a list of trades for the admin
+    parameters:
+      - name: filter[status]
+        in: query
+        description: Filter trades by status (active or inactive)
+        schema:
+          type: string
+          enum: [active, inactive]
+      - name: sort
+        in: query
+        description: Sort trades by creation date
+        schema:
+          type: string
+          enum: [created_at, -created_at]
+      - $ref: "#/components/parameters/pageSize"
+      - $ref: "#/components/parameters/pageNumber"
+    responses:
+      "200":
+        description: Successful response
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/Base200Response"
+                - type: object
+                  required:
+                    - data
+                  properties:
+                    data:
+                      type: object
+                      required:
+                        - items
+                        - pagination
+                      properties:
+                        items:
+                          type: array
+                          items:
+                            $ref: "#/components/schemas/AdminTrade"
+                        pagination:
+                          $ref: "#/components/schemas/Pagination"
+"/admins/trades/{trade}":
+  get:
+    tags:
+      - trades
+    summary: Retrieve user trade details by ULID
+    description: Get a trade by ULID for the admin
+    operationId: getAdminTrade
+    parameters:
+      - name: trade
+        in: path
+        required: true
+    responses:
+      "200":
+        description: "The user trade was retrieved successfully."
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/Base200Response"
+                - type: object
+                  required:
+                    - data
+                  properties:
+                    data:
+                      $ref: "#/components/schemas/AdminTrade"

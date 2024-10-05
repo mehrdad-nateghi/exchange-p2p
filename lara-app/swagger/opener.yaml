@@ -400,6 +400,22 @@ components:
               type: array
               items:
                 $ref: "#/components/schemas/Invoice"
+    AdminTrade:
+      allOf:
+        - $ref: "#/components/schemas/Trade"
+        - type: object
+          required:
+            - steps
+            - invoices
+          properties:
+            steps:
+              type: array
+              items:
+                $ref: "#/components/schemas/TradeStep"
+            invoices:
+              type: array
+              items:
+                $ref: "#/components/schemas/Invoice"
     TradeStep:
       type: object
       required:
