@@ -60,7 +60,7 @@ if (!function_exists('getMinMaxAllowedPrice')) {
     {
         // call third party to get current euro price
         // if there's in cache get it if not add it
-        return Cache::remember('min_max_allowed_price', now()->addHours(1), function () {
+        return Cache::remember('min_max_allowed_price', now()->addHours(6), function () {
             try {
                 $response = Http::retry(10)->get('http://api.navasan.tech/latest/', [
                     'api_key' => 'freeUOZsqT8UDAg8o82kxDs9uZqmGNer',
