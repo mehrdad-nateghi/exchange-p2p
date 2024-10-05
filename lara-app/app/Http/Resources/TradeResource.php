@@ -14,15 +14,16 @@ class TradeResource extends JsonResource
      */
     public function toArray($request)
     {
+        $owner = $this->bid->request->user_role_on_request;
         return [
             'ulid' => $this->ulid,
             'number' => $this->number,
             'deposit_reason' => $this->deposit_reason,
             'deposit_reason_accepted' => $this->deposit_reason_accepted,
-            'status' => $this->status->key(),
+            'status' => $this->getStatusByOwner($owner),
             'bid' => new BidResource($this->bid),
-            'steps' => $this->whenLoaded('tradeSteps', function (){
-                return TradeStepResource::collection($this->tradeSteps()->byOwner($this->bid->request->user_role_on_request)->get());
+            'steps' => $this->whenLoaded('tradeSteps', function () use($owner){
+                return TradeStepResource::collection($this->tradeSteps()->byOwner($owner)->get());
             }),
             'invoices' => $this->whenLoaded('invoices', function () {
                 return InvoiceResource::collection($this->invoices);

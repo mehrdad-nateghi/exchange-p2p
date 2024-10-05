@@ -32,13 +32,23 @@ class TradeStep extends Model
     public function scopeByOwner($query, $owner)
     {
         // Is seller
-        if($owner === TradeStepOwnerEnum::SELLER->key()){
+        /*if($owner === TradeStepOwnerEnum::SELLER->key()){
             return $query->whereIn('owner', [TradeStepOwnerEnum::SELLER->value, TradeStepOwnerEnum::SYSTEM->value]);
-        };
+        };*/
 
         // Is Buyer
-        return $query->where('owner', TradeStepOwnerEnum::BUYER->value);
+        if($owner === TradeStepOwnerEnum::BUYER->key()){
+            return $query->whereNotIn('priority', [4]);
+        };
+
+
+        return $query;
     }
+
+    /*public function getStatusAttribute()
+    {
+        dd($this->status);
+    }*/
 
     /*public function getActionsAttribute()
     {

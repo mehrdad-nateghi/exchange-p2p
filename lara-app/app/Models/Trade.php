@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Enums\TradeStatusEnum;
+use App\Enums\TradeStepOwnerEnum;
+use App\Enums\TradeStepsStatusEnum;
 use App\Traits\Global\Number;
 use App\Traits\Global\Paginatable;
 use App\Traits\Global\Ulid;
@@ -54,5 +56,18 @@ class Trade extends Model
     {
         $this->attributes['number'] = $value;
         $this->attributes['deposit_reason'] = $value;
+    }
+
+    public function getStatusByOwner($owner)
+    {
+        // Is Buyer
+        if($owner === TradeStepOwnerEnum::BUYER->key()){
+            $stepThreeHasDone = $this->tradeSteps()->where('priority', 3)->where('status', TradeStepsStatusEnum::DONE)->exists();
+            if($stepThreeHasDone){
+               return TradeStatusEnum::COMPLETED->key();
+            }
+        };
+
+        return $this->status->key();
     }
 }
