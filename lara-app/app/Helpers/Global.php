@@ -63,7 +63,7 @@ if (!function_exists('getMinMaxAllowedPrice')) {
         return Cache::remember('min_max_allowed_price', now()->addHours(1), function () {
             try {
                 $response = Http::retry(10)->get('http://api.navasan.tech/latest/', [
-                    'api_key' => 'freeEgW0lQWS0DE1pFyUoPLQgln1aLzu',
+                    'api_key' => 'freeUOZsqT8UDAg8o82kxDs9uZqmGNer',
                     'item' => 'eur'
                 ]);
 
