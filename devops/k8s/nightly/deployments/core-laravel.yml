@@ -57,13 +57,13 @@ spec:
                   key: redis-password
 
             # MAIL--------------------------------------
-            - name: MAIL_USERNAME
-              value: 10cSOoYX8R
-            - name: MAIL_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: ahasend
-                  key: password
+            # - name: MAIL_USERNAME
+            #   value: "10cSOoYX8R"
+            # - name: MAIL_PASSWORD
+            #   valueFrom:
+            #     secretKeyRef:
+            #       name: ahasend
+            #       key: password
 
             # ZIBAL_CALLBACK_URL--------------------------------------
             - name: ZIBAL_CALLBACK_URL
