@@ -60,13 +60,13 @@ class UpdateBidController extends Controller
             })->toArray();
 
             $trade->tradeSteps()->createMany($stepsData);
+            $request = $bid->request;
 
             // create invoice for trade
-            $amount = $bid->refresh()->price;
+            $amount = $bid->refresh()->price * $request->volume;
             $feePercentage = config('constants.invoice_fee_percentage');
             $fee = round($amount * ($feePercentage / 100), 2);
 
-            $request = $bid->request;
             $userId = $request->type->value == RequestTypeEnum::BUY->value ? $request->user_id : $bid->user_id;
 
             $trade->refresh()->invoices()->create([
