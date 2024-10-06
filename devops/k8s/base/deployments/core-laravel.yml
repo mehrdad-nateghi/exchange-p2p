@@ -24,9 +24,6 @@ spec:
       initContainers:
         - name: laravel-setup
           image: registry.hamdocker.ir/paylibero/build-core-laravel
-          volumeMounts:
-            - mountPath: /var/www/storage/oauth
-              name: passport-oauth-volume
           command: ["/bin/sh", "-c"]
           args:
             - |
@@ -45,9 +42,6 @@ spec:
         - image: registry.hamdocker.ir/paylibero/build-core-laravel
           imagePullPolicy: Always
           name: core-laravel
-          volumeMounts:
-            - mountPath: /var/www/storage/oauth
-              name: passport-oauth-volume
           ports:
             - containerPort: 8000
               protocol: TCP
