@@ -10,17 +10,17 @@ spec:
         - name: queue-worker
           resources:
             requests:
-              memory: '128Mi'
-              cpu: '64m'
+              memory: "128Mi"
+              cpu: "64m"
             limits:
-              memory: '256Mi'
-              cpu: '128m'
+              memory: "256Mi"
+              cpu: "128m"
           env:
-# APP--------------------------------------
+            # APP--------------------------------------
             - name: APP_ENV
               value: nightly
 
-# DB--------------------------------------
+            # DB--------------------------------------
             - name: DB_HOST
               value: paylibero-db-mysql-headless
             - name: DB_PORT
@@ -36,7 +36,7 @@ spec:
                   name: core-laravel-mysql-db
                   key: password
 
-# RECAPTCHA--------------------------------------
+            # RECAPTCHA--------------------------------------
             - name: RECAPTCHA_V3_SECRET_KEY
               valueFrom:
                 secretKeyRef:
@@ -48,9 +48,9 @@ spec:
                   name: google-recaptcha
                   key: site_key
             - name: RECAPTCHA_V3_ENABLE
-              value: 'false'
+              value: "false"
 
-# REDIS--------------------------------------
+            # REDIS--------------------------------------
             - name: REDIS_HOST
               value: redis
             - name: REDIS_PORT
@@ -61,7 +61,9 @@ spec:
                   name: redis-auth
                   key: redis-password
 
-# MAIL--------------------------------------
+            # MAIL--------------------------------------
+            - name: MAIL_USERNAME
+              value: "10cSOoYX8R"
             - name: MAIL_PASSWORD
               valueFrom:
                 secretKeyRef:
