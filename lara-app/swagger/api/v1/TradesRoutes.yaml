@@ -227,3 +227,31 @@
                   properties:
                     data:
                       $ref: "#/components/schemas/AdminTrade"
+"/admins/trades/{trade}/cancel":
+  patch:
+    tags:
+      - trades
+    summary: "Update Trade Status"
+    description: "This endpoint updates a trade status."
+    operationId: updateTradeStatus
+    parameters:
+      - name: trade
+        in: path
+        description: "The ULID of trade"
+        required: true
+        schema:
+          type: string
+    responses:
+      "200":
+        description: "The Trades was retrieved successfully."
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/Base200Response"
+                - type: object
+                  required:
+                    - data
+                  properties:
+                    data:
+                      $ref: "#/components/schemas/AdminTrade"
