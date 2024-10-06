@@ -20,7 +20,7 @@ spec:
     spec:
       restartPolicy: Always
       imagePullSecrets:
-       - name: hamdocker
+        - name: hamdocker
       initContainers:
         - name: laravel-setup
           image: registry.hamdocker.ir/paylibero/build-core-laravel
@@ -41,10 +41,6 @@ spec:
           env:
             - name: HOSTNAME
               value: php
-      volumes:
-        - name: passport-oauth-volume
-          persistentVolumeClaim:
-            claimName: core-laravel-passport-oauth-pvc
       containers:
         - image: registry.hamdocker.ir/paylibero/build-core-laravel
           imagePullPolicy: Always
