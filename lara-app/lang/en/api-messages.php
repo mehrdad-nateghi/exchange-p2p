@@ -50,6 +50,7 @@ return [
     'bids' => 'bids',
     'trade' => 'trade',
     'trades' => 'trades',
+    'trade_steps' => 'trade steps',
     'payment_method' => 'payment method',
     'payment_methods' => 'payment methods',
     'user_payment_methods' => "user's payment methods",

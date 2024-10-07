@@ -27,4 +27,6 @@ return [
 
 
     'frontend_url_after_payment' => env('FRONTEND_URL_AFTER_PAYMENT', 'http://localhost:8000/dashboard/trades'),
+
+    'default_hours_increase_expire_at_trade_step' => env('DEFAULT_HOURS_INCREASE_EXPIRE_AT_TRADE_STEP', '2'),
 ];
