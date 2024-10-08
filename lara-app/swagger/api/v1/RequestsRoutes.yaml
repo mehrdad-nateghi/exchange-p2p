@@ -158,6 +158,32 @@
                   properties:
                     data:
                       $ref: "#/components/schemas/Request"
+  delete:
+    tags:
+      - requests
+    summary: "Delete a request by ULID"
+    description: "This endpoint deletes a request by ULID."
+    operationId: deleteUserRequest
+    parameters:
+      - name: request
+        in: path
+        required: true
+        description: "The ULID of the request."
+        schema:
+          type: string
+    responses:
+      "200":
+        description: "The user's request was deleted successfully."
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/Base200Response"
+                - type: object
+                  properties:
+                    data:
+                      type: object
+                      nullable: true
 
 "users/requests/{request}/add/payment-method/{paymentMethod}":
   post:
