@@ -21,11 +21,13 @@ class RequestResource extends JsonResource
             'price' => $this->price,
             'type' => $this->type->key(),
             'status' => $this->status->key(),
+            'trade_ulid' => $this->trades()->withTrashed()->latest()->first()->ulid,
             'user' => new UserResource($this->user),
             'user_role_on_request' => $this->user_role_on_request,
             'payment_methods' => PaymentMethodCollection::make($this->paymentMethods),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+            'deleted_at' => $this->deleted_at,
         ];
     }
 }

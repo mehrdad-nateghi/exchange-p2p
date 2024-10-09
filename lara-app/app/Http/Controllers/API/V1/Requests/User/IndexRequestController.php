@@ -22,7 +22,7 @@ class IndexRequestController extends Controller
     ): JsonResponse
     {
         try {
-            $requests = QueryBuilder::for(Auth::user()->requests())
+            $requests = QueryBuilder::for(Auth::user()->requests()->withTrashed())
                 ->allowedFilters([
                     AllowedFilter::custom('type', new RequestTypeFilter),
                     AllowedFilter::custom('status', new RequestStatusFilter),
@@ -30,8 +30,8 @@ class IndexRequestController extends Controller
                     AllowedFilter::custom('volume_from', new RequestVolumeFilter),
                     AllowedFilter::custom('volume_to', new RequestVolumeFilter),
                 ])
-                ->defaultSort(['-created_at','-price'])
-                ->allowedSorts('created_at','price')
+                ->defaultSort(['-created_at', '-price'])
+                ->allowedSorts('created_at', 'price')
                 ->paginateWithDefault();
 
             $requests = new RequestCollection($requests);
