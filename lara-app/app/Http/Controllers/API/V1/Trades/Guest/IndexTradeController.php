@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API\V1\Trades\Guest;
 
+use App\Enums\TradeStatusEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\Request\Guest\IndexRequestRequest;
 use App\Http\Resources\RequestCollection;
@@ -19,24 +20,15 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class IndexTradeController extends Controller
 {
-    public function __invoke(
-        //IndexRequestRequest $request
-    ): JsonResponse
+    public function __invoke(): JsonResponse
     {
         try {
-            /*$requests = QueryBuilder::for(Request::class)
-                ->allowedFilters([
-                    AllowedFilter::custom('type', new RequestTypeFilter),
-                    AllowedFilter::custom('status', new RequestStatusFilter),
-                    AllowedFilter::custom('payment_method', new RequestPaymentMethodFilter),
-                    AllowedFilter::custom('volume_from', new RequestVolumeFilter),
-                    AllowedFilter::custom('volume_to', new RequestVolumeFilter),
-                ])
-                ->defaultSort(['-created_at','-price'])
-                ->allowedSorts('created_at','price')
-                ->paginateWithDefault();*/
-
-            $trades = Trade::orderBy('created_at', 'desc')->paginate();
+            $trades = Trade::whereIn('status', [
+                TradeStatusEnum::PROCESSING->value,
+                TradeStatusEnum::COMPLETED->value,
+            ])
+                ->orderBy('created_at', 'desc')
+                ->paginate();
 
             $trades = new TradeCollection($trades);
 
