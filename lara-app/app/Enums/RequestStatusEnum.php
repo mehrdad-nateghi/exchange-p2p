@@ -10,5 +10,6 @@ enum RequestStatusEnum: int{
     case PENDING = 1;
     case PROCESSING = 2;
     case TRADING = 3;
-    case CANCELED = 4;
+    case COMPLETED = 4;
+    case CANCELED = 5;
 }

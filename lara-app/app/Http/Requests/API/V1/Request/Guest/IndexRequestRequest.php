@@ -44,12 +44,12 @@ class IndexRequestRequest extends FormRequest
             ],
 
             'filter.status' => [
-                'nullable',
+                'required',
             ],
 
             'filter.status.*' => [
-                'nullable',
-                Rule::in(RequestStatusEnum::keys())
+                'required',
+                Rule::in([RequestStatusEnum::PENDING->key(),RequestStatusEnum::PROCESSING->key(),RequestStatusEnum::TRADING->key()])
             ],
 
             'filter.payment_method' => [
