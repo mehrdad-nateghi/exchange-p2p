@@ -21,7 +21,7 @@ class RequestResource extends JsonResource
             'price' => $this->price,
             'type' => $this->type->key(),
             'status' => $this->status->key(),
-            'trade_ulid' => $this->trades()->withTrashed()->latest()->first()->ulid,
+            'trade_ulid' => $this->trades()->withTrashed()->latest()->first()->ulid ?? null,
             'user' => new UserResource($this->user),
             'user_role_on_request' => $this->user_role_on_request,
             'payment_methods' => PaymentMethodCollection::make($this->paymentMethods),

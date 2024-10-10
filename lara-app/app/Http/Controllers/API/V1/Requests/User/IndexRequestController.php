@@ -22,7 +22,7 @@ class IndexRequestController extends Controller
     ): JsonResponse
     {
         try {
-            $requests = QueryBuilder::for(Auth::user()->requests()->withTrashed())
+            $requests = QueryBuilder::for(Auth::user()->requests()->withTrashed()->with('trades'))
                 ->allowedFilters([
                     AllowedFilter::custom('type', new RequestTypeFilter),
                     AllowedFilter::custom('status', new RequestStatusFilter),
