@@ -586,7 +586,7 @@ components:
         type: array
         items:
           type: string
-          enum: [pending, processing, trading, canceled]
+          enum: [pending, processing, trading, completed, canceled]
           example: ["pending", "trading"]
   securitySchemes:
     bearer:
