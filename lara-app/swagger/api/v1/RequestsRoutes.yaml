@@ -6,50 +6,11 @@
     description: "Get all requests of a user"
     operationId: getUserRequests
     parameters:
-      - name: filter[type]
-        in: query
-        description: The type of request
-        required: false
-        schema:
-          type: string
-          enum: [buy, sell]
-          example: buy
-
-      - name: filter[status]
-        in: query
-        description: The status of the request
-        required: false
-        schema:
-          type: array
-          items:
-            type: string
-            enum: [pending, processing, trading, canceled]
-          example: ["pending", "trading"]
-
-      - name: sort
-        in: query
-        description: The sort order of the results
-        required: false
-        schema:
-          type: string
-          enum: [created_at, -created_at, price, -price]
-          example: -created_at
-
-      - name: per_page
-        in: query
-        description: "Number of items to return per page"
-        required: false
-        schema:
-          type: integer
-          default: 15
-
-      - name: page
-        in: query
-        description: "page number"
-        required: false
-        schema:
-          type: integer
-          default: 1
+      - $ref: "#/components/parameters/pageSize"
+      - $ref: "#/components/parameters/pageNumber"
+      - $ref: "#/components/parameters/requestSort"
+      - $ref: "#/components/parameters/requestType"
+      - $ref: "#/components/parameters/requestStatus"
     responses:
       "200":
         description: "The requests was retrieved successfully."

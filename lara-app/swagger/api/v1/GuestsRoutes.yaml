@@ -6,15 +6,11 @@
     description: "Get all requests"
     operationId: getAllRequests
     parameters:
-      - name: filter[type]
-        in: query
-        description: The type of request
-        required: false
-        schema:
-          type: string
-          enum: [buy, sell]
-          example: buy
-
+      - $ref: "#/components/parameters/requestType"
+      - $ref: "#/components/parameters/requestSort"
+      - $ref: "#/components/parameters/pageSize"
+      - $ref: "#/components/parameters/pageNumber"
+      - $ref: "#/components/parameters/requestStatus"
       - name: filter[payment_method]
         in: query
         description: The type of payment_method
@@ -25,18 +21,6 @@
             type: string
             enum: [foreign_bank, paypal]
           example: [paypal]
-
-      - name: filter[status]
-        in: query
-        description: The status of the request
-        required: false
-        schema:
-          type: array
-          items:
-            type: string
-            enum: [pending, processing, trading, canceled]
-          example: ["pending", "trading"]
-
       - name: filter[volume_from]
         in: query
         description: The minimum volume range of the requests (0 - 100000)
@@ -57,30 +41,6 @@
           maximum: 100000
           example: 150
 
-      - name: sort
-        in: query
-        description: The sort order of the results
-        required: false
-        schema:
-          type: string
-          enum: [created_at, -created_at, price, -price]
-          example: -created_at
-
-      - name: per_page
-        in: query
-        description: "Number of items to return per page"
-        required: false
-        schema:
-          type: integer
-          default: 15
-
-      - name: page
-        in: query
-        description: "page number"
-        required: false
-        schema:
-          type: integer
-          default: 1
     responses:
       "200":
         description: "The requests was retrieved successfully."

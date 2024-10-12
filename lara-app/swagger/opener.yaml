@@ -97,7 +97,6 @@ components:
           required:
             - type
             - holder_name
-            - email
             - is_active
             - icon
             - created_at
@@ -126,10 +125,6 @@ components:
             card_number:
               type: string
               description: "Card number"
-              example: ""
-            sheba:
-              type: string
-              description: "SHEBA number"
               example: ""
             bic:
               type: string
@@ -559,6 +554,35 @@ components:
       schema:
         type: integer
         default: 1
+    requestSort:
+      name: sort
+      required: true
+      in: query
+      description: The sort order of the results
+      schema:
+        type: string
+        enum: [created_at, -created_at, price, -price]
+        example: -created_at
+    requestType:
+      name: filter[type]
+      in: query
+      description: The type of request
+      required: false
+      schema:
+        type: string
+        enum: [buy, sell]
+        example: buy
+    requestStatus:
+      name: filter[status]
+      in: query
+      description: The status of the request
+      required: false
+      schema:
+        type: array
+        items:
+          type: string
+          enum: [pending, processing, trading, canceled]
+          example: ["pending", "trading"]
   securitySchemes:
     bearer:
       type: http
