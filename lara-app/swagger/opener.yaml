@@ -173,6 +173,11 @@ components:
           type: string
           description: "Unique identifier for the request"
           example: "01J26AAGQQ2HTYHZGR9PM6DGJD"
+        trade_ulid:
+          type: string
+          nullable: true
+          description: "Unique identifier for the trade of the request"
+          example: "01J26AAGQQ2HTYHZGR9PM6DGJD"
         number:
           type: string
           description: "Request number"
