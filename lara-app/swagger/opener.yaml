@@ -556,7 +556,7 @@ components:
         default: 1
     requestSort:
       name: sort
-      required: true
+      required: false
       in: query
       description: The sort order of the results
       schema:
@@ -576,7 +576,7 @@ components:
       name: filter[status]
       in: query
       description: The status of the request
-      required: false
+      required: true
       schema:
         type: array
         items:
