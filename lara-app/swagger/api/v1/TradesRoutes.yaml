@@ -243,7 +243,43 @@
           type: string
     responses:
       "200":
-        description: "The Trades was retrieved successfully."
+        description: "The trade Status was updated successfully."
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/Base200Response"
+                - type: object
+                  required:
+                    - data
+                  properties:
+                    data:
+                      $ref: "#/components/schemas/AdminTrade"
+"/admins/trade-steps/{trade}/increase-expire-at":
+  patch:
+    tags:
+      - trades
+    summary: "Increase the expiration time of a trade step"
+    description: "Partially update the expiration time of a specific trade step by increasing it. The number of hours to increase is optional."
+    operationId: increaseExpireAt
+    parameters:
+      - name: trade
+        in: path
+        description: "The ULID of trade"
+        required: true
+        schema:
+          type: string
+      - name: hours
+        in: query
+        description: "Number of hours to increase the expiration time. If not provided, a default value is applied."
+        required: false
+        schema:
+          type: number
+          minimum: 1
+          example: 44
+    responses:
+      "200":
+        description: "The expiration time of a trade step was updated successfully."
         content:
           application/json:
             schema:
