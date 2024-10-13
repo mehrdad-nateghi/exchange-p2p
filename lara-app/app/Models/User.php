@@ -4,6 +4,8 @@ namespace App\Models;
 
 use App\Enums\Legacy\LinkedMethodStatusEnum;
 use App\Enums\Legacy\UserRoleEnum;
+use App\Enums\RequestStatusEnum;
+use App\Enums\TradeStatusEnum;
 use App\Enums\UserStatusEnum;
 use App\Models\Legacy\Invoice;
 use App\Traits\Global\Ulid;
@@ -22,7 +24,7 @@ use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable
 {
 
-    use HasApiTokens,HasFactory,Notifiable,SoftDeletes, Ulid, HasRoles;
+    use HasApiTokens, HasFactory, Notifiable, SoftDeletes, Ulid, HasRoles;
 
     protected $table = 'users';
 
@@ -65,7 +67,7 @@ class User extends Authenticatable
     */
     public function authenticationLogs()
     {
-        return $this->hasMany(AuthenticationLog::class,'applicant_id');
+        return $this->hasMany(AuthenticationLog::class, 'applicant_id');
     }
 
     /*
@@ -73,7 +75,7 @@ class User extends Authenticatable
     */
     public function linkedMethods()
     {
-        return $this->hasMany(LinkedMethod::class,'applicant_id');
+        return $this->hasMany(LinkedMethod::class, 'applicant_id');
     }
 
     /*
@@ -97,7 +99,7 @@ class User extends Authenticatable
     */
     public function invoices()
     {
-        return $this->hasMany(Invoice::class,'applicant_id');
+        return $this->hasMany(Invoice::class, 'applicant_id');
     }
 
 
@@ -106,7 +108,7 @@ class User extends Authenticatable
     */
     public function emails()
     {
-        return $this->hasMany(Email::class,'user_id');
+        return $this->hasMany(Email::class, 'user_id');
     }
 
     /*
@@ -114,7 +116,7 @@ class User extends Authenticatable
     */
     public function relatedEmails()
     {
-        return $this->morphMany(Email::class,'emailable');
+        return $this->morphMany(Email::class, 'emailable');
     }
 
     /*
@@ -122,7 +124,7 @@ class User extends Authenticatable
     */
     public function relatedNotifications()
     {
-        return $this->morphMany(Notification::class,'notifiable');
+        return $this->morphMany(Notification::class, 'notifiable');
     }
 
     /**
@@ -139,7 +141,7 @@ class User extends Authenticatable
     public function getLinkedPaymentMethods()
     {
         $linked_methods = $this->linkedMethods()
-            ->where('status',LinkedMethodStatusEnum::Active)
+            ->where('status', LinkedMethodStatusEnum::Active)
             ->get();
 
         return $linked_methods;
@@ -151,7 +153,7 @@ class User extends Authenticatable
     public function getUnlinkedPaymentMethods()
     {
         $linked_methods = $this->linkedMethods()
-            ->where('status',LinkedMethodStatusEnum::Removed)
+            ->where('status', LinkedMethodStatusEnum::Removed)
             ->get();
 
         return $linked_methods;
@@ -163,8 +165,8 @@ class User extends Authenticatable
     public function getLinkedMethodIfIsActive($linked_method_id)
     {
         $linked_method = $this->linkedMethods()
-            ->where('id',$linked_method_id)
-            ->where('status',LinkedMethodStatusEnum::Active)
+            ->where('id', $linked_method_id)
+            ->where('status', LinkedMethodStatusEnum::Active)
             ->first();
 
         return $linked_method;
@@ -176,8 +178,8 @@ class User extends Authenticatable
     public function getLinkedMethodByPaymentMethodIdIfIsActive($payment_method_id)
     {
         $linked_method = $this->linkedMethods()
-            ->where('method_type_id',$payment_method_id)
-            ->where('status',LinkedMethodStatusEnum::Active)
+            ->where('method_type_id', $payment_method_id)
+            ->where('status', LinkedMethodStatusEnum::Active)
             ->first();
 
         return $linked_method;
@@ -205,7 +207,7 @@ class User extends Authenticatable
 
     public function tradesAsRequester(): HasManyThrough
     {
-        return $this->hasManyThrough(Trade::class,Request::class);
+        return $this->hasManyThrough(Trade::class, Request::class);
     }
 
     public function tradesAsBidder(): HasMany
@@ -239,6 +241,24 @@ class User extends Authenticatable
     public function files()
     {
         return $this->hasMany(File::class);
+    }
+
+    public function getActiveRequestsAttribute()
+    {
+        return $this->requests()->whereIn('status', [
+                RequestStatusEnum::PENDING->value,
+                RequestStatusEnum::PROCESSING->value,
+                RequestStatusEnum::TRADING->value,
+            ]
+        )->count();
+    }
+
+    public function getCompletedTradesAttribute()
+    {
+        return $this->trades()->whereIn('status', [
+                TradeStatusEnum::COMPLETED->value,
+            ]
+        )->count();
     }
 
 }
