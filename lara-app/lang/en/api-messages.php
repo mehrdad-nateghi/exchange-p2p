@@ -44,6 +44,8 @@ return [
     'code_verified_successfully' => 'Verification code verified successfully',
 
 
+    'user' => 'user',
+    'user_stats' => 'user stats',
     'request' => 'request',
     'requests' => 'requests',
     'bid' => 'bid',

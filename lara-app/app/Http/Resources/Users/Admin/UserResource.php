@@ -22,7 +22,6 @@ class UserResource extends JsonResource
             'email' => $this->email,
             'status' => $this->status,
             'role_on_request' => $this->user_role_on_request,
-            'stats' => new UserStatsResource($this),
             'roles' => RoleCollection::make($this->roles),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,

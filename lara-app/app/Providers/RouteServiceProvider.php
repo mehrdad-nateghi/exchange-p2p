@@ -40,6 +40,7 @@ class RouteServiceProvider extends ServiceProvider
             'AdminTradesRoutes',
             'AdminTradeStepsRoutes',
             'AdminRequestsRoutes',
+            'AdminUsersRoutes',
         ],
     ];
 
