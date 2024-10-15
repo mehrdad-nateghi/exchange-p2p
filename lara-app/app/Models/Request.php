@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Auth;
 
 class Request extends Model
 {
-    use HasFactory, Ulid, Number,Paginatable, SoftDeletes;
+    use HasFactory, Ulid, Number, Paginatable, SoftDeletes;
 
     protected $casts = [
         'status' => RequestStatusEnum::class,
@@ -36,8 +36,8 @@ class Request extends Model
         // 'description', todo-mn: need to add it?
         'min_allowed_price',
         'max_allowed_price',
-       /* 'deposit_reason',
-        'deposit_reason_accepted'*/
+        /* 'deposit_reason',
+         'deposit_reason_accepted'*/
     ];
 
     public function getRouteKeyName(): string
@@ -77,7 +77,8 @@ class Request extends Model
 
     private function isUserRole(RequestTypeEnum $requestType): bool
     {
-        $userId = Auth::id();
+        $isAdmin = Auth::user()->hasRole('admin');
+        $userId = $isAdmin ? $this->user->id : Auth::id();
 
         if ($this->type->value !== $requestType->value) {
             $bid = $this->bids()->where('status', BidStatusEnum::ACCEPTED)->first();
