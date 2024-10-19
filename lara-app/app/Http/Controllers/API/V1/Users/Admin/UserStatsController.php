@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\API\V1\Users;
+namespace App\Http\Controllers\API\V1\Users\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Users\Admin\UserStatsResource;

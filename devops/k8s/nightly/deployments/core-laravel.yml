@@ -14,6 +14,8 @@ spec:
               value: nightly
             - name: APP_URL
               value: https://nightly.paylibero.ir
+            - name: USER_DASHBOARD_URL
+              value: https://nightly.paylibero.ir/dashboard
 
             # DB--------------------------------------
             - name: DB_HOST
@@ -130,6 +132,8 @@ spec:
               value: nightly
             - name: APP_URL
               value: https://nightly.paylibero.ir
+            - name: USER_DASHBOARD_URL
+              value: https://nightly.paylibero.ir/dashboard
 
             # DB--------------------------------------
             - name: DB_HOST
