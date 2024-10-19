@@ -178,3 +178,75 @@
                   properties:
                     data:
                       $ref: "#/components/schemas/Request"
+"/admins/requests":
+  get:
+    tags:
+      - requests
+    summary: "Get admin requests"
+    description: "Retrieve admin requests"
+    operationId: getAdminRequests
+    parameters:
+      - in: query
+        name: filter[volume_from]
+        schema:
+          type: integer
+          example: 100000
+        description: Minimum volume for filtering the requests (optional).
+      - in: query
+        name: filter[volume_to]
+        schema:
+          type: integer
+          example: 100000
+        description: Maximum volume for filtering the requests (optional).
+      - name: filter[payment_method]
+        in: query
+        description: The type of payment_method
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+            enum: [ foreign_bank, paypal, rial_bank ]
+          example: [ paypal ]
+      - in: query
+        name: filter[price_from]
+        schema:
+          type: integer
+          example: 10000
+        description: Minimum price for filtering the requests (optional).
+      - in: query
+        name: filter[price_to]
+        schema:
+          type: integer
+          example: 68915
+        description: Maximum price for filtering the requests (optional).
+      - $ref: "#/components/parameters/pageSize"
+      - $ref: "#/components/parameters/pageNumber"
+      - $ref: "#/components/parameters/requestSort"
+      - $ref: "#/components/parameters/requestType"
+      - $ref: "#/components/parameters/requestStatus"
+    responses:
+      "200":
+        description: "The requests was retrieved successfully."
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/Base200Response"
+                - type: object
+                  required:
+                    - data
+                  properties:
+                    data:
+                      type: object
+                      required:
+                        - items
+                        - pagination
+                      properties:
+                        pagination:
+                          $ref: "#/components/schemas/Pagination"
+                        items:
+                          type: array
+                          description: "Array of request items"
+                          items:
+                            $ref: "#/components/schemas/Request"
