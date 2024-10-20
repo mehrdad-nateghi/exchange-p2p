@@ -26,6 +26,20 @@
                       properties:
                         user:
                           $ref: "#/components/schemas/User"
+"/admins/users/login-as-user/{ulid}":
+  get:
+    tags:
+      - users
+    summary: Log in as a specific user
+    description: Allows an admin to log in as a specific user by providing the user's ULID.
+    operationId: loginAsUser
+    parameters:
+      - in: path
+        name: ULID
+        required: true
+        description: The unique identifier of the user to log in as
+        schema:
+          type: string
 "/admins/users/{userId}/stats":
   get:
     tags:
