@@ -19,10 +19,17 @@ class MeTestController extends Controller
                 'user' =>  $userService->createResource($user),
             ];
 
-            return apiResponse()
+            $start = microtime(true);
+
+            $response = apiResponse()
                 ->message(trans('api-messages.user_info_retrieved_successfully'))
                 ->data($data)
                 ->getApiResponse();
+
+            $duration = (microtime(true) - $start) * 1000;
+            Log::info('apiResponse took ' . $duration . ' ms');
+
+            return $response;
         } catch (\Throwable $t) {
             Log::error($t);
             return internalServerError();
