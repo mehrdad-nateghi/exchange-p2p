@@ -26,3 +26,31 @@
                       properties:
                         user:
                           $ref: "#/components/schemas/User"
+"/admins/users/{userId}/stats":
+  get:
+    tags:
+      - users
+    summary: "Get users stats"
+    description: "Get users stats."
+    operationId: usersStats
+    parameters:
+      - name: userId
+        in: path
+        description: "The ULID of user"
+        required: true
+        schema:
+          type: string
+    responses:
+      "200":
+        description: "The users stats was retrieved successfully."
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/Base200Response"
+                - type: object
+                  required:
+                    - data
+                  properties:
+                    data:
+                      $ref: "#/components/schemas/User"
