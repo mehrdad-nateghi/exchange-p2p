@@ -9,6 +9,7 @@
 use App\Http\Controllers\API\V1\Public\DailyRateRangeController;
 use App\Http\Controllers\API\V1\Public\GatewayCallbackController;
 use App\Http\Controllers\API\V1\Public\HealthCheckController;
+use App\Http\Controllers\API\V1\Public\MeTestController;
 use Aws\S3\S3Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -18,6 +19,7 @@ use Shetabit\Payment\Facade\Payment;
 
 Route::name('global.')->group(function () {
     Route::get('/health',HealthCheckController::class)->name('health.check');
+    Route::get('/me-test',MeTestController::class)->name('me.test');
     Route::get('/daily-rate-range',DailyRateRangeController::class)->name('daily.rate.range');
     Route::get('/daily-rate-range',DailyRateRangeController::class)->name('daily.rate.range');
     Route::get('/gateway/callback',GatewayCallbackController::class)->name('gateway.callback');
