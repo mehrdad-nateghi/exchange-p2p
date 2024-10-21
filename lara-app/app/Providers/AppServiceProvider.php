@@ -33,6 +33,11 @@ class AppServiceProvider extends ServiceProvider
     {
         // Log a warning if we spend more than 1000ms on a single query.
         DB::listen(function ($query) {
+            Log::info("Query data", [
+                'time' => $query->time,
+                'sql' => $query->sql
+            ]);
+
             if ($query->time > 200) {
                 Log::warning("An individual database query exceeded 200 ms.", [
                     'sql' => $query->sql
@@ -48,6 +53,6 @@ class AppServiceProvider extends ServiceProvider
         // Register Observers
         VerificationCode::observe(VerificationCodeObserver::class);
 
-        Passport::loadKeysFrom(storage_path('oauth'));
+        //Passport::loadKeysFrom(storage_path('oauth'));
     }
 }
