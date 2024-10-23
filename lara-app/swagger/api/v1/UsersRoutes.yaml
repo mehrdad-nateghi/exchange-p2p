@@ -1,20 +1,26 @@
-"/users/me":
+'/users/me':
   get:
     tags:
       - users
-    summary: "Get Current User Information"
-    description: "Retrieve information about the currently authenticated user."
+    summary: 'Get Current User Information'
+    description: 'Retrieve information about the currently authenticated user.'
     operationId: me
-    parameters: []
+    parameters:
+      - name: cache-control
+        in: header
+        description: 'Disable cache'
+        required: true
+        schema:
+          type: string
     requestBody: null
     responses:
-      "200":
-        description: "User information retrieved successfully."
+      '200':
+        description: 'User information retrieved successfully.'
         content:
           application/json:
             schema:
               allOf:
-                - $ref: "#/components/schemas/Base200Response"
+                - $ref: '#/components/schemas/Base200Response'
                 - type: object
                   required:
                     - data
@@ -25,8 +31,8 @@
                         - user
                       properties:
                         user:
-                          $ref: "#/components/schemas/User"
-"/admins/users/login-as-user/{ulid}":
+                          $ref: '#/components/schemas/User'
+'/admins/users/login-as-user/{ulid}':
   get:
     tags:
       - users
@@ -40,31 +46,31 @@
         description: The unique identifier of the user to log in as
         schema:
           type: string
-"/admins/users/{userId}/stats":
+'/admins/users/{userId}/stats':
   get:
     tags:
       - users
-    summary: "Get users stats"
-    description: "Get users stats."
+    summary: 'Get users stats'
+    description: 'Get users stats.'
     operationId: usersStats
     parameters:
       - name: userId
         in: path
-        description: "The ULID of user"
+        description: 'The ULID of user'
         required: true
         schema:
           type: string
     responses:
-      "200":
-        description: "The users stats was retrieved successfully."
+      '200':
+        description: 'The users stats was retrieved successfully.'
         content:
           application/json:
             schema:
               allOf:
-                - $ref: "#/components/schemas/Base200Response"
+                - $ref: '#/components/schemas/Base200Response'
                 - type: object
                   required:
                     - data
                   properties:
                     data:
-                      $ref: "#/components/schemas/User"
+                      $ref: '#/components/schemas/User'
