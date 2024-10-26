@@ -21,7 +21,7 @@ spec:
             - name: DB_HOST
               value: paylibero-db-mysql-headless
             - name: DB_PORT
-              value: "3306"
+              value: '3306'
             - name: DB_USERNAME
               valueFrom:
                 secretKeyRef:
@@ -45,13 +45,13 @@ spec:
                   name: google-recaptcha
                   key: site_key
             - name: RECAPTCHA_V3_ENABLE
-              value: "false"
+              value: 'false'
 
             # REDIS--------------------------------------
             - name: REDIS_HOST
               value: redis
             - name: REDIS_PORT
-              value: "6379"
+              value: '6379'
             - name: REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -60,7 +60,7 @@ spec:
 
             # MAIL--------------------------------------
             - name: MAIL_USERNAME
-              value: "10cSOoYX8R"
+              value: '10cSOoYX8R'
             - name: MAIL_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -100,7 +100,7 @@ spec:
             - name: FILESYSTEM_DISK
               value: s3
             - name: AWS_USE_PATH_STYLE_ENDPOINT
-              value: "false"
+              value: 'false'
             - name: AWS_ENDPOINT
               value: https://s3.ir-thr-at1.arvanstorage.ir
             - name: AWS_ACCESS_KEY_ID
@@ -118,13 +118,13 @@ spec:
         - name: core-laravel
           resources:
             limits:
-              cpu: 500m
+              cpu: '2'
               ephemeral-storage: 200M
-              memory: 1G
+              memory: 4G
             requests:
-              cpu: 500m
+              cpu: '2'
               ephemeral-storage: 200M
-              memory: 1G
+              memory: 4G
 
           env:
             # APP--------------------------------------
@@ -139,7 +139,7 @@ spec:
             - name: DB_HOST
               value: paylibero-db-mysql-headless
             - name: DB_PORT
-              value: "3306"
+              value: '3306'
             - name: DB_USERNAME
               valueFrom:
                 secretKeyRef:
@@ -163,13 +163,13 @@ spec:
                   name: google-recaptcha
                   key: site_key
             - name: RECAPTCHA_V3_ENABLE
-              value: "false"
+              value: 'false'
 
             # REDIS--------------------------------------
             - name: REDIS_HOST
               value: redis
             - name: REDIS_PORT
-              value: "6379"
+              value: '6379'
             - name: REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -178,7 +178,7 @@ spec:
 
             # MAIL--------------------------------------
             - name: MAIL_USERNAME
-              value: "10cSOoYX8R"
+              value: '10cSOoYX8R'
             - name: MAIL_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -218,7 +218,7 @@ spec:
             - name: FILESYSTEM_DISK
               value: s3
             - name: AWS_USE_PATH_STYLE_ENDPOINT
-              value: "false"
+              value: 'false'
             - name: AWS_ENDPOINT
               value: https://s3.ir-thr-at1.arvanstorage.ir
             - name: AWS_ACCESS_KEY_ID

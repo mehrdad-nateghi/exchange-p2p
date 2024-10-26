@@ -14,16 +14,16 @@ components:
       properties:
         status:
           type: string
-          description: "The status of the API response"
-          example: "success"
+          description: 'The status of the API response'
+          example: 'success'
         code:
           type: integer
-          description: "The HTTP status code of the response"
+          description: 'The HTTP status code of the response'
           example: 200
         message:
           type: string
-          description: "A descriptive message about the response"
-          example: "The requests were retrieved successfully."
+          description: 'A descriptive message about the response'
+          example: 'The requests were retrieved successfully.'
     Pagination:
       type: object
       required:
@@ -41,46 +41,46 @@ components:
       properties:
         current_page:
           type: integer
-          description: "Current page number"
+          description: 'Current page number'
           example: 1
         first_page_url:
           type: string
-          description: "URL of the first page"
+          description: 'URL of the first page'
         from:
           type: integer
-          description: "Start index of items on current page"
+          description: 'Start index of items on current page'
           example: 1
         last_page:
           type: integer
-          description: "Last page number"
+          description: 'Last page number'
           example: 1
         last_page_url:
           type: string
-          description: "URL of the last page"
+          description: 'URL of the last page'
         next_page_url:
           type: string
           nullable: true
-          description: "URL of the next page"
+          description: 'URL of the next page'
           example: null
         path:
           type: string
-          description: "Base path for pagination URLs"
+          description: 'Base path for pagination URLs'
         per_page:
           type: integer
-          description: "Number of items per page"
+          description: 'Number of items per page'
           example: 15
         prev_page_url:
           type: string
           nullable: true
-          description: "URL of the previous page"
+          description: 'URL of the previous page'
           example: null
         to:
           type: integer
-          description: "End index of items on current page"
+          description: 'End index of items on current page'
           example: 6
         total:
           type: integer
-          description: "Total number of items"
+          description: 'Total number of items'
           example: 6
     PaymentMethod:
       type: object
@@ -90,8 +90,8 @@ components:
       properties:
         ulid:
           type: string
-          description: "Unique identifier for the payment method"
-          example: "01J25YKXXAS0KX1W4383HE65GR"
+          description: 'Unique identifier for the payment method'
+          example: '01J25YKXXAS0KX1W4383HE65GR'
         payment_method:
           type: object
           required:
@@ -108,53 +108,53 @@ components:
                 - foreign_bank
                 - paypal
                 - rial_bank
-              description: "Type of payment method"
-              example: "rial_bank"
+              description: 'Type of payment method'
+              example: 'rial_bank'
             holder_name:
               type: string
-              description: "Name of the account holder"
-              example: ""
+              description: 'Name of the account holder'
+              example: ''
             email:
               type: string
-              description: "email of the account"
-              example: ""
+              description: 'email of the account'
+              example: ''
             bank_name:
               type: string
-              description: "Name of the bank"
-              example: ""
+              description: 'Name of the bank'
+              example: ''
             card_number:
               type: string
-              description: "Card number"
-              example: ""
+              description: 'Card number'
+              example: ''
             bic:
               type: string
-              description: "Bank Identifier Code (BIC)"
-              example: "BKCHAEADXXX"
+              description: 'Bank Identifier Code (BIC)'
+              example: 'BKCHAEADXXX'
             iban:
               type: string
-              description: "International Bank Account Number (IBAN)"
-              example: "AE070331234567890123456"
+              description: 'International Bank Account Number (IBAN)'
+              example: 'AE070331234567890123456'
             account_no:
               type: string
-              description: "Account number"
-              example: ""
+              description: 'Account number'
+              example: ''
             is_active:
               type: boolean
-              description: "Whether the payment method is active"
+              description: 'Whether the payment method is active'
               example: false
             icon:
               type: string
-              description: "payment method icon url"
+              description: 'payment method icon url'
             created_at:
               type: string
               format: date-time
-              description: "Creation timestamp"
-              example: "2024-07-07T06:38:04.000000Z"
+              description: 'Creation timestamp'
+              example: '2024-07-07T06:38:04.000000Z'
             updated_at:
               type: string
               format: date-time
-              description: "Last update timestamp"
-              example: "2024-07-07T06:38:04.000000Z"
+              description: 'Last update timestamp'
+              example: '2024-07-07T06:38:04.000000Z'
     Request:
       type: object
       required:
@@ -171,47 +171,47 @@ components:
       properties:
         ulid:
           type: string
-          description: "Unique identifier for the request"
-          example: "01J26AAGQQ2HTYHZGR9PM6DGJD"
+          description: 'Unique identifier for the request'
+          example: '01J26AAGQQ2HTYHZGR9PM6DGJD'
         trade_ulid:
           type: string
           nullable: true
-          description: "Unique identifier for the trade of the request"
-          example: "01J26AAGQQ2HTYHZGR9PM6DGJD"
+          description: 'Unique identifier for the trade of the request'
+          example: '01J26AAGQQ2HTYHZGR9PM6DGJD'
         number:
           type: string
-          description: "Request number"
-          example: "RE-550585"
+          description: 'Request number'
+          example: 'RE-550585'
         user:
-          $ref: "#/components/schemas/User"
+          $ref: '#/components/schemas/User'
         volume:
           type: string
-          description: "Volume of the request"
-          example: "250.00"
+          description: 'Volume of the request'
+          example: '250.00'
         price:
           type: string
-          description: "Price of the request"
-          example: "59193.00"
+          description: 'Price of the request'
+          example: '59193.00'
         type:
           type: string
-          enum: ["buy", "sell"]
-          description: "Type of the request (BUY or SELL)"
-          example: "buy"
+          enum: ['buy', 'sell']
+          description: 'Type of the request (BUY or SELL)'
+          example: 'buy'
         status:
           type: string
-          enum: ["pending", "processing", "trading", "canceled"]
-          description: "Status of the request"
-          example: "pending"
+          enum: ['pending', 'processing', 'trading', 'canceled']
+          description: 'Status of the request'
+          example: 'pending'
         created_at:
           type: string
           format: date-time
-          description: "Creation timestamp"
-          example: "2024-07-07T06:38:04.000000Z"
+          description: 'Creation timestamp'
+          example: '2024-07-07T06:38:04.000000Z'
         updated_at:
           type: string
           format: date-time
-          description: "Last update timestamp"
-          example: "2024-07-07T06:38:04.000000Z"
+          description: 'Last update timestamp'
+          example: '2024-07-07T06:38:04.000000Z'
         payment_methods:
           type: object
           required:
@@ -219,12 +219,12 @@ components:
             - pagination
           properties:
             pagination:
-              $ref: "#/components/schemas/Pagination"
+              $ref: '#/components/schemas/Pagination'
             items:
               type: array
-              description: "Array of payment method items"
+              description: 'Array of payment method items'
               items:
-                $ref: "#/components/schemas/PaymentMethod"
+                $ref: '#/components/schemas/PaymentMethod'
     User:
       type: object
       required:
@@ -239,28 +239,28 @@ components:
       properties:
         ulid:
           type: string
-          example: "01HZA0X41HX5CXY2YWD4GP0WAG"
+          example: '01HZA0X41HX5CXY2YWD4GP0WAG'
         first_name:
           type: string
-          example: "Ali"
+          example: 'Ali'
         last_name:
           type: string
-          example: "Karimi"
+          example: 'Karimi'
         email:
           type: string
-          example: "a@b.com"
+          example: 'a@b.com'
         created_at:
           type: string
           format: date-time
-          example: "2024-05-15T06:56:46+00:00"
+          example: '2024-05-15T06:56:46+00:00'
         status:
           type: string
           enum: [active, inactive]
-          example: "active"
+          example: 'active'
         updated_at:
           type: string
           format: date-time
-          example: "2024-05-15T06:56:46+00:00"
+          example: '2024-05-15T06:56:46+00:00'
         roles:
           type: array
           items:
@@ -272,15 +272,15 @@ components:
             properties:
               name:
                 type: string
-                example: "applicant"
+                example: 'applicant'
               created_at:
                 type: string
                 format: date-time
-                example: "2024-05-15T06:56:46+00:00"
+                example: '2024-05-15T06:56:46+00:00'
               updated_at:
                 type: string
                 format: date-time
-                example: "2024-05-15T06:56:46+00:00"
+                example: '2024-05-15T06:56:46+00:00'
     Bid:
       type: object
       required:
@@ -296,38 +296,38 @@ components:
       properties:
         ulid:
           type: string
-          description: "Unique identifier for the request"
-          example: "01J25YP7C2MTHAXNREE7FNPY85"
+          description: 'Unique identifier for the request'
+          example: '01J25YP7C2MTHAXNREE7FNPY85'
         number:
           type: string
-          description: "Number of the bid"
-          example: "BI-564311"
+          description: 'Number of the bid'
+          example: 'BI-564311'
         user:
-          $ref: "#/components/schemas/User"
+          $ref: '#/components/schemas/User'
         price:
           type: string
-          description: "Price of the bid"
-          example: "59193.00"
+          description: 'Price of the bid'
+          example: '59193.00'
         is_highest_price:
           type: boolean
-          description: "indicates that the bid has highest price or not"
+          description: 'indicates that the bid has highest price or not'
         status:
           type: string
-          enum: ["pending", "processing", "trading", "canceled", "accepted"]
-          description: "Status of the request"
-          example: "pending"
+          enum: ['registered', 'accepted', 'rejected']
+          description: 'Status of the request'
+          example: 'registered'
         created_at:
           type: string
           format: date-time
-          description: "Creation timestamp"
-          example: "2024-07-07T06:38:04.000000Z"
+          description: 'Creation timestamp'
+          example: '2024-07-07T06:38:04.000000Z'
         updated_at:
           type: string
           format: date-time
-          description: "Last update timestamp"
-          example: "2024-07-07T06:38:04.000000Z"
+          description: 'Last update timestamp'
+          example: '2024-07-07T06:38:04.000000Z'
         request:
-          $ref: "#/components/schemas/Request"
+          $ref: '#/components/schemas/Request'
     Trade:
       type: object
       required:
@@ -343,50 +343,50 @@ components:
       properties:
         ulid:
           type: string
-          description: "Unique identifier for the trade"
-          example: "01J5RR12N6A76MRDBTTMS07HY3"
+          description: 'Unique identifier for the trade'
+          example: '01J5RR12N6A76MRDBTTMS07HY3'
         number:
           type: string
-          description: "Trade number"
-          example: "TR-357535"
+          description: 'Trade number'
+          example: 'TR-357535'
         status:
           type: string
-          enum: ["processing", "completed", "canceled", "failed", "suspend"]
-          description: "Status of the trade"
-          example: "processing"
+          enum: ['processing', 'completed', 'canceled', 'failed', 'suspend']
+          description: 'Status of the trade'
+          example: 'processing'
         deposit_reason:
           type: string
-          description: "reason of the deposit"
-          example: "TR-712974"
+          description: 'reason of the deposit'
+          example: 'TR-712974'
         deposit_reason_accepted:
           type: integer
-          description: "indicates that the deposit reason is accepted or not"
+          description: 'indicates that the deposit reason is accepted or not'
           example: 0
         bid:
           allOf:
-            - $ref: "#/components/schemas/Bid"
+            - $ref: '#/components/schemas/Bid'
             - type: object
               required:
                 - payment_method
               properties:
                 payment_method:
-                  $ref: "#/components/schemas/PaymentMethod"
+                  $ref: '#/components/schemas/PaymentMethod'
         completed_at:
           type: string
           format: date-time
           nullable: true
-          description: "Completion timestamp"
+          description: 'Completion timestamp'
         created_at:
           type: string
           format: date-time
-          description: "Creation timestamp"
+          description: 'Creation timestamp'
         updated_at:
           type: string
           format: date-time
-          description: "Last update timestamp"
+          description: 'Last update timestamp'
     UserTrade:
       allOf:
-        - $ref: "#/components/schemas/Trade"
+        - $ref: '#/components/schemas/Trade'
         - type: object
           required:
             - steps
@@ -395,14 +395,14 @@ components:
             steps:
               type: array
               items:
-                $ref: "#/components/schemas/TradeStep"
+                $ref: '#/components/schemas/TradeStep'
             invoices:
               type: array
               items:
-                $ref: "#/components/schemas/Invoice"
+                $ref: '#/components/schemas/Invoice'
     AdminTrade:
       allOf:
-        - $ref: "#/components/schemas/Trade"
+        - $ref: '#/components/schemas/Trade'
         - type: object
           required:
             - steps
@@ -411,11 +411,11 @@ components:
             steps:
               type: array
               items:
-                $ref: "#/components/schemas/TradeStep"
+                $ref: '#/components/schemas/TradeStep'
             invoices:
               type: array
               items:
-                $ref: "#/components/schemas/Invoice"
+                $ref: '#/components/schemas/Invoice'
     TradeStep:
       type: object
       required:
@@ -435,7 +435,7 @@ components:
         files:
           type: array
           items:
-            $ref: "#/components/schemas/File"
+            $ref: '#/components/schemas/File'
         name:
           type: string
         description:
@@ -506,47 +506,47 @@ components:
       properties:
         ulid:
           type: string
-          description: "Unique identifier for the file"
-          example: "01J8307D7QDCFCX0EYH66J2294"
+          description: 'Unique identifier for the file'
+          example: '01J8307D7QDCFCX0EYH66J2294'
         name:
           type: string
-          description: "Name of the file"
-          example: "Screenshot from 2024-09-18 19-31-50.png"
+          description: 'Name of the file'
+          example: 'Screenshot from 2024-09-18 19-31-50.png'
         url:
           type: string
-          description: "url of the file"
+          description: 'url of the file'
         mime_type:
           type: string
-          description: "MIME type of the file"
-          example: "image/png"
+          description: 'MIME type of the file'
+          example: 'image/png'
         path:
           type: string
-          description: "Path to the file"
-          example: "uploads/xkuGNf98Gu1Vj0purdRmTCbElmuwdsXQ3T8uqdR1.png"
+          description: 'Path to the file'
+          example: 'uploads/xkuGNf98Gu1Vj0purdRmTCbElmuwdsXQ3T8uqdR1.png'
         size:
           type: integer
-          description: "Size of the file in bytes"
+          description: 'Size of the file in bytes'
           example: 289573
         status:
           type: string
-          description: "Status of the file"
-          example: "uploaded"
+          description: 'Status of the file'
+          example: 'uploaded'
         created_at:
           type: string
           format: date-time
-          description: "Creation timestamp"
-          example: "2024-09-18T16:42:39.000000Z"
+          description: 'Creation timestamp'
+          example: '2024-09-18T16:42:39.000000Z'
         updated_at:
           type: string
           format: date-time
-          description: "Last update timestamp"
-          example: "2024-09-18T16:42:39.000000Z"
+          description: 'Last update timestamp'
+          example: '2024-09-18T16:42:39.000000Z'
 
   parameters:
     pageSize:
       name: per_page
       in: query
-      description: "Number of items to return per page"
+      description: 'Number of items to return per page'
       required: false
       schema:
         type: integer
@@ -554,7 +554,7 @@ components:
     pageNumber:
       name: page
       in: query
-      description: "page number"
+      description: 'page number'
       required: false
       schema:
         type: integer
@@ -587,7 +587,7 @@ components:
         items:
           type: string
           enum: [pending, processing, trading, completed, canceled]
-          example: ["pending", "trading"]
+          example: ['pending', 'trading']
   securitySchemes:
     bearer:
       type: http
@@ -595,7 +595,7 @@ components:
 
   responses:
     default:
-      description: ""
+      description: ''
       content:
         application/json:
           schema:
