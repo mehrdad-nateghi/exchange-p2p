@@ -89,9 +89,10 @@ class User extends Authenticatable
     /*
     * Get the Bids for the User
     */
-    public function bids(): HasManyThrough
+    public function bids(): HasMany
     {
-        return $this->hasManyThrough(Bid::class, Request::class);
+        return $this->hasMany(Bid::class);
+        //return $this->hasManyThrough(Bid::class, Request::class);
     }
 
     /*
