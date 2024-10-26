@@ -30,7 +30,9 @@ class DatabaseSeeder extends Seeder
                 RoleSeeder::class,
                 UserSeeder::class,
                 StepSeeder::class,
-                DepositReasonSeeder::class
+                DepositReasonSeeder::class,
+                RequestSeeder::class,
+                BidSeeder::class,
             ]);
 
             DB::commit();
