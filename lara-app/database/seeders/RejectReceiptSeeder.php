@@ -60,8 +60,7 @@ class RejectReceiptSeeder extends Seeder
                     if ($tradeStep->priority === 2) {
                         $tradeStep->update([
                             'expire_at' => Carbon::now()->addMinutes($tradeStep->duration_minutes),
-                            'status' => TradeStepsStatusEnum::DONE,
-                            'completed_at' => Carbon::now()->addMinutes(5),
+                            'status' => TradeStepsStatusEnum::DOING,
                         ]);
 
                         // Create the record
