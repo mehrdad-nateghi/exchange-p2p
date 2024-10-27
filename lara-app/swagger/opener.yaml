@@ -225,6 +225,52 @@ components:
               description: 'Array of payment method items'
               items:
                 $ref: '#/components/schemas/PaymentMethod'
+    GuestRequest:
+      type: object
+      required:
+        - ulid
+        - number
+        - volume
+        - price
+        - type
+        - status
+        - created_at
+        - updated_at
+      properties:
+        ulid:
+          type: string
+          description: 'Unique identifier for the request'
+          example: '01J26AAGQQ2HTYHZGR9PM6DGJD'
+        number:
+          type: string
+          description: 'Request number'
+          example: 'RE-550585'
+        volume:
+          type: string
+          description: 'Volume of the request'
+          example: '250.00'
+        price:
+          type: string
+          description: 'Price of the request'
+          example: '59193.00'
+        type:
+          type: string
+          enum: ['buy', 'sell']
+          description: 'Type of the request (BUY or SELL)'
+          example: 'buy'
+        status:
+          type: string
+          enum: ['pending', 'processing', 'trading', 'canceled']
+          description: 'Status of the request'
+          example: 'pending'
+        created_at:
+          type: string
+          format: date-time
+          description: 'Creation timestamp'
+        updated_at:
+          type: string
+          format: date-time
+          description: 'Last update timestamp'
     User:
       type: object
       required:
@@ -334,12 +380,53 @@ components:
         - ulid
         - number
         - status
-        - deposit_reason
-        - deposit_reason_accepted
-        - bid
+        - request
         - completed_at
         - created_at
         - updated_at
+      properties:
+        ulid:
+          type: string
+          description: 'Unique identifier for the trade'
+          example: '01J5RR12N6A76MRDBTTMS07HY3'
+        number:
+          type: string
+          description: 'Trade number'
+          example: 'TR-357535'
+        status:
+          type: string
+          enum: ['processing', 'completed', 'canceled', 'failed', 'suspend']
+          description: 'Status of the trade'
+          example: 'processing'
+        request:
+          $ref: '#/components/schemas/GuestRequest'
+        completed_at:
+          type: string
+          format: date-time
+          nullable: true
+          description: 'Completion timestamp'
+        created_at:
+          type: string
+          format: date-time
+          description: 'Creation timestamp'
+        updated_at:
+          type: string
+          format: date-time
+          description: 'Last update timestamp'
+    UserTrade:
+      type: object
+      required:
+        - ulid
+        - number
+        - status
+        - deposit_reason
+        - deposit_reason_accepted
+        - completed_at
+        - created_at
+        - updated_at
+        - steps
+        - bid
+        - invoices
       properties:
         ulid:
           type: string
@@ -362,15 +449,6 @@ components:
           type: integer
           description: 'indicates that the deposit reason is accepted or not'
           example: 0
-        bid:
-          allOf:
-            - $ref: '#/components/schemas/Bid'
-            - type: object
-              required:
-                - payment_method
-              properties:
-                payment_method:
-                  $ref: '#/components/schemas/PaymentMethod'
         completed_at:
           type: string
           format: date-time
@@ -384,22 +462,23 @@ components:
           type: string
           format: date-time
           description: 'Last update timestamp'
-    UserTrade:
-      allOf:
-        - $ref: '#/components/schemas/Trade'
-        - type: object
-          required:
-            - steps
-            - invoices
-          properties:
-            steps:
-              type: array
-              items:
-                $ref: '#/components/schemas/TradeStep'
-            invoices:
-              type: array
-              items:
-                $ref: '#/components/schemas/Invoice'
+        bid:
+          allOf:
+            - $ref: '#/components/schemas/Bid'
+            - type: object
+              required:
+                - payment_method
+              properties:
+                payment_method:
+                  $ref: '#/components/schemas/PaymentMethod'
+        steps:
+          type: array
+          items:
+            $ref: '#/components/schemas/TradeStep'
+        invoices:
+          type: array
+          items:
+            $ref: '#/components/schemas/Invoice'
     AdminTrade:
       allOf:
         - $ref: '#/components/schemas/Trade'
@@ -416,6 +495,7 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/Invoice'
+
     TradeStep:
       type: object
       required:
