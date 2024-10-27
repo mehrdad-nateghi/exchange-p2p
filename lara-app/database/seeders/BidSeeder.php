@@ -18,13 +18,6 @@ use Illuminate\Database\Seeder;
 
 class BidSeeder extends Seeder
 {
- /*   private Generator $faker;
-
-    public function __construct()
-    {
-        $this->faker = Factory::create();
-    }*/
-
     public function run()
     {
         // get all requests
