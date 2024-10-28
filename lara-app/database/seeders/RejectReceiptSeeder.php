@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Enums\FileStatusEnum;
 use App\Enums\InvoiceStatusEnum;
 use App\Enums\RequestTypeEnum;
+use App\Enums\TradeStatusEnum;
 use App\Enums\TradeStepsStatusEnum;
 use App\Enums\TransactionStatusEnum;
 use App\Models\User;
@@ -72,6 +73,10 @@ class RejectReceiptSeeder extends Seeder
                             'mime_type' => 'image/png',
                             'size' => '56000',
                             'status' => FileStatusEnum::REJECT_BY_BUYER,
+                        ]);
+
+                        $trade->update([
+                            'status' => TradeStatusEnum::SUSPEND->value
                         ]);
                     }
 
