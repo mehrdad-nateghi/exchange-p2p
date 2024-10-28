@@ -60,7 +60,8 @@ class RejectReceiptSeeder extends Seeder
                     if ($tradeStep->priority === 2) {
                         $tradeStep->update([
                             'expire_at' => Carbon::now()->addMinutes($tradeStep->duration_minutes),
-                            'status' => TradeStepsStatusEnum::DOING,
+                            'status' => TradeStepsStatusEnum::DONE,
+                            'completed_at' => Carbon::now()->addMinutes(10),
                         ]);
 
                         // Create the record
@@ -71,6 +72,14 @@ class RejectReceiptSeeder extends Seeder
                             'mime_type' => 'image/png',
                             'size' => '56000',
                             'status' => FileStatusEnum::REJECT_BY_BUYER,
+                        ]);
+                    }
+
+                    // Step three = Confirm or Reject Currency Receipt
+                    if ($tradeStep->priority === 2) {
+                        $tradeStep->update([
+                            'expire_at' => Carbon::now()->addMinutes($tradeStep->duration_minutes),
+                            'status' => TradeStepsStatusEnum::DOING,
                         ]);
                     }
                 }

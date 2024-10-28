@@ -18,13 +18,14 @@ class BidResource extends JsonResource
             'ulid' => $this->ulid,
             'number' => $this->number,
             'price' => $this->price,
-            //'is_highest_price' => $this->is_highest_price,
+            'is_highest_price' => $this->is_highest_price,
             'status' => $this->status->key(),
             'request' => new RequestResource($this->request),
-            'user' => new UserResource($this->user),
+            //'user' => new UserResource($this->user),
             'payment_method' => new PaymentMethodResource($this->paymentMethod),
             'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at
+            'updated_at' => $this->updated_at,
+            'deleted_at' => $this->deleted_at
         ];
     }
 }

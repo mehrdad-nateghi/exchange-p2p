@@ -33,6 +33,7 @@ class DatabaseSeeder extends Seeder
                 DepositReasonSeeder::class,
                 RequestSeeder::class,
                 BidSeeder::class,
+                RejectReceiptSeeder::class,
             ]);
 
             DB::commit();
