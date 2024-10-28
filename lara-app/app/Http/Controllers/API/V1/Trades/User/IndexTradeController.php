@@ -26,6 +26,7 @@ class IndexTradeController extends Controller
                 ->with(['invoices' => function($query) {
                     $query->select('*');
                 }])
+                ->with(['bid.request', 'bid.paymentMethod']) // Nested eager loading
                 ->select([
                     'trades.*',
                 ])
