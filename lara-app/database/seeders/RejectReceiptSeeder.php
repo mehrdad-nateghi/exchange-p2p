@@ -76,7 +76,7 @@ class RejectReceiptSeeder extends Seeder
                     }
 
                     // Step three = Confirm or Reject Currency Receipt
-                    if ($tradeStep->priority === 2) {
+                    if ($tradeStep->priority === 3) {
                         $tradeStep->update([
                             'expire_at' => Carbon::now()->addMinutes($tradeStep->duration_minutes),
                             'status' => TradeStepsStatusEnum::DOING,
