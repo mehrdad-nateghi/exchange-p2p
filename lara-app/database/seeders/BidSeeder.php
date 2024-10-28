@@ -29,14 +29,6 @@ class BidSeeder extends Seeder
             $bidderEmail = str_replace('requester', 'bidder', $requesterEmail);
             $bidder = User::where('email', $bidderEmail)->first();
 
-            $paymentMethod = $bidder->paymentMethods()
-                ->whereIn('type', [
-                    PaymentMethodTypeEnum::FOREIGN_BANK->value,
-                    PaymentMethodTypeEnum::PAYPAL->value
-                ])
-                ->inRandomOrder()
-                ->first();
-
             // get 4 random bidders excluding the main bidder
             $otherBidders = User::where('email', 'like', '%bidder%')
                 ->where('id', '!=', $bidder->id)
@@ -81,6 +73,14 @@ class BidSeeder extends Seeder
             }
 
             // Finally, create the accepted bid with the request price
+            $paymentMethod = $bidder->paymentMethods()
+                ->whereIn('type', [
+                    PaymentMethodTypeEnum::FOREIGN_BANK->value,
+                    PaymentMethodTypeEnum::PAYPAL->value
+                ])
+                ->inRandomOrder()
+                ->first();
+
             $bid = Bid::create([
                 'user_id' => $bidder->id,
                 'request_id' => $request->id,
@@ -89,8 +89,22 @@ class BidSeeder extends Seeder
                 'status' => BidStatusEnum::ACCEPTED->value,
             ]);
 
+            if($request->type->value == RequestTypeEnum::BUY->value){
+                $rialBankForAttachOnRequest = $request->user->paymentMethods()
+                    ->where('type',PaymentMethodTypeEnum::RIAL_BANK->value)
+                    ->inRandomOrder()
+                    ->first();
+            }else{
+                $rialBankForAttachOnRequest = $bidder->paymentMethods()
+                    ->where('type',PaymentMethodTypeEnum::RIAL_BANK->value)
+                    ->inRandomOrder()
+                    ->first();
+            }
+
+            $request->paymentMethods()->attach($rialBankForAttachOnRequest);
+
             $trade = $bid->trades()->create([
-                'request_id' => $bid->request_id,
+                'request_id' => $request->id,
                 'status' => TradeStatusEnum::PROCESSING->value,
             ]);
 
