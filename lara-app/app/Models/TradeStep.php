@@ -22,6 +22,7 @@ class TradeStep extends Model
     protected $casts = [
         'status' => TradeStepsStatusEnum::class,
         'owner' => TradeStepOwnerEnum::class,
+        'expire_at' => 'datetime'
     ];
 
     public function getRouteKeyName(): string
