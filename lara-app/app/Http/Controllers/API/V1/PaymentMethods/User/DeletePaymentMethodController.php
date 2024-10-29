@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\V1\PaymentMethods\User;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\API\V1\PaymentMethod\User\DeletePaymentMethodRequest;
 use App\Models\PaymentMethod;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
@@ -11,6 +12,7 @@ use Illuminate\Support\Facades\Log;
 class DeletePaymentMethodController extends Controller
 {
     public function __invoke(
+        DeletePaymentMethodRequest $request,
         PaymentMethod $paymentMethod,
     ): JsonResponse {
         try {

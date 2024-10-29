@@ -4,6 +4,7 @@ namespace App\Http\Requests\API\V1\PaymentMethod\User;
 
 use App\Enums\PaymentMethodTypeEnum;
 use App\Rules\AlphaSpace;
+use App\Rules\PaymentMethodIsInUse;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -34,6 +35,8 @@ class UpdatePaymentMethodRequest extends FormRequest
         $paymentMethodId = $this->paymentMethod->payment_method_id;
 
         return [
+            'payment_method' => ['required',new PaymentMethodIsInUse($this->paymentMethod)],
+
             // PAYMENT METHODS
             'type' => [
                 'required',
@@ -135,6 +138,7 @@ class UpdatePaymentMethodRequest extends FormRequest
     {
         $this->merge([
             'type' => $this->paymentMethod->type->value,
+            'payment_method' => $this->paymentMethod,
         ]);
     }
 
