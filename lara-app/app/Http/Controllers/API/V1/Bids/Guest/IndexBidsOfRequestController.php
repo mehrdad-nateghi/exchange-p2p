@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\API\V1\Bids\Guest;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\BidCollection;
+use App\Http\Resources\Bids\Guest\BidCollection;
 use App\Models\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
@@ -15,7 +15,11 @@ class IndexBidsOfRequestController extends Controller
     ): JsonResponse
     {
         try {
-            $bids = $request->bids()->orderBy('created_at', 'desc')->paginate();
+            $bids = $request->bids()
+                ->with(['paymentMethod', 'request'])
+                ->orderBy('created_at', 'desc')
+                ->paginate();
+
             $bids = new BidCollection($bids);
 
             return apiResponse()
