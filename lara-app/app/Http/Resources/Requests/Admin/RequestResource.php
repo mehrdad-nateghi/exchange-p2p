@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Requests\Admin;
 
+use App\Http\Resources\Bids\Admin\BidCollection;
 use App\Http\Resources\PaymentMethod\Admin\PaymentMethodCollection;
 use App\Http\Resources\Users\Admin\UserResource;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -23,9 +24,10 @@ class RequestResource extends JsonResource
             'price' => $this->price,
             'type' => $this->type->key(),
             'status' => $this->status->key(),
-            'trade_ulid' => $this->trades()->withTrashed()->latest()->first()->ulid ?? null,
+            'trade_ulid' => $this->latestTradeWithTrashed?->ulid,
             'user' => new UserResource($this->user),
             'user_role_on_request' => $this->user_role_on_request,
+            'bids' => BidCollection::make($this->bids),
             'payment_methods' => PaymentMethodCollection::make($this->paymentMethods),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,

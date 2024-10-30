@@ -14,6 +14,13 @@ class ShowRequestController extends Controller
         Request $request,
     ): JsonResponse {
         try {
+            $request->load([
+                'user',
+                'bids',
+                'latestTradeWithTrashed',
+                'paymentMethods'
+            ]);
+
             $resource =  new RequestResource($request);
 
             return apiResponse()
