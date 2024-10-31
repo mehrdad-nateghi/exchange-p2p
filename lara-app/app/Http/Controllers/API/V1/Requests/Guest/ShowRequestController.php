@@ -14,7 +14,7 @@ class ShowRequestController extends Controller
         Request $request,
     ): JsonResponse {
         try {
-            $resource =  new RequestResource($request);
+            $resource =  new RequestResource($request->load('paymentMethods.paymentMethod'));
 
             return apiResponse()
                 ->message(trans('api-messages.retrieve_success', ['attribute' => trans('api-messages.request')]))

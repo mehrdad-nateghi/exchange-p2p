@@ -16,7 +16,7 @@ class IndexBidsOfRequestController extends Controller
     {
         try {
             $bids = $request->bids()
-                ->with(['paymentMethod', 'request'])
+                ->with(['paymentMethod', 'request', 'user'])
                 ->orderBy('created_at', 'desc')
                 ->paginate();
 

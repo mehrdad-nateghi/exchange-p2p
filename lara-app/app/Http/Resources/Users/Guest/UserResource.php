@@ -19,11 +19,11 @@ class UserResource extends JsonResource
             'ulid' => $this->ulid,
             'first_name' => $this->first_name,
             'last_name' => $this->last_name,
-            'email' => $this->email,
-            'status' => $this->status,
+            //'email' => $this->email,
+            //'status' => $this->status,
             //'roles' => RoleCollection::make($this->roles),
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            //'created_at' => $this->created_at,
+            //'updated_at' => $this->updated_at,
             //'deleted_at' => $this->deleted_at,
           ];
     }

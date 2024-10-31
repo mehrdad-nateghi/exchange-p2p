@@ -18,12 +18,13 @@ class PaypalAccountResource extends JsonResource
         return [
             //'ulid' => $this->ulid,
             'type' => PaymentMethodTypeEnum::PAYPAL->key(),
-            'holder_name' => $this->holder_name,
-            'email' => $this->email,
             'icon' => $this->icon,
+
+            /*'holder_name' => $this->holder_name,
+            'email' => $this->email,
             'is_active' => $this->is_active,
             'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            'updated_at' => $this->updated_at,*/
           ];
     }
 }

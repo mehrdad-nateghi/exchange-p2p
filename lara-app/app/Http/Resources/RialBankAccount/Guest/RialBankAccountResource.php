@@ -18,15 +18,16 @@ class RialBankAccountResource extends JsonResource
         return [
             //'ulid' => $this->ulid,
             'type' => PaymentMethodTypeEnum::RIAL_BANK->key(),
+            'icon' => $this->icon,
+/*
             'holder_name' => $this->holder_name,
             'bank_name' => $this->bank_name,
             'card_number' => $this->card_number,
             'iban' => $this->iban,
             'account_no' => $this->account_no,
-            'icon' => $this->icon,
             'is_active' => $this->is_active,
             'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            'updated_at' => $this->updated_at,*/
           ];
     }
 }

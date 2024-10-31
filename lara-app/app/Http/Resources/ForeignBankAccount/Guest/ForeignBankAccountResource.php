@@ -18,14 +18,15 @@ class ForeignBankAccountResource extends JsonResource
         return [
             //'ulid' => $this->ulid,
             'type' => PaymentMethodTypeEnum::FOREIGN_BANK->key(),
-            'holder_name' => $this->holder_name,
+            'icon' => $this->icon,
+
+           /* 'holder_name' => $this->holder_name,
             'bank_name' => $this->bank_name,
             'iban' => $this->iban,
             'bic' => $this->bic,
-            'icon' => $this->icon,
             'is_active' => $this->is_active,
             'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            'updated_at' => $this->updated_at,*/
           ];
     }
 }

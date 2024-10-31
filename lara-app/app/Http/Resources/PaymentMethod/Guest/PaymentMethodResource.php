@@ -16,7 +16,7 @@ class PaymentMethodResource extends JsonResource
         return [
             'ulid' => $this->ulid,
             'user' => $this->whenLoaded('user', fn() => new UserResource($this->user)),
-            'payment_method' => $this->getPaymentMethodResource(),
+            'payment_method' => $this->whenLoaded('paymentMethod', fn() => $this->getPaymentMethodResource()),
           ];
     }
 
