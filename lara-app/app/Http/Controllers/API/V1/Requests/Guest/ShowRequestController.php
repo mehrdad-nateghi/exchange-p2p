@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\API\V1\Requests\Admin;
+namespace App\Http\Controllers\API\V1\Requests\Guest;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\Requests\Admin\RequestResource;
+use App\Http\Resources\Requests\Guest\RequestResource;
 use App\Models\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
@@ -14,14 +14,7 @@ class ShowRequestController extends Controller
         Request $request,
     ): JsonResponse {
         try {
-            $request->load([
-                'user',
-                'bids',
-                'latestTradeWithTrashed',
-                'paymentMethods'
-            ]);
-
-            $resource =  new RequestResource($request);
+            $resource =  new RequestResource($request->load('paymentMethods.paymentMethod'));
 
             return apiResponse()
                 ->message(trans('api-messages.retrieve_success', ['attribute' => trans('api-messages.request')]))

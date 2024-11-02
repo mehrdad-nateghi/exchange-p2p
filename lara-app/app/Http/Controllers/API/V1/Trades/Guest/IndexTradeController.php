@@ -14,10 +14,11 @@ class IndexTradeController extends Controller
     public function __invoke(): JsonResponse
     {
         try {
-            $trades = Trade::whereIn('status', [
-                TradeStatusEnum::PROCESSING->value,
-                TradeStatusEnum::COMPLETED->value,
-            ])
+            $trades = Trade::with(['request.bids.user'])
+                ->whereIn('status', [
+                    TradeStatusEnum::PROCESSING->value,
+                    TradeStatusEnum::COMPLETED->value,
+                ])
                 ->orderBy('created_at', 'desc')
                 ->paginate();
 
