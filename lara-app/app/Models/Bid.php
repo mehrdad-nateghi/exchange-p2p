@@ -25,11 +25,12 @@ class Bid extends Model
     }
 
     protected $fillable = [
-        'user_id', 'request_id', 'payment_method_id', 'price', 'status'
+        'user_id', 'request_id', 'payment_method_id', 'price', 'status','rejected_at'
     ];
 
     protected $casts = [
-        'status' => BidStatusEnum::class
+        'status' => BidStatusEnum::class,
+        'rejected_at' => 'datetime'
     ];
 
     public function request(): BelongsTo

@@ -3,7 +3,7 @@
 namespace App\Http\Resources\Bids\Admin;
 
 use App\Http\Resources\PaymentMethod\Admin\PaymentMethodResource;
-use App\Http\Resources\Requests\Admin\RequestResource;
+use App\Http\Resources\Users\Admin\UserResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class BidResource extends JsonResource
@@ -22,6 +22,7 @@ class BidResource extends JsonResource
             'price' => $this->price,
             'is_highest_price' => $this->is_highest_price,
             'status' => $this->status->key(),
+            'user' => new UserResource($this->user),
             'payment_method' => new PaymentMethodResource($this->paymentMethod),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,

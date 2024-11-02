@@ -69,6 +69,7 @@ class BidSeeder extends Seeder
                     'payment_method_id' => $otherPaymentMethod->id,
                     'price' => $randomPrice,
                     'status' => BidStatusEnum::REJECTED->value,
+                    'rejected_at' => now(),
                 ]);
             }
 
