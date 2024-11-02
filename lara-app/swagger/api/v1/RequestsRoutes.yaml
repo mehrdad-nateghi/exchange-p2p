@@ -250,3 +250,31 @@
                           description: "Array of request items"
                           items:
                             $ref: "#/components/schemas/Request"
+"/admins/requests/{request}":
+  get:
+    tags:
+      - requests
+    summary: "Get a request by ULID"
+    description: "This endpoint retrieve a request by ULID for Admin."
+    operationId: getAdminRequest
+    parameters:
+      - name: request
+        in: path
+        required: true
+        description: "The ULID of the request."
+        schema:
+          type: string
+    responses:
+      "200":
+        description: "The user's request was retrieved successfully."
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/Base200Response"
+                - type: object
+                  required:
+                    - data
+                  properties:
+                    data:
+                      $ref: "#/components/schemas/Request"
