@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('number')->unique()->index();
             $table->decimal('price',13,2);
             $table->tinyInteger('status')->index();
+            $table->dateTime('rejected_at')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

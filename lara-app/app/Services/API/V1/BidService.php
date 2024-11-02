@@ -29,7 +29,10 @@ class BidService
 
         $bid->request->bids()
             ->where('id', '!=', $bid->id)
-            ->update(['status' => BidStatusEnum::REJECTED]);
+            ->update([
+                'status' => BidStatusEnum::REJECTED,
+                'rejected_at' => now(),
+            ]);
 
         return $bid->fresh();
     }
