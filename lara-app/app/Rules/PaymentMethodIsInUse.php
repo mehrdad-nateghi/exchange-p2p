@@ -40,7 +40,8 @@ class PaymentMethodIsInUse implements Rule
                 })->orWhereHas('bids', function ($q) {
                     $q->where('bids.payment_method_id', $this->paymentMethod->id);
                 });
-            });
+            })
+            ->exists();
 
         if ($requestExists) {
             return false;
