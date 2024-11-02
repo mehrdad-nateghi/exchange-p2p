@@ -225,6 +225,19 @@ components:
               description: 'Array of payment method items'
               items:
                 $ref: '#/components/schemas/PaymentMethod'
+        bids:
+          type: object
+          required:
+            - items
+            - pagination
+          properties:
+            pagination:
+              $ref: '#/components/schemas/Pagination'
+            items:
+              type: array
+              description: 'Array of bids'
+              items:
+                $ref: '#/components/schemas/Bid'
     GuestRequest:
       type: object
       required:
@@ -374,6 +387,8 @@ components:
           example: '2024-07-07T06:38:04.000000Z'
         request:
           $ref: '#/components/schemas/Request'
+        payment_method:
+          $ref: '#/components/schemas/PaymentMethod'
     Trade:
       type: object
       required:
@@ -400,6 +415,8 @@ components:
           example: 'processing'
         request:
           $ref: '#/components/schemas/GuestRequest'
+        bid:
+          $ref: '#/components/schemas/Bid'
         completed_at:
           type: string
           format: date-time
