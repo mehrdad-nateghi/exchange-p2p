@@ -4,7 +4,7 @@ namespace App\Http\Controllers\API\V1\Requests\Guest;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\Request\Guest\IndexRequestRequest;
-use App\Http\Resources\RequestCollection;
+use App\Http\Resources\Requests\Guest\RequestCollection;
 use App\Models\Request;
 use App\QueryFilters\RequestPaymentMethodFilter;
 use App\QueryFilters\RequestStatusFilter;
@@ -22,7 +22,7 @@ class IndexRequestController extends Controller
     ): JsonResponse
     {
         try {
-            $requests = QueryBuilder::for(Request::class)
+            $requests = QueryBuilder::for(Request::with('paymentMethods.paymentMethod'))
                 ->allowedFilters([
                     AllowedFilter::custom('type', new RequestTypeFilter),
                     AllowedFilter::custom('status', new RequestStatusFilter),
