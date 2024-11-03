@@ -17,13 +17,6 @@ class ValidatePriceForBid implements Rule
         $this->request = $request;
     }
 
-    /**
-     * Determine if the validation rule passes.
-     *
-     * @param string $attribute
-     * @param mixed $value
-     * @return bool
-     */
     public function passes($attribute, $value)
     {
         if (!$this->request) {
@@ -36,16 +29,19 @@ class ValidatePriceForBid implements Rule
         $value = (int) $value;
         $requestPrice = (int) $this->request->price;
         $minAllowedPrice = (int) $this->request->min_allowed_price;
-        $isBuyRequest = $this->request->type->value === RequestTypeEnum::BUY->value ; // Assuming you have a type field
+        $maxAllowedPrice = (int) $this->request->max_allowed_price;
+        $isBuyRequest = $this->request->type->value === RequestTypeEnum::BUY->value;
 
         if (empty($latestBid)) {
             if ($isBuyRequest) {
-                if ($value < $minAllowedPrice || $value > $requestPrice) {
-                    $this->errorMessage = __('api-messages.bid_price_must_between', ['min' => $minAllowedPrice, 'max' => $requestPrice]);
+                // For BUY: First bid should be between request_price and max_allowed_price (exclusive request_price)
+                if ($value <= $requestPrice || $value > $maxAllowedPrice) {
+                    $this->errorMessage = __('api-messages.bid_price_must_between', ['min' => $requestPrice, 'max' => $maxAllowedPrice]);
                     return false;
                 }
-            } else { // Sell request
-                if ($value > $requestPrice || $value < $minAllowedPrice) {
+            } else {
+                // For SELL: First bid should be between min_allowed_price and request_price (exclusive request_price)
+                if ($value < $minAllowedPrice || $value >= $requestPrice) {
                     $this->errorMessage = __('api-messages.bid_price_must_between', ['min' => $minAllowedPrice, 'max' => $requestPrice]);
                     return false;
                 }
@@ -54,46 +50,25 @@ class ValidatePriceForBid implements Rule
 
         if (!empty($latestBid)) {
             if ($isBuyRequest) {
-                $minPrice = $latestBid->price + config('constants.BID_PRICE_PLUS_LATEST_BID_PRICE_RIAL');
-                $maxPrice = $requestPrice;
-
-                if ($value <= $latestBid->price || $value > $maxPrice) {
-                    $this->errorMessage = __('api-messages.bid_price_must_between', ['min' => $minPrice, 'max' => $maxPrice]);
-                    return false;
-                }
-            } else { // Sell request
                 $maxPrice = $latestBid->price - config('constants.BID_PRICE_PLUS_LATEST_BID_PRICE_RIAL');
-                $minPrice = $minAllowedPrice;
-
-                if ($value >= $latestBid->price || $value < $minPrice) {
-                    $this->errorMessage = __('api-messages.bid_price_must_between', ['min' => $minPrice, 'max' => $maxPrice]);
+                // For BUY: New bid must be lower than last bid but higher than request_price
+                if ($value >= $latestBid->price || $value <= $requestPrice) {
+                    $this->errorMessage = __('api-messages.bid_price_must_between', ['min' => $requestPrice, 'max' => $maxPrice]);
+                    return false;
+                }
+            } else {
+                $minPrice = $latestBid->price + config('constants.BID_PRICE_PLUS_LATEST_BID_PRICE_RIAL');
+                // For SELL: New bid must be higher than last bid but lower than request_price
+                if ($value <= $latestBid->price || $value >= $requestPrice) {
+                    $this->errorMessage = __('api-messages.bid_price_must_between', ['min' => $minPrice, 'max' => $requestPrice]);
                     return false;
                 }
             }
         }
-
-        /*if (empty($latestBid) && ($value < $minAllowedPrice || $value > $requestPrice)) {
-            $this->errorMessage = __('api-messages.bid_price_must_between', ['min' => $minAllowedPrice, 'max' => $requestPrice]);
-            return false;
-        }
-
-        if(!empty($latestBid)){
-            $maxPrice = min($latestBid->price + config('constants.BID_PRICE_PLUS_LATEST_BID_PRICE_RIAL'), $requestPrice);
-
-            if ($value < $minAllowedPrice || $value <= $maxPrice || $value > $requestPrice) {
-                $this->errorMessage = __('api-messages.bid_price_must_between', ['min' => $maxPrice, 'max' => $requestPrice]);
-                return false;
-            }
-        }*/
 
         return true;
     }
 
-    /**
-     * Get the validation error message.
-     *
-     * @return string
-     */
     public function message()
     {
         return $this->errorMessage;
