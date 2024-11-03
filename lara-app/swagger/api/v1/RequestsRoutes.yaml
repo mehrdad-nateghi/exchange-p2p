@@ -1,24 +1,24 @@
-"/users/requests":
+'/users/requests':
   get:
     tags:
       - requests
-    summary: "Get all requests"
-    description: "Get all requests of a user"
+    summary: 'Get all requests'
+    description: 'Get all requests of a user'
     operationId: getUserRequests
     parameters:
-      - $ref: "#/components/parameters/pageSize"
-      - $ref: "#/components/parameters/pageNumber"
-      - $ref: "#/components/parameters/requestSort"
-      - $ref: "#/components/parameters/requestType"
-      - $ref: "#/components/parameters/requestStatus"
+      - $ref: '#/components/parameters/pageSize'
+      - $ref: '#/components/parameters/pageNumber'
+      - $ref: '#/components/parameters/requestSort'
+      - $ref: '#/components/parameters/requestType'
+      - $ref: '#/components/parameters/requestStatus'
     responses:
-      "200":
-        description: "The requests was retrieved successfully."
+      '200':
+        description: 'The requests was retrieved successfully.'
         content:
           application/json:
             schema:
               allOf:
-                - $ref: "#/components/schemas/Base200Response"
+                - $ref: '#/components/schemas/Base200Response'
                 - type: object
                   required:
                     - data
@@ -30,17 +30,17 @@
                         - pagination
                       properties:
                         pagination:
-                          $ref: "#/components/schemas/Pagination"
+                          $ref: '#/components/schemas/Pagination'
                         items:
                           type: array
-                          description: "Array of request items"
+                          description: 'Array of request items'
                           items:
-                            $ref: "#/components/schemas/Request"
+                            $ref: '#/components/schemas/Request'
   post:
     tags:
       - requests
-    summary: "Create a new request"
-    description: "Create a new request with the specified details"
+    summary: 'Create a new request'
+    description: 'Create a new request with the specified details'
     operationId: createRequest
     requestBody:
       required: true
@@ -56,97 +56,97 @@
             properties:
               type:
                 type: integer
-                description: "The type of request, Buy: 1 | Sell:2"
+                description: 'The type of request, Buy: 1 | Sell:2'
                 enum:
                   - 1
                   - 2
                 example: 1
               volume:
                 type: integer
-                description: "Volume of the request"
-                example: "250"
+                description: 'Volume of the request'
+                example: '250'
               price:
                 type: integer
-                description: "Price of the request"
-                example: "2000"
+                description: 'Price of the request'
+                example: '2000'
               payment_methods:
                 type: array
-                description: "Array of payment method ULIDs"
+                description: 'Array of payment method ULIDs'
                 items:
                   type: string
                 example:
-                  ["01J25YKXXAS0KX1W4383HE65GR", "01J25YKY0C2GHB2Y4BAESSTXQ6"]
+                  ['01J25YKXXAS0KX1W4383HE65GR', '01J25YKY0C2GHB2Y4BAESSTXQ6']
     responses:
-      "201":
-        description: "Created Successfully"
+      '201':
+        description: 'Created Successfully'
         content:
           application/json:
             schema:
               allOf:
-                - $ref: "#/components/schemas/Base200Response"
+                - $ref: '#/components/schemas/Base200Response'
                 - type: object
                   required:
                     - data
                   properties:
                     data:
-                      $ref: "#/components/schemas/Request"
+                      $ref: '#/components/schemas/Request'
 
-"/users/requests/{request}":
+'/users/requests/{request}':
   get:
     tags:
       - requests
-    summary: "Get a request by ULID"
-    description: "This endpoint retrieve a request by ULID."
+    summary: 'Get a request by ULID'
+    description: 'This endpoint retrieve a request by ULID.'
     operationId: getUserRequest
     parameters:
       - name: request
         in: path
         required: true
-        description: "The ULID of the request."
+        description: 'The ULID of the request.'
         schema:
           type: string
     responses:
-      "200":
+      '200':
         description: "The user's request was retrieved successfully."
         content:
           application/json:
             schema:
               allOf:
-                - $ref: "#/components/schemas/Base200Response"
+                - $ref: '#/components/schemas/Base200Response'
                 - type: object
                   required:
                     - data
                   properties:
                     data:
-                      $ref: "#/components/schemas/Request"
+                      $ref: '#/components/schemas/Request'
   delete:
     tags:
       - requests
-    summary: "Delete a request by ULID"
-    description: "This endpoint deletes a request by ULID."
+    summary: 'Delete a request by ULID'
+    description: 'This endpoint deletes a request by ULID.'
     operationId: deleteUserRequest
     parameters:
       - name: request
         in: path
         required: true
-        description: "The ULID of the request."
+        description: 'The ULID of the request.'
         schema:
           type: string
     responses:
-      "200":
+      '200':
         description: "The user's request was deleted successfully."
         content:
           application/json:
             schema:
               allOf:
-                - $ref: "#/components/schemas/Base200Response"
+                - $ref: '#/components/schemas/Base200Response'
                 - type: object
                   properties:
                     data:
                       type: object
                       nullable: true
 
-"users/requests/{request}/add/payment-method/{paymentMethod}":
+'users/requests/{request}/add/payment-method/{paymentMethod}':
   post:
     tags:
       - requests
@@ -167,23 +167,24 @@
         schema:
           type: string
     responses:
-      "200":
+      '200':
         description: Payment method successfully added to the request
         content:
           application/json:
             schema:
               allOf:
-                - $ref: "#/components/schemas/Base200Response"
+                - $ref: '#/components/schemas/Base200Response'
                 - type: object
                   properties:
                     data:
-                      $ref: "#/components/schemas/Request"
-"/admins/requests":
+                      $ref: '#/components/schemas/Request'
+
+'/admins/requests':
   get:
     tags:
       - requests
-    summary: "Get admin requests"
-    description: "Retrieve admin requests"
+    summary: 'Get admin requests'
+    description: 'Retrieve admin requests'
     operationId: getAdminRequests
     parameters:
       - in: query
@@ -206,8 +207,8 @@
           type: array
           items:
             type: string
-            enum: [ foreign_bank, paypal, rial_bank ]
-          example: [ paypal ]
+            enum: [foreign_bank, paypal, rial_bank]
+          example: [paypal]
       - in: query
         name: filter[price_from]
         schema:
@@ -220,19 +221,19 @@
           type: integer
           example: 68915
         description: Maximum price for filtering the requests (optional).
-      - $ref: "#/components/parameters/pageSize"
-      - $ref: "#/components/parameters/pageNumber"
-      - $ref: "#/components/parameters/requestSort"
-      - $ref: "#/components/parameters/requestType"
-      - $ref: "#/components/parameters/requestStatus"
+      - $ref: '#/components/parameters/pageSize'
+      - $ref: '#/components/parameters/pageNumber'
+      - $ref: '#/components/parameters/requestSort'
+      - $ref: '#/components/parameters/requestType'
+      - $ref: '#/components/parameters/requestStatus'
     responses:
-      "200":
-        description: "The requests was retrieved successfully."
+      '200':
+        description: 'The requests was retrieved successfully.'
         content:
           application/json:
             schema:
               allOf:
-                - $ref: "#/components/schemas/Base200Response"
+                - $ref: '#/components/schemas/Base200Response'
                 - type: object
                   required:
                     - data
@@ -244,37 +245,124 @@
                         - pagination
                       properties:
                         pagination:
-                          $ref: "#/components/schemas/Pagination"
+                          $ref: '#/components/schemas/Pagination'
                         items:
                           type: array
-                          description: "Array of request items"
+                          description: 'Array of request items'
                           items:
-                            $ref: "#/components/schemas/Request"
-"/admins/requests/{request}":
+                            $ref: '#/components/schemas/Request'
+
+'/admins/requests/{request}':
   get:
     tags:
       - requests
-    summary: "Get a request by ULID"
-    description: "This endpoint retrieve a request by ULID for Admin."
+    summary: 'Get a request by ULID'
+    description: 'This endpoint retrieve a request by ULID for Admin.'
     operationId: getAdminRequest
     parameters:
       - name: request
         in: path
         required: true
-        description: "The ULID of the request."
+        description: 'The ULID of the request.'
         schema:
           type: string
     responses:
-      "200":
+      '200':
         description: "The user's request was retrieved successfully."
         content:
           application/json:
             schema:
               allOf:
-                - $ref: "#/components/schemas/Base200Response"
+                - $ref: '#/components/schemas/Base200Response'
                 - type: object
                   required:
                     - data
                   properties:
                     data:
-                      $ref: "#/components/schemas/Request"
+                      $ref: '#/components/schemas/Request'
+
+'/requests':
+  get:
+    tags:
+      - requests
+    summary: 'Get all system requests'
+    description: 'Get all requests'
+    operationId: getAllRequests
+    parameters:
+      - $ref: '#/components/parameters/requestType'
+      - $ref: '#/components/parameters/requestSort'
+      - $ref: '#/components/parameters/pageSize'
+      - $ref: '#/components/parameters/pageNumber'
+      - $ref: '#/components/parameters/requestStatus'
+      - name: filter[payment_method]
+        in: query
+        description: The type of payment_method
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+            enum: [foreign_bank, paypal]
+          example: [paypal]
+      - name: filter[volume_from]
+        in: query
+        description: The minimum volume range of the requests (0 - 100000)
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          maximum: 100000
+          example: 150
+
+      - name: filter[volume_to]
+        in: query
+        description: The maximum volume range of the requests (0 - 100000)
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          maximum: 100000
+          example: 150
+    responses:
+      '200':
+        description: 'The requests was retrieved successfully.'
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/Base200Response'
+                - type: object
+                  required:
+                    - data
+                  properties:
+                    data:
+                      type: object
+                      required:
+                        - items
+                        - pagination
+                      properties:
+                        pagination:
+                          $ref: '#/components/schemas/Pagination'
+                        items:
+                          type: array
+                          description: 'Array of request items'
+                          items:
+                            allOf:
+                              - $ref: '#/components/schemas/GuestRequest'
+                              - type: object
+                                required:
+                                  - payment_methods
+                                properties:
+                                  payment_methods:
+                                    type: object
+                                    required:
+                                      - items
+                                      - pagination
+                                    properties:
+                                      pagination:
+                                        $ref: '#/components/schemas/Pagination'
+                                      items:
+                                        type: array
+                                        description: 'Array of payment method items'
+                                        items:
+                                          $ref: '#/components/schemas/PaymentMethod'
