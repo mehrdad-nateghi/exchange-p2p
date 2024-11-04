@@ -30,8 +30,15 @@ spec:
           env:
             - name: NODE_ENV
               value: production
+
             - name: PUBLIC_BUILD_COMMIT_SHA
               value: "'${DEPLOY_COMMIT_SHORT_SHA}'"
+
+            - name: NEXT_PUBLIC_API_SERVER_ADDRESS
+              value: http://core-laravel:8000
+
+            - name: NEXT_PUBLIC_AUTH_SESSION_KEY
+              value: laravel_session
           resources: {}
           livenessProbe:
             failureThreshold: 5
