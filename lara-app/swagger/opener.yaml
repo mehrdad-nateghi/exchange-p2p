@@ -247,6 +247,7 @@ components:
         - price
         - type
         - status
+        - trade_ulid
         - created_at
         - updated_at
       properties:
@@ -276,6 +277,11 @@ components:
           enum: ['pending', 'processing', 'trading', 'canceled']
           description: 'Status of the request'
           example: 'pending'
+        trade_ulid:
+          type: string
+          nullable: true
+          description: 'Unique identifier for the trade of the request'
+          example: '01J26AAGQQ2HTYHZGR9PM6DGJD'
         created_at:
           type: string
           format: date-time
@@ -351,6 +357,8 @@ components:
         - user
         - request
         - created_at
+        - deleted_at
+        - rejected_at
         - updated_at
       properties:
         ulid:
@@ -379,6 +387,16 @@ components:
           type: string
           format: date-time
           description: 'Creation timestamp'
+          example: '2024-07-07T06:38:04.000000Z'
+        deleted_at:
+          type: string
+          format: date-time
+          description: 'deleted timestamp'
+          example: '2024-07-07T06:38:04.000000Z'
+        rejected_at:
+          type: string
+          format: date-time
+          description: 'rejected timestamp'
           example: '2024-07-07T06:38:04.000000Z'
         updated_at:
           type: string
@@ -512,7 +530,6 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/Invoice'
-
     TradeStep:
       type: object
       required:
