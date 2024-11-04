@@ -52,14 +52,14 @@ class ValidatePriceForBid implements Rule
             if ($isBuyRequest) {
                 $maxPrice = $latestBid->price - config('constants.BID_PRICE_PLUS_LATEST_BID_PRICE_RIAL');
                 // For BUY: New bid must be lower than last bid but higher than request_price
-                if ($value < $requestPrice || $value >= $maxPrice) {
+                if ($value < $requestPrice || $value > $maxPrice) {
                     $this->errorMessage = __('api-messages.bid_price_must_between', ['min' => $requestPrice, 'max' => $maxPrice]);
                     return false;
                 }
             } else {
                 $minPrice = $latestBid->price + config('constants.BID_PRICE_PLUS_LATEST_BID_PRICE_RIAL');
                 // For SELL: New bid must be higher than last bid but lower than request_price
-                if ($value > $requestPrice || $value <= $minPrice) {
+                if ($value > $requestPrice || $value < $minPrice) {
                     $this->errorMessage = __('api-messages.bid_price_must_between', ['min' => $minPrice, 'max' => $requestPrice]);
                     return false;
                 }
