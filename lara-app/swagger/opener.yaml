@@ -247,6 +247,7 @@ components:
         - price
         - type
         - status
+        - trade_ulid
         - created_at
         - updated_at
       properties:
@@ -276,6 +277,11 @@ components:
           enum: ['pending', 'processing', 'trading', 'canceled']
           description: 'Status of the request'
           example: 'pending'
+        trade_ulid:
+          type: string
+          nullable: true
+          description: 'Unique identifier for the trade of the request'
+          example: '01J26AAGQQ2HTYHZGR9PM6DGJD'
         created_at:
           type: string
           format: date-time
@@ -524,7 +530,6 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/Invoice'
-
     TradeStep:
       type: object
       required:

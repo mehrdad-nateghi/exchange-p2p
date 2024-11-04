@@ -313,7 +313,6 @@
           minimum: 0
           maximum: 100000
           example: 150
-
       - name: filter[volume_to]
         in: query
         description: The maximum volume range of the requests (0 - 100000)
@@ -366,3 +365,73 @@
                                         description: 'Array of payment method items'
                                         items:
                                           $ref: '#/components/schemas/PaymentMethod'
+
+'/requests/{request}':
+  get:
+    tags:
+      - requests
+    summary: 'Get a request by ULID'
+    description: 'This endpoint retrieves a request by ULID.'
+    operationId: getRequest
+    parameters:
+      - name: request
+        in: path
+        required: true
+        description: 'The ULID of the request.'
+        schema:
+          type: string
+    responses:
+      '200':
+        description: 'The request was retrieved successfully.'
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/Base200Response'
+                - type: object
+                  required:
+                    - data
+                  properties:
+                    data:
+                      allOf:
+                        - $ref: '#/components/schemas/GuestRequest'
+                        - type: object
+                          required:
+                            - payment_methods
+                          properties:
+                            payment_methods:
+                              type: object
+                              required:
+                                - items
+                                - pagination
+                              properties:
+                                pagination:
+                                  $ref: '#/components/schemas/Pagination'
+                                items:
+                                  type: array
+                                  description: 'Array of payment method items'
+                                  items:
+                                    type: object
+                                    required:
+                                      - ulid
+                                      - payment_method
+                                    properties:
+                                      ulid:
+                                        type: string
+                                        description: 'Unique identifier for the payment method'
+                                        example: '01J25YKXXAS0KX1W4383HE65GR'
+                                      payment_method:
+                                        type: object
+                                        required:
+                                          - type
+                                          - icon
+                                        properties:
+                                          type:
+                                            type: string
+                                            enum:
+                                              - foreign_bank
+                                              - paypal
+                                              - rial_bank
+                                          icon:
+                                            type: string
+                                            description: 'Payment method icon URL'
