@@ -448,6 +448,10 @@ components:
           type: string
           format: date-time
           description: 'Last update timestamp'
+        canceled_at:
+          type: string
+          format: date-time
+          description: 'Canceled timestamp'
     UserTrade:
       type: object
       required:
