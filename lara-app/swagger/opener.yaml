@@ -163,9 +163,9 @@ components:
         - volume
         - price
         - type
-        - user
         - status
         - created_at
+        - user_role_on_request
         - updated_at
         - payment_methods
       properties:
@@ -178,12 +178,15 @@ components:
           nullable: true
           description: 'Unique identifier for the trade of the request'
           example: '01J26AAGQQ2HTYHZGR9PM6DGJD'
+        user_role_on_request:
+          type: string
+          enum: [buyer, seller]
+          description: 'Role of the user on the request'
+          example: 'buyer'
         number:
           type: string
           description: 'Request number'
           example: 'RE-550585'
-        user:
-          $ref: '#/components/schemas/User'
         volume:
           type: string
           description: 'Volume of the request'
@@ -247,6 +250,7 @@ components:
         - price
         - type
         - status
+        - user
         - trade_ulid
         - created_at
         - updated_at
@@ -282,6 +286,25 @@ components:
           nullable: true
           description: 'Unique identifier for the trade of the request'
           example: '01J26AAGQQ2HTYHZGR9PM6DGJD'
+        user:
+          type: object
+          required:
+            - first_name
+            - last_name
+            - ulid
+          properties:
+            first_name:
+              type: string
+              description: 'First name of the user'
+              example: 'first name'
+            last_name:
+              type: string
+              description: 'Last name of the user'
+              example: 'last name'
+            ulid:
+              type: string
+              description: 'Unique identifier for the user'
+              example: '01JBRM9GCZ4TC8BMGGTQ4KS75K'
         created_at:
           type: string
           format: date-time
