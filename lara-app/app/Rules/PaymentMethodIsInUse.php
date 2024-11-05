@@ -2,6 +2,7 @@
 
 namespace App\Rules;
 
+use App\Enums\BidStatusEnum;
 use App\Enums\RequestStatusEnum;
 use App\Models\PaymentMethod;
 use App\Models\User;
@@ -28,26 +29,27 @@ class PaymentMethodIsInUse implements Rule
      */
     public function passes($attribute, $value)
     {
+        $activeStatuses = [
+            RequestStatusEnum::PENDING->value,
+            RequestStatusEnum::PROCESSING->value,
+            RequestStatusEnum::TRADING->value
+        ];
+
         $requestExists = $this->user->requests()
-            ->whereIn('status', [
-                RequestStatusEnum::PENDING->value,
-                RequestStatusEnum::PROCESSING->value,
-                RequestStatusEnum::TRADING->value
-            ])
-            ->where(function ($query) {
-                $query->whereHas('paymentMethods', function ($q) {
-                    $q->where('payment_methods.id', $this->paymentMethod->id);
-                })->orWhereHas('bids', function ($q) {
-                    $q->where('bids.payment_method_id', $this->paymentMethod->id);
-                });
-            })
+            ->whereIn('status', $activeStatuses)
+            ->whereHas('paymentMethods', fn($q) => $q->where('payment_methods.id', $this->paymentMethod->id))
             ->exists();
 
-        if ($requestExists) {
-            return false;
-        }
+        $bidExists = $this->user->bids()
+            ->whereIn('status', [
+                BidStatusEnum::REGISTERED->value,
+                BidStatusEnum::ACCEPTED->value
+            ])
+            ->whereHas('request', fn($q) => $q->whereIn('status', $activeStatuses))
+            ->whereHas('paymentMethod', fn($q) => $q->where('payment_methods.id', $this->paymentMethod->id))
+            ->exists();
 
-        return true;
+        return !($requestExists || $bidExists);
     }
 
     /**
