@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\BidStatusEnum;
+use App\Enums\RequestTypeEnum;
 use App\Traits\Global\Number;
 use App\Traits\Global\Paginatable;
 use App\Traits\Global\Ulid;
@@ -78,6 +79,23 @@ class Bid extends Model
             ->max('price');
 
         return $this->price == $highestBid;
+    }
+
+    public function getIsBestPriceAttribute()
+    {
+        if($this->request->type->value === RequestTypeEnum::BUY->value){
+            $bestPrice = Bid::query()
+                ->where('request_id', $this->request_id)
+                ->min('price');
+        }
+
+        if($this->request->type->value === RequestTypeEnum::SELL->value){
+            $bestPrice = Bid::query()
+                ->where('request_id', $this->request_id)
+                ->max('price');
+        }
+
+        return $this->price == $bestPrice;
     }
 
     public function trades(): HasMany

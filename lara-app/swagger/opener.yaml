@@ -352,7 +352,7 @@ components:
         - ulid
         - number
         - price
-        - is_highest_price
+        - is_best_price
         - status
         - user
         - request
@@ -375,7 +375,7 @@ components:
           type: string
           description: 'Price of the bid'
           example: '59193.00'
-        is_highest_price:
+        is_best_price:
           type: boolean
           description: 'indicates that the bid has highest price or not'
         status:
