@@ -20,39 +20,30 @@ class IndexTradeController extends Controller
     ): JsonResponse
     {
         try {
-            $cacheKey = 'all_trades_' . $request->fullUrl();
+            $trades = QueryBuilder::for(Auth::user()->trades())
+                ->with(['tradeSteps' => function($query) {
+                    $query->select('*');
+                }])
+                ->with(['invoices' => function($query) {
+                    $query->select('*');
+                }])
+                ->with(['bid.request', 'bid.paymentMethod'])
+                ->select([
+                    'trades.*',
+                ])
+                ->allowedFilters([
+                    AllowedFilter::custom('status', new TradeStatusFilter),
+                ])
+                ->defaultSort(['-created_at'])
+                ->allowedSorts('created_at')
+                ->paginateWithDefault();
 
-            /*$value = Cache::get('all_trades_' . $request->fullUrl());
-            if (!is_null($value)) {
-                dd($value);
-            }*/
+            $trades = new TradeCollection($trades);
 
-            return Cache::remember($cacheKey, 3600, function () use ($request) {
-                $trades = QueryBuilder::for(Auth::user()->trades())
-                    ->with(['tradeSteps' => function($query) {
-                        $query->select('*');
-                    }])
-                    ->with(['invoices' => function($query) {
-                        $query->select('*');
-                    }])
-                    ->with(['bid.request', 'bid.paymentMethod'])
-                    ->select([
-                        'trades.*',
-                    ])
-                    ->allowedFilters([
-                        AllowedFilter::custom('status', new TradeStatusFilter),
-                    ])
-                    ->defaultSort(['-created_at'])
-                    ->allowedSorts('created_at')
-                    ->paginateWithDefault();
-
-                $trades = new TradeCollection($trades);
-
-                return apiResponse()
-                    ->message(trans('api-messages.retrieve_success', ['attribute' => trans('api-messages.trades')]))
-                    ->data($trades)
-                    ->getApiResponse();
-            });
+            return apiResponse()
+                ->message(trans('api-messages.retrieve_success', ['attribute' => trans('api-messages.trades')]))
+                ->data($trades)
+                ->getApiResponse();
         } catch (\Throwable $t) {
             Log::error($t);
             return internalServerError();
