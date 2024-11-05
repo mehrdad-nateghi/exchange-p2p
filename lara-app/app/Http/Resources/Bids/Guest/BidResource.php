@@ -21,7 +21,7 @@ class BidResource extends JsonResource
             'ulid' => $this->ulid,
             'number' => $this->number,
             'price' => $this->price,
-            'is_highest_price' => $this->is_highest_price,
+            'is_best_price' => $this->is_best_price,
             'status' => $this->status->key(),
             'request' => $this->whenLoaded('request', fn() => new RequestResource($this->request)),
             'user' => $this->whenLoaded('user', fn() => new UserResource($this->user)),
