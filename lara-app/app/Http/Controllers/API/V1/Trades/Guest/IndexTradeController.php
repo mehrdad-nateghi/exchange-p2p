@@ -20,7 +20,7 @@ class IndexTradeController extends Controller
                     TradeStatusEnum::COMPLETED->value,
                 ])
                 ->orderBy('created_at', 'desc')
-                ->paginate();
+                ->paginateWithDefault();
 
             $trades = new TradeCollection($trades);
 
