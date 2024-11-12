@@ -74,5 +74,8 @@ return [
     'failed' => 'failed',
     'error' => 'error',
     'deposit_reason' => 'Deposit reason',
+    'impersonation_success' => 'Successfully impersonating :attribute',
 
+    'admin_return_success' => 'Successfully returned to admin account',
+    'admin_return_failed' => 'Failed to return to admin account',
 ];

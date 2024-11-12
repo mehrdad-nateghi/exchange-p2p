@@ -86,7 +86,7 @@ spec:
 
             # SANCTUM--------------------------------------
             - name: SANCTUM_STATEFUL_DOMAINS
-              value: localhost:4000,core-lara-33e1254e7d-paylibero-nightly.apps.ir-thr-ba1.arvancaas.ir,nightly.paylibero.ir
+              value: localhost:4000,core-lara-33e1254e7d-paylibero-nightly.apps.ir-thr-ba1.arvancaas.ir,nightly.paylibero.ir,nightly.admin.paylibero.ir
             - name: SESSION_DOMAIN
               value: .paylibero.ir
 
@@ -204,7 +204,7 @@ spec:
 
             # SANCTUM--------------------------------------
             - name: SANCTUM_STATEFUL_DOMAINS
-              value: localhost:4000,core-lara-33e1254e7d-paylibero-nightly.apps.ir-thr-ba1.arvancaas.ir,nightly.paylibero.ir
+              value: localhost:4000,core-lara-33e1254e7d-paylibero-nightly.apps.ir-thr-ba1.arvancaas.ir,nightly.paylibero.ir,nightly.admin.paylibero.ir
             - name: SESSION_DOMAIN
               value: .paylibero.ir
 
