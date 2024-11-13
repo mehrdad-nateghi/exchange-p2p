@@ -60,6 +60,7 @@ if (!function_exists('getMinMaxAllowedPrice')) {
     {
         // call third party to get current euro price
         // if there's in cache get it if not add it
+        //Cache::forget('min_max_allowed_price');
         return Cache::remember('min_max_allowed_price', now()->addHours(6), function () {
             try {
                 $response = Http::retry(10)->get('http://api.navasan.tech/latest/', [
@@ -76,6 +77,7 @@ if (!function_exists('getMinMaxAllowedPrice')) {
                     }
 
                     return [
+                        'rate' => (int) $euroPrice,
                         'min' => $euroPrice * 0.9,  // Example: 10% below current price
                         'max' => $euroPrice * 1.1,  // Example: 10% above current price
                     ];
