@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\TransactionProviderEnum;
 use App\Enums\TransactionStatusEnum;
 use App\Traits\Global\Paginatable;
 use App\Traits\Global\Ulid;
@@ -21,10 +22,14 @@ class Transaction extends Model
         'amount',
         'currency',
         'status',
+        'provider',
+        'metadata',
     ];
 
     protected $casts = [
-      'status' => TransactionStatusEnum::class
+      'status' => TransactionStatusEnum::class,
+      'provider' => TransactionProviderEnum::class,
+      'metadata' => 'json'
     ];
 
     public function transactionable(): MorphTo

@@ -22,6 +22,8 @@ return new class extends Migration
             $table->string('ref_id')->index()->nullable();
             $table->decimal('amount', 13, 2)->nullable();
             $table->string('currency', 3)->nullable();
+            $table->tinyInteger('provider')->nullable();
+            $table->json('metadata')->nullable();
             $table->tinyInteger('status')->index(); // pending, completed, failed
             $table->timestamps();
             $table->softDeletes();

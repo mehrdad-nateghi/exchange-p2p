@@ -7,6 +7,7 @@ use App\Enums\InvoiceStatusEnum;
 use App\Enums\RequestTypeEnum;
 use App\Enums\TradeStatusEnum;
 use App\Enums\TradeStepsStatusEnum;
+use App\Enums\TransactionProviderEnum;
 use App\Enums\TransactionStatusEnum;
 use App\Models\User;
 use Carbon\Carbon;
@@ -44,6 +45,7 @@ class RejectReceiptSeeder extends Seeder
                             'ref_id' => fake()->numerify('####################'),
                             'amount' => $invoice->total_payable_amount,
                             'currency' => 'IRT',
+                            'provider' => TransactionProviderEnum::FINNOTECH->value,
                             'status' => TransactionStatusEnum::COMPLETED->value
                         ]);
 
