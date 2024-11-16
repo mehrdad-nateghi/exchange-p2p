@@ -62,31 +62,9 @@ class Invoice extends Model
         return $this->morphMany(Transaction::class, 'transactionable');
     }
 
-    public function scopeFilterByUserRole($query)
+    public function scopeFilterByUserId($query)
     {
-        return $query->whereHasMorph('invoiceable', [Trade::class], function($tradeQuery) {
-            $tradeQuery->whereHas('request', function ($q) {
-                $q->where(function ($subQuery) {
-                    $subQuery->where(function ($q) {
-                        // For sell requests
-                        $q->where('type', RequestTypeEnum::SELL->value)
-                            ->where('user_id', Auth::id());
-                    });
-                })->orWhereHas('trades', function ($q) {
-                    // For buy requests
-                    $q->where('type', RequestTypeEnum::BUY->value)
-                        ->whereHas('bid', fn($bidQ) => $bidQ->where('user_id', Auth::id())->where('status', BidStatusEnum::ACCEPTED->value));
-                });
-            });
-        })->where(function($q) {
-            $q->where(function($subQ) {
-                // Seller invoice condition
-                $subQ->where('type', InvoiceTypeEnum::PAY_TOMAN_TO_SELLER->value);
-            })->orWhere(function($subQ) {
-                // Buyer invoice condition
-                $subQ->where('type', InvoiceTypeEnum::STEP_ONE_PAY_TOMAN_TO_SYSTEM->value);
-            });
-        });
+        return $query->where('user_id', Auth::id());
     }
 
     /*public function setFeeAttribute($value)

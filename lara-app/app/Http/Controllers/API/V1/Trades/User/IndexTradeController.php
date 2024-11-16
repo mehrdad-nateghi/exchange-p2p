@@ -21,10 +21,10 @@ class IndexTradeController extends Controller
         try {
             $trades = QueryBuilder::for(Auth::user()->trades())
                 ->with(['tradeSteps' => function($query) {
-                    $query->select('*');
+                    $query->select('*')->filterByUserId();
                 }])
                 ->with(['invoices' => function($query) {
-                    $query->select('*')->filterByUserRole();
+                    $query->select('*')->where('user_id', Auth::id());
                 }])
                 ->with(['bid.request', 'bid.paymentMethod'])
                 ->select([
