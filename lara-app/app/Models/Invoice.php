@@ -63,19 +63,27 @@ class Invoice extends Model
 
     public function scopeFilterByUserRole($query)
     {
-        return $query->whereHas('trade.request', function ($q) {
-            $q->where(function ($subQuery) {
-                $subQuery->where(function ($q) {
-                    // For sell requests
-                    $q->where('type', RequestTypeEnum::SELL->value)
-                        ->where('user_id', Auth::id())
-                        ->whereHas('trade.invoices', fn($invQ) => $invQ->where('type', InvoiceTypeEnum::PAY_TOMAN_TO_SELLER->value));
-                })->orWhere(function ($q) {
-                    // For buy requests
-                    $q->where('type', RequestTypeEnum::BUY->value)
-                        ->whereHas('trade.bid', fn($bidQ) => $bidQ->where('user_id', Auth::id()))
-                        ->whereHas('trade.invoices', fn($invQ) => $invQ->where('type', InvoiceTypeEnum::STEP_ONE_PAY_TOMAN_TO_SYSTEM->value));
+        return $query->whereHasMorph('invoiceable', [Trade::class], function($tradeQuery) {
+            $tradeQuery->whereHas('request', function ($q) {
+                $q->where(function ($subQuery) {
+                    $subQuery->where(function ($q) {
+                        // For sell requests
+                        $q->where('type', RequestTypeEnum::SELL->value)
+                            ->where('user_id', Auth::id());
+                    })->orWhere(function ($q) {
+                        // For buy requests
+                        $q->where('type', RequestTypeEnum::BUY->value)
+                            ->whereHas('bid', fn($bidQ) => $bidQ->where('user_id', Auth::id()));
+                    });
                 });
+            });
+        })->where(function($q) {
+            $q->where(function($subQ) {
+                // Seller invoice condition
+                $subQ->where('type', InvoiceTypeEnum::PAY_TOMAN_TO_SELLER->value);
+            })->orWhere(function($subQ) {
+                // Buyer invoice condition
+                $subQ->where('type', InvoiceTypeEnum::STEP_ONE_PAY_TOMAN_TO_SYSTEM->value);
             });
         });
     }
