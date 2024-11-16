@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\BidStatusEnum;
 use App\Enums\InvoiceStatusEnum;
 use App\Enums\InvoiceTypeEnum;
 use App\Enums\RequestTypeEnum;
@@ -70,11 +71,11 @@ class Invoice extends Model
                         // For sell requests
                         $q->where('type', RequestTypeEnum::SELL->value)
                             ->where('user_id', Auth::id());
-                    })->orWhere(function ($q) {
-                        // For buy requests
-                        $q->where('type', RequestTypeEnum::BUY->value)
-                            ->whereHas('bid', fn($bidQ) => $bidQ->where('user_id', Auth::id()));
                     });
+                })->orWhereHas('trades', function ($q) {
+                    // For buy requests
+                    $q->where('type', RequestTypeEnum::BUY->value)
+                        ->whereHas('bid', fn($bidQ) => $bidQ->where('user_id', Auth::id())->where('status', BidStatusEnum::ACCEPTED->value));
                 });
             });
         })->where(function($q) {
