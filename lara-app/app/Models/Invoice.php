@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\InvoiceStatusEnum;
 use App\Enums\InvoiceTypeEnum;
+use App\Enums\RequestTypeEnum;
 use App\Traits\Global\Number;
 use App\Traits\Global\Paginatable;
 use App\Traits\Global\Ulid;
@@ -14,6 +15,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Support\Facades\Auth;
 
 class Invoice extends Model
 {
@@ -57,6 +59,25 @@ class Invoice extends Model
     public function transactions(): MorphMany
     {
         return $this->morphMany(Transaction::class, 'transactionable');
+    }
+
+    public function scopeFilterByUserRole($query)
+    {
+        return $query->whereHas('trade.request', function ($q) {
+            $q->where(function ($subQuery) {
+                $subQuery->where(function ($q) {
+                    // For sell requests
+                    $q->where('type', RequestTypeEnum::SELL->value)
+                        ->where('user_id', Auth::id())
+                        ->whereHas('trade.invoices', fn($invQ) => $invQ->where('type', InvoiceTypeEnum::PAY_TOMAN_TO_SELLER->value));
+                })->orWhere(function ($q) {
+                    // For buy requests
+                    $q->where('type', RequestTypeEnum::BUY->value)
+                        ->whereHas('trade.bid', fn($bidQ) => $bidQ->where('user_id', Auth::id()))
+                        ->whereHas('trade.invoices', fn($invQ) => $invQ->where('type', InvoiceTypeEnum::STEP_ONE_PAY_TOMAN_TO_SYSTEM->value));
+                });
+            });
+        });
     }
 
     /*public function setFeeAttribute($value)
