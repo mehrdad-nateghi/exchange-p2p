@@ -77,6 +77,9 @@
                     max:
                       type: integer
                       example: 69377
+                    rate:
+                      type: integer
+                      example: 72070
 
 "/temp":
   get:
