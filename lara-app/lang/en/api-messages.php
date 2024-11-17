@@ -69,7 +69,8 @@ return [
     'payment_failed' => 'Payment failed.',
     'payment_success' => 'Payment was successful.',
     'card_to_iban' => 'Card to IBAN',
-
+    'pay_invoice' => 'Pay invoice',
+    'invoice' => 'invoice',
     'success' => 'success',
     'failed' => 'failed',
     'error' => 'error',

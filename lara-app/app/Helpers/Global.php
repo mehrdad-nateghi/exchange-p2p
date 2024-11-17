@@ -3,6 +3,7 @@
 use App\Services\Global\ApiResponseService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
@@ -87,5 +88,32 @@ if (!function_exists('getMinMaxAllowedPrice')) {
                 return [];
             }
         });
+    }
+}
+
+/////////////////////////////////////////////////////
+if (!function_exists('generateUniqueNumber')) {
+    /**
+     * Generate a unique number for specified table and column
+     *
+     * @param string $table Table name to check uniqueness against
+     * @param string $column Column name to check uniqueness against
+     * @param int $length Length of number (default: 10)
+     * @param bool $startWithZero Whether the number can start with 0 (default: false)
+     * @return string
+     */
+    function generateUniqueNumber(string $table, string $column, int $length = 10, bool $startWithZero = false): string
+    {
+        do {
+            if ($startWithZero) {
+                $number = str_pad(mt_rand(0, str_repeat(9, $length)), $length, '0', STR_PAD_LEFT);
+            } else {
+                $min = pow(10, $length - 1);
+                $max = pow(10, $length) - 1;
+                $number = (string) mt_rand($min, $max);
+            }
+        } while (DB::table($table)->where($column, $number)->exists());
+
+        return $number;
     }
 }

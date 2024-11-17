@@ -12,6 +12,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -36,6 +38,14 @@ class Trade extends Model
     {
         return $this->belongsTo(Request::class);
     }
+
+    public function paymentMethods()
+    {
+        return $this->belongsToMany(PaymentMethod::class, 'payment_method_request', 'request_id', 'payment_method_id')
+            ->withTimestamps()
+            ->wherePivot('request_id', $this->request_id);
+    }
+
 
     public function bid(): BelongsTo
     {
