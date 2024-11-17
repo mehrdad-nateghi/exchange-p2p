@@ -84,7 +84,7 @@ spec:
             - name: FINNOTECH_AUTHORIZATION_CODE_TOKEN
               valueFrom:
                 secretKeyRef:
-                  name: finnotech_authorization_code_token
+                  name: finnotech-authorization-code-token
                   key: token
             - name: FRONTEND_URL_AFTER_PAYMENT
               value: https://nightly.paylibero.ir/dashboard/trades
@@ -207,7 +207,7 @@ spec:
             - name: FINNOTECH_AUTHORIZATION_CODE_TOKEN
               valueFrom:
                 secretKeyRef:
-                  name: finnotech_authorization_code_token
+                  name: finnotech-authorization-code-token
                   key: token
             - name: FRONTEND_URL_AFTER_PAYMENT
               value: https://nightly.paylibero.ir/dashboard/trades
