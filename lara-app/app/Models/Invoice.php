@@ -62,7 +62,7 @@ class Invoice extends Model
         return $this->morphMany(Transaction::class, 'transactionable');
     }
 
-    public function scopeFilterByUserId($query)
+    public function scopeFilterByOwner($query)
     {
         return $query->where('user_id', Auth::id());
     }

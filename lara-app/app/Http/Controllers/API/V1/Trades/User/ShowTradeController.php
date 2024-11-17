@@ -19,7 +19,7 @@ class ShowTradeController extends Controller
             $resource = new TradeResource($trade->load([
                 'tradeSteps',
                 'invoices' => function($query) {
-                    $query->filterByUserId();
+                    $query->filterByOwner();
                 }
             ]));
 

@@ -24,7 +24,7 @@ class IndexTradeController extends Controller
                     $query->select('*');
                 }])
                 ->with(['invoices' => function($query) {
-                    $query->select('*')->filterByUserId();
+                    $query->select('*')->filterByOwner();
                 }])
                 ->with(['bid.request', 'bid.paymentMethod'])
                 ->select([

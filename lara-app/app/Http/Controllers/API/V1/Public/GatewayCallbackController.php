@@ -27,6 +27,7 @@ class GatewayCallbackController extends Controller
         try {
             DB::beginTransaction();
 
+            $cancel = $request->integer('cancel');
             $success = $request->integer('success');
             $status = $request->integer('status');
             $trackId = $request->input('trackId');
@@ -37,13 +38,25 @@ class GatewayCallbackController extends Controller
             $trade = $invoice->invoiceable;
             $this->tradeUlId = $trade->ulid;
 
-            if ($success !== 1 && $status !== 2) {
-                throw new \Exception(trans('api-messages.payment_failed'));
+            if (($success !== 1 && $status !== 2) || $cancel == 1) {
+                $transaction->update([
+                    'status' => TransactionStatusEnum::FAILED,
+                ]);
+
+                DB::commit();
+
+                throw new InvalidPaymentException(trans('api-messages.payment_failed'));
             }
 
 
             if ($transaction->status != TransactionStatusEnum::PENDING) {
-                throw new \Exception("This transaction is already processed");
+                $transaction->update([
+                    'status' => TransactionStatusEnum::FAILED,
+                ]);
+
+                DB::commit();
+
+                throw new InvalidPaymentException("This transaction is already processed");
             }
 
             Payment::amount($transaction->amount)->transactionId($trackId)->verify();
@@ -82,30 +95,24 @@ class GatewayCallbackController extends Controller
             DB::commit();
 
             return $this->redirectWithStatus(trans('api-messages.success'), trans('api-messages.payment_success'));
-
-            /*$resource = new TradeResource($trade->refresh()->load(['tradeSteps', 'invoices']));
-
-            return apiResponse()
-                ->message(trans('api-messages.payment_success'))
-                ->data($resource)
-                ->getApiResponse();*/
         } catch (InvalidPaymentException $exception) {
             DB::rollBack();
+
+            $transaction->update([
+                'status' => TransactionStatusEnum::FAILED,
+            ]);
+
             Log::error($exception->getMessage());
-
             return $this->redirectWithStatus(trans('api-messages.failed'), trans('api-messages.payment_failed'));
-
-            /*return apiResponse()
-                ->failed()
-                ->paymentRequired()
-                ->message(trans('api-messages.payment_failed'))
-                ->getApiResponse();*/
         } catch (\Throwable $t) {
             DB::rollBack();
+
+            $transaction->update([
+                'status' => TransactionStatusEnum::FAILED,
+            ]);
+
             Log::error($t);
             return $this->redirectWithStatus(trans('api-messages.error'), trans('api-messages.internal_server_error'));
-
-            //return internalServerError();
         }
     }
 
