@@ -16,13 +16,15 @@ class StepSeeder extends Seeder
      */
     public function run()
     {
+        $durationMinutes = 5;
+
         $steps = [
             [
                 'name' => 'Pay Toman to System',
                 'description' => 'The buyer must deposit the Toman amount into the system account.',
                 'priority' => 1,
                 'owner' => StepOwnerEnum::BUYER->value,
-                'duration_minutes' => 1440, // 24 hours
+                'duration_minutes' => $durationMinutes,
                 'is_active' => true,
             ],
             [
@@ -30,7 +32,7 @@ class StepSeeder extends Seeder
                 'description' => "The seller must transfer the currency to the buyer\'s account and upload the receipt.",
                 'priority' => 2,
                 'owner' => StepOwnerEnum::SELLER->value,
-                'duration_minutes' => 1440, // 24 hours
+                'duration_minutes' => $durationMinutes,
                 'is_active' => true,
             ],
             [
@@ -38,7 +40,7 @@ class StepSeeder extends Seeder
                 'description' => 'The buyer must confirm or reject the receipt of the currency.',
                 'priority' => 3,
                 'owner' => StepOwnerEnum::BUYER->value,
-                'duration_minutes' => 1440, // 24 hours
+                'duration_minutes' => $durationMinutes,
                 'is_active' => true,
             ],
             [
@@ -46,19 +48,9 @@ class StepSeeder extends Seeder
                 'description' => 'The system makes the final payment to the seller.',
                 'priority' => 4,
                 'owner' => StepOwnerEnum::SYSTEM->value,
-                'duration_minutes' => 1440, // 24 hours
+                'duration_minutes' => $durationMinutes,
                 'is_active' => true,
-
             ],
-            // I think we don't need it?
-            /*[
-                'name' => 'Complete Transaction',
-                'description' => 'The transaction has been successfully completed.',
-                'priority' => 5,
-                'owner' => StepOwnerEnum::SYSTEM->value,
-                'duration_minutes' => 1440, // 24 hours
-                'is_active' => true,
-            ],*/
         ];
 
         foreach ($steps as $step) {
