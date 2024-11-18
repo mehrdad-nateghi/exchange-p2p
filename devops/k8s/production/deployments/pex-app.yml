@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pex-app
+spec:
+  template:
+    spec:
+      containers:
+        - name: pex-app
+          env:
+            - name: DEPLOYMENT_ENV
+              value: production
+
+            - name: NEXT_PUBLIC_FILE_STORAGE_URL
+              value: https://files.paylibero.ir
+
+            - name: NEXT_PUBLIC_SITE_SECRET
+              value: 6Lc_s1QpAAAAAIQhxFfqYkcgTvwfPjdQ-sumzg6L
+
+            - name: NEXT_PUBLIC_REACT_APP_SITE_KEY
+              value: 6LfVge4pAAAAANnXqccl7kEI6sxeXSLYUuDYKeSp
+          resources:
+            limits:
+              cpu: 500m
+              ephemeral-storage: 200M
+              memory: 1G
+            requests:
+              cpu: 500m
+              ephemeral-storage: 200M
+              memory: 1G

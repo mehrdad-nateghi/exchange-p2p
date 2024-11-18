@@ -1,22 +1,17 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-namespace: paylibero-nightly
+namespace: paylibero-staging
 
 resources:
-  - ../base
-
-  - config/mysql.yml
-  - deployments/phpmyadmin.yml
-  - services/phpmyadmin.yml
-
-  - deployments/pex-storybook.yml
-  - services/pex-storybook.yml
-
-  - deployments/redis.yml
-  - services/redis.yml
-  - config/redis.yml
-
+  - ../base/deployments/core-laravel.yml
+  - ../base/deployments/queue-worker.yml
+  - ../base/deployments/pex-app.yml
+  - ../base/deployments/pex-admin.yml
+  - ../base/configs/core-laravel.yml
+  - ../base/services
+  - HPAs
+  - operators
   - ingresses.yml
 
 patches:
@@ -30,8 +25,6 @@ images:
   - name: registry.hamdocker.ir/paylibero/build-core-laravel
     newTag: ${DEPLOY_COMMIT_SHORT_SHA}
   - name: registry.hamdocker.ir/paylibero/pex-app
-    newTag: ${DEPLOY_COMMIT_SHORT_SHA}
-  - name: registry.hamdocker.ir/paylibero/pex-storybook
     newTag: ${DEPLOY_COMMIT_SHORT_SHA}
   - name: registry.hamdocker.ir/paylibero/pex-admin
     newTag: ${DEPLOY_COMMIT_SHORT_SHA}

@@ -1,6 +1,5 @@
 include: /.gitlab-ci.templates.yml
 
-
 stages:
   - Triggers
 
@@ -47,7 +46,6 @@ trigger-pex-admin:
     strategy: depend
   rules:
     - if: $CI_PIPELINE_SOURCE == "pipeline" && $SERVICE_NAME == "pex-admin"
-
 
 trigger-pex-storybook:
   stage: Triggers
