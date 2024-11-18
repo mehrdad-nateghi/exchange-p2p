@@ -4,14 +4,12 @@ kind: Kustomization
 namespace: paylibero-production
 
 resources:
-  - ../base/deployments/core-laravel.yml
-  - ../base/deployments/queue-worker.yml
-  - ../base/deployments/pex-app.yml
-  - ../base/deployments/pex-admin.yml
-  - ../base/services
-  - ../base/config/core-laravel.yml
-  - HPAs
-  - operators
+  - ../base
+  - HPAs/core-laravel.yml
+  - HPAs/queue-worker.yml
+  - HPAs/pex-app.yml
+  - HPAs/pex-admin.yml
+  - operators/redis/cluster.yml
   - ingresses.yml
 
 patches:
@@ -19,6 +17,34 @@ patches:
   - path: deployments/queue-worker.yml
   - path: deployments/pex-app.yml
   - path: deployments/pex-admin.yml
+  # TODO: Remove these patch after we migrate to mysql database operator
+  - patch: |
+      $patch: delete
+      apiVersion: apps/v1
+      kind: StatefulSet
+      metadata:
+        name: paylibero-db-mysql
+    target:
+      kind: StatefulSet
+      name: paylibero-db-mysql
+  - patch: |
+      $patch: delete
+      apiVersion: apps/v1
+      kind: Service
+      metadata:
+        name: paylibero-db-mysql
+    target:
+      kind: Service
+      name: paylibero-db-mysql
+  - patch: |
+      $patch: delete
+      apiVersion: apps/v1
+      kind: Service
+      metadata:
+        name: paylibero-db-mysql-headless
+    target:
+      kind: Service
+      name: paylibero-db-mysql-headless
 
 images:
   - name: registry.hamdocker.ir/paylibero/build-core-laravel
