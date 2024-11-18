@@ -76,16 +76,16 @@ spec:
               value: https://sandboxapi.finnotech.ir
             - name: FINNOTECH_CLIENT_ID
               value: paylibero
-            - name: FINNOTECH_TOKEN
+            - name: FINNOTECH_CLIENT_CREDENTIALS_TOKEN
               valueFrom:
                 secretKeyRef:
                   name: finno-tech
-                  key: token
+                  key: client-credentials-token
             - name: FINNOTECH_AUTHORIZATION_CODE_TOKEN
               valueFrom:
                 secretKeyRef:
-                  name: finnotech-authorization-code-token
-                  key: token
+                  name: finno-tech
+                  key: authorization-code-token
             - name: FRONTEND_URL_AFTER_PAYMENT
               value: https://nightly.paylibero.ir/dashboard/trades
 
@@ -199,16 +199,16 @@ spec:
               value: https://sandboxapi.finnotech.ir
             - name: FINNOTECH_CLIENT_ID
               value: paylibero
-            - name: FINNOTECH_TOKEN
+            - name: FINNOTECH_CLIENT_CREDENTIALS_TOKEN
               valueFrom:
                 secretKeyRef:
                   name: finno-tech
-                  key: token
+                  key: client-credentials-token
             - name: FINNOTECH_AUTHORIZATION_CODE_TOKEN
               valueFrom:
                 secretKeyRef:
-                  name: finnotech-authorization-code-token
-                  key: token
+                  name: finno-tech
+                  key: authorization-code-token
             - name: FRONTEND_URL_AFTER_PAYMENT
               value: https://nightly.paylibero.ir/dashboard/trades
 
