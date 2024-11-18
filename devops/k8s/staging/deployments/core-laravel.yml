@@ -3,7 +3,6 @@ kind: Deployment
 metadata:
   name: core-laravel
 spec:
-  replicas: 1
   template:
     spec:
       initContainers:
@@ -11,11 +10,11 @@ spec:
           env:
             # APP--------------------------------------
             - name: APP_ENV
-              value: nightly
+              value: staging
             - name: APP_URL
-              value: https://nightly.paylibero.ir
+              value: https://staging.paylibero.ir
             - name: USER_DASHBOARD_URL
-              value: https://nightly.paylibero.ir/dashboard
+              value: https://staging.paylibero.ir/dashboard
 
             # DB--------------------------------------
             - name: DB_HOST
@@ -49,14 +48,14 @@ spec:
 
             # REDIS--------------------------------------
             - name: REDIS_HOST
-              value: redis
+              value: redis-cluster-leader-headless
             - name: REDIS_PORT
               value: '6379'
             - name: REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: redis-auth
-                  key: redis-password
+                  name: redis-secret
+                  key: password
 
             # MAIL--------------------------------------
             - name: MAIL_USERNAME
@@ -69,7 +68,7 @@ spec:
 
             # ZIBAL_CALLBACK_URL--------------------------------------
             - name: ZIBAL_CALLBACK_URL
-              value: https://nightly.paylibero.ir/api/gateway/callback
+              value: https://staging.paylibero.ir/api/gateway/callback
 
             # FINNOTECH--------------------------------------
             - name: FINNOTECH_BASE_URL
@@ -91,17 +90,17 @@ spec:
 
             # SANCTUM--------------------------------------
             - name: SANCTUM_STATEFUL_DOMAINS
-              value: localhost:4000,core-lara-33e1254e7d-paylibero-nightly.apps.ir-thr-ba1.arvancaas.ir,nightly.paylibero.ir,nightly.admin.paylibero.ir
+              value: staging.paylibero.ir,admin.staging.paylibero.ir,staging.paylibero.de,admin.staging.paylibero.de,staging.paylibero.net,admin.staging.paylibero.net
             - name: SESSION_DOMAIN
-              value: .paylibero.ir
+              value: staging.paylibero.ir
 
             # AWS--------------------------------------
             - name: AWS_URL
-              value: https://files-nightly.paylibero.ir/
+              value: https://files-staging.paylibero.ir/
             - name: AWS_DEFAULT_REGION
               value: Simin
             - name: AWS_BUCKET
-              value: paylibero-nightly-core
+              value: paylibero-staging-core
             - name: FILESYSTEM_DISK
               value: s3
             - name: AWS_USE_PATH_STYLE_ENDPOINT
@@ -134,11 +133,11 @@ spec:
           env:
             # APP--------------------------------------
             - name: APP_ENV
-              value: nightly
+              value: staging
             - name: APP_URL
-              value: https://nightly.paylibero.ir
+              value: https://staging.paylibero.ir
             - name: USER_DASHBOARD_URL
-              value: https://nightly.paylibero.ir/dashboard
+              value: https://staging.paylibero.ir/dashboard
 
             # DB--------------------------------------
             - name: DB_HOST
@@ -172,14 +171,14 @@ spec:
 
             # REDIS--------------------------------------
             - name: REDIS_HOST
-              value: redis
+              value: redis-cluster-leader-headless
             - name: REDIS_PORT
               value: '6379'
             - name: REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: redis-auth
-                  key: redis-password
+                  name: redis-secret
+                  key: password
 
             # MAIL--------------------------------------
             - name: MAIL_USERNAME
@@ -192,7 +191,7 @@ spec:
 
             # ZIBAL_CALLBACK_URL--------------------------------------
             - name: ZIBAL_CALLBACK_URL
-              value: https://nightly.paylibero.ir/api/gateway/callback
+              value: https://staging.paylibero.ir/api/gateway/callback
 
             # FINNOTECH--------------------------------------
             - name: FINNOTECH_BASE_URL
@@ -214,17 +213,17 @@ spec:
 
             # SANCTUM--------------------------------------
             - name: SANCTUM_STATEFUL_DOMAINS
-              value: localhost:4000,core-lara-33e1254e7d-paylibero-nightly.apps.ir-thr-ba1.arvancaas.ir,nightly.paylibero.ir,nightly.admin.paylibero.ir
+              value: staging.paylibero.ir,admin.staging.paylibero.ir,staging.paylibero.de,admin.staging.paylibero.de,staging.paylibero.net,admin.staging.paylibero.net
             - name: SESSION_DOMAIN
-              value: .paylibero.ir
+              value: staging.paylibero.ir
 
             # AWS--------------------------------------
             - name: AWS_URL
-              value: https://files-nightly.paylibero.ir/
+              value: https://files-staging.paylibero.ir/
             - name: AWS_DEFAULT_REGION
               value: Simin
             - name: AWS_BUCKET
-              value: paylibero-nightly-core
+              value: paylibero-staging-core
             - name: FILESYSTEM_DISK
               value: s3
             - name: AWS_USE_PATH_STYLE_ENDPOINT

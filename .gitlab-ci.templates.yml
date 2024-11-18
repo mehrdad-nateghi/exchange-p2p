@@ -1,7 +1,7 @@
 variables:
   # Cache Compression Tool
-  FF_USE_FASTZIP: "true"
-  CACHE_COMPRESSION_LEVEL: "fast"
+  FF_USE_FASTZIP: 'true'
+  CACHE_COMPRESSION_LEVEL: 'fast'
 
 .test_job_template:
   interruptible: true
@@ -10,6 +10,7 @@ variables:
   rules:
     - if: '$CI_MERGE_REQUEST_ID == null && $CI_COMMIT_REF_NAME == "main"'
     - if: '$CI_MERGE_REQUEST_ID == null && $CI_COMMIT_REF_NAME == "production"'
+    - if: '$CI_MERGE_REQUEST_ID == null && $CI_COMMIT_REF_NAME == "staging"'
 
 .build_job_template:
   image: hub.hamdocker.ir/library/docker:20-dind
@@ -21,8 +22,8 @@ variables:
   cache: [] # we use docker cache to build
   variables:
     # for job
-    COMPOSE_DOCKER_CLI_BUILD: "1"
-    DOCKER_BUILDKIT: "1"
+    COMPOSE_DOCKER_CLI_BUILD: '1'
+    DOCKER_BUILDKIT: '1'
   script:
     - cd $CI_PROJECT_DIR/devops/build
     - docker-compose -f docker-compose.base.yml -f docker-compose.${ENVIRONMENT_NAME}.yml build  ${SERVICE_NAME}
@@ -64,7 +65,7 @@ variables:
     name: hub.hamdocker.ir/bitnami/kubectl:latest
     docker:
       user: root
-    entrypoint: [""]
+    entrypoint: ['']
   tags:
     - docker-executor
   cache: []

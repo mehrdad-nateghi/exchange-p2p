@@ -8,9 +8,9 @@ pex-app:deploy:
   stage: Deploy
   extends: .deploy_job_template
   variables:
-   SERVICE_NAME: pex-admin
-   ENVIRONMENT_PREFIX: paylibero
-   KUBE_CONFIG_NAME: $ARVAN_KUBE_CONFIG_NIGHTLY
+    SERVICE_NAME: pex-admin
+    ENVIRONMENT_PREFIX: paylibero
+    KUBE_CONFIG_NAME: $ARVAN_KUBE_CONFIG
   environment:
     name: paylibero-$ENVIRONMENT_NAME-$SERVICE_NAME
     url: $DEPLOYMENT_URL

@@ -21,7 +21,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-    - host: core-lara-33e1254e7d-paylibero-nightly.apps.ir-thr-ba1.arvancaas.ir
+    - host: core-lara-33e1254e7d-paylibero-staging.apps.ir-thr-ba1.arvancaas.ir
       http:
         paths:
           - backend:
@@ -32,7 +32,7 @@ spec:
             path: /
             pathType: Prefix
 
-    - host: pex-app-33e1254e7d-paylibero-nightly.apps.ir-thr-ba1.arvancaas.ir
+    - host: pex-app-33e1254e7d-paylibero-staging.apps.ir-thr-ba1.arvancaas.ir
       http:
         paths:
           - backend:
@@ -43,18 +43,7 @@ spec:
             path: /
             pathType: ImplementationSpecific
 
-    - host: redis-33e1254e7d-paylibero-nightly.apps.ir-thr-ba1.arvancaas.ir
-      http:
-        paths:
-          - backend:
-              service:
-                name: redis-gui
-                port:
-                  number: 80
-            path: /
-            pathType: ImplementationSpecific
-
-    - host: phpmyadmin-33e1254e7d-paylibero-nightly.apps.ir-thr-ba1.arvancaas.ir
+    - host: phpmyadmin-33e1254e7d-paylibero-staging.apps.ir-thr-ba1.arvancaas.ir
       http:
         paths:
           - backend:
@@ -65,7 +54,7 @@ spec:
             path: /
             pathType: ImplementationSpecific
 
-    - host: nightly.paylibero.ir
+    - host: staging.paylibero.ir
       http:
         paths:
           - backend:
@@ -91,7 +80,7 @@ spec:
             pathType: ImplementationSpecific
 
     # For admin panel just one domain is enough
-    - host: nightly.admin.paylibero.ir
+    - host: staging.admin.paylibero.ir
       http:
         paths:
           - backend:
@@ -116,18 +105,7 @@ spec:
             path: /api
             pathType: ImplementationSpecific
 
-    - host: storybook.paylibero.ir
-      http:
-        paths:
-          - backend:
-              service:
-                name: pex-storybook
-                port:
-                  number: 80
-            path: /
-            pathType: ImplementationSpecific
-
-    - host: nightly.paylibero.net
+    - host: staging.paylibero.net
       http:
         paths:
           - backend:
@@ -145,7 +123,7 @@ spec:
             path: /api
             pathType: ImplementationSpecific
 
-    - host: nightly.paylibero.de
+    - host: staging.paylibero.de
       http:
         paths:
           - backend:
