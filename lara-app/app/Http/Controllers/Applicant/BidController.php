@@ -2,22 +2,21 @@
 
 namespace App\Http\Controllers\Applicant;
 
-use App\Enums\BidStatusEnum;
-use App\Enums\BidTypeEnum;
-use App\Enums\LinkedMethodStatusEnum;
-use App\Enums\RequestStatusEnum;
-use App\Enums\RequestTypeEnum;
-use App\Enums\TradeStatusEnum;
+use App\Enums\Legacy\BidStatusEnum;
+use App\Enums\Legacy\BidTypeEnum;
+use App\Enums\Legacy\LinkedMethodStatusEnum;
+use App\Enums\Legacy\RequestStatusEnum;
+use App\Enums\Legacy\RequestTypeEnum;
+use App\Enums\Legacy\TradeStatusEnum;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\AcceptBidRequest;
-use App\Http\Requests\RegisterBidRequest;
-use App\Models\Bid as BidModel;
+use App\Http\Requests\Legacy\AcceptBidRequest;
+use App\Http\Requests\Legacy\RegisterBidRequest;
+use App\Models\Legacy\Bid as BidModel;
 use App\Models\Request as RequestModel;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-use PhpParser\Node\Stmt\TryCatch;
 
 class BidController extends Controller
 {

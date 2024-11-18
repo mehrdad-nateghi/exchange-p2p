@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pex-admin
+spec:
+  revisionHistoryLimit: 0
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pex-admin
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 75%
+  template:
+    metadata:
+      labels:
+        app: pex-admin
+        commit-short-sha: 'commit_${DEPLOY_COMMIT_SHORT_SHA}'
+    spec:
+      restartPolicy: Always
+      imagePullSecrets:
+        - name: hamdocker
+      containers:
+        - image: registry.hamdocker.ir/paylibero/pex-admin
+          imagePullPolicy: Always
+          name: pex-admin
+          ports:
+            - containerPort: 3000
+          env:
+            - name: NODE_ENV
+              value: production
+
+            - name: PUBLIC_BUILD_COMMIT_SHA
+              value: "'${DEPLOY_COMMIT_SHORT_SHA}'"
+
+            - name: NEXT_PUBLIC_API_SERVER_ADDRESS
+              value: http://core-laravel:8000
+
+            - name: NEXT_PUBLIC_AUTH_SESSION_KEY
+              value: laravel_session
+          resources: {}
+          livenessProbe:
+            failureThreshold: 5
+            httpGet:
+              path: /api/health/
+              port: 3000
+              scheme: HTTP
+            initialDelaySeconds: 90
+            periodSeconds: 60
+            successThreshold: 1
+            timeoutSeconds: 1
+
+          readinessProbe:
+            failureThreshold: 5
+            httpGet:
+              path: /api/health/
+              port: 3000
+              scheme: HTTP
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1

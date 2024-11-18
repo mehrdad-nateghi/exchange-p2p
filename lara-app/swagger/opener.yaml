@@ -1,0 +1,753 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: PayLibero API
+  description: description...
+components:
+  schemas:
+    Base200Response:
+      type: object
+      required:
+        - status
+        - code
+        - message
+      properties:
+        status:
+          type: string
+          description: 'The status of the API response'
+          example: 'success'
+        code:
+          type: integer
+          description: 'The HTTP status code of the response'
+          example: 200
+        message:
+          type: string
+          description: 'A descriptive message about the response'
+          example: 'The requests were retrieved successfully.'
+    Pagination:
+      type: object
+      required:
+        - current_page
+        - first_page_url
+        - from
+        - last_page
+        - last_page_url
+        - next_page_url
+        - path
+        - per_page
+        - prev_page_url
+        - to
+        - total
+      properties:
+        current_page:
+          type: integer
+          description: 'Current page number'
+          example: 1
+        first_page_url:
+          type: string
+          description: 'URL of the first page'
+        from:
+          type: integer
+          description: 'Start index of items on current page'
+          example: 1
+        last_page:
+          type: integer
+          description: 'Last page number'
+          example: 1
+        last_page_url:
+          type: string
+          description: 'URL of the last page'
+        next_page_url:
+          type: string
+          nullable: true
+          description: 'URL of the next page'
+          example: null
+        path:
+          type: string
+          description: 'Base path for pagination URLs'
+        per_page:
+          type: integer
+          description: 'Number of items per page'
+          example: 15
+        prev_page_url:
+          type: string
+          nullable: true
+          description: 'URL of the previous page'
+          example: null
+        to:
+          type: integer
+          description: 'End index of items on current page'
+          example: 6
+        total:
+          type: integer
+          description: 'Total number of items'
+          example: 6
+    PaymentMethod:
+      type: object
+      required:
+        - ulid
+        - payment_method
+      properties:
+        ulid:
+          type: string
+          description: 'Unique identifier for the payment method'
+          example: '01J25YKXXAS0KX1W4383HE65GR'
+        payment_method:
+          type: object
+          required:
+            - type
+            - holder_name
+            - is_active
+            - icon
+            - created_at
+            - updated_at
+          properties:
+            type:
+              type: string
+              enum:
+                - foreign_bank
+                - paypal
+                - rial_bank
+              description: 'Type of payment method'
+              example: 'rial_bank'
+            holder_name:
+              type: string
+              description: 'Name of the account holder'
+              example: ''
+            email:
+              type: string
+              description: 'email of the account'
+              example: ''
+            bank_name:
+              type: string
+              description: 'Name of the bank'
+              example: ''
+            card_number:
+              type: string
+              description: 'Card number'
+              example: ''
+            bic:
+              type: string
+              description: 'Bank Identifier Code (BIC)'
+              example: 'BKCHAEADXXX'
+            iban:
+              type: string
+              description: 'International Bank Account Number (IBAN)'
+              example: 'AE070331234567890123456'
+            account_no:
+              type: string
+              description: 'Account number'
+              example: ''
+            is_active:
+              type: boolean
+              description: 'Whether the payment method is active'
+              example: false
+            icon:
+              type: string
+              description: 'payment method icon url'
+            created_at:
+              type: string
+              format: date-time
+              description: 'Creation timestamp'
+              example: '2024-07-07T06:38:04.000000Z'
+            updated_at:
+              type: string
+              format: date-time
+              description: 'Last update timestamp'
+              example: '2024-07-07T06:38:04.000000Z'
+    Request:
+      type: object
+      required:
+        - ulid
+        - number
+        - volume
+        - price
+        - type
+        - status
+        - created_at
+        - user_role_on_request
+        - updated_at
+        - payment_methods
+      properties:
+        ulid:
+          type: string
+          description: 'Unique identifier for the request'
+          example: '01J26AAGQQ2HTYHZGR9PM6DGJD'
+        trade_ulid:
+          type: string
+          nullable: true
+          description: 'Unique identifier for the trade of the request'
+          example: '01J26AAGQQ2HTYHZGR9PM6DGJD'
+        user_role_on_request:
+          type: string
+          enum: [buyer, seller]
+          description: 'Role of the user on the request'
+          example: 'buyer'
+        number:
+          type: string
+          description: 'Request number'
+          example: 'RE-550585'
+        volume:
+          type: string
+          description: 'Volume of the request'
+          example: '250.00'
+        price:
+          type: string
+          description: 'Price of the request'
+          example: '59193.00'
+        type:
+          type: string
+          enum: ['buy', 'sell']
+          description: 'Type of the request (BUY or SELL)'
+          example: 'buy'
+        status:
+          type: string
+          enum: ['pending', 'processing', 'trading', 'canceled']
+          description: 'Status of the request'
+          example: 'pending'
+        created_at:
+          type: string
+          format: date-time
+          description: 'Creation timestamp'
+          example: '2024-07-07T06:38:04.000000Z'
+        updated_at:
+          type: string
+          format: date-time
+          description: 'Last update timestamp'
+          example: '2024-07-07T06:38:04.000000Z'
+        payment_methods:
+          type: object
+          required:
+            - items
+            - pagination
+          properties:
+            pagination:
+              $ref: '#/components/schemas/Pagination'
+            items:
+              type: array
+              description: 'Array of payment method items'
+              items:
+                $ref: '#/components/schemas/PaymentMethod'
+        bids:
+          type: object
+          required:
+            - items
+            - pagination
+          properties:
+            pagination:
+              $ref: '#/components/schemas/Pagination'
+            items:
+              type: array
+              description: 'Array of bids'
+              items:
+                $ref: '#/components/schemas/Bid'
+    GuestRequest:
+      type: object
+      required:
+        - ulid
+        - number
+        - volume
+        - price
+        - type
+        - status
+        - user
+        - trade_ulid
+        - created_at
+        - updated_at
+      properties:
+        ulid:
+          type: string
+          description: 'Unique identifier for the request'
+          example: '01J26AAGQQ2HTYHZGR9PM6DGJD'
+        number:
+          type: string
+          description: 'Request number'
+          example: 'RE-550585'
+        volume:
+          type: string
+          description: 'Volume of the request'
+          example: '250.00'
+        price:
+          type: string
+          description: 'Price of the request'
+          example: '59193.00'
+        type:
+          type: string
+          enum: ['buy', 'sell']
+          description: 'Type of the request (BUY or SELL)'
+          example: 'buy'
+        status:
+          type: string
+          enum: ['pending', 'processing', 'trading', 'canceled']
+          description: 'Status of the request'
+          example: 'pending'
+        trade_ulid:
+          type: string
+          nullable: true
+          description: 'Unique identifier for the trade of the request'
+          example: '01J26AAGQQ2HTYHZGR9PM6DGJD'
+        user:
+          type: object
+          required:
+            - first_name
+            - last_name
+            - ulid
+          properties:
+            first_name:
+              type: string
+              description: 'First name of the user'
+              example: 'first name'
+            last_name:
+              type: string
+              description: 'Last name of the user'
+              example: 'last name'
+            ulid:
+              type: string
+              description: 'Unique identifier for the user'
+              example: '01JBRM9GCZ4TC8BMGGTQ4KS75K'
+        created_at:
+          type: string
+          format: date-time
+          description: 'Creation timestamp'
+        updated_at:
+          type: string
+          format: date-time
+          description: 'Last update timestamp'
+    User:
+      type: object
+      required:
+        - ulid
+        - first_name
+        - last_name
+        - email
+        - created_at
+        - status
+        - updated_at
+        - roles
+      properties:
+        ulid:
+          type: string
+          example: '01HZA0X41HX5CXY2YWD4GP0WAG'
+        first_name:
+          type: string
+          example: 'Ali'
+        last_name:
+          type: string
+          example: 'Karimi'
+        email:
+          type: string
+          example: 'a@b.com'
+        created_at:
+          type: string
+          format: date-time
+          example: '2024-05-15T06:56:46+00:00'
+        status:
+          type: string
+          enum: [active, inactive]
+          example: 'active'
+        updated_at:
+          type: string
+          format: date-time
+          example: '2024-05-15T06:56:46+00:00'
+        roles:
+          type: array
+          items:
+            type: object
+            required:
+              - name
+              - created_at
+              - updated_at
+            properties:
+              name:
+                type: string
+                example: 'applicant'
+              created_at:
+                type: string
+                format: date-time
+                example: '2024-05-15T06:56:46+00:00'
+              updated_at:
+                type: string
+                format: date-time
+                example: '2024-05-15T06:56:46+00:00'
+    Bid:
+      type: object
+      required:
+        - ulid
+        - number
+        - price
+        - is_best_price
+        - status
+        - user
+        - request
+        - created_at
+        - deleted_at
+        - rejected_at
+        - updated_at
+      properties:
+        ulid:
+          type: string
+          description: 'Unique identifier for the request'
+          example: '01J25YP7C2MTHAXNREE7FNPY85'
+        number:
+          type: string
+          description: 'Number of the bid'
+          example: 'BI-564311'
+        user:
+          $ref: '#/components/schemas/User'
+        price:
+          type: string
+          description: 'Price of the bid'
+          example: '59193.00'
+        is_best_price:
+          type: boolean
+          description: 'indicates that the bid has highest price or not'
+        status:
+          type: string
+          enum: ['registered', 'accepted', 'rejected']
+          description: 'Status of the request'
+          example: 'registered'
+        created_at:
+          type: string
+          format: date-time
+          description: 'Creation timestamp'
+          example: '2024-07-07T06:38:04.000000Z'
+        deleted_at:
+          type: string
+          format: date-time
+          description: 'deleted timestamp'
+          example: '2024-07-07T06:38:04.000000Z'
+        rejected_at:
+          type: string
+          format: date-time
+          description: 'rejected timestamp'
+          example: '2024-07-07T06:38:04.000000Z'
+        updated_at:
+          type: string
+          format: date-time
+          description: 'Last update timestamp'
+          example: '2024-07-07T06:38:04.000000Z'
+        request:
+          $ref: '#/components/schemas/Request'
+        payment_method:
+          $ref: '#/components/schemas/PaymentMethod'
+    Trade:
+      type: object
+      required:
+        - ulid
+        - number
+        - status
+        - request
+        - completed_at
+        - created_at
+        - updated_at
+      properties:
+        ulid:
+          type: string
+          description: 'Unique identifier for the trade'
+          example: '01J5RR12N6A76MRDBTTMS07HY3'
+        number:
+          type: string
+          description: 'Trade number'
+          example: 'TR-357535'
+        status:
+          type: string
+          enum: ['processing', 'completed', 'canceled', 'failed', 'suspend']
+          description: 'Status of the trade'
+          example: 'processing'
+        request:
+          $ref: '#/components/schemas/GuestRequest'
+        bid:
+          $ref: '#/components/schemas/Bid'
+        completed_at:
+          type: string
+          format: date-time
+          nullable: true
+          description: 'Completion timestamp'
+        created_at:
+          type: string
+          format: date-time
+          description: 'Creation timestamp'
+        updated_at:
+          type: string
+          format: date-time
+          description: 'Last update timestamp'
+        canceled_at:
+          type: string
+          format: date-time
+          description: 'Canceled timestamp'
+    UserTrade:
+      type: object
+      required:
+        - ulid
+        - number
+        - status
+        - deposit_reason
+        - deposit_reason_accepted
+        - completed_at
+        - created_at
+        - updated_at
+        - steps
+        - bid
+        - invoices
+      properties:
+        ulid:
+          type: string
+          description: 'Unique identifier for the trade'
+          example: '01J5RR12N6A76MRDBTTMS07HY3'
+        number:
+          type: string
+          description: 'Trade number'
+          example: 'TR-357535'
+        status:
+          type: string
+          enum: ['processing', 'completed', 'canceled', 'failed', 'suspend']
+          description: 'Status of the trade'
+          example: 'processing'
+        deposit_reason:
+          type: string
+          description: 'reason of the deposit'
+          example: 'TR-712974'
+        deposit_reason_accepted:
+          type: integer
+          description: 'indicates that the deposit reason is accepted or not'
+          example: 0
+        completed_at:
+          type: string
+          format: date-time
+          nullable: true
+          description: 'Completion timestamp'
+        created_at:
+          type: string
+          format: date-time
+          description: 'Creation timestamp'
+        updated_at:
+          type: string
+          format: date-time
+          description: 'Last update timestamp'
+        bid:
+          allOf:
+            - $ref: '#/components/schemas/Bid'
+            - type: object
+              required:
+                - payment_method
+              properties:
+                payment_method:
+                  $ref: '#/components/schemas/PaymentMethod'
+        steps:
+          type: array
+          items:
+            $ref: '#/components/schemas/TradeStep'
+        invoices:
+          type: array
+          items:
+            $ref: '#/components/schemas/Invoice'
+    AdminTrade:
+      allOf:
+        - $ref: '#/components/schemas/Trade'
+        - type: object
+          required:
+            - steps
+            - invoices
+          properties:
+            steps:
+              type: array
+              items:
+                $ref: '#/components/schemas/TradeStep'
+            invoices:
+              type: array
+              items:
+                $ref: '#/components/schemas/Invoice'
+    TradeStep:
+      type: object
+      required:
+        - name
+        - ulid
+        - description
+        - owner
+        - files
+        - status
+        - created_at
+        - updated_at
+        - expire_at
+        - completed_at
+      properties:
+        ulid:
+          type: string
+        files:
+          type: array
+          items:
+            $ref: '#/components/schemas/File'
+        name:
+          type: string
+        description:
+          type: string
+        owner:
+          type: string
+          enum: [buyer, seller, system]
+        status:
+          type: string
+          enum: [todo, doing, done]
+        expire_at:
+          type: string
+          format: date-time
+          nullable: true
+        completed_at:
+          type: string
+          format: date-time
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    Invoice:
+      type: object
+      required:
+        - ulid
+        - number
+        - amount
+        - fee
+        - status
+        - type
+        - created_at
+        - updated_at
+      properties:
+        ulid:
+          type: string
+        number:
+          type: string
+        amount:
+          type: string
+        fee:
+          type: string
+        status:
+          type: string
+          enum: [pending, paid, canceled]
+        type:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    File:
+      type: object
+      required:
+        - ulid
+        - name
+        - mime_type
+        - path
+        - url
+        - size
+        - status
+        - created_at
+        - updated_at
+      properties:
+        ulid:
+          type: string
+          description: 'Unique identifier for the file'
+          example: '01J8307D7QDCFCX0EYH66J2294'
+        name:
+          type: string
+          description: 'Name of the file'
+          example: 'Screenshot from 2024-09-18 19-31-50.png'
+        url:
+          type: string
+          description: 'url of the file'
+        mime_type:
+          type: string
+          description: 'MIME type of the file'
+          example: 'image/png'
+        path:
+          type: string
+          description: 'Path to the file'
+          example: 'uploads/xkuGNf98Gu1Vj0purdRmTCbElmuwdsXQ3T8uqdR1.png'
+        size:
+          type: integer
+          description: 'Size of the file in bytes'
+          example: 289573
+        status:
+          type: string
+          description: 'Status of the file'
+          example: 'uploaded'
+        created_at:
+          type: string
+          format: date-time
+          description: 'Creation timestamp'
+          example: '2024-09-18T16:42:39.000000Z'
+        updated_at:
+          type: string
+          format: date-time
+          description: 'Last update timestamp'
+          example: '2024-09-18T16:42:39.000000Z'
+
+  parameters:
+    pageSize:
+      name: per_page
+      in: query
+      description: 'Number of items to return per page'
+      required: false
+      schema:
+        type: integer
+        default: 15
+    pageNumber:
+      name: page
+      in: query
+      description: 'page number'
+      required: false
+      schema:
+        type: integer
+        default: 1
+    requestSort:
+      name: sort
+      required: false
+      in: query
+      description: The sort order of the results
+      schema:
+        type: string
+        enum: [created_at, -created_at, price, -price]
+        example: -created_at
+    requestType:
+      name: filter[type]
+      in: query
+      description: The type of request
+      required: false
+      schema:
+        type: string
+        enum: [buy, sell]
+        example: buy
+    requestStatus:
+      name: filter[status]
+      in: query
+      description: The status of the request
+      required: true
+      schema:
+        type: array
+        items:
+          type: string
+          enum: [pending, processing, trading, completed, canceled]
+          example: ['pending', 'trading']
+  securitySchemes:
+    bearer:
+      type: http
+      scheme: bearer
+
+  responses:
+    default:
+      description: ''
+      content:
+        application/json:
+          schema:
+            type: object
+
+security:
+  - bearer: []
+servers:
+  - url: http://localhost:8000/api/v1
+  - url: http://localhost:8000/api
+  - url: https://core-lara-33e1254e7d-paylibero-nightly.apps.ir-thr-ba1.arvancaas.ir/api/v1
+  - url: https://core-lara-33e1254e7d-paylibero-nightly.apps.ir-thr-ba1.arvancaas.ir/api
+  - url: https://nightly.paylibero.ir/api/v1
+  - url: https://nightly.paylibero.ir/api

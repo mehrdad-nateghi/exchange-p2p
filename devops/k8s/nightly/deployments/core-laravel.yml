@@ -3,19 +3,25 @@ kind: Deployment
 metadata:
   name: core-laravel
 spec:
-  replicas: 2
+  replicas: 1
   template:
     spec:
-      containers:
-        - name: core-laravel
-          resources:
-            requests:
-              memory: "256Mi"
-              cpu: "128m"
-            limits:
-              memory: "2048Mi"
-              cpu: "1024m"
+      initContainers:
+        - name: laravel-setup
           env:
+            # APP--------------------------------------
+            - name: APP_ENV
+              value: nightly
+            - name: APP_URL
+              value: https://nightly.paylibero.ir
+            - name: USER_DASHBOARD_URL
+              value: https://nightly.paylibero.ir/dashboard
+
+            # DB--------------------------------------
+            - name: DB_HOST
+              value: paylibero-db-mysql-headless
+            - name: DB_PORT
+              value: '3306'
             - name: DB_USERNAME
               valueFrom:
                 secretKeyRef:
@@ -26,3 +32,212 @@ spec:
                 secretKeyRef:
                   name: core-laravel-mysql-db
                   key: password
+
+            # RECAPTCHA--------------------------------------
+            - name: RECAPTCHA_V3_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: google-recaptcha
+                  key: secret_key
+            - name: RECAPTCHA_V3_SITE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: google-recaptcha
+                  key: site_key
+            - name: RECAPTCHA_V3_ENABLE
+              value: 'false'
+
+            # REDIS--------------------------------------
+            - name: REDIS_HOST
+              value: redis
+            - name: REDIS_PORT
+              value: '6379'
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: redis-auth
+                  key: redis-password
+
+            # MAIL--------------------------------------
+            - name: MAIL_USERNAME
+              value: '10cSOoYX8R'
+            - name: MAIL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: ahasend
+                  key: password
+
+            # ZIBAL_CALLBACK_URL--------------------------------------
+            - name: ZIBAL_CALLBACK_URL
+              value: https://nightly.paylibero.ir/api/gateway/callback
+
+            # FINNOTECH--------------------------------------
+            - name: FINNOTECH_BASE_URL
+              value: https://sandboxapi.finnotech.ir
+            - name: FINNOTECH_CLIENT_ID
+              value: paylibero
+            - name: FINNOTECH_CLIENT_CREDENTIALS_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: finno-tech
+                  key: client-credentials-token
+            - name: FINNOTECH_AUTHORIZATION_CODE_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: finno-tech
+                  key: authorization-code-token
+            - name: FRONTEND_URL_AFTER_PAYMENT
+              value: https://nightly.paylibero.ir/dashboard/trades
+
+            # SANCTUM--------------------------------------
+            - name: SANCTUM_STATEFUL_DOMAINS
+              value: localhost:4000,core-lara-33e1254e7d-paylibero-nightly.apps.ir-thr-ba1.arvancaas.ir,nightly.paylibero.ir,nightly.admin.paylibero.ir
+            - name: SESSION_DOMAIN
+              value: .paylibero.ir
+
+            # AWS--------------------------------------
+            - name: AWS_URL
+              value: https://files-nightly.paylibero.ir/
+            - name: AWS_DEFAULT_REGION
+              value: Simin
+            - name: AWS_BUCKET
+              value: paylibero-nightly-core
+            - name: FILESYSTEM_DISK
+              value: s3
+            - name: AWS_USE_PATH_STYLE_ENDPOINT
+              value: 'false'
+            - name: AWS_ENDPOINT
+              value: https://s3.ir-thr-at1.arvanstorage.ir
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: file-storage
+                  key: id
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: file-storage
+                  key: access-key
+
+      containers:
+        - name: core-laravel
+          resources:
+            limits:
+              cpu: '2'
+              ephemeral-storage: 200M
+              memory: 4G
+            requests:
+              cpu: '2'
+              ephemeral-storage: 200M
+              memory: 4G
+
+          env:
+            # APP--------------------------------------
+            - name: APP_ENV
+              value: nightly
+            - name: APP_URL
+              value: https://nightly.paylibero.ir
+            - name: USER_DASHBOARD_URL
+              value: https://nightly.paylibero.ir/dashboard
+
+            # DB--------------------------------------
+            - name: DB_HOST
+              value: paylibero-db-mysql-headless
+            - name: DB_PORT
+              value: '3306'
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: core-laravel-mysql-db
+                  key: username
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: core-laravel-mysql-db
+                  key: password
+
+            # RECAPTCHA--------------------------------------
+            - name: RECAPTCHA_V3_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: google-recaptcha
+                  key: secret_key
+            - name: RECAPTCHA_V3_SITE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: google-recaptcha
+                  key: site_key
+            - name: RECAPTCHA_V3_ENABLE
+              value: 'false'
+
+            # REDIS--------------------------------------
+            - name: REDIS_HOST
+              value: redis
+            - name: REDIS_PORT
+              value: '6379'
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: redis-auth
+                  key: redis-password
+
+            # MAIL--------------------------------------
+            - name: MAIL_USERNAME
+              value: '10cSOoYX8R'
+            - name: MAIL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: ahasend
+                  key: password
+
+            # ZIBAL_CALLBACK_URL--------------------------------------
+            - name: ZIBAL_CALLBACK_URL
+              value: https://nightly.paylibero.ir/api/gateway/callback
+
+            # FINNOTECH--------------------------------------
+            - name: FINNOTECH_BASE_URL
+              value: https://sandboxapi.finnotech.ir
+            - name: FINNOTECH_CLIENT_ID
+              value: paylibero
+            - name: FINNOTECH_CLIENT_CREDENTIALS_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: finno-tech
+                  key: client-credentials-token
+            - name: FINNOTECH_AUTHORIZATION_CODE_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: finno-tech
+                  key: authorization-code-token
+            - name: FRONTEND_URL_AFTER_PAYMENT
+              value: https://nightly.paylibero.ir/dashboard/trades
+
+            # SANCTUM--------------------------------------
+            - name: SANCTUM_STATEFUL_DOMAINS
+              value: localhost:4000,core-lara-33e1254e7d-paylibero-nightly.apps.ir-thr-ba1.arvancaas.ir,nightly.paylibero.ir,nightly.admin.paylibero.ir
+            - name: SESSION_DOMAIN
+              value: .paylibero.ir
+
+            # AWS--------------------------------------
+            - name: AWS_URL
+              value: https://files-nightly.paylibero.ir/
+            - name: AWS_DEFAULT_REGION
+              value: Simin
+            - name: AWS_BUCKET
+              value: paylibero-nightly-core
+            - name: FILESYSTEM_DISK
+              value: s3
+            - name: AWS_USE_PATH_STYLE_ENDPOINT
+              value: 'false'
+            - name: AWS_ENDPOINT
+              value: https://s3.ir-thr-at1.arvanstorage.ir
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: file-storage
+                  key: id
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: file-storage
+                  key: access-key

@@ -1,0 +1,767 @@
+"/auth/send-code":
+  post:
+    tags:
+      - auth
+    summary: "Send Verification Code"
+    description: "Send a verification code to the specified email or mobile(Not support yet)"
+    operationId: sendCode
+    parameters: []
+    requestBody:
+      required: true
+      content:
+        application/x-www-form-urlencoded:
+          schema:
+            type: object
+            properties:
+              to:
+                type: string
+                format: email
+                description: "The email or mobile(Not support yet) to send the verification code to."
+                example: example@email.com
+              via:
+                type: integer
+                enum: [1]
+                description: "The delivery method for the verification code. 1: EMAIL | 2: MOBILE"
+              type:
+                type: integer
+                enum: [1, 2]
+                description: "Type of verification. 1: SET_PASSWORD | 2: RESET_PASSWORD"
+              g-recaptcha-response:
+                type: string
+                description: "The reCAPTCHA response from the client."
+                default: "03AGdBq24XvxmBsQ8jd2LhfQhPUwUGJx_6PxqY3GQxNM6xXX6xXXpqYjZhgA"
+            required:
+              - to
+              - via
+              - type
+              - g-recaptcha-response
+    responses:
+      "201":
+        description: "Created Successful"
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  description: "The status of the operation"
+                  example: "success"
+                code:
+                  type: integer
+                  description: "The HTTP status code"
+                  example: 201
+                message:
+                  type: string
+                  description: "A descriptive message about the operation result"
+                  example: "Verification code sent successfully"
+                data:
+                  type: null
+                  description: "Additional data (null in this case)"
+                  example: null
+              required:
+                - status
+                - code
+                - message
+                - data
+
+"/auth/resend-code":
+  post:
+    tags:
+      - auth
+    summary: "Resend Verification Code"
+    description: "Resend a verification code to the specified recipient."
+    operationId: resendCode
+    parameters: []
+    requestBody:
+      required: true
+      content:
+        application/x-www-form-urlencoded:
+          schema:
+            type: object
+            properties:
+              to:
+                type: string
+                default: "example@example.com"
+                description: "The recipient's email or mobile number(Not support yet)"
+              via:
+                type: string
+                enum: ["1"]
+                description: "The delivery method for the verification code. 1: EMAIL"
+              type:
+                type: string
+                enum: ["1", "2"]
+                description: "Type of verification. **Possible Values:**  1: SET_PASSWORD | 2: RESET_PASSWORD"
+            required:
+              - to
+              - via
+              - type
+    responses:
+      "201":
+        description: "Created Successful"
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  description: "The status of the operation"
+                  example: "success"
+                code:
+                  type: integer
+                  description: "The HTTP status code"
+                  example: 201
+                message:
+                  type: string
+                  description: "A descriptive message about the operation result"
+                  example: "Verification code sent successfully"
+                data:
+                  type: null
+                  description: "Additional data (null in this case)"
+                  example: null
+              required:
+                - status
+                - code
+                - message
+                - data
+
+"/auth/verify-code":
+  post:
+    tags:
+      - auth
+    summary: "Verify verification code"
+    description: "Used to verify a verification code sent to the user's email or mobile number for resetting their password."
+    operationId: verifyCode
+    parameters: []
+    requestBody:
+      required: true
+      content:
+        application/x-www-form-urlencoded:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                description: "Verification code sent to the user. This code is typically a 6-digit."
+                example: "541236"
+              to:
+                type: string
+                description: "User's email address or mobile number where the verification code was sent. Must be a valid email address or mobile number format depending on the chosen 'via' method. Not support mobile yet!"
+                example: "a@a.com"
+              via:
+                type: integer
+                description: "Verification via. 1: EMAIL"
+                enum: ["1"]
+              type:
+                description: "Type of verification. 2: RESET_PASSWORD"
+                enum: ["2"]
+            required:
+              - code
+              - to
+              - via
+              - type
+    responses:
+      "200":
+        description: "Created Successful"
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  description: "The status of the operation"
+                  example: "success"
+                code:
+                  type: integer
+                  description: "The HTTP status code"
+                  example: 200
+                message:
+                  type: string
+                  description: "A descriptive message about the operation result"
+                  example: "User signed up successfully."
+                data:
+                  type: object
+                  description: "Object containing user information and access token"
+                  properties:
+                    user:
+                      type: object
+                      description: "User details"
+                      properties:
+                        ulid:
+                          type: string
+                          description: "Unique identifier for the user"
+                          example: "01HZA0X41HX5CXY2YWD4GP0WAG"
+                        first_name:
+                          type: string
+                          description: "User's first name"
+                          example: null
+                        last_name:
+                          type: string
+                          description: "User's last name"
+                          example: null
+                        email:
+                          type: string
+                          description: "User's email address"
+                          example: "a@b.com"
+                        status:
+                          type: string
+                          description: "User's account status"
+                          example: "active"
+                        created_at:
+                          type: string
+                          format: date-time
+                          description: "Timestamp of user creation"
+                          example: "2024-05-15T06:56:46+00:00"
+                        updated_at:
+                          type: string
+                          format: date-time
+                          description: "Timestamp of last user update"
+                          example: "2024-05-15T06:56:46+00:00"
+                      required:
+                        - ulid
+                        - first_name
+                        - last_name
+                        - email
+                        - status
+                        - created_at
+                        - updated_at
+                    token:
+                      type: object
+                      description: "Authentication token information"
+                      properties:
+                        access_token:
+                          type: string
+                          description: "New access token"
+                          example: "eyJ0eXAiOiJKV1..."
+                        type:
+                          type: string
+                          description: "Token type"
+                          example: "Bearer"
+                        expires_at:
+                          type: string
+                          format: date-time
+                          description: "Token expiration timestamp"
+                          example: "2024-06-23 06:31:30"
+                      required:
+                        - access_token
+                        - type
+                        - expires_at
+                  required:
+                    - user
+                    - token
+              required:
+                - status
+                - code
+                - message
+                - data
+
+"/auth/signup":
+  post:
+    tags:
+      - auth
+    summary: "Verify and sign up a new user."
+    description: "Verify and sign up a new user."
+    operationId: signup
+    parameters: []
+    requestBody:
+      required: true
+      content:
+        application/x-www-form-urlencoded:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                description: "Verification code sent to the user. This code is typically a 6-digit."
+                example: "541236"
+              to:
+                type: string
+                description: "User's email address or mobile number where the verification code was sent. Must be a valid email address or mobile number format depending on the chosen 'via' method. Not support mobile yet!"
+                example: "a@a.com"
+              via:
+                type: integer
+                description: "Verification via. **Possible Values:**  1: EMAIL"
+                enum: ["1"]
+              type:
+                description: "Type of verification. **Possible Values:**  1: SET_PASSWORD"
+                enum: ["1"]
+            required:
+              - code
+              - to
+              - via
+              - type
+    responses:
+      "200":
+        description: "Created Successful"
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  description: "The status of the operation"
+                  example: "success"
+                code:
+                  type: integer
+                  description: "The HTTP status code"
+                  example: 200
+                message:
+                  type: string
+                  description: "A descriptive message about the operation result"
+                  example: "User signed up successfully."
+                data:
+                  type: object
+                  description: "Object containing user information and access token"
+                  properties:
+                    user:
+                      type: object
+                      description: "User details"
+                      properties:
+                        ulid:
+                          type: string
+                          description: "Unique identifier for the user"
+                          example: "01HZA0X41HX5CXY2YWD4GP0WAG"
+                        first_name:
+                          type: string
+                          description: "User's first name"
+                          example: null
+                        last_name:
+                          type: string
+                          description: "User's last name"
+                          example: null
+                        email:
+                          type: string
+                          description: "User's email address"
+                          example: "a@b.com"
+                        status:
+                          type: string
+                          description: "User's account status"
+                          example: "active"
+                        created_at:
+                          type: string
+                          format: date-time
+                          description: "Timestamp of user creation"
+                          example: "2024-05-15T06:56:46+00:00"
+                        updated_at:
+                          type: string
+                          format: date-time
+                          description: "Timestamp of last user update"
+                          example: "2024-05-15T06:56:46+00:00"
+                      required:
+                        - ulid
+                        - first_name
+                        - last_name
+                        - email
+                        - status
+                        - created_at
+                        - updated_at
+                    token:
+                      type: object
+                      description: "Authentication token information"
+                      properties:
+                        access_token:
+                          type: string
+                          description: "New access token"
+                          example: "eyJ0eXAiOiJKV1..."
+                        type:
+                          type: string
+                          description: "Token type"
+                          example: "Bearer"
+                        expires_at:
+                          type: string
+                          format: date-time
+                          description: "Token expiration timestamp"
+                          example: "2024-06-23 06:31:30"
+                      required:
+                        - access_token
+                        - type
+                        - expires_at
+                  required:
+                    - user
+                    - token
+              required:
+                - status
+                - code
+                - message
+                - data
+
+"/auth/set-password":
+  post:
+    tags:
+      - auth
+    summary: "Set user password"
+    description: "This endpoint allows an authenticated user to set a new password for their account."
+    operationId: setPassword
+    parameters: []
+    requestBody:
+      required: true
+      content:
+        application/x-www-form-urlencoded:
+          schema:
+            type: object
+            properties:
+              password:
+                type: string
+                minLength: 8
+                description: "The new password for the user account. **Possible Values:** at least 8 characters. | mixed number and letter."
+                example: "123a456b"
+              password_confirmation:
+                type: string
+                minLength: 8
+                description: "Repeat password"
+                example: "123a456b"
+            required:
+              - password
+              - password_confirmation
+    responses:
+      "200":
+        description: "Created Successful"
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  description: "The status of the operation"
+                  example: "success"
+                code:
+                  type: integer
+                  description: "The HTTP status code"
+                  example: 200
+                message:
+                  type: string
+                  description: "A descriptive message about the operation result"
+                  example: "Password has been set successfully."
+                data:
+                  type: object
+                  description: "Object containing user information"
+                  properties:
+                    user:
+                      type: object
+                      description: "User details"
+                      properties:
+                        ulid:
+                          type: string
+                          description: "Unique identifier for the user"
+                          example: "01J11WDAS03P9W7JE2X3TZEJ7R"
+                        first_name:
+                          type: string
+                          description: "User's first name"
+                          example: null
+                        last_name:
+                          type: string
+                          description: "User's last name"
+                          example: null
+                        email:
+                          type: string
+                          description: "User's email address"
+                          example: "2@gmail.com"
+                        status:
+                          type: string
+                          description: "User's account status"
+                          example: "active"
+                        created_at:
+                          type: string
+                          format: date-time
+                          description: "Timestamp of user creation"
+                          example: "2024-06-23T06:26:51.000000Z"
+                        updated_at:
+                          type: string
+                          format: date-time
+                          description: "Timestamp of last user update"
+                          example: "2024-06-23T06:27:23.000000Z"
+                        roles:
+                          type: array
+                          description: "User's roles"
+                          items:
+                            type: object
+                            properties:
+                              name:
+                                type: string
+                                description: "Name of the role"
+                                example: "applicant"
+                              created_at:
+                                type: string
+                                format: date-time
+                                description: "Timestamp of role creation"
+                                example: "2024-06-22T13:46:57.000000Z"
+                              updated_at:
+                                type: string
+                                format: date-time
+                                description: "Timestamp of last role update"
+                                example: "2024-06-22T13:46:57.000000Z"
+                            required:
+                              - name
+                              - created_at
+                              - updated_at
+                      required:
+                        - ulid
+                        - first_name
+                        - last_name
+                        - email
+                        - status
+                        - created_at
+                        - updated_at
+                        - roles
+                  required:
+                    - user
+              required:
+                - status
+                - code
+                - message
+                - data
+
+"/auth/login":
+  post:
+    tags:
+      - auth
+    summary: "Login User"
+    description: "Allows a user to log in using their email and password."
+    operationId: login
+    parameters: []
+    requestBody:
+      required: true
+      content:
+        application/x-www-form-urlencoded:
+          schema:
+            type: object
+            properties:
+              email:
+                type: string
+                format: email
+                description: "The user's email."
+                default: "example@example.com"
+              password:
+                type: string
+                minLength: 8
+                description: "The user's password."
+                example: "123a456b"
+              g-recaptcha-response:
+                type: string
+                description: "The reCAPTCHA response from the client."
+                default: "03AGdBq24XvxmBsQ8jd2LhfQhPUwUGJx_6PxqY3GQxNM6xXX6xXXpqYjZhgA"
+            required:
+              - email
+              - password
+              - g-recaptcha-response
+    responses:
+      "200":
+        description: "User logged in successfully."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  description: "The status of the operation"
+                  example: "success"
+                code:
+                  type: integer
+                  description: "The HTTP status code"
+                  example: 200
+                message:
+                  type: string
+                  description: "A descriptive message about the operation result"
+                  example: "User logged in successfully."
+                data:
+                  type: object
+                  description: "Object containing user information and token"
+                  properties:
+                    user:
+                      type: object
+                      description: "User details"
+                      properties:
+                        ulid:
+                          type: string
+                          description: "Unique identifier for the user"
+                          example: "01J11WDAS03P9W7JE2X3TZEJ7R"
+                        first_name:
+                          type: string
+                          description: "User's first name"
+                          example: null
+                        last_name:
+                          type: string
+                          description: "User's last name"
+                          example: null
+                        email:
+                          type: string
+                          description: "User's email address"
+                          example: "example@example.com"
+                        status:
+                          type: string
+                          description: "User's account status"
+                          example: "active"
+                        created_at:
+                          type: string
+                          format: date-time
+                          description: "Timestamp of user creation"
+                          example: "2024-06-23T06:26:51.000000Z"
+                        updated_at:
+                          type: string
+                          format: date-time
+                          description: "Timestamp of last user update"
+                          example: "2024-06-23T06:27:23.000000Z"
+                        roles:
+                          type: array
+                          description: "User's roles"
+                          items:
+                            type: object
+                            properties:
+                              name:
+                                type: string
+                                description: "Name of the role"
+                                example: "applicant"
+                              created_at:
+                                type: string
+                                format: date-time
+                                description: "Timestamp of role creation"
+                                example: "2024-06-22T13:46:57.000000Z"
+                              updated_at:
+                                type: string
+                                format: date-time
+                                description: "Timestamp of last role update"
+                                example: "2024-06-22T13:46:57.000000Z"
+                            required:
+                              - name
+                              - created_at
+                              - updated_at
+                      required:
+                        - ulid
+                        - first_name
+                        - last_name
+                        - email
+                        - status
+                        - created_at
+                        - updated_at
+                        - roles
+                    token:
+                      type: object
+                      description: "Authentication token information"
+                      properties:
+                        access_token:
+                          type: string
+                          description: "access token"
+                          example: "eyJ0eXAiOiJKV1..."
+                        type:
+                          type: string
+                          description: "Token type"
+                          example: "Bearer"
+                        expires_at:
+                          type: string
+                          format: date-time
+                          description: "Token expiration timestamp"
+                          example: "2024-06-23 07:17:15"
+                      required:
+                        - access_token
+                        - type
+                        - expires_at
+                  required:
+                    - user
+                    - token
+              required:
+                - status
+                - code
+                - message
+                - data
+
+"/auth/refresh-token":
+  post:
+    tags:
+      - auth
+    summary: "Refresh access token"
+    description: "Refreshes the user's access token using the refresh token stored in an HTTP-only cookie"
+    operationId: refreshToken
+    responses:
+      "200":
+        description: "The payment methods was retrieved successfully."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  description: "The status of the operation"
+                  example: "success"
+                code:
+                  type: integer
+                  description: "The HTTP status code"
+                  example: 200
+                message:
+                  type: string
+                  description: "A descriptive message about the operation result"
+                  example: "Access token has been successfully refreshed."
+                data:
+                  type: object
+                  description: "Object containing the refreshed token information"
+                  properties:
+                    token:
+                      type: object
+                      description: "Refreshed authentication token information"
+                      properties:
+                        access_token:
+                          type: string
+                          description: "New access token"
+                          example: "eyJ0eXAiOiJKV1..."
+                        type:
+                          type: string
+                          description: "Token type"
+                          example: "Bearer"
+                        expires_at:
+                          type: string
+                          format: date-time
+                          description: "Token expiration timestamp"
+                          example: "2024-06-23 06:31:30"
+                      required:
+                        - access_token
+                        - type
+                        - expires_at
+                  required:
+                    - token
+              required:
+                - status
+                - code
+                - message
+                - data
+
+"/auth/logout":
+  post:
+    tags:
+      - auth
+    summary: "Log out user"
+    description: "Logs out the current user."
+    operationId: logout
+    responses:
+      "200":
+        description: "Successful logout"
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  description: "The status of the operation"
+                  example: "success"
+                code:
+                  type: integer
+                  description: "The HTTP status code"
+                  example: 200
+                message:
+                  type: string
+                  description: "A descriptive message about the operation result"
+                  example: "You have been successfully logged out."
+                data:
+                  type: null
+                  description: "Additional data (null in this case)"
+                  example: null
+              required:
+                - status
+                - code
+                - message
+                - data

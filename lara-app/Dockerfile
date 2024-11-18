@@ -1,21 +1,24 @@
-FROM php:8.2
+FROM hub.hamdocker.ir/library/php:8.2
 
 RUN apt-get update -y
-RUN apt-get install -y unzip libpq-dev libcurl4-gnutls-dev
+RUN apt-get install -y unzip libpq-dev libcurl4-gnutls-dev supervisor
 RUN docker-php-ext-install pdo pdo_mysql bcmath
+RUN pecl install redis
+RUN docker-php-ext-enable redis
 
 WORKDIR /var/www
 
-ARG CI_COMMIT_SHORT_SHA
-ARG CI_COMMIT_MESSAGE
-ARG CI_PIPELINE_CREATED_AT
-
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
 COPY ./dockerfiles/entrypoint.sh /usr/local/bin/entrypoint.sh
+
+# Create a directory for Supervisor logs
+RUN mkdir -p /var/log/supervisor
 
 # Image metadata:
 ARG CI_COMMIT_SHORT_SHA
+ARG CI_COMMIT_MESSAGE
 ARG CI_PIPELINE_CREATED_AT
 ARG CI_PIPELINE_URL
 

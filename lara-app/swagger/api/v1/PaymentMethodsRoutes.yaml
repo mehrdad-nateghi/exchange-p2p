@@ -1,0 +1,260 @@
+"/users/payment-methods":
+  get:
+    tags:
+      - payment methods
+    summary: "Get all payment methods"
+    description: "This endpoint retrieve all payment methods."
+    operationId: getUserPaymentMethods
+    parameters:
+      - $ref: "#/components/parameters/pageSize"
+      - $ref: "#/components/parameters/pageNumber"
+      - name: "filter[type]"
+        in: query
+        description: "The type of payment methods"
+        required: false
+        schema:
+          type: string
+          enum:
+            - rial
+            - currency
+          example: rial
+    responses:
+      "200":
+        description: "The payment methods was retrieved successfully."
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/Base200Response"
+                - type: object
+                  required:
+                    - data
+                  properties:
+                    data:
+                      type: object
+                      required:
+                        - items
+                        - pagination
+                      properties:
+                        pagination:
+                          $ref: "#/components/schemas/Pagination"
+                        items:
+                          type: array
+                          description: "Array of payment method items"
+                          items:
+                            $ref: "#/components/schemas/PaymentMethod"
+
+  post:
+    tags:
+      - payment methods
+    summary: "Create a new payment method"
+    description: "This endpoint allows users to create a new payment method by providing the necessary details based on the selected payment method type (Rial bank, Foreign bank, or paypal)."
+    operationId: createUserPaymentMethod
+    parameters: []
+    requestBody:
+      required: true
+      content:
+        application/x-www-form-urlencoded:
+          schema:
+            type: object
+            required:
+              - type
+              - holder_name
+              - is_active
+            properties:
+              type:
+                type: string
+                description: "The type of payment method, Rial Bank: 1 | Foreign Bank:2 | Paypal: 3"
+                enum: ["1", "2", "3"]
+                example: "1"
+              card_number:
+                type: string
+                description: "The card number (required if type is Rial Bank)"
+                example: "6274129005473742"
+              sheba:
+                type: string
+                description: "The Sheba number (required if type is Rial Bank)"
+                example: "IR062960000000100324200001"
+              account_no:
+                type: string
+                description: "The account number"
+                example: "10996491"
+              iban:
+                type: string
+                description: "The IBAN (required if type is Foreign Bank)"
+                example: "DE89370400440532013000"
+              bic:
+                type: string
+                description: "The BIC (required if type is Foreign Bank)"
+                example: "DEUTDEFF"
+              email:
+                type: string
+                format: email
+                description: "The email address (required if type is Paypal)"
+                example: "john.doe@example.com"
+              holder_name:
+                type: string
+                description: "The name of the account holder"
+                example: "John Doe"
+              bank_name:
+                type: string
+                description: "The name of the bank (required if type is Rial Bank or Foreign Bank)"
+                example: "Bank Melli Iran"
+              is_active:
+                type: integer
+                enum:
+                  - 0
+                  - 1
+                description: "Indicates if the payment method is active. Inactive: 0 | Active: 1"
+                example: 1
+    responses:
+      "201":
+        description: "Payment method created successfully"
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/Base200Response"
+                - type: object
+                  required:
+                    - data
+                  properties:
+                    data:
+                      $ref: "#/components/schemas/PaymentMethod"
+
+"/users/payment-methods/{paymentMethod}":
+  get:
+    tags:
+      - payment methods
+    summary: "Get a payment method by ULID"
+    description: "This endpoint retrieve a payment method by ULID."
+    operationId: getUserPaymentMethod
+    parameters:
+      - name: paymentMethod
+        in: path
+        required: true
+        description: "The ULID of the payment method."
+        schema:
+          type: string
+    responses:
+      "200":
+        description: "The user's payment method was retrieved successfully."
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/Base200Response"
+                - type: object
+                  required:
+                    - data
+                  properties:
+                    data:
+                      $ref: "#/components/schemas/PaymentMethod"
+  put:
+    tags:
+      - payment methods
+    summary: "Update a user's payment method"
+    description: "Update a specific payment method of the authenticated user."
+    operationId: UpdateUserPaymentMethod
+    parameters:
+      - name: paymentMethod
+        in: path
+        required: true
+        description: "The ULID of the payment method to update."
+        schema:
+          type: string
+    requestBody:
+      required: true
+      content:
+        application/x-www-form-urlencoded:
+          schema:
+            type: object
+            required:
+              - holder_name
+              - is_active
+            properties:
+              card_number:
+                type: string
+                description: "The card number (required if type is Rial Bank)"
+                example: "6274129005473742"
+              sheba:
+                type: string
+                description: "The Sheba number (required if type is Rial Bank)"
+                example: "IR062960000000100324200001"
+              account_no:
+                type: string
+                description: "The account number"
+                example: "10996491"
+              iban:
+                type: string
+                description: "The IBAN (required if type is Foreign Bank)"
+                example: "DE89370400440532013000"
+              bic:
+                type: string
+                description: "The BIC (required if type is Foreign Bank)"
+                example: "DEUTDEFF"
+              email:
+                type: string
+                format: email
+                description: "The email address (required if type is Paypal)"
+                example: "john.doe@example.com"
+              holder_name:
+                type: string
+                description: "The name of the account holder"
+                example: "John Doe"
+              bank_name:
+                type: string
+                description: "The name of the bank (required if type is Rial Bank or Foreign Bank)"
+                example: "Bank Melli Iran"
+              icon:
+                type: string
+                description: "payment method icon url"
+              is_active:
+                type: integer
+                enum:
+                  - 0
+                  - 1
+                description: "Indicates if the payment method is active. Inactive: 0 | Active: 1"
+                example: 1
+    responses:
+      "200":
+        description: "The payment method was updated successfully."
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/Base200Response"
+                - type: object
+                  required:
+                    - data
+                  properties:
+                    data:
+                      $ref: "#/components/schemas/PaymentMethod"
+  delete:
+    tags:
+      - payment methods
+    summary: "Delete a user's payment method"
+    description: "Deletes a specific payment method of the authenticated user."
+    operationId: deleteUserPaymentMethod
+    parameters:
+      - name: paymentMethod
+        in: path
+        required: true
+        description: "The ULID of the payment method to delete."
+        schema:
+          type: string
+    responses:
+      "200":
+        description: "The user's payment methods was deleted successfully."
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/Base200Response"
+                - type: object
+                  required:
+                    - data
+                  properties:
+                    data:
+                      type: object
+                      nullable: true

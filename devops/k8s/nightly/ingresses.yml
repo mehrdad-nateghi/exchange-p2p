@@ -12,8 +12,8 @@ metadata:
     nginx.ingress.kubernetes.io/load-balance: ewma
     nginx.ingress.kubernetes.io/proxy-body-size: 150m
     nginx.ingress.kubernetes.io/proxy-buffer-size: 96k
-    nginx.ingress.kubernetes.io/proxy-read-timeout: "1000"
-    nginx.ingress.kubernetes.io/proxy-send-timeout: "1000"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: '1000'
+    nginx.ingress.kubernetes.io/proxy-send-timeout: '1000'
     #nginx.ingress.kubernetes.io/server-snippet: |
     #  client_header_buffer_size 100k;
     #  large_client_header_buffers 4 100k;
@@ -30,7 +30,7 @@ spec:
                 port:
                   number: 8000
             path: /
-            pathType: ImplementationSpecific
+            pathType: Prefix
 
     - host: pex-app-33e1254e7d-paylibero-nightly.apps.ir-thr-ba1.arvancaas.ir
       http:
@@ -43,6 +43,28 @@ spec:
             path: /
             pathType: ImplementationSpecific
 
+    - host: redis-33e1254e7d-paylibero-nightly.apps.ir-thr-ba1.arvancaas.ir
+      http:
+        paths:
+          - backend:
+              service:
+                name: redis-gui
+                port:
+                  number: 80
+            path: /
+            pathType: ImplementationSpecific
+
+    - host: phpmyadmin-33e1254e7d-paylibero-nightly.apps.ir-thr-ba1.arvancaas.ir
+      http:
+        paths:
+          - backend:
+              service:
+                name: phpmyadmin
+                port:
+                  number: 80
+            path: /
+            pathType: ImplementationSpecific
+
     - host: nightly.paylibero.ir
       http:
         paths:
@@ -52,7 +74,40 @@ spec:
                 port:
                   number: 8000
             path: /
+            pathType: Prefix
+          - backend:
+              service:
+                name: core-laravel
+                port:
+                  number: 8000
+            path: /sanctum/csrf-cookie
+            pathType: Prefix
+          - backend:
+              service:
+                name: core-laravel
+                port:
+                  number: 8000
+            path: /api
             pathType: ImplementationSpecific
+
+    # For admin panel just one domain is enough
+    - host: nightly.admin.paylibero.ir
+      http:
+        paths:
+          - backend:
+              service:
+                name: pex-admin
+                port:
+                  number: 8000
+            path: /
+            pathType: ImplementationSpecific
+          - backend:
+              service:
+                name: core-laravel
+                port:
+                  number: 8000
+            path: /sanctum/csrf-cookie
+            pathType: Prefix
           - backend:
               service:
                 name: core-laravel

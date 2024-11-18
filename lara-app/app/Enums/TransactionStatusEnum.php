@@ -2,8 +2,13 @@
 
 namespace App\Enums;
 
-enum TransactionStatusEnum: int{
-    case Unsuccessful = 0;
-    case Successful = 1;
-};
+use App\Traits\Global\EnumTrait;
 
+enum TransactionStatusEnum: int{
+
+    use EnumTrait;
+
+    case PENDING = 1;
+    case COMPLETED = 2;
+    case FAILED = 3;
+}

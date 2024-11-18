@@ -2,7 +2,14 @@
 
 namespace App\Exceptions;
 
+use Illuminate\Auth\AuthenticationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
+use Spatie\Permission\Exceptions\UnauthorizedException;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -41,10 +48,83 @@ class Handler extends ExceptionHandler
      *
      * @return void
      */
-    public function register()
+    public function register(): void
     {
-        $this->reportable(function (Throwable $e) {
-            //
+        $this->renderable(function (ModelNotFoundException $e, $request) {
+            if (request()->wantsJson() || $request->is('api/*')) {
+                return apiResponse()
+                    ->failed()
+                    ->message(trans('api-messages.item_not_found'))
+                    ->notFound()
+                    ->getApiResponse();
+            }
+        });
+
+        $this->renderable(function (AuthenticationException $e, $request) {
+            if (request()->wantsJson() || $request->is('api/*')) {
+                return apiResponse()
+                    ->failed()
+                    ->message(trans('api-messages.un_authenticated'))
+                    ->unAuthenticated()
+                    ->getApiResponse();
+            }
+        });
+
+
+        $this->renderable(function (Throwable $e, $request) {
+            if (($e instanceof AccessDeniedHttpException || $e instanceof UnauthorizedException)
+                && (request()->wantsJson() || $request->is('api/*'))) {
+                return apiResponse()
+                    ->failed()
+                    ->message(trans('api-messages.un_authorized'))
+                    ->unAuthorized()
+                    ->getApiResponse();
+            }
+        });
+
+        $this->renderable(function (ValidationException $e, $request) {
+            if (request()->wantsJson() || $request->is('api/*')) {
+                return apiResponse()
+                    ->failed()
+                    ->message($e->getMessage())
+                    ->data(['errors' => $e->errors()])
+                    ->unProcessableEntity()
+                    ->getApiResponse();
+            }
+        });
+
+        $this->renderable(function (NotFoundHttpException $e, $request) {
+            if (request()->wantsJson() || $request->is('api/*')) {
+                return apiResponse()
+                    ->failed()
+                    ->message(trans('api-messages.requested_link_does_not_exist'))
+                    ->notFound()
+                    ->getApiResponse();
+            }
+        });
+
+        $this->reportable(function (Throwable $t) {
+            if (app()->bound('sentry')) {
+                Log::error($t);
+
+                return apiResponse()
+                    ->failed()
+                    ->serverError()
+                    ->message(trans('api-messages.internal_server_error'))
+                    ->getApiResponse();
+            }
+        });
+
+        $this->reportable(function (\Error $e) {
+            if (app()->bound('sentry')) {
+                Log::error($e);
+
+                return apiResponse()
+                    ->failed()
+                    ->serverError()
+                    ->message(trans('api-messages.internal_server_error'))
+                    ->getApiResponse();
+            }
         });
     }
 }

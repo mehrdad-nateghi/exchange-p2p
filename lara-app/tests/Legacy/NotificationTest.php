@@ -2,8 +2,8 @@
 
 namespace Tests\Feature;
 
-use App\Enums\UserRoleEnum;
-use App\Models\Bid;
+use App\Enums\Legacy\UserRoleEnum;
+use App\Models\Legacy\Bid;
 use App\Models\Notification;
 use App\Models\Request;
 use App\Models\Trade;

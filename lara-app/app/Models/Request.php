@@ -5,134 +5,103 @@ namespace App\Models;
 use App\Enums\BidStatusEnum;
 use App\Enums\RequestStatusEnum;
 use App\Enums\RequestTypeEnum;
+use App\Enums\TradeStepOwnerEnum;
+use App\Traits\Global\Number;
+use App\Traits\Global\Paginatable;
+use App\Traits\Global\Ulid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 
 class Request extends Model
 {
-    use HasFactory;
+    use HasFactory, Ulid, Number, Paginatable, SoftDeletes;
 
-    protected $table = 'requests';
-
-    protected $fillable = [
-        'support_id',
-        'type',
-        'status',
-        'description',
-        'trade_volume',
-        'lower_bound_feasibility_threshold',
-        'upper_bound_feasibility_threshold',
-        'acceptance_threshold',
-        'request_rate',
-        'payment_reason',
-        'applicant_id',
-        'created_at',
-        'updated_at'
-    ];
-
-    public $timestamps = true;
-
-    /*
-    * Get the PaymentMethods for the Request
-    */
-    public function linkedMethods(){
-        return $this->belongsToMany(LinkedMethod::class, 'request_linkedmethod', 'request_id', 'linked_method_id');
-    }
-
-    /*
-    * Get the User owns the Request
-    */
-    public function user(){
-        return $this->belongsTo(User::class, 'applicant_id');
-    }
-
-    /*
-    * Get the Bids for the Request
-    */
-    public function bids(){
-        return $this->hasMany(Bid::class, 'request_id');
-    }
-
-    /*
-    * Get the Trades for the Request
-    */
-    public function trades(){
-        return $this->hasMany(Trade::class, 'request_id');
-    }
-
-    /*
-    * Get the Emails related to the Request
-    */
-   public function emails(){
-       return $this->morphMany(Email::class, 'emailable');
-   }
-
-    /*
-    * Get the Notifications related to the Request
-    */
-    public function notifications(){
-        return $this->morphMany(Notification::class, 'notifiable');
-    }
-
-    /*
-     * Set a bid as the top bid of the request
-     */
-    public function setTopBid($bid_id){
-        $current_top_bid = $this->bids()->where("status", BidStatusEnum::Top)->first();
-        $processing_bid = $this->bids()->where("id", $bid_id)->first();
-
-        if($processing_bid) {
-            $processing_bid->status = BidStatusEnum::Top;
-
-            if($current_top_bid) {
-                $current_top_bid->status = BidStatusEnum::Registered;
-                $current_top_bid->save();
-            }
-
-            $processing_bid->save();
-
-            return true;
-        }
-
-        return false;
-    }
-
-    /*
-     * Get the top bid of the request
-     */
-    public function getTopBid(){
-        return $this->bids()->where('status', BidStatusEnum::Top)->first();
-    }
-
-    /*
-     * Get the request payment methods
-     */
-    public function getRequestPaymentMethods() {
-        return $this->linkedMethods()->with('paymentMethod')->get()->pluck('paymentMethod')->unique();
-    }
-
-    /*
-     * Accept a specific bid for the request
-     */
-    public function acceptBid($bid) {
-
-        $this->bids()->where('id',$bid->id)->update([
-            'status' => BidStatusEnum::Confirmed
-        ]);
-
-        $this->bids()->whereIn('status',[BidStatusEnum::Top, BidStatusEnum::Registered])->update([
-            'status' => BidStatusEnum::Rejected
-        ]);
-
-        return true;
-    }
-
-    /*
-    * Enum casting for the status and type fields
-    */
     protected $casts = [
         'status' => RequestStatusEnum::class,
         'type' => RequestTypeEnum::class
     ];
 
+    protected static $prefixNumber = 'RE-';
+
+    protected $fillable = [
+        'volume',
+        'type',
+        'status',
+        'price',
+        // 'description', todo-mn: need to add it?
+        'min_allowed_price',
+        'max_allowed_price',
+        /* 'deposit_reason',
+         'deposit_reason_accepted'*/
+    ];
+
+    public function getRouteKeyName(): string
+    {
+        return 'ulid';
+    }
+
+    public function paymentMethods(): BelongsToMany
+    {
+        return $this->belongsToMany(PaymentMethod::class, 'payment_method_request')->withTimestamps();
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function trades(): HasMany
+    {
+        return $this->hasMany(Trade::class);
+    }
+
+    public function latestTradeWithTrashed(): HasOne
+    {
+        return $this->hasOne(Trade::class)->withTrashed()->latest();
+    }
+
+    public function bids(): HasMany
+    {
+        return $this->hasMany(Bid::class);
+    }
+
+    public function getIsUserSellerAttribute(): bool
+    {
+        return $this->isUserRole(RequestTypeEnum::SELL);
+    }
+
+    public function getIsUserBuyerAttribute(): bool
+    {
+        return $this->isUserRole(RequestTypeEnum::BUY);
+    }
+
+    private function isUserRole(RequestTypeEnum $requestType): bool
+    {
+        $isAdmin = Auth::user()->hasRole('admin');
+        $userId = $isAdmin ? $this->user->id : Auth::id();
+
+        if ($this->type->value !== $requestType->value) {
+            $bid = $this->bids()->where('status', BidStatusEnum::ACCEPTED)->first();
+            return $bid && $bid->user_id == $userId;
+        }
+
+        return $this->user_id == $userId;
+    }
+
+    public function getUserRoleOnRequestAttribute(): ?string
+    {
+        if ($this->is_user_seller) {
+            return TradeStepOwnerEnum::SELLER->key();
+        }
+        if ($this->is_user_buyer) {
+            return TradeStepOwnerEnum::BUYER->key();
+        }
+        return null;
+    }
 }

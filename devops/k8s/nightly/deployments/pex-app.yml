@@ -3,18 +3,29 @@ kind: Deployment
 metadata:
   name: pex-app
 spec:
-  replicas: 2
+  replicas: 1
   template:
     spec:
       containers:
         - name: pex-app
+          env:
+            - name: DEPLOYMENT_ENV
+              value: nightly
+
+            - name: NEXT_PUBLIC_FILE_STORAGE_URL
+              value: https://files.paylibero.ir
+
+            - name: NEXT_PUBLIC_SITE_SECRET
+              value: 6Lc_s1QpAAAAAIQhxFfqYkcgTvwfPjdQ-sumzg6L
+
+            - name: NEXT_PUBLIC_REACT_APP_SITE_KEY
+              value: 6LfVge4pAAAAANnXqccl7kEI6sxeXSLYUuDYKeSp
           resources:
-            requests:
-              memory: "256Mi"
-              cpu: "128m"
             limits:
-              memory: "2048Mi"
-              cpu: "1024m"
-            env:
-              - name: DEPLOYMENT_ENV
-                value: nightly
+              cpu: 500m
+              ephemeral-storage: 200M
+              memory: 1G
+            requests:
+              cpu: 500m
+              ephemeral-storage: 200M
+              memory: 1G

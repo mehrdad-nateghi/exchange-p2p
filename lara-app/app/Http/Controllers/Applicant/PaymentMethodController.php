@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Applicant;
 
-use App\Enums\LinkedMethodStatusEnum;
+use App\Enums\Legacy\LinkedMethodStatusEnum;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\LinkPaymentMethodRequest;
+use App\Http\Requests\Legacy\LinkPaymentMethodRequest;
 use App\Models\LinkedMethod;
 use App\Models\PaymentMethod;
 use Illuminate\Support\Facades\Auth;

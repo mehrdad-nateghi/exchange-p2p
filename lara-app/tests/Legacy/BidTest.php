@@ -2,10 +2,10 @@
 
 namespace Tests\Feature;
 
-use App\Enums\UserRoleEnum;
-use App\Models\Bid;
+use App\Enums\Legacy\UserRoleEnum;
 use App\Models\Email;
 use App\Models\EmailTemplate;
+use App\Models\Legacy\Bid;
 use App\Models\LinkedMethod;
 use App\Models\Notification;
 use App\Models\PaymentMethod;
@@ -13,7 +13,6 @@ use App\Models\Request;
 use App\Models\Trade;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class BidTest extends TestCase

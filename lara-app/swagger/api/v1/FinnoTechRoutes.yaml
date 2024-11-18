@@ -1,0 +1,56 @@
+"/users/third-party/finnotech/card-info":
+  get:
+    tags:
+      - finnotech
+    summary: Retrieve card information
+    description: Retrieve IBAN and associated information for a given card number
+    operationId: getCardInfo
+    parameters:
+      - name: card
+        in: query
+        required: true
+        description: The card number
+        schema:
+          type: string
+    responses:
+      "200":
+        description: The Card to IBAN was retrieved successfully
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/Base200Response"
+                - type: object
+                  properties:
+                    data:
+                      type: object
+                      required:
+                        - trackId
+                        - iban
+                        - card
+                        - deposit
+                        - bank_name
+                        - deposit_description
+                        - deposit_owners
+                      properties:
+                        trackId:
+                          type: string
+                          example: "6cfaff97-aa46-481a-8be9-058698eab943"
+                        iban:
+                          type: string
+                          example: "IR150150000000002901136012"
+                        card:
+                          type: string
+                          example: "6219861019874687"
+                        deposit:
+                          type: string
+                          example: "2901136012"
+                        bank_name:
+                          type: string
+                          example: "آینده"
+                        deposit_description:
+                          type: string
+                          example: "حساب فعال است"
+                        deposit_owners:
+                          type: string
+                          example: "سحر قاسمی"

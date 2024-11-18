@@ -1,0 +1,14 @@
+<?php
+
+namespace {{ namespace }};
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Traits\Global\Paginatable;
+use App\Traits\Global\Ulid;
+
+class {{ class }} extends Model
+{
+    use HasFactory,Ulid, Paginatable, SoftDeletes;
+}

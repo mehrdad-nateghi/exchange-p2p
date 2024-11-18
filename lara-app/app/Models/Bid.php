@@ -3,81 +3,103 @@
 namespace App\Models;
 
 use App\Enums\BidStatusEnum;
-use App\Enums\BidTypeEnum;
+use App\Enums\RequestTypeEnum;
+use App\Traits\Global\Number;
+use App\Traits\Global\Paginatable;
+use App\Traits\Global\Ulid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Bid extends Model
 {
-    use HasFactory;
+    use HasFactory, Ulid, SoftDeletes, Paginatable, Number;
 
-    protected $table = 'bids';
+    protected static $prefixNumber = 'BI-';
+
+    public function getRouteKeyName(): string
+    {
+        return 'ulid';
+    }
 
     protected $fillable = [
-        'request_id',
-        'applicant_id',
-        'target_account_id',
-        'bid_rate',
-        'created_at',
-        'support_id',
-        'type',
-        'status',
-        'description'
+        'user_id', 'request_id', 'payment_method_id', 'price', 'status','rejected_at'
     ];
 
-    public $timestamps = true;
-
-
-    /**
-     * Get the User that owns the Bid
-     */
-    public function user(){
-        return $this->belongsTo(User::class, 'applicant_id');
-    }
-
-
-    /**
-     * Get the Request that owns the Bid
-     */
-    public function request(){
-        return $this->belongsTo(Request::class, 'request_id');
-    }
-
-    /*
-    * Get the Trade for the Bid
-    */
-    public function trade(){
-        return $this->hasOne(Trade::class);
-    }
-
-    /*
-    * Get the Emails related to the Bid
-    */
-    public function emails(){
-        return $this->morphMany(Email::class, 'emailable');
-    }
-
-    /*
-    * Get the Notifications related to the Bid
-    */
-    public function notifications(){
-        return $this->morphMany(Notification::class, 'notifiable');
-    }
-
-    /*
-    * Get the LinkedMethod belongs to the Bid
-    */
-    public function linkedMethod(){
-        return $this->belongsTo(LinkedMethod::class, 'target_account_id');
-    }
-
-    /*
-    * Enum casting for the status and type fields
-    */
     protected $casts = [
         'status' => BidStatusEnum::class,
-        'type' => BidTypeEnum::class
+        'rejected_at' => 'datetime'
     ];
 
+    public function request(): BelongsTo
+    {
+        return $this->belongsTo(Request::class);
+    }
 
+    public function paymentMethod(): BelongsTo
+    {
+        return $this->belongsTo(PaymentMethod::class);
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    /*public function getIconAttribute()
+    {
+        if ($this->status === BidStatusEnum::ACCEPTED->value) {
+            return 'accepted';
+        }
+
+        if ($this->status === BidStatusEnum::REJECTED->value) {
+            return 'rejected';
+        }
+
+        $highestBid = Bid::query()
+            ->where('request_id', $this->request_id)
+            ->where('status', BidStatusEnum::REGISTERED->value)
+            ->max('price');
+
+        if ($this->price == $highestBid) {
+            return 'highest_price';
+        }else{
+            return 'not_highest_price';
+        }
+    }*/
+
+    public function getIsHighestPriceAttribute()
+    {
+        $highestBid = Bid::query()
+            ->where('request_id', $this->request_id)
+            //->where('status', BidStatusEnum::REGISTERED->value)
+            ->max('price');
+
+        return $this->price == $highestBid;
+    }
+
+    public function getIsBestPriceAttribute()
+    {
+        if($this->request->type->value === RequestTypeEnum::BUY->value){
+            $bestPrice = Bid::query()
+                ->where('request_id', $this->request_id)
+                ->min('price');
+        }
+
+        if($this->request->type->value === RequestTypeEnum::SELL->value){
+            $bestPrice = Bid::query()
+                ->where('request_id', $this->request_id)
+                ->max('price');
+        }
+
+        return $this->price == $bestPrice;
+    }
+
+    public function trades(): HasMany
+    {
+        return $this->hasMany(Trade::class);
+    }
 }

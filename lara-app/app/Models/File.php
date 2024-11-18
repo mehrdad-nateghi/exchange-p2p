@@ -2,29 +2,50 @@
 
 namespace App\Models;
 
+use App\Enums\FileStatusEnum;
+use App\Traits\Global\Paginatable;
+use App\Traits\Global\Ulid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Storage;
 
 class File extends Model
 {
-    use HasFactory;
-
-    protected $table = 'files';
+    use HasFactory,Ulid, Paginatable, SoftDeletes;
 
     protected $fillable = [
-        'url',
-        'alt',
-        'type',
-        'transaction_id'
+        'user_id',
+        'name',
+        'path',
+        'mime_type',
+        'size',
+        'status'
     ];
 
-    public $timestamps = false;
+    public function getRouteKeyName(): string
+    {
+        return 'ulid';
+    }
 
+    protected $casts = [
+        'status' => FileStatusEnum::class
+    ];
 
-    /*
-    * Get the Transaction that owns the File
-    */
-    public function transaction(){
-        return $this->belongsTo(Transaction::class);
+    public function getUrlAttribute(): string
+    {
+        return Storage::temporaryUrl($this->path, now()->addMinutes(5));
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function fileable(): MorphTo
+    {
+        return $this->morphTo();
     }
 }

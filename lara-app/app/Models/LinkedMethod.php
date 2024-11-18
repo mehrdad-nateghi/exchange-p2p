@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
-use App\Enums\BidStatusEnum;
-use App\Enums\LinkedMethodStatusEnum;
-use App\Enums\RequestStatusEnum;
+use App\Enums\Legacy\BidStatusEnum;
+use App\Enums\Legacy\LinkedMethodStatusEnum;
+use App\Enums\Legacy\RequestStatusEnum;
+use App\Models\Legacy\Bid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 

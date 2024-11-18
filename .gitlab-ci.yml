@@ -19,6 +19,7 @@ trigger-core-laravel:
         - .gitlab-ci.templates.yml
         - devops/build/*
         - devops/k8s/**/core-laravel.yml
+        - devops/k8s/**/queue-worker.yml
         - devops/k8s/**/kustomization.yml
         - devops/k8s/**/ingresses.yml
 
@@ -33,6 +34,18 @@ trigger-pex-app:
     strategy: depend
   rules:
     - if: $CI_PIPELINE_SOURCE == "pipeline" && $SERVICE_NAME == "pex-app"
+
+trigger-pex-admin:
+  stage: Triggers
+  variables:
+    DEPLOY_COMMIT_SHORT_SHA: $DEPLOY_COMMIT_SHORT_SHA
+    ENVIRONMENT_NAME: $ENVIRONMENT_NAME
+    DEPLOYMENT_URL: $DEPLOYMENT_URL
+  trigger:
+    include: /devops/external-apps-ci-configs/pex-admin.gitlab-ci.yml
+    strategy: depend
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "pipeline" && $SERVICE_NAME == "pex-admin"
 
 trigger-pex-storybook:
   stage: Triggers

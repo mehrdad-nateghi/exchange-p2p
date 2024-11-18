@@ -43,7 +43,7 @@ spec:
       #initContainers: null
       containers:
         - name: mysql
-          image: docker.io/bitnami/mysql:8.2
+          image: hub.hamdocker.ir/bitnami/mysql:8.2
           imagePullPolicy: IfNotPresent
           securityContext:
             allowPrivilegeEscalation: false

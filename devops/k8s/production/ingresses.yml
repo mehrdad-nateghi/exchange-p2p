@@ -1,0 +1,109 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-http
+    kubernetes.io/change-cause: kubectl apply --record=true --filename=-
+    nginx.ingress.kubernetes.io/backend-protocol: HTTP
+    nginx.ingress.kubernetes.io/client-body-buffer-size: 64k
+    nginx.ingress.kubernetes.io/client-header-buffer-size: 100k
+    nginx.ingress.kubernetes.io/http2-max-header-size: 96k
+    nginx.ingress.kubernetes.io/large-client-header-buffers: 4 100k
+    nginx.ingress.kubernetes.io/load-balance: ewma
+    nginx.ingress.kubernetes.io/proxy-body-size: 150m
+    nginx.ingress.kubernetes.io/proxy-buffer-size: 96k
+    nginx.ingress.kubernetes.io/proxy-read-timeout: '1000'
+    nginx.ingress.kubernetes.io/proxy-send-timeout: '1000'
+    #nginx.ingress.kubernetes.io/server-snippet: |
+    #  client_header_buffer_size 100k;
+    #  large_client_header_buffers 4 100k;
+  name: paylibero
+spec:
+  ingressClassName: nginx
+  rules:
+    # For admin panel just one domain is enough
+    - host: admin.paylibero.ir
+      http:
+        paths:
+          - backend:
+              service:
+                name: pex-admin
+                port:
+                  number: 8000
+            path: /
+            pathType: ImplementationSpecific
+          - backend:
+              service:
+                name: core-laravel
+                port:
+                  number: 8000
+            path: /sanctum/csrf-cookie
+            pathType: Prefix
+          - backend:
+              service:
+                name: core-laravel
+                port:
+                  number: 8000
+            path: /api
+            pathType: ImplementationSpecific
+
+    - host: paylibero.ir
+      http:
+        paths:
+          - backend:
+              service:
+                name: pex-app
+                port:
+                  number: 8000
+            path: /
+            pathType: Prefix
+          - backend:
+              service:
+                name: core-laravel
+                port:
+                  number: 8000
+            path: /sanctum/csrf-cookie
+            pathType: Prefix
+          - backend:
+              service:
+                name: core-laravel
+                port:
+                  number: 8000
+            path: /api
+            pathType: ImplementationSpecific
+
+    - host: paylibero.net
+      http:
+        paths:
+          - backend:
+              service:
+                name: pex-app
+                port:
+                  number: 8000
+            path: /
+            pathType: ImplementationSpecific
+          - backend:
+              service:
+                name: core-laravel
+                port:
+                  number: 8000
+            path: /api
+            pathType: ImplementationSpecific
+
+    - host: paylibero.de
+      http:
+        paths:
+          - backend:
+              service:
+                name: pex-app
+                port:
+                  number: 8000
+            path: /
+            pathType: ImplementationSpecific
+          - backend:
+              service:
+                name: core-laravel
+                port:
+                  number: 8000
+            path: /api
+            pathType: ImplementationSpecific

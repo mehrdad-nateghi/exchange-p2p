@@ -1,0 +1,146 @@
+<?php
+
+namespace App\Http\Requests\API\V1\PaymentMethod\User;
+
+use App\Enums\PaymentMethodTypeEnum;
+use App\Rules\AlphaSpace;
+use App\Rules\PaymentMethodIsInUse;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
+use Intervention\Validation\Rules\Bic;
+use Intervention\Validation\Rules\Iban;
+
+class UpdatePaymentMethodRequest extends FormRequest
+{
+    /**
+     * Determine if the user is authorized to make this request.
+     *
+     * @return bool
+     */
+    public function authorize()
+    {
+        return true;
+    }
+
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, mixed>
+     */
+    public function rules()
+    {
+        $type = $this->paymentMethod->type->value;
+        $paymentMethodId = $this->paymentMethod->payment_method_id;
+
+        return [
+            'payment_method' => ['required',new PaymentMethodIsInUse($this->paymentMethod)],
+
+            // PAYMENT METHODS
+            'type' => [
+                'required',
+                Rule::enum(PaymentMethodTypeEnum::class)
+            ],
+
+            // RIAL ACCOUNTS
+            'card_number' => [
+                'bail',
+                'required_if:type,' . PaymentMethodTypeEnum::RIAL_BANK->value,
+                'ir_bank_card_number',
+                'unique:rial_bank_accounts,card_number,' . $paymentMethodId
+            ],
+            'account_no' => [
+                'bail',
+                'nullable',
+                'string',
+                'max:50',
+                'unique:rial_bank_accounts,account_no,' . $paymentMethodId
+            ],
+
+            // FOREIGN ACCOUNTS
+            'bic' => [
+                'bail',
+                'required_if:type,' . PaymentMethodTypeEnum::FOREIGN_BANK->value,
+                new Bic(),
+                'unique:foreign_bank_accounts,bic,' . $paymentMethodId
+            ],
+
+            // PAYPAL ACCOUNTS
+            'email' => [
+                'bail',
+                'required_if:type,' . PaymentMethodTypeEnum::PAYPAL->value,
+                'email',
+                'unique:paypal_accounts,email,' . $paymentMethodId
+            ],
+
+            // COMMON
+            'iban' => [
+                'string',
+                'nullable',
+                'required_if:type,' . PaymentMethodTypeEnum::FOREIGN_BANK->value . ',' . PaymentMethodTypeEnum::RIAL_BANK->value,
+                function ($attribute, $value, $fail) use ($type, $paymentMethodId) {
+                    if ($type == PaymentMethodTypeEnum::RIAL_BANK->value) {
+                        $rules = [
+                            'ir_sheba',
+                            'unique:rial_bank_accounts,iban,' . $paymentMethodId,
+                            'size:26',
+                        ];
+                    } elseif ($type == PaymentMethodTypeEnum::FOREIGN_BANK->value) {
+                        $rules = [
+                            new Iban(),
+                            'unique:foreign_bank_accounts,iban,' . $paymentMethodId
+                        ];
+                    } else {
+                        return; // No validation if type doesn't match
+                    }
+
+                    $validator = Validator::make([$attribute => $value], [$attribute => $rules]);
+                    if ($validator->fails()) {
+                        $fail($validator->errors()->first($attribute));
+                    }
+                },
+            ],
+
+            'holder_name' => [
+                'bail',
+                'required',
+                Rule::when(in_array($type, [
+                    PaymentMethodTypeEnum::PAYPAL->value,
+                    PaymentMethodTypeEnum::FOREIGN_BANK->value,
+                ]), fn() => [
+                    new AlphaSpace(),
+                ]),
+                'max:50',
+            ],
+            'bank_name' => [
+                'bail',
+                Rule::requiredIf(function () use ($type) {
+                    return in_array($type, [
+                        PaymentMethodTypeEnum::RIAL_BANK->value,
+                        PaymentMethodTypeEnum::FOREIGN_BANK->value,
+                    ]);
+                }),
+                Rule::when($type === PaymentMethodTypeEnum::FOREIGN_BANK->value, fn() => [
+                    new AlphaSpace(),
+                ]),
+                'max:50',
+            ],
+            'is_active' => [
+                'bail',
+                'required',
+                'boolean',
+            ],
+        ];
+    }
+
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'type' => $this->paymentMethod->type->value,
+            'payment_method' => $this->paymentMethod,
+        ]);
+    }
+
+
+}

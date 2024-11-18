@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Enums\UserRoleEnum;
+use App\Enums\Legacy\UserRoleEnum;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\SignInRequest;
+use App\Http\Requests\Legacy\SignInRequest;
 use App\Http\Resources\UserResource;
 use App\Interfaces\AuthRepositoryInterface;
 use Illuminate\Http\Request;
@@ -116,5 +116,41 @@ class AuthController extends Controller
         $request->user()->token()->revoke();
 
         return response()->json(['message' => 'Successfully signed out.']);
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/api/admin/get-token",
+     *     summary="Get token included into cookie",
+     *     tags={"Authentication"},
+     *     operationId="getTokenIncludedInCookieByAdmin",
+     *     security={
+     *           {"bearerAuth": {}}
+     *     },
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation",
+     *         @OA\JsonContent(
+     *              @OA\Property(property="token", type="string", description="An access token dispatched from the cookie."),
+     *      )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized"
+     *     ),
+     *     @OA\Response(
+     *         response=403,
+     *         description="Forbidden"
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal Server Error",
+     *     )
+     * )
+     */
+    public function getToken(Request $request) {
+        $token = $this->authRepository->getTokenFromCookie($request);
+
+        return response(['token' => $token], 200);
     }
 }

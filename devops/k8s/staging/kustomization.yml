@@ -1,0 +1,32 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: paylibero-staging
+
+resources:
+  - ../base/deployments/core-laravel.yml
+  - ../base/deployments/queue-worker.yml
+  - ../base/deployments/pex-app.yml
+  - ../base/deployments/pex-admin.yml
+  - ../base/configs/core-laravel.yml
+  - ../base/services
+  - HPAs
+  - operators
+  - ingresses.yml
+
+patches:
+  - path: deployments/core-laravel.yml
+  - path: deployments/queue-worker.yml
+  - path: deployments/pex-app.yml
+  - path: deployments/pex-admin.yml
+  - path: statefulsets/mysql.yml
+
+images:
+  - name: registry.hamdocker.ir/paylibero/build-core-laravel
+    newTag: ${DEPLOY_COMMIT_SHORT_SHA}
+  - name: registry.hamdocker.ir/paylibero/pex-app
+    newTag: ${DEPLOY_COMMIT_SHORT_SHA}
+  - name: registry.hamdocker.ir/paylibero/pex-admin
+    newTag: ${DEPLOY_COMMIT_SHORT_SHA}
+  - name: registry.hamdocker.ir/paylibero/queue-worker
+    newTag: ${DEPLOY_COMMIT_SHORT_SHA}

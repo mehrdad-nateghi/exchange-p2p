@@ -3,105 +3,81 @@
 namespace App\Models;
 
 use App\Enums\TradeStatusEnum;
+use App\Enums\TradeStepOwnerEnum;
+use App\Enums\TradeStepsStatusEnum;
+use App\Traits\Global\Number;
+use App\Traits\Global\Paginatable;
+use App\Traits\Global\Ulid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Trade extends Model
 {
-    use HasFactory;
+    use HasFactory,Ulid, Paginatable, Number, SoftDeletes;
 
-    protected $table = 'trades';
+    protected $fillable = ['request_id', 'bid_id', 'status', 'completed_at', 'canceled_at', 'deposit_reason','deposit_reason_accepted'];
 
-    protected $fillable = [
-        'support_id',
-        'request_id',
-        'bid_id',
-        'trade_fee',
-        'status',
-        'created_at'
-    ];
+    protected static $prefixNumber = 'TR-';
 
-    public $timestamps = true;
-
-    /*
-    * Get the Request owns the Trade
-    */
-    public function request(){
-        return $this->belongsTo(Request::class, 'request_id');
+    public function getRouteKeyName(): string
+    {
+        return 'ulid';
     }
 
-    /*
-    * Get the Bid for the Trade
-    */
-    public function bid(){
+    protected $casts = [
+        'status' => TradeStatusEnum::class,
+    ];
+
+    public function request(): BelongsTo
+    {
+        return $this->belongsTo(Request::class);
+    }
+
+    public function paymentMethods()
+    {
+        return $this->belongsToMany(PaymentMethod::class, 'payment_method_request', 'request_id', 'payment_method_id')
+            ->withTimestamps()
+            ->wherePivot('request_id', $this->request_id);
+    }
+
+
+    public function bid(): BelongsTo
+    {
         return $this->belongsTo(Bid::class);
     }
 
-    /*
-    * Get the Invoices for the Trade
-    */
-    public function invoices(){
-        return $this->hasMany(Invoice::class, 'trade_id');
+    public function tradeSteps(): HasMany
+    {
+        return $this->hasMany(TradeStep::class);
     }
 
-    /*
-    * Get the Emails related to the Trade
-    */
-    public function emails(){
-        return $this->morphMany(Email::class, 'emailable');
+    public function invoices(): MorphMany
+    {
+        return $this->morphMany(Invoice::class, 'invoiceable');
     }
 
-    /*
-    * Get the Notifications related to the Trade
-    */
-    public function notifications(){
-        return $this->morphMany(Notification::class, 'notifiable');
+    public function setNumberAttribute($value)
+    {
+        $this->attributes['number'] = $value;
+        $this->attributes['deposit_reason'] = $value;
     }
 
-    /*
-     * Set system fee to trade
-     */
-    public function setSystemFee(){
+    public function getStatusByOwner($owner)
+    {
+        // Is Buyer
+        if($owner === TradeStepOwnerEnum::BUYER->key()){
+            $stepThreeHasDone = $this->tradeSteps()->where('priority', 3)->where('status', TradeStepsStatusEnum::DONE)->exists();
+            if($stepThreeHasDone){
+               return TradeStatusEnum::COMPLETED->key();
+            }
+        };
 
-        $trade_volume = $this->request->trade_volume;
-
-        $system_fee = 0;
-
-        $financial = Financial::first();
-
-        if (!$financial) {
-            return false;
-        }
-
-        if ($trade_volume > 0 && $trade_volume <= 99) {
-            $system_fee = $financial->system_fee_a;
-        }
-        elseif ($trade_volume >= 100 && $trade_volume <= 999) {
-            $system_fee = $financial->system_fee_b;
-        }
-        elseif ($trade_volume >= 1000 && $trade_volume <= 2999) {
-            $system_fee = $financial->system_fee_c;
-        }
-        elseif ($trade_volume >= 3000) {
-            $system_fee = $financial->system_fee_d;
-        }
-        else{
-            return false;
-        }
-
-        $this->update([
-            'trade_fee' => $system_fee
-        ]);
-
-        return true;
+        return $this->status->key();
     }
-
-    /*
-    * Enum casting for the status field
-    */
-    protected $casts = [
-        'status' => TradeStatusEnum::class
-    ];
 }
-

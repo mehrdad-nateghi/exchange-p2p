@@ -1,0 +1,293 @@
+"/trades":
+  get:
+    tags:
+      - trades
+    summary: Retrieve trades
+    description: Get a list of trades
+    operationId: getAllTrades
+    parameters:
+      - $ref: "#/components/parameters/pageSize"
+      - $ref: "#/components/parameters/pageNumber"
+      - name: filter[type]
+        in: query
+        description: Filter trades by type (buy or sell)
+        schema:
+          type: string
+          enum: [buy, sell]
+      - name: filter[status]
+        in: query
+        description: Filter trades by status
+        schema:
+          type: string
+          enum: [pending, processing, trading, canceled]
+    responses:
+      "200":
+        description: Successful response
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/Base200Response"
+                - type: object
+                  required:
+                    - data
+                  properties:
+                    data:
+                      type: object
+                      required:
+                        - items
+                        - pagination
+                      properties:
+                        items:
+                          type: array
+                          items:
+                            $ref: "#/components/schemas/Trade"
+                        pagination:
+                          $ref: "#/components/schemas/Pagination"
+
+"/users/trades":
+  get:
+    tags:
+      - trades
+    summary: Retrieve user trades
+    operationId: getUserTrades
+    description: Get a list of trades for the authenticated user
+    parameters:
+      - name: filter[status]
+        in: query
+        description: Filter trades by status (active or inactive)
+        schema:
+          type: string
+          enum: [active, inactive]
+      - name: sort
+        in: query
+        description: Sort trades by creation date
+        schema:
+          type: string
+          enum: [created_at, -created_at]
+      - $ref: "#/components/parameters/pageSize"
+      - $ref: "#/components/parameters/pageNumber"
+    responses:
+      "200":
+        description: Successful response
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/Base200Response"
+                - type: object
+                  required:
+                    - data
+                  properties:
+                    data:
+                      type: object
+                      required:
+                        - items
+                        - pagination
+                      properties:
+                        items:
+                          type: array
+                          items:
+                            $ref: "#/components/schemas/UserTrade"
+                        pagination:
+                          $ref: "#/components/schemas/Pagination"
+
+"/users/trades/{trade}":
+  get:
+    tags:
+      - trades
+    summary: Retrieve user trade by ULID
+    description: Get a trade by ULID for the authenticated user
+    operationId: getUserTrade
+    parameters:
+      - name: trade
+        in: path
+        required: true
+    responses:
+      "200":
+        description: "The user trade was retrieved successfully."
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/Base200Response"
+                - type: object
+                  required:
+                    - data
+                  properties:
+                    data:
+                      $ref: "#/components/schemas/UserTrade"
+  patch:
+    tags:
+      - trades
+    summary: "update deposit reason of the trade by ULID"
+    description: "This endpoint update deposit reason of the trade by ULID."
+    operationId: updateDepositReason
+    parameters:
+      - name: trade
+        in: path
+        required: true
+        description: "The ULID of the trade."
+        schema:
+          type: string
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - deposit_reason
+            properties:
+              deposit_reason:
+                type: string
+                description: "the reason of the deposit"
+    responses:
+      "200":
+        description: "The deposit reason was updated successfully."
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/Base200Response"
+                - type: object
+                  required:
+                    - data
+                  properties:
+                    data:
+                      $ref: "#/components/schemas/UserTrade"
+"/admins/trades":
+  get:
+    tags:
+      - trades
+    summary: Retrieve all of trades
+    operationId: getAdminTrades
+    description: Get a list of trades for the admin
+    parameters:
+      - name: filter[status]
+        in: query
+        description: Filter trades by status (active or inactive)
+        schema:
+          type: string
+          enum: [active, inactive]
+      - name: sort
+        in: query
+        description: Sort trades by creation date
+        schema:
+          type: string
+          enum: [created_at, -created_at]
+      - $ref: "#/components/parameters/pageSize"
+      - $ref: "#/components/parameters/pageNumber"
+    responses:
+      "200":
+        description: Successful response
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/Base200Response"
+                - type: object
+                  required:
+                    - data
+                  properties:
+                    data:
+                      type: object
+                      required:
+                        - items
+                        - pagination
+                      properties:
+                        items:
+                          type: array
+                          items:
+                            $ref: "#/components/schemas/AdminTrade"
+                        pagination:
+                          $ref: "#/components/schemas/Pagination"
+"/admins/trades/{trade}":
+  get:
+    tags:
+      - trades
+    summary: Retrieve user trade details by ULID
+    description: Get a trade by ULID for the admin
+    operationId: getAdminTrade
+    parameters:
+      - name: trade
+        in: path
+        required: true
+    responses:
+      "200":
+        description: "The user trade was retrieved successfully."
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/Base200Response"
+                - type: object
+                  required:
+                    - data
+                  properties:
+                    data:
+                      $ref: "#/components/schemas/AdminTrade"
+"/admins/trades/{trade}/cancel":
+  patch:
+    tags:
+      - trades
+    summary: "Update Trade Status"
+    description: "This endpoint updates a trade status."
+    operationId: updateTradeStatus
+    parameters:
+      - name: trade
+        in: path
+        description: "The ULID of trade"
+        required: true
+        schema:
+          type: string
+    responses:
+      "200":
+        description: "The trade Status was updated successfully."
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/Base200Response"
+                - type: object
+                  required:
+                    - data
+                  properties:
+                    data:
+                      $ref: "#/components/schemas/AdminTrade"
+"/admins/trade-steps/{trade}/increase-expire-at":
+  patch:
+    tags:
+      - trades
+    summary: "Increase the expiration time of a trade step"
+    description: "Partially update the expiration time of a specific trade step by increasing it. The number of hours to increase is optional."
+    operationId: increaseExpireAt
+    parameters:
+      - name: trade
+        in: path
+        description: "The ULID of trade"
+        required: true
+        schema:
+          type: string
+      - name: hours
+        in: query
+        description: "Number of hours to increase the expiration time. If not provided, a default value is applied."
+        required: false
+        schema:
+          type: number
+          minimum: 1
+          example: 44
+    responses:
+      "200":
+        description: "The expiration time of a trade step was updated successfully."
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/Base200Response"
+                - type: object
+                  required:
+                    - data
+                  properties:
+                    data:
+                      $ref: "#/components/schemas/AdminTrade"

@@ -1,0 +1,35 @@
+<?php
+
+namespace App\Http\Controllers\API\V1\Trades\User;
+
+use App\Http\Controllers\Controller;
+use App\Http\Resources\TradeResource;
+use App\Models\Trade;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
+
+class ShowTradeController extends Controller
+{
+    public function __invoke(
+        Trade $trade,
+    ): JsonResponse {
+        try {
+            //$resource =  new TradeResource($trade->load('tradeSteps','invoices'));
+
+            $resource = new TradeResource($trade->load([
+                'tradeSteps',
+                'invoices' => function($query) {
+                    $query->filterByOwner();
+                }
+            ]));
+
+            return apiResponse()
+                ->message(trans('api-messages.retrieve_success', ['attribute' => trans('api-messages.trade')]))
+                ->data($resource)
+                ->getApiResponse();
+        } catch (\Throwable $t) {
+            Log::error($t);
+            return internalServerError();
+        }
+    }
+}

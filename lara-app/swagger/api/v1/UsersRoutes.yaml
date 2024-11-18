@@ -1,0 +1,76 @@
+'/users/me':
+  get:
+    tags:
+      - users
+    summary: 'Get Current User Information'
+    description: 'Retrieve information about the currently authenticated user.'
+    operationId: me
+    parameters:
+      - name: cache-control
+        in: header
+        description: 'Disable cache'
+        required: true
+        schema:
+          type: string
+    requestBody: null
+    responses:
+      '200':
+        description: 'User information retrieved successfully.'
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/Base200Response'
+                - type: object
+                  required:
+                    - data
+                  properties:
+                    data:
+                      type: object
+                      required:
+                        - user
+                      properties:
+                        user:
+                          $ref: '#/components/schemas/User'
+'/admins/users/login-as-user/{ulid}':
+  get:
+    tags:
+      - users
+    summary: Log in as a specific user
+    description: Allows an admin to log in as a specific user by providing the user's ULID.
+    operationId: loginAsUser
+    parameters:
+      - in: path
+        name: ULID
+        required: true
+        description: The unique identifier of the user to log in as
+        schema:
+          type: string
+'/admins/users/{userId}/stats':
+  get:
+    tags:
+      - users
+    summary: 'Get users stats'
+    description: 'Get users stats.'
+    operationId: usersStats
+    parameters:
+      - name: userId
+        in: path
+        description: 'The ULID of user'
+        required: true
+        schema:
+          type: string
+    responses:
+      '200':
+        description: 'The users stats was retrieved successfully.'
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/Base200Response'
+                - type: object
+                  required:
+                    - data
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/User'

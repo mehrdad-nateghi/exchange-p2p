@@ -1,7 +1,7 @@
 variables:
   # Cache Compression Tool
-  FF_USE_FASTZIP: "true"
-  CACHE_COMPRESSION_LEVEL: "fast"
+  FF_USE_FASTZIP: 'true'
+  CACHE_COMPRESSION_LEVEL: 'fast'
 
 .test_job_template:
   interruptible: true
@@ -10,19 +10,20 @@ variables:
   rules:
     - if: '$CI_MERGE_REQUEST_ID == null && $CI_COMMIT_REF_NAME == "main"'
     - if: '$CI_MERGE_REQUEST_ID == null && $CI_COMMIT_REF_NAME == "production"'
+    - if: '$CI_MERGE_REQUEST_ID == null && $CI_COMMIT_REF_NAME == "staging"'
 
 .build_job_template:
-  image: docker:20-dind
+  image: hub.hamdocker.ir/library/docker:20-dind
   services:
     - docker:dind
   interruptible: true
-  tags:
-    # - shell-executer # Directly run on CI worker node instead of containers to preserve docker layer cache between builds
+  # tags:
+  #   - shell # Directly run on CI worker node instead of containers to preserve docker layer cache between builds
   cache: [] # we use docker cache to build
   variables:
     # for job
-    COMPOSE_DOCKER_CLI_BUILD: "1"
-    DOCKER_BUILDKIT: "1"
+    COMPOSE_DOCKER_CLI_BUILD: '1'
+    DOCKER_BUILDKIT: '1'
   script:
     - cd $CI_PROJECT_DIR/devops/build
     - docker-compose -f docker-compose.base.yml -f docker-compose.${ENVIRONMENT_NAME}.yml build  ${SERVICE_NAME}
@@ -31,7 +32,7 @@ variables:
         CI_COMMIT_SHORT_SHA=latest docker-compose -f docker-compose.base.yml -f docker-compose.${ENVIRONMENT_NAME}.yml build -q ${SERVICE_NAME}
       fi
     - echo "--- successfully built the following docker image tag ${CI_COMMIT_SHORT_SHA} ---"
-    - docker login --username ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}
+    - docker login registry.hamdocker.ir/paylibero --username ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}
     - docker-compose -f docker-compose.base.yml -f docker-compose.${ENVIRONMENT_NAME}.yml push ${SERVICE_NAME}
     - > # push the latest tag only on commits to main
       if [ -z "$CI_MERGE_REQUEST_ID" ] && [ $CI_COMMIT_REF_NAME == "main" ]; then
@@ -40,28 +41,31 @@ variables:
 
 .base-deploy-scripts:
   &base_deploy_scripts # remove all deployments excluding current service
-  - sed -i "/- deployments\/$SERVICE_NAME\.yml/p;/- deployments\/\(.*\)\.yml/d" devops/k8s/base/kustomization.yml
+  - SERVICE_NAMES_STRING_NO_SPACE=$(echo "$SERVICE_NAME" | sed 's/, /,/g')
+  - CONVERTED_SERVICE_NAMES_STRING_NO_SPACE=${SERVICE_NAMES_STRING_NO_SPACE//,/\\|}
+  - sed -i "/- .*\/\($CONVERTED_SERVICE_NAMES_STRING_NO_SPACE\)\.yml/p;/- .*\/\(.*\)\.yml/d" devops/k8s/base/kustomization.yml
   - >
-    sed -i "/- path: deployments\/$SERVICE_NAME\.yml/p;/- path: deployments\/\(.*\)\.yml/d" devops/k8s/${ENVIRONMENT_NAME}/kustomization.yml
+    sed -i "/- path: .*\/\($CONVERTED_SERVICE_NAMES_STRING_NO_SPACE\)\.yml/p;/- path: .*\/\(.*\)\.yml/d" devops/k8s/${ENVIRONMENT_NAME}/kustomization.yml
 
   - kubectl config get-contexts
   - kubectl config set-context --current --namespace=${ENVIRONMENT_PREFIX:-paylibero}-${ENVIRONMENT_NAME}
-  - sed -i 's/deb.debian.org/debian.hostiran.ir/g' /etc/apt/sources.list
-  - sed -i '/debian-security/d' /etc/apt/sources.list
+  # - sed -i 's/deb.debian.org/debian.hostiran.ir/g' /etc/apt/sources.list
+  # - sed -i '/debian-security/d' /etc/apt/sources.list
   # for envsubst to not replace the value of $MYSQL_ROOT_PASSWORD so that probes would succeed.
-  - export MYSQL_ROOT_PASSWORD='$MYSQL_ROOT_PASSWORD' 
+  - export MYSQL_ROOT_PASSWORD='$MYSQL_ROOT_PASSWORD'
   - which envsubst || (apt-get update && apt-get install -y gettext)
+  - rm -f /tmp/manifest.yaml
   - kubectl kustomize devops/k8s/${ENVIRONMENT_NAME} | envsubst | tee /tmp/manifest.yaml
   - kubectl apply --record -f /tmp/manifest.yaml
   # kubectl wait has issues for now. it is being under consideration in Arvan.
-  #- kubectl wait --for=condition=available --timeout=200s deployment/${SERVICE_NAME}
+  # - kubectl wait --for=condition=available --timeout=200s deployment/${SERVICE_NAME}
 
 .base_deploy_job_template:
   image:
-    name: bitnami/kubectl:latest
+    name: hub.hamdocker.ir/bitnami/kubectl:latest
     docker:
       user: root
-    entrypoint: [""]
+    entrypoint: ['']
   tags:
     - docker-executor
   cache: []

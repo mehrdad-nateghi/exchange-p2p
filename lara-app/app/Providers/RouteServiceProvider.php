@@ -19,19 +19,30 @@ class RouteServiceProvider extends ServiceProvider
      */
     public const HOME = '/home';
 
-    protected $namespace = 'App\Http\Controllers';
-
-    protected array $namespaces = [
-        'v1' => 'v1',
-    ];
-
     protected array $api_middlewares = [
-        'api',
+        'web',
     ];
 
-    protected array $routes = [
-        'v1' => [
-            'user',
+    protected $routes = [
+        'V1' => [
+            'SwaggerRoutes',
+            'GuestsRoutes',
+            'AuthRoutes',
+            'UsersRoutes',
+            'PaymentMethodsRoutes',
+            'RequestsRoutes',
+            'BidsRoutes',
+            'TradesRoutes',
+            'InvoiceRoutes',
+            'FilesRoutes',
+            'ThirdPartyRoutes',
+            'UserDepositReasonRoutes',
+            'AdminTradesRoutes',
+            'AdminTradeStepsRoutes',
+            'AdminRequestsRoutes',
+            'AdminUsersRoutes',
+            'AdminFilesRoutes',
+            'AdminInvoiceRoutes',
         ],
     ];
 
@@ -40,28 +51,33 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         $this->configureRateLimiting();
 
         $this->routes(function () {
-            // api
+            // API versioning
             foreach ($this->routes as $version => $fileNames) {
                 foreach ($fileNames as $fileName) {
                     Route::middleware($this->api_middlewares)
-                        ->namespace($this->namespace . '\\' . $this->namespaces[$version])
                         ->prefix('api/' . strtolower($version))
                         ->as($version . ".")
                         ->group(
-                            base_path('routes/api/' . $this->namespaces[$version] . '/' . $fileName . '.php')
+                            base_path('routes/API/' . $version . '/' . $fileName . '.php')
                         );
                 }
             }
 
+            // Global api
+            Route::middleware($this->api_middlewares)
+                ->prefix('api/')
+                ->group(
+                    base_path('routes/API/GlobalRoutes.php')
+                );
+
             // web
             Route::middleware('web')
                 ->group(base_path('routes/web.php'));
-
         });
     }
 
@@ -70,7 +86,7 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    protected function configureRateLimiting()
+    protected function configureRateLimiting(): void
     {
         RateLimiter::for('api', function (Request $request) {
             return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());

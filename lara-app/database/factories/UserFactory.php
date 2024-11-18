@@ -2,9 +2,9 @@
 
 namespace Database\Factories;
 
+use App\Enums\UserStatusEnum;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
@@ -19,13 +19,11 @@ class UserFactory extends Factory
     public function definition()
     {
         return [
-            'role' => \App\Enums\UserRoleEnum::Admin,
             'first_name' => fake()->name(),
             'last_name' => fake()->lastName(),
             'email' => fake()->unique()->safeEmail(),
             'password' => Hash::make(fake()->password()),
-            'status' => \App\Enums\UserStatusEnum::Active,
-            'created_at' => fake()->dateTime()
+            'status' => UserStatusEnum::ACTIVE->value,
         ];
     }
 

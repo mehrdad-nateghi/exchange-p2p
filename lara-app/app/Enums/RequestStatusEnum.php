@@ -2,9 +2,14 @@
 
 namespace App\Enums;
 
+use App\Traits\Global\EnumTrait;
+
 enum RequestStatusEnum: int{
-    case Pending = 0;
-    case InProcess = 1;
-    case InTrade = 2;
-    case Removed = 3;
+
+    use EnumTrait;
+    case PENDING = 1;
+    case PROCESSING = 2;
+    case TRADING = 3;
+    case COMPLETED = 4;
+    case CANCELED = 5;
 }

@@ -36,12 +36,13 @@ class Kernel extends HttpKernel
             \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
             \Illuminate\Session\Middleware\StartSession::class,
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
-            \App\Http\Middleware\VerifyCsrfToken::class,
+            //\App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
 
         'api' => [
-            // \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+            //\App\Http\Middleware\ValidateTokenInCookie::class,
+            \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             'throttle:api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
@@ -69,5 +70,10 @@ class Kernel extends HttpKernel
         'is.applicant' => \App\Http\Middleware\IsApplicant::class,
         'is.admin' => \App\Http\Middleware\IsAdmin::class,
         'email.is.verified' => \App\Http\Middleware\EmailVerifiedMiddleware::class,
+        //'validate.token.in.cookie' => \App\Http\Middleware\ValidateTokenInCookie::class,
+        'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
+        //'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
+        //'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
+        
     ];
 }

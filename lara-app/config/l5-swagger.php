@@ -12,7 +12,7 @@ return [
                 /*
                  * Route for accessing api documentation interface
                 */
-                'api' => 'api/documentation',
+                'api' => 'api/v1/documentation',
             ],
             'paths' => [
                 /*
@@ -23,7 +23,7 @@ return [
                 /*
                  * File name of the generated json documentation file
                 */
-                'docs_json' => 'api-docs.json',
+                'docs_json' => '/api/v1/doc/openapi.json',
 
                 /*
                  * File name of the generated YAML documentation file
@@ -50,7 +50,7 @@ return [
             /*
              * Route for accessing parsed swagger annotations.
             */
-            'docs' => 'docs',
+            'docs' => '',
 
             /*
              * Route for Oauth2 authentication callback.
@@ -77,7 +77,7 @@ return [
             /*
              * Absolute path to location where parsed annotations will be stored
             */
-            'docs' => storage_path('api-docs'),
+            'docs' => public_path('api-docs'),
 
             /*
              * Absolute path to directory where to export views

@@ -1,6 +1,5 @@
-version: "3.8"
 services:
-    # PHP Service
+    ######## PHP ########
     php:
         build:
             context: .
@@ -9,34 +8,73 @@ services:
         environment:
             - APP_ENV=${APP_ENV}
             - CONTAINER_ROLE=app
+            - HOSTNAME=php
+            - DEPLOY_MODE=false
             - RUN_SETUP_COMMANDS=${RUN_SETUP_COMMANDS}
         working_dir: /var/www
         volumes:
             - ./:/var/www
         ports:
             - 8000:8000
+        hostname: php
         depends_on:
             - database
+            - redis
 
-    # Database Server
+    ######## SWAGGER ########
+    swagger:
+        build:
+            context: .
+            dockerfile: Dockerfile.swagger
+        volumes:
+            - ./:/var/www
+
+    ######## Database ########
     database:
-        image: mysql:8.2.0
+        image: hub.hamdocker.ir/library/mysql:8.2.0
         restart: always
         volumes:
             - ./dockerfiles/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
             - database_data:/var/lib/mysql
         ports:
-            - 3306:3306
+            - 3307:3306
         environment:
             - MYSQL_DATABASE=${DB_DATABASE}
             - MYSQL_USER=${DB_USERNAME}
             - MYSQL_PASSWORD=${DB_PASSWORD}
             - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
 
+    ######## Redis ########
+    redis:
+        image: hub.hamdocker.ir/library/redis:latest
+        volumes:
+            - redis_data:/bitnami/redis/data
+        ports:
+            - 6379:6379
+        environment:
+            - ALLOW_EMPTY_PASSWORD=yes
+
+    ######## Queue ########
+    queue:
+        build:
+            context: .
+        working_dir: /var/www
+        volumes:
+            - ./:/var/www
+        environment:
+            - APP_ENV=${APP_ENV}
+            - HOSTNAME=queue
+            - DEPLOY_MODE=false
+        restart: unless-stopped
+        depends_on:
+            - php
+            - redis
+
+    ######## Database Admin: Phpmyadmin ########
     databaseAdmin:
         depends_on:
             - database
-        image: phpmyadmin
+        image: hub.hamdocker.ir/library/phpmyadmin
         restart: always
         ports:
             - "8090:80"
@@ -47,12 +85,29 @@ services:
             - MYSQL_PASSWORD=${DB_PASSWORD}
             - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
 
+    ######## Mailhog ########
     mailhog:
-        image: mailhog/mailhog
-        container_name: 'mailhog'
+        image: hub.hamdocker.ir/mailhog/mailhog
+        container_name: "mailhog"
         ports:
             - "1025:1025"
             - "8025:8025"
 
+    minio:
+        image: bitnami/minio:latest
+        volumes:
+            - minio_buckets_data:/data
+        ports:
+            - 127.0.0.1:9000:9000
+            - 127.0.0.1:9001:9001
+        environment:
+            - MINIO_ROOT_USER=minio
+            - MINIO_ROOT_PASSWORD=minio123
+            - MINIO_DEFAULT_BUCKETS=core-lara
+            - MINIO_SCHEME=http
+            - MINIO_SERVER_URL=http://localhost:9000
+            - BITNAMI_DEBUG=true
 volumes:
     database_data:
+    redis_data:
+    minio_buckets_data:

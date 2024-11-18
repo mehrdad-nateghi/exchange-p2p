@@ -5,19 +5,35 @@ namespace: paylibero-nightly
 
 resources:
   - ../base
+
+  - config/mysql.yml
+  - deployments/phpmyadmin.yml
+  - services/phpmyadmin.yml
+
+  - deployments/pex-storybook.yml
+  - services/pex-storybook.yml
+
+  - deployments/redis.yml
+  - services/redis.yml
+  - config/redis.yml
+
   - ingresses.yml
 
 patches:
   - path: deployments/core-laravel.yml
+  - path: deployments/queue-worker.yml
   - path: deployments/pex-app.yml
-  - path: deployments/pex-storybook.yml
+  - path: deployments/pex-admin.yml
   - path: statefulsets/mysql.yml
-  - path: cronjobs/mysql_backup.yml
 
 images:
-  - name: docker.io/paylibero/build-core-laravel
+  - name: registry.hamdocker.ir/paylibero/build-core-laravel
     newTag: ${DEPLOY_COMMIT_SHORT_SHA}
-  - name: docker.io/paylibero/pex-app
+  - name: registry.hamdocker.ir/paylibero/pex-app
     newTag: ${DEPLOY_COMMIT_SHORT_SHA}
-  - name: docker.io/paylibero/pex-storybook
+  - name: registry.hamdocker.ir/paylibero/pex-storybook
+    newTag: ${DEPLOY_COMMIT_SHORT_SHA}
+  - name: registry.hamdocker.ir/paylibero/pex-admin
+    newTag: ${DEPLOY_COMMIT_SHORT_SHA}
+  - name: registry.hamdocker.ir/paylibero/queue-worker
     newTag: ${DEPLOY_COMMIT_SHORT_SHA}

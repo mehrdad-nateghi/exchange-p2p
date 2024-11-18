@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Interfaces\AuthRepositoryInterface;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 
 class AuthRepository implements AuthRepositoryInterface
@@ -22,6 +23,11 @@ class AuthRepository implements AuthRepositoryInterface
         );
 
         return $response;
+    }
+
+    public function getTokenFromCookie($request) {
+
+        return $request->cookie('access_token');
     }
 
 }

@@ -1,0 +1,173 @@
+'/users/bids':
+  get:
+    tags:
+      - bids
+    summary: 'Get all users bids'
+    description: 'This endpoint retrieve all user bids.'
+    operationId: getUserBids
+    parameters:
+      - $ref: '#/components/parameters/pageSize'
+      - $ref: '#/components/parameters/pageNumber'
+      - name: filter[status]
+        in: query
+        description: 'The status of the bid'
+        required: false
+        schema:
+          type: string
+          enum: ['active', 'inactive']
+      - name: sort
+        in: query
+        description: The sort order of the results
+        required: false
+        schema:
+          type: string
+          enum: [created_at, -created_at]
+          default: -created_at
+    responses:
+      '200':
+        description: 'The requests was retrieved successfully.'
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/Base200Response'
+                - type: object
+                  required:
+                    - data
+                  properties:
+                    data:
+                      type: object
+                      required:
+                        - items
+                        - pagination
+                      properties:
+                        pagination:
+                          $ref: '#/components/schemas/Pagination'
+                        items:
+                          type: array
+                          description: 'Array of bids items'
+                          items:
+                            $ref: '#/components/schemas/Bid'
+  post:
+    tags:
+      - bids
+    summary: 'create bid for a request'
+    description: 'This endpoint allows users to create a new bid for a request.'
+    operationId: createBid
+    parameters:
+      - name: request
+        in: query
+        required: true
+        description: 'The ULID of the request.'
+        schema:
+          type: string
+      - name: payment_method
+        in: query
+        required: true
+        description: 'The ULID of the payment_method.'
+        schema:
+          type: string
+      - name: price
+        in: query
+        required: true
+        description: 'The price.'
+        schema:
+          type: string
+    responses:
+      201:
+        description: 'Created Successful'
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/Base200Response'
+                - type: object
+                  required:
+                    - data
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/Bid'
+
+'/users/bids/{bidId}':
+  patch:
+    tags:
+      - bids
+    summary: 'Update User Bid'
+    description: 'This endpoint updates a bid of user.'
+    operationId: updateUserBid
+    parameters:
+      - name: bidId
+        in: path
+        description: 'The ULID of bid'
+        required: true
+        schema:
+          type: string
+    responses:
+      '200':
+        description: 'The requests was retrieved successfully.'
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/Base200Response'
+                - type: object
+                  required:
+                    - data
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/Bid'
+
+'/requests/{requestId}/bids':
+  get:
+    tags:
+      - bids
+    summary: 'Get request bids'
+    description: 'This endpoint retrieve all bids of a request.'
+    operationId: getRequestBids
+    parameters:
+      - $ref: '#/components/parameters/pageSize'
+      - $ref: '#/components/parameters/pageNumber'
+      - name: requestId
+        in: path
+        required: true
+        description: 'The ULID of the request.'
+        schema:
+          type: string
+      - name: filter[status]
+        in: query
+        description: 'The status of the bid'
+        required: false
+        schema:
+          type: string
+          enum: ['active', 'inactive']
+      - name: filter[is_best_price]
+        in: query
+        description: 'Filter highest price of bids for a request'
+        required: false
+        schema:
+          type: boolean
+    responses:
+      '200':
+        description: 'The requests was retrieved successfully.'
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/Base200Response'
+                - type: object
+                  required:
+                    - data
+                  properties:
+                    data:
+                      type: object
+                      required:
+                        - items
+                        - pagination
+                      properties:
+                        pagination:
+                          $ref: '#/components/schemas/Pagination'
+                        items:
+                          type: array
+                          description: 'Array of bids items'
+                          items:
+                            $ref: '#/components/schemas/Bid'

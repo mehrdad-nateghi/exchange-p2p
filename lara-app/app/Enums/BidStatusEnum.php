@@ -2,11 +2,13 @@
 
 namespace App\Enums;
 
-enum BidStatusEnum: int{
-    case Registered = 0;
-    case Top = 1;
-    case Confirmed = 2;
-    case Rejected = 3;
-    case Invalid = 4;
-};
+use App\Traits\Global\EnumTrait;
 
+enum BidStatusEnum: int{
+
+    use EnumTrait;
+
+    case REGISTERED = 1;
+    case ACCEPTED = 2;
+    case REJECTED = 3;
+}

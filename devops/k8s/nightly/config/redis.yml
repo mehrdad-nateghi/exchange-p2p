@@ -1,0 +1,11 @@
+# The password is coming from redis-auth secret
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: redis-config
+data:
+  redis.conf: |
+    bind 0.0.0.0
+    requirepass paylibero0100
+    user default on +@all ~* >paylibero0100
+    port 6379

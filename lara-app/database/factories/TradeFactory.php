@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\Bid;
+use App\Models\Legacy\Bid;
 use App\Models\Request;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
@@ -22,7 +22,7 @@ class TradeFactory extends Factory
         return [
             'support_id' => config('constants.SupportId_Prefixes.Trade_Pr'). Str::uuid(),
             'trade_fee' => fake()->randomFloat($nbMaxDecimals = 2 , $min = 0, $max = 99,999,999,999.99),
-            'status' => \App\Enums\TradeStatusEnum::RialPending,
+            'status' => \App\Enums\Legacy\TradeStatusEnum::RialPending,
             'request_id' => Request::factory(),
             'bid_id' => Bid::factory(),
             'created_at' => fake()->dateTime()

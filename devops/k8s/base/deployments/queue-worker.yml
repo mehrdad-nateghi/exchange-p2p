@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: queue-worker
+spec:
+  revisionHistoryLimit: 0
+  replicas: 1
+  selector:
+    matchLabels:
+      app: queue-worker
+  template:
+    metadata:
+      labels:
+        app: queue-worker
+        commit-short-sha: "commit_${DEPLOY_COMMIT_SHORT_SHA}"
+    spec:
+      restartPolicy: Always
+      imagePullSecrets:
+        - name: hamdocker
+      volumes:
+        - name: worker-logs
+          persistentVolumeClaim:
+            claimName: queue-worker-logs-pvc
+      containers:
+        - image: registry.hamdocker.ir/paylibero/build-core-laravel
+          name: queue-worker
+          volumeMounts:
+            - name: worker-logs
+              mountPath: /var/log/supervisor
+          ports:
+            - containerPort: 8000
+              protocol: TCP
+          resources: {}
+          envFrom:
+            - configMapRef:
+                name: core-laravel
+          env:
+            - name: HOSTNAME
+              value: queue

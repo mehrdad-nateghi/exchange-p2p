@@ -2,9 +2,10 @@ version: "3.8"
 
 services:
   core-laravel:
-    image: paylibero/build-core-laravel:${CI_COMMIT_SHORT_SHA}
+    image: registry.hamdocker.ir/paylibero/build-core-laravel:${CI_COMMIT_SHORT_SHA}
     build:
       context: ../../lara-app
+      dockerfile: Dockerfile
       args:
         - CI_COMMIT_SHORT_SHA
         - CI_COMMIT_MESSAGE

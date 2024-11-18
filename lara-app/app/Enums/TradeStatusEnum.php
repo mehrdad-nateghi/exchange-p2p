@@ -2,13 +2,15 @@
 
 namespace App\Enums;
 
-enum TradeStatusEnum: int{
-    case RialPending = 0;
-    case RialConfirmation = 1;
-    case TargetPending = 2;
-    case TargetConfirmation = 3;
-    case SystemPending = 4;
-    case Successful = 5;
-    case Unsuccessful = 6;
-};
+use App\Traits\Global\EnumTrait;
 
+enum TradeStatusEnum: int{
+
+    use EnumTrait;
+
+    case PROCESSING = 1;
+    case COMPLETED = 2;
+    case CANCELED = 3;
+    case FAILED = 4;
+    case SUSPEND = 5;
+}

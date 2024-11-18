@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Enums\PaymentMethodTypeEnum;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class PaymentMethodResource extends JsonResource
@@ -9,9 +10,18 @@ class PaymentMethodResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id' => $this->id,
-            'name' => $this->name,
-            'country_id' => $this->country_id,
+            'ulid' => $this->ulid,
+            'user' => new UserResource($this->whenLoaded('user')),
+            'payment_method' => $this->getPaymentMethodResource(),
           ];
+    }
+
+    private function getPaymentMethodResource(): RialBankAccountResource|ForeignBankAccountResource|PaypalAccountResource
+    {
+        return match (intval($this->type->value)) {
+            PaymentMethodTypeEnum::RIAL_BANK->value => new RialBankAccountResource($this->paymentMethod),
+            PaymentMethodTypeEnum::FOREIGN_BANK->value => new ForeignBankAccountResource($this->paymentMethod),
+            PaymentMethodTypeEnum::PAYPAL->value => new PaypalAccountResource($this->paymentMethod),
+        };
     }
 }

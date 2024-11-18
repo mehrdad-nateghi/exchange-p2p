@@ -19,7 +19,13 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['*'],
+    'allowed_origins' => [
+        'http://localhost:8000',
+        'http://localhost:4000',
+        'https://core-lara-33e1254e7d-paylibero-nightly.apps.ir-thr-ba1.arvancaas.ir',
+        'https://nightly.paylibero.ir',
+        'https://nightly.admin.paylibero.ir',
+    ],
 
     'allowed_origins_patterns' => [],
 
@@ -29,6 +35,6 @@ return [
 
     'max_age' => 0,
 
-    'supports_credentials' => false,
+    'supports_credentials' => true,
 
 ];

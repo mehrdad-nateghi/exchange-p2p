@@ -1,0 +1,163 @@
+"/users/files/steps/{stepID}/upload":
+  post:
+    summary: Upload a file for a specific step
+    description: Uploads a file (receipt) for a given step ID
+    operationId: uploadFileForStep
+    tags:
+      - Files
+    parameters:
+      - name: stepID
+        in: path
+        required: true
+        schema:
+          type: string
+    requestBody:
+      required: true
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            properties:
+              receipt:
+                type: string
+                format: binary
+                description: The file to upload
+          encoding:
+            receipt:
+              contentType: image/png, image/jpeg, image/gif, image/bmp, image/webp
+    responses:
+      "200":
+        description: Upload a file successfully
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/Base200Response"
+                - type: object
+                  properties:
+                    data:
+                      type: object
+                      properties:
+                        ulid:
+                          type: string
+                          example: "01J6VNY4Y143V3XSV1V7PPSAY3"
+                        name:
+                          type: string
+                          example: "Confirm or Reject Currency Receipt"
+                        description:
+                          type: string
+                          example: "The buyer must confirm or reject the receipt of the currency."
+                        priority:
+                          type: integer
+                          example: 3
+                        owner:
+                          type: string
+                          example: "buyer"
+                        status:
+                          type: string
+                          example: "todo"
+                        files:
+                          type: array
+                          items:
+                            $ref: "#/components/schemas/File"
+                        expire_at:
+                          type: string
+                          format: date-time
+                          nullable: true
+                        completed_at:
+                          type: string
+                          format: date-time
+                          nullable: true
+                        created_at:
+                          type: string
+                          format: date-time
+                          example: "2024-09-03T10:12:27.000000Z"
+                        updated_at:
+                          type: string
+                          format: date-time
+                          example: "2024-09-03T10:12:27.000000Z"
+
+"/users/files/{fileID}":
+  patch:
+    summary: Update a file by ID
+    description: Updates a file by its ID
+    operationId: updateFileStatus
+    tags:
+      - Files
+    parameters:
+      - name: fileID
+        in: path
+        required: true
+        schema:
+          type: string
+    requestBody:
+      required: true
+      content:
+        application/x-www-form-urlencoded:
+          schema:
+            type: object
+            required:
+              - status
+            properties:
+              status:
+                type: string
+                description: "The status of the file, accept / reject"
+                enum: ["accept", "reject"]
+                example: "accept"
+    responses:
+      "200":
+        $ref: "#/components/schemas/Base200Response"
+
+  get:
+    summary: get a file
+    description: get a file
+    operationId: getFile
+    tags:
+      - Files
+    parameters:
+      - name: fileID
+        in: path
+        required: true
+        schema:
+          type: string
+    responses:
+      "200":
+        description: Upload a file successfully
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/Base200Response"
+                - type: object
+                  required:
+                    - data
+                  properties:
+                    data:
+                      $ref: "#/components/schemas/File"
+"/admins/files/{fileID}":
+  get:
+    summary: get a file
+    description: get a file
+    operationId: getAdminFile
+    tags:
+      - Files
+    parameters:
+      - name: fileID
+        in: path
+        required: true
+        schema:
+          type: string
+    responses:
+      "200":
+        description: File received successfully
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/Base200Response"
+                - type: object
+                  required:
+                    - data
+                  properties:
+                    data:
+                      $ref: "#/components/schemas/File"

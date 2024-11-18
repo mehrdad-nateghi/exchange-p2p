@@ -2,63 +2,87 @@
 
 namespace App\Models;
 
+use App\Enums\BidStatusEnum;
 use App\Enums\InvoiceStatusEnum;
 use App\Enums\InvoiceTypeEnum;
+use App\Enums\RequestTypeEnum;
+use App\Traits\Global\Number;
+use App\Traits\Global\Paginatable;
+use App\Traits\Global\Ulid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Support\Facades\Auth;
 
 class Invoice extends Model
 {
-    use HasFactory;
+    use HasFactory, Ulid, Paginatable, Number, SoftDeletes;
 
-    protected $table = 'invoices';
+    protected $fillable = ['user_id', 'amount', 'fee', 'status', 'type'];
 
-    protected $fillable = [
-        'support_id',
-        'applicant_id',
-        'trade_id',
-        'trade_net_value',
-        'target_account_snapshot',
-        'payment_reason',
-        'created_at'
-    ];
+    protected static $prefixNumber = 'IN-';
 
-    public $timestamps = false;
-
-    /**
-    * Get the LinkedMethod that owns the Invoice
-    */
-    public function linkedMethod(){
-        return $this->belongsTo(LinkedMethod::class,'target_account_id');
+    public function getRouteKeyName(): string
+    {
+        return 'ulid';
     }
 
-    /*
-    * Get the User owns the Invoice
-    */
-    public function user(){
-        return $this->belongsTo(User::class, 'applicant_id');
+    protected $appends = ['total_payable_amount'];
+
+    protected function totalPayableAmount(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                return $this->amount + $this->fee;
+            },
+        );
     }
 
-    /*
-    * Get the Trade owns the Invoice
-    */
-    public function trade(){
-        return $this->belongsTo(Trade::class, 'trade_id');
-    }
-
-    /*
-    * Get the Transactions for the Invoice.
-    */
-    public function transactions(){
-        return $this->hasMany(Transaction::class, 'invoice_id');
-    }
-
-    /*
-    * Enum casting for the status and trade_stage fields
-    */
     protected $casts = [
         'status' => InvoiceStatusEnum::class,
-        'trade_stage' => InvoiceTypeEnum::class
+        'type' => InvoiceTypeEnum::class,
     ];
 
+    public function invoiceable(): MorphTo
+    {
+        return $this->morphTo();
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function transactions(): MorphMany
+    {
+        return $this->morphMany(Transaction::class, 'transactionable');
+    }
+
+    public function scopeFilterByOwner($query)
+    {
+        return $query->where('user_id', Auth::id());
+    }
+
+    /*public function setFeeAttribute($value)
+    {
+        if ($value === null) {
+            $this->attributes['fee'] = $this->calculateFee();
+        } else {
+            $this->attributes['fee'] = $value;
+        }
+    }
+
+    protected function calculateFee()
+    {
+        return round($this->amount * 0.10, 2); // 10% fee
+    }*/
+
+    /*public function getNetAmountAttribute()
+    {
+        return $this->amount - $this->fee;
+    }*/
 }

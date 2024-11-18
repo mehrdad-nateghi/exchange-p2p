@@ -2,9 +2,15 @@
 
 namespace App\Enums;
 
-enum InvoiceStatusEnum: int{
-    case Open = 0;
-    case Paid = 1;
-    case Unpaid = 2;
-};
+use App\Traits\Global\EnumTrait;
 
+enum InvoiceStatusEnum: int{
+
+    use EnumTrait;
+
+    case PENDING = 1;
+    case PAID = 2;
+    case FAILED = 3;
+    case CANCELED = 4;
+
+}

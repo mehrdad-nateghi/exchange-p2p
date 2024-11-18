@@ -2,40 +2,55 @@
 
 namespace App\Models;
 
+use App\Enums\PaymentMethodTypeEnum;
+use App\Traits\Global\Paginatable;
+use App\Traits\Global\Ulid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class PaymentMethod extends Model
 {
-    use HasFactory;
+    use HasFactory, Ulid, SoftDeletes, Paginatable;
 
-    protected $table = 'payment_methods';
+    public function getRouteKeyName(): string
+    {
+        return 'ulid';
+    }
 
     protected $fillable = [
-        'name',
-        'country_id'
+        'user_id',
+        'type',
+        'status',
     ];
 
-    public $timestamps = false;
+    protected $casts = [
+        'type' => PaymentMethodTypeEnum::class,
+    ];
 
-    /**
-     * Get the country that owns the paymentMetod.
-     */
-    public function country(){
-        return $this->belongsTo(Country::class);
+    protected $with = ['paymentMethod'];
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 
-    /*
-    * Get the attributes for the paymentMethod.
-    */
-    public function attributes(){
-        return $this->hasMany(MethodAttribute::class);
+    public function paymentMethod(): MorphTo
+    {
+        return $this->morphTo();
     }
 
-    /*
-    * Get the linkedMethods for the paymentMethod.
-    */
-    public function linkedMethods(){
-        return $this->hasMany(LinkedMethod::class, 'method_type_id');
+    public function requests(): BelongsToMany
+    {
+        return $this->belongsToMany(Request::class, 'payment_method_request')->withTimestamps();
+    }
+
+    public function bids(): HasMany
+    {
+        return $this->hasMany(Bid::class);
     }
 }

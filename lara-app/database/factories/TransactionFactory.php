@@ -2,13 +2,13 @@
 
 namespace Database\Factories;
 
-use App\Models\Invoice;
+use App\Models\Legacy\Invoice;
 use App\Models\TransactionMethod;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Transaction>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Legacy\Transaction>
  */
 class TransactionFactory extends Factory
 {
@@ -23,7 +23,7 @@ class TransactionFactory extends Factory
             'support_id' => config('constants.SupportId_Prefixes.Transaction_Pr'). Str::uuid(),
             'amount' => fake()->randomFloat($nbMaxDecimals = 2 , $min = 0, $max = 99,999,999,999.99),
             'description' => fake()->text($maxNbChars = 50),
-            'status' => \App\Enums\TransactionStatusEnum::Successful,
+            'status' => \App\Enums\Legacy\TransactionStatusEnum::Successful,
             'invoice_id' => Invoice::factory(),
             'transaction_method_id' => TransactionMethod::factory(),
             'created_at' => fake()->dateTime()

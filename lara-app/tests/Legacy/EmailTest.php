@@ -2,10 +2,10 @@
 
 namespace Tests\Feature;
 
-use App\Enums\UserRoleEnum;
-use App\Models\Bid;
+use App\Enums\Legacy\UserRoleEnum;
 use App\Models\Email;
 use App\Models\EmailTemplate;
+use App\Models\Legacy\Bid;
 use App\Models\Request;
 use App\Models\Trade;
 use App\Models\User;

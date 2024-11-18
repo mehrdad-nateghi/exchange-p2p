@@ -5,14 +5,16 @@ resources:
   - services/mysql.yml
   - services/core-laravel.yml
   - services/pex-app.yml
-  - services/pex-storybook.yml
+  - services/pex-admin.yml
 
   - deployments/core-laravel.yml
+  - deployments/queue-worker.yml
   - deployments/pex-app.yml
-  - deployments/pex-storybook.yml
+  - deployments/pex-admin.yml
 
   - statefulsets/mysql.yml
 
   - configs/mysql.yml
-
-  - cronjobs/mysql_backup.yml
+  - configs/core-laravel.yml
+#? Currently we just use the cronjob in production and because we use managed database
+# - cronjobs/mysql_backup.yml

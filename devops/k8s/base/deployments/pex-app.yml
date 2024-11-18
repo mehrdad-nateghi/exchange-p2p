@@ -3,6 +3,7 @@ kind: Deployment
 metadata:
   name: pex-app
 spec:
+  revisionHistoryLimit: 0
   replicas: 1
   selector:
     matchLabels:
@@ -15,13 +16,13 @@ spec:
     metadata:
       labels:
         app: pex-app
-        commit-short-sha: 'commit_${DEPLOY_COMMIT_SHORT_SHA}'
+        commit-short-sha: "commit_${DEPLOY_COMMIT_SHORT_SHA}"
     spec:
       restartPolicy: Always
       imagePullSecrets:
-        - name: regcred
+        - name: hamdocker
       containers:
-        - image: docker.io/paylibero/pex-app
+        - image: registry.hamdocker.ir/paylibero/pex-app
           imagePullPolicy: Always
           name: pex-app
           ports:
@@ -29,14 +30,16 @@ spec:
           env:
             - name: NODE_ENV
               value: production
+
             - name: NEXT_PUBLIC_API_SERVER_ADDRESS
               value: http://core-laravel:8000
-            - name: NEXT_PUBLIC_SITE_SECRET
-              value: 6Lc_s1QpAAAAAIQhxFfqYkcgTvwfPjdQ-sumzg6L
-            - name: NEXT_PUBLIC_REACT_APP_SITE_KEY
-              value: 6Lc_s1QpAAAAAG7VQZxe9zddFwX_CHXAJ1t7oN9Q
+
+            - name: NEXT_PUBLIC_AUTH_SESSION_KEY
+              value: laravel_session
+
             - name: NEXT_PUBLIC_AUTH_TOKEN
               value: pl-auth-token
+
             - name: PUBLIC_BUILD_COMMIT_SHA
               value: "'${DEPLOY_COMMIT_SHORT_SHA}'"
           resources: {}

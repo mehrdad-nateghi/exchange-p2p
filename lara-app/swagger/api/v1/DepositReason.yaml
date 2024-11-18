@@ -1,0 +1,51 @@
+"/users/deposit-reasons":
+  get:
+    tags:
+      - deposit-reasons
+    summary: "Get all deposit reasons"
+    description: "Get all deposit reasons"
+    operationId: getUserDepositReasons
+    responses:
+      "200":
+        description: "The deposit reasons was retrieved successfully."
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/Base200Response"
+                - type: object
+                  required:
+                    - data
+                  properties:
+                    data:
+                      type: object
+                      required:
+                        - items
+                        - pagination
+                      properties:
+                        pagination:
+                          $ref: "#/components/schemas/Pagination"
+                        items:
+                          type: array
+                          description: "Array of request items"
+                          items:
+                            type: object
+                            required:
+                              - title
+                              - created_at
+                              - updated_at
+                            properties:
+                              title:
+                                type: string
+                                description: "Title of the deposit reason"
+                                example: "Deposit reason 1"
+                              created_at:
+                                type: string
+                                format: date-time
+                                description: "Created at"
+                                example: "2024-02-20T12:00:00Z"
+                              updated_at:
+                                type: string
+                                format: date-time
+                                description: "Updated at"
+                                example: "2024-02-20T12:00:00Z"
