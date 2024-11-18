@@ -3,10 +3,28 @@ kind: Deployment
 metadata:
   name: pex-storybook
 spec:
+  revisionHistoryLimit: 0
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pex-storybook
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 75%
   template:
+    metadata:
+      labels:
+        app: pex-storybook
+        commit-short-sha: 'commit_${DEPLOY_COMMIT_SHORT_SHA}'
     spec:
+      restartPolicy: Always
+      imagePullSecrets:
+        - name: hamdocker
       containers:
-        - name: pex-storybook
+        - image: registry.hamdocker.ir/paylibero/pex-storybook
+          imagePullPolicy: Always
+          name: pex-storybook
           resources:
             requests:
               memory: '128Mi'
@@ -14,3 +32,28 @@ spec:
             limits:
               memory: '256Mi'
               cpu: '128m'
+
+          ports:
+            - containerPort: 80
+
+          livenessProbe:
+            failureThreshold: 5
+            httpGet:
+              path: /
+              port: 80
+              scheme: HTTP
+            initialDelaySeconds: 90
+            periodSeconds: 60
+            successThreshold: 1
+            timeoutSeconds: 1
+
+          readinessProbe:
+            failureThreshold: 5
+            httpGet:
+              path: /
+              port: 80
+              scheme: HTTP
+            initialDelaySeconds: 90
+            periodSeconds: 60
+            successThreshold: 1
+            timeoutSeconds: 1

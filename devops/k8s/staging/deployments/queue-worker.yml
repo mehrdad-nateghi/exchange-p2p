@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: queue-worker
+spec:
+  replicas: 1
+  template:
+    spec:
+      containers:
+        - name: queue-worker
+          resources:
+            requests:
+              memory: '128Mi'
+              cpu: '64m'
+            limits:
+              memory: '256Mi'
+              cpu: '128m'
+          env:
+            # APP--------------------------------------
+            - name: APP_ENV
+              value: staging
+
+            # DB--------------------------------------
+            - name: DB_HOST
+              value: paylibero-db-mysql-headless
+            - name: DB_PORT
+              value: '3306'
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: core-laravel-mysql-db
+                  key: username
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: core-laravel-mysql-db
+                  key: password
+
+            # RECAPTCHA--------------------------------------
+            - name: RECAPTCHA_V3_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: google-recaptcha
+                  key: secret_key
+            - name: RECAPTCHA_V3_SITE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: google-recaptcha
+                  key: site_key
+            - name: RECAPTCHA_V3_ENABLE
+              value: 'false'
+
+            # REDIS--------------------------------------
+            - name: REDIS_HOST
+              value: redis-cluster-leader-headless
+            - name: REDIS_PORT
+              value: '6379'
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: redis-secret
+                  key: password
+
+            # MAIL--------------------------------------
+            - name: MAIL_USERNAME
+              value: '10cSOoYX8R'
+            - name: MAIL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: ahasend
+                  key: password
