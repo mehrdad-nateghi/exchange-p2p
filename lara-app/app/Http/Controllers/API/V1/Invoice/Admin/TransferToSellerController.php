@@ -104,6 +104,7 @@ class TransferToSellerController extends Controller
 
                 return apiResponse()
                     ->failed()
+                    //->message($data['error']['message'])
                     ->message(trans('api-messages.request_failed', ['attribute' => trans('api-messages.pay_invoice')]))
                     ->data($resource)
                     ->getApiResponse();

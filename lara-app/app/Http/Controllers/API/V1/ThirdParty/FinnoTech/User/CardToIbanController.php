@@ -17,7 +17,7 @@ class CardToIbanController extends Controller
     ): JsonResponse
     {
         $clientId = config('finnotech.client_id');
-        $token = config('finnotech.token');
+        $token = config('finnotech.client_credentials_token');
         $baseUrl = config('finnotech.base_url');
         $endpoint = "/facility/v2/clients/{$clientId}/cardToIban";
 
