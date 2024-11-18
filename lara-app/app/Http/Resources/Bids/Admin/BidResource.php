@@ -22,8 +22,12 @@ class BidResource extends JsonResource
             'price' => $this->price,
             'is_best_price' => $this->is_best_price,
             'status' => $this->status->key(),
-            'user' => new UserResource($this->user),
-            'payment_method' => new PaymentMethodResource($this->paymentMethod),
+            'user' => $this->whenLoaded('user', function () {
+                return new UserResource($this->user);
+            }),
+            'payment_method' => $this->whenLoaded('paymentMethod', function () {
+                return new PaymentMethodResource($this->paymentMethod);
+            }),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'deleted_at' => $this->deleted_at
