@@ -4,7 +4,7 @@ include: /.gitlab-ci.templates.yml
 stages:
   - Deploy
 
-pex-app:deploy:
+pex-admin:deploy:
   stage: Deploy
   extends: .deploy_job_template
   variables:
