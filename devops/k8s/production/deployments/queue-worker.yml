@@ -52,14 +52,14 @@ spec:
 
             # REDIS--------------------------------------
             - name: REDIS_HOST
-              value: redis
+              value: redis-cluster-leader-headless
             - name: REDIS_PORT
               value: '6379'
             - name: REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: redis-auth
-                  key: redis-password
+                  name: redis-secret
+                  key: password
 
             # MAIL--------------------------------------
             - name: MAIL_USERNAME

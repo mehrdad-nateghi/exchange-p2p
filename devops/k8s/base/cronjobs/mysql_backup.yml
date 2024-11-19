@@ -12,50 +12,50 @@ spec:
       template:
         spec:
           imagePullSecrets:
-          - name: regcred
+            - name: regcred
           containers:
-          - env:
-            - name: ACCESS_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: db-mysql-backup-s3-secret
-                  key: S3_ACCESS_KEY
-            - name: SECRET_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: db-mysql-backup-s3-secret
-                  key: S3_SECRET_KEY
-            - name: ENDPOINT
-              valueFrom:
-                secretKeyRef:
-                  name: db-mysql-backup-s3-secret
-                  key: S3_ENDPOINT
-            - name: BUCKETNAME
-              valueFrom:
-                secretKeyRef:
-                  name: db-mysql-backup-s3-secret
-                  key: S3_BUCKETNAME
-            - name: region_name
-              value: base
-            - name: PGPASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: paylibero-db-mysql
-                  key: mysql-root-password
-            - name: target_srv_name
-              value: paylibero-db-mysql
-            image: docker.io/paylibero/mysql_backup_all:v1.0.0
-            imagePullPolicy: IfNotPresent
-            name: db-mysql-backup
-            resources:
-              requests:
-                cpu: 1000m
-                memory: 256Mi
-              limits:
-                cpu: 2000m
-                memory: 1024Mi
-            terminationMessagePath: /dev/termination-log
-            terminationMessagePolicy: File
+            - env:
+                - name: ACCESS_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: db-mysql-backup-s3-secret
+                      key: S3_ACCESS_KEY
+                - name: SECRET_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: db-mysql-backup-s3-secret
+                      key: S3_SECRET_KEY
+                - name: ENDPOINT
+                  valueFrom:
+                    secretKeyRef:
+                      name: db-mysql-backup-s3-secret
+                      key: S3_ENDPOINT
+                - name: BUCKETNAME
+                  valueFrom:
+                    secretKeyRef:
+                      name: db-mysql-backup-s3-secret
+                      key: S3_BUCKETNAME
+                - name: region_name
+                  value: base
+                - name: PGPASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: paylibero-db-mysql
+                      key: mysql-root-password
+                - name: target_srv_name
+                  value: paylibero-db-mysql
+              image: docker.io/paylibero/mysql_backup_all:v1.0.0
+              imagePullPolicy: IfNotPresent
+              name: db-mysql-backup
+              resources:
+                requests:
+                  cpu: 1000m
+                  memory: 256Mi
+                limits:
+                  cpu: 2000m
+                  memory: 1024Mi
+              terminationMessagePath: /dev/termination-log
+              terminationMessagePolicy: File
           dnsPolicy: ClusterFirst
           restartPolicy: OnFailure
           schedulerName: default-scheduler
