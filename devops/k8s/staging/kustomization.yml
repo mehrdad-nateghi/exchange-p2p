@@ -4,14 +4,13 @@ kind: Kustomization
 namespace: paylibero-staging
 
 resources:
-  - ../base/deployments/core-laravel.yml
-  - ../base/deployments/queue-worker.yml
-  - ../base/deployments/pex-app.yml
-  - ../base/deployments/pex-admin.yml
-  - ../base/configs/core-laravel.yml
-  - ../base/services
-  - HPAs
-  - operators
+  - ../base
+  - config/mysql.yml
+  - HPAs/core-laravel.yml
+  - HPAs/queue-worker.yml
+  - HPAs/pex-app.yml
+  - HPAs/pex-admin.yml
+  - operators/redis/cluster.yml
   - ingresses.yml
 
 patches:
