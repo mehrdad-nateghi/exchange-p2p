@@ -5,11 +5,11 @@ metadata:
   labels:
     app.kubernetes.io/instance: paylibero-db
     app.kubernetes.io/name: mysql
-    app.kubernetes.io/version: "8.2"
-    helm.sh/chart: "mysql-9.14.3"
+    app.kubernetes.io/version: '8.2'
+    helm.sh/chart: 'mysql-9.14.3'
 spec:
   replicas: 1
-  podManagementPolicy: ""
+  podManagementPolicy: ''
   selector:
     matchLabels:
       app.kubernetes.io/instance: paylibero-db
@@ -22,8 +22,8 @@ spec:
       labels:
         app.kubernetes.io/instance: paylibero-db
         app.kubernetes.io/name: mysql
-        app.kubernetes.io/version: "8.2"
-        helm.sh/chart: "mysql-9.14.3"
+        app.kubernetes.io/version: '8.2'
+        helm.sh/chart: 'mysql-9.14.3'
     spec:
       serviceAccountName: paylibero-db-mysql
       affinity:
@@ -56,19 +56,22 @@ spec:
               type: RuntimeDefault
           env:
             - name: BITNAMI_DEBUG
-              value: "false"
+              value: 'false'
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: paylibero-db-mysql
-                  key: mysql-root-password
+                  name: core-laravel-mysql-db
+                  key: password
             - name: MYSQL_USER
-              value: paylibero
+              valueFrom:
+                secretKeyRef:
+                  name: core-laravel-mysql-db
+                  key: username
             - name: MYSQL_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: paylibero-db-mysql
-                  key: mysql-password
+                  name: core-laravel-mysql-db
+                  key: password
             - name: MYSQL_DATABASE
               value: laravel
           ports:
