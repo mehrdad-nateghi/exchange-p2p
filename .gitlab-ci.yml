@@ -12,7 +12,7 @@ trigger-core-laravel:
     include: /lara-app/.gitlab-ci.yml
     strategy: depend
   rules:
-    - if: '($CI_PIPELINE_SOURCE != "pipeline") && (($CI_MERGE_REQUEST_ID && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main" && $CI_MERGE_REQUEST_TITLE !~ /^Draft:/) || $CI_COMMIT_REF_NAME == "main" || $CI_COMMIT_REF_NAME == "production")'
+    - if: '($CI_PIPELINE_SOURCE != "pipeline") && (($CI_MERGE_REQUEST_ID && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main" && $CI_MERGE_REQUEST_TITLE !~ /^Draft:/) || $CI_COMMIT_REF_NAME == "main" || $CI_COMMIT_REF_NAME == "production" || $CI_COMMIT_REF_NAME == "staging")'
       changes:
         - .gitlab-ci.yml
         - lara-app/**/*
