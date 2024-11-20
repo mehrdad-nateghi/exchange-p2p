@@ -17,7 +17,7 @@ class LoginAsUserController extends Controller
         try {
             $request->session()->put('admin_id', Auth::id());
 
-            Auth::login($user);
+            Auth::guard('web')->login($user);
 
             return apiResponse()
                 ->message(trans('api-messages.impersonation_success', ['attribute' => trans('api-messages.user')]))
