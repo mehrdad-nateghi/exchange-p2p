@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\V1\Invoice\Admin;
 
 use App\Enums\InvoiceStatusEnum;
 use App\Enums\PaymentMethodTypeEnum;
+use App\Enums\TradeStepsStatusEnum;
 use App\Enums\TransactionProviderEnum;
 use App\Enums\TransactionStatusEnum;
 use App\Http\Controllers\Controller;
@@ -74,6 +75,12 @@ class TransferToSellerController extends Controller
             $data = $response->json();
 
             if ($response->successful() && $data['status'] === 'DONE') {
+
+                $invoice->invoiceable->tradeSteps()->where('priority', 4)->where('status', TradeStepsStatusEnum::DOING->value)->update([
+                    'status' => TradeStepsStatusEnum::DONE->value,
+                    'completed_at' => now()
+                ]);
+
                 $invoice->update([
                     'status' => InvoiceStatusEnum::PAID->value
                 ]);
