@@ -40,7 +40,7 @@ variables:
       fi
 
 .base-deploy-scripts:
-  &base_deploy_scripts # remove all deployments excluding current service
+  &base_deploy_scripts # Remove all deployments excluding current service
   - SERVICE_NAMES_STRING_NO_SPACE=$(echo "$SERVICE_NAME" | sed 's/, /,/g')
   - CONVERTED_SERVICE_NAMES_STRING_NO_SPACE=${SERVICE_NAMES_STRING_NO_SPACE//,/\\|}
   - sed -i "/- .*\/\($CONVERTED_SERVICE_NAMES_STRING_NO_SPACE\)\.yml/p;/- .*\/\(.*\)\.yml/d" devops/k8s/base/kustomization.yml

@@ -139,7 +139,7 @@ deploy-staging:
   stage: Deploy
   extends: .deploy_job_template
   variables:
-    SERVICE_NAME: 'core-laravel,queue-worker'
+    SERVICE_NAME: 'core-laravel,queue-worker,mysql'
     ENVIRONMENT_NAME: staging
     KUBE_CONFIG_NAME: $ARVAN_KUBE_CONFIG
   rules:
