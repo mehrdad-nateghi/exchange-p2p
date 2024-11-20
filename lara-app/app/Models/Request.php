@@ -105,7 +105,7 @@ class Request extends Model
         return null;
     }
 
-    public function getSellerUserAttribute()
+    /*public function getSellerUserAttribute()
     {
         return $this->is_user_seller ? $this->user : $this->bid->user;
     }
@@ -113,5 +113,5 @@ class Request extends Model
     public function getBuyerUserAttribute()
     {
         return $this->is_user_buyer ? $this->user : $this->bid->user;
-    }
+    }*/
 }

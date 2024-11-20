@@ -76,8 +76,10 @@ class StoreBidController extends Controller
                 $fee = round($amount * ($feePercentage / 100), 2);
 
                 // create invoices for buyer
+                $buyerUserId = $request->type->value == RequestTypeEnum::BUY->value ? $request->user->id : $bid->user->id;
+
                 $trade->refresh()->invoices()->create([
-                    'user_id' => $request->buyerUser->id,
+                    'user_id' => $buyerUserId,
                     'amount' => $amount,
                     'fee' => $fee,
                     'status' => InvoiceStatusEnum::PENDING->value,
@@ -85,8 +87,10 @@ class StoreBidController extends Controller
                 ]);
 
                 // create invoices for seller
+                $sellerUserId = $request->type->value == RequestTypeEnum::SELL->value ? $request->user->id : $bid->user->id;
+
                 $trade->refresh()->invoices()->create([
-                    'user_id' => $request->sellerUser->id,
+                    'user_id' => $sellerUserId,
                     'amount' => $amount,
                     'fee' => $fee,
                     'status' => InvoiceStatusEnum::PENDING->value,
