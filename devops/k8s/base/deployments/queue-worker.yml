@@ -37,15 +37,3 @@ spec:
           env:
             - name: HOSTNAME
               value: queue
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: queue-worker-logs-pvc
-  namespace: paylibero-production
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 1Gi

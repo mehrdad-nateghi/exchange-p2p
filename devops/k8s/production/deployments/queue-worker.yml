@@ -9,12 +9,14 @@ spec:
       containers:
         - name: queue-worker
           resources:
-            requests:
-              memory: '128Mi'
-              cpu: '64m'
             limits:
-              memory: '256Mi'
-              cpu: '128m'
+              cpu: 500m
+              ephemeral-storage: 500M
+              memory: 1G
+            requests:
+              cpu: 500m
+              ephemeral-storage: 500M
+              memory: 1G
           env:
             # APP--------------------------------------
             - name: APP_ENV

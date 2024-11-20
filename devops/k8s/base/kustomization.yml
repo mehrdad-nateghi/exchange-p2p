@@ -14,7 +14,6 @@ resources:
 
   - statefulsets/mysql.yml
 
-  - configs/mysql.yml
   - configs/core-laravel.yml
 #? Currently we just use the cronjob in production and because we use managed database
 # - cronjobs/mysql_backup.yml
