@@ -47,7 +47,8 @@ variables:
   - >
     sed -i "/- path: .*\/\($CONVERTED_SERVICE_NAMES_STRING_NO_SPACE\)\.yml/p;/- path: .*\/\(.*\)\.yml/d" devops/k8s/${ENVIRONMENT_NAME}/kustomization.yml
 
-  - kubectl config get-contexts
+  - cat devops/k8s/base/kustomization.yml
+  - cat devops/k8s/${ENVIRONMENT_NAME}/kustomization.yml
   - kubectl config set-context --current --namespace=${ENVIRONMENT_PREFIX:-paylibero}-${ENVIRONMENT_NAME}
   # - sed -i 's/deb.debian.org/debian.hostiran.ir/g' /etc/apt/sources.list
   # - sed -i '/debian-security/d' /etc/apt/sources.list
