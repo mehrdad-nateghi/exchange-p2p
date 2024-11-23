@@ -121,3 +121,12 @@ spec:
         resources:
           requests:
             storage: 10Gi
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: paylibero-db-mysql
+  labels:
+    app.kubernetes.io/instance: paylibero-db
+    app.kubernetes.io/name: mysql
