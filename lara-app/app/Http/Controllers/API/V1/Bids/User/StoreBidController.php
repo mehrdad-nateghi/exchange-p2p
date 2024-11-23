@@ -75,14 +75,26 @@ class StoreBidController extends Controller
                 $feePercentage = config('constants.invoice_fee_percentage');
                 $fee = round($amount * ($feePercentage / 100), 2);
 
-                $userId = $request->type->value == RequestTypeEnum::BUY->value ? $request->user_id : $bid->user_id;
+                // create invoices for buyer
+                $buyerUserId = $request->type->value == RequestTypeEnum::BUY->value ? $request->user->id : $bid->user->id;
 
                 $trade->refresh()->invoices()->create([
-                    'user_id' => $userId,
+                    'user_id' => $buyerUserId,
                     'amount' => $amount,
                     'fee' => $fee,
                     'status' => InvoiceStatusEnum::PENDING->value,
                     'type' => InvoiceTypeEnum::STEP_ONE_PAY_TOMAN_TO_SYSTEM->value,
+                ]);
+
+                // create invoices for seller
+                $sellerUserId = $request->type->value == RequestTypeEnum::SELL->value ? $request->user->id : $bid->user->id;
+
+                $trade->refresh()->invoices()->create([
+                    'user_id' => $sellerUserId,
+                    'amount' => $amount,
+                    'fee' => $fee,
+                    'status' => InvoiceStatusEnum::PENDING->value,
+                    'type' => InvoiceTypeEnum::PAY_TOMAN_TO_SELLER->value,
                 ]);
             }
 

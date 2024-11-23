@@ -10,8 +10,8 @@ spec:
         - name: mysql
           resources:
             requests:
-              cpu: '2'
-              memory: 4G
+              cpu: '1'
+              memory: 2G
             limits:
-              cpu: '2'
-              memory: 4G
+              cpu: '1'
+              memory: 2G

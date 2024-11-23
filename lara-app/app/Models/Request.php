@@ -104,4 +104,14 @@ class Request extends Model
         }
         return null;
     }
+
+    /*public function getSellerUserAttribute()
+    {
+        return $this->is_user_seller ? $this->user : $this->bid->user;
+    }
+
+    public function getBuyerUserAttribute()
+    {
+        return $this->is_user_buyer ? $this->user : $this->bid->user;
+    }*/
 }

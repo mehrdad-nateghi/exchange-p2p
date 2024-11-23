@@ -18,7 +18,7 @@ class LoginAsAdminController extends Controller
         try {
             if ($adminId = $request->session()->get('admin_id')) {
                 $admin = User::findOrFail($adminId);
-                Auth::login($admin);
+                Auth::guard('web')->login($admin);
                 $request->session()->forget('admin_id');
 
                 return apiResponse()

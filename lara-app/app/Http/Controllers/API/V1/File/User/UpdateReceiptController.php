@@ -53,23 +53,6 @@ class UpdateReceiptController extends Controller
                     'status' => TradeStepsStatusEnum::DOING->value,
                     'expire_at' => Carbon::now()->addMinutes($nextStep->duration_minutes),
                 ]);
-
-                // create invoice for trade
-                $request = $trade->request;
-                $bid = $trade->bid;
-                $amount = $bid->price * $request->volume;
-                $feePercentage = config('constants.invoice_fee_percentage');
-                $fee = round($amount * ($feePercentage / 100), 2);
-
-                $userId = $request->type->value == RequestTypeEnum::SELL->value ? $request->user_id : $bid->user_id;
-
-                $trade->refresh()->invoices()->create([
-                    'user_id' => $userId,
-                    'amount' => $amount,
-                    'fee' => $fee,
-                    'status' => InvoiceStatusEnum::PENDING->value,
-                    'type' => InvoiceTypeEnum::PAY_TOMAN_TO_SELLER->value,
-                ]);
             }
 
             // Reject

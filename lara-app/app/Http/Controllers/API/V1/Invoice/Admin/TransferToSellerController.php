@@ -48,7 +48,8 @@ class TransferToSellerController extends Controller
             ]);
 
             $user = $invoice->user;  // access relationship once
-            $rialBankAccount = $invoice->invoiceable->paymentMethods()->where('payment_methods.type', PaymentMethodTypeEnum::RIAL_BANK->value)->first()->paymentMethod;
+            //$rialBankAccount = $invoice->invoiceable->paymentMethods()->where('payment_methods.type', PaymentMethodTypeEnum::RIAL_BANK->value)->first()->paymentMethod;
+            $rialBankAccount = $invoice->invoiceable->request->paymentMethods()->where('payment_methods.type', PaymentMethodTypeEnum::RIAL_BANK->value)->first()->paymentMethod;
 
             $queryParams = [
                 'trackId' => $trackId,
