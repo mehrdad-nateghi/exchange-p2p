@@ -122,13 +122,13 @@ spec:
         - name: core-laravel
           resources:
             limits:
-              cpu: '2'
+              cpu: '1'
               ephemeral-storage: 200M
-              memory: 4G
+              memory: 2G
             requests:
-              cpu: '2'
+              cpu: '1'
               ephemeral-storage: 200M
-              memory: 4G
+              memory: 2G
 
           env:
             # APP--------------------------------------
