@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API\V1\Invoice\Admin;
 
+use App\Enums\FinnoTechResponseStatusEnum;
 use App\Enums\InvoiceStatusEnum;
 use App\Enums\PaymentMethodTypeEnum;
 use App\Enums\TradeStepsStatusEnum;
@@ -12,11 +13,13 @@ use App\Http\Requests\API\V1\Invoice\Admin\TransferToSellerRequest;
 use App\Http\Requests\API\V1\Invoice\User\PayInvoiceRequest;
 use App\Http\Resources\Invoice\Admin\InvoiceResource;
 use App\Models\Invoice;
+use App\Services\ThirdParty\FinnoTech\FinnoTechService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
+use Psy\Util\Str;
 use Shetabit\Multipay\Invoice as ShetabitInvoice;
 use Shetabit\Payment\Facade\Payment;
 
@@ -25,15 +28,11 @@ class TransferToSellerController extends Controller
     public function __invoke(
         TransferToSellerRequest $request,
         Invoice                 $invoice,
+        FinnoTechService  $finnoTechService
     )
     {
         try {
             DB::beginTransaction();
-
-            $clientId = config('finnotech.client_id');
-            $token = config('finnotech.authorization_code_token');
-            $baseUrl = config('finnotech.base_url');
-            $endpoint = "/oak/v2/clients/{$clientId}/transferTo";
 
             $trackId = generateUniqueNumber('transactions', 'track_id');
             $amount = $invoice->amount - $invoice->fee;
@@ -64,18 +63,9 @@ class TransferToSellerController extends Controller
                 'reasonDescription' => $invoice->number
             ];
 
-            $url = $baseUrl . $endpoint . '?' . http_build_query($queryParams);
+            $data = $finnoTechService->withAuthorizationCode()->transferTo($queryParams, $bodyParams);
 
-            $response = Http::withToken($token)
-                ->withHeaders([
-                    'Content-Type' => 'application/json',
-                    'Accept' => 'application/json',
-                ])
-                ->post($url, $bodyParams);
-
-            $data = $response->json();
-
-            if ($response->successful() && $data['status'] === 'DONE') {
+            if ($data['status'] === FinnoTechResponseStatusEnum::DONE->value) {
 
                 $invoice->invoiceable->tradeSteps()->where('priority', 4)->where('status', TradeStepsStatusEnum::DOING->value)->update([
                     'status' => TradeStepsStatusEnum::DONE->value,
