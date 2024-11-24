@@ -76,18 +76,21 @@ spec:
               value: https://sandboxapi.finnotech.ir
             - name: FINNOTECH_CLIENT_ID
               value: paylibero
-            - name: FINNOTECH_CLIENT_CREDENTIALS_TOKEN
+            - name: FINNOTECH_CLIENT_SECRET
               valueFrom:
                 secretKeyRef:
                   name: finno-tech
-                  key: client-credentials-token
-            - name: FINNOTECH_AUTHORIZATION_CODE_TOKEN
+                  key: client-secret
+            - name: FINNOTECH_NATIONAL_ID
               valueFrom:
                 secretKeyRef:
                   name: finno-tech
-                  key: authorization-code-token
-            - name: FRONTEND_URL_AFTER_PAYMENT
-              value: https://nightly.paylibero.ir/dashboard/trades
+                  key: national-id
+            - name: FINNOTECH_AUTHORIZATION_CODE
+              valueFrom:
+                secretKeyRef:
+                  name: finno-tech
+                  key: authorization-code
 
             # SANCTUM--------------------------------------
             - name: SANCTUM_STATEFUL_DOMAINS
@@ -199,18 +202,21 @@ spec:
               value: https://sandboxapi.finnotech.ir
             - name: FINNOTECH_CLIENT_ID
               value: paylibero
-            - name: FINNOTECH_CLIENT_CREDENTIALS_TOKEN
+            - name: FINNOTECH_CLIENT_SECRET
               valueFrom:
                 secretKeyRef:
                   name: finno-tech
-                  key: client-credentials-token
-            - name: FINNOTECH_AUTHORIZATION_CODE_TOKEN
+                  key: client-secret
+            - name: FINNOTECH_NATIONAL_ID
               valueFrom:
                 secretKeyRef:
                   name: finno-tech
-                  key: authorization-code-token
-            - name: FRONTEND_URL_AFTER_PAYMENT
-              value: https://nightly.paylibero.ir/dashboard/trades
+                  key: national-id
+            - name: FINNOTECH_AUTHORIZATION_CODE
+              valueFrom:
+                secretKeyRef:
+                  name: finno-tech
+                  key: authorization-code
 
             # SANCTUM--------------------------------------
             - name: SANCTUM_STATEFUL_DOMAINS
