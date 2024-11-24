@@ -76,6 +76,8 @@ spec:
               value: https://sandboxapi.finnotech.ir
             - name: FINNOTECH_CLIENT_ID
               value: paylibero
+            - name: FRONTEND_URL_AFTER_PAYMENT
+              value: https://nightly.paylibero.ir/dashboard/trades
             - name: FINNOTECH_CLIENT_SECRET
               valueFrom:
                 secretKeyRef:
@@ -202,6 +204,8 @@ spec:
               value: https://sandboxapi.finnotech.ir
             - name: FINNOTECH_CLIENT_ID
               value: paylibero
+            - name: FRONTEND_URL_AFTER_PAYMENT
+              value: https://nightly.paylibero.ir/dashboard/trades
             - name: FINNOTECH_CLIENT_SECRET
               valueFrom:
                 secretKeyRef:
