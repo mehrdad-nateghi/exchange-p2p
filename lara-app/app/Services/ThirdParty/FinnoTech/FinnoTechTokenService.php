@@ -32,10 +32,13 @@ class FinnoTechTokenService
         try {
             // Check if we have a valid cached token
             if (Cache::has(self::AUTHORIZATION_CODE_TOKEN_CACHE_KEY)) {
+                Log::info('has cache');
+
                 $tokenData = Cache::get(self::AUTHORIZATION_CODE_TOKEN_CACHE_KEY);
                 return $tokenData['value'] ?? null;
             }
 
+            Log::info('no cache');
             return self::refreshAndCacheAuthorizationCodeToken();
         } catch (\Throwable $t) {
             Log::error('FinnoTech Token Error: ' . $t->getMessage());
@@ -100,6 +103,14 @@ class FinnoTechTokenService
         // Create Basic Auth string
         $authString = self::getBase64_encode($clientId, $clientSecret);
 
+        Log::info('refreshAndCacheAuthorizationCodeToken',[
+            'client_id' => $clientId,
+            'client_secret' => $clientSecret,
+            'authorization_code' => $authorizationCode,
+            'base_url' => $baseUrl,
+            'authString' => $authString
+        ]);
+
         try {
             $response = Http::withHeaders([
                 'Content-Type' => 'application/json',
@@ -109,6 +120,10 @@ class FinnoTechTokenService
                 'code' => $authorizationCode,
                 'bank' => '062', // Ayandeh
                 'redirect_uri' => 'https://paylibero.ir'
+            ]);
+
+            Log::info('response',[
+                'response' => $response->json(),
             ]);
 
             if (!$response->successful()) {
