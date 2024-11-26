@@ -123,6 +123,37 @@ return [
 
         'client' => env('REDIS_CLIENT', 'phpredis'),
 
+        'clusters' => [
+            'default' => [
+                // Primary leader nodes
+                [
+                    'host' => env('REDIS_LEADER_HOST'),
+                    'password' => env('REDIS_PASSWORD'),
+                    'port' => env('REDIS_PORT', 6379),
+                    'database' => 0,
+                ],
+                [
+                    'host' => env('REDIS_LEADER_ADDITIONAL_HOST'),
+                    'password' => env('REDIS_PASSWORD'),
+                    'port' => env('REDIS_PORT', 6379),
+                    'database' => 0,
+                ],
+                // Follower nodes
+                [
+                    'host' => env('REDIS_FOLLOWER_HOST'),
+                    'password' => env('REDIS_PASSWORD'),
+                    'port' => env('REDIS_PORT', 6379),
+                    'database' => 0,
+                ],
+                [
+                    'host' => env('REDIS_FOLLOWER_ADDITIONAL_HOST'),
+                    'password' => env('REDIS_PASSWORD'),
+                    'port' => env('REDIS_PORT', 6379),
+                    'database' => 0,
+                ],
+            ],
+        ],
+
         'options' => [
             'cluster' => env('REDIS_CLUSTER', 'redis'),
             'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_').'_database_'),
