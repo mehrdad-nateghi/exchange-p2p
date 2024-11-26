@@ -174,10 +174,14 @@ spec:
               value: 'false'
 
             # REDIS--------------------------------------
-            - name: REDIS_HOST
-              value: redis-cluster-leader-headless
-            - name: REDIS_PORT
-              value: '6379'
+            - name: REDIS_LEADER_HOST
+              value: redis-cluster-leader.paylibero-production.svc.cluster.local
+            - name: REDIS_LEADER_ADDITIONAL_HOST
+              value: redis-cluster-leader-additional.paylibero-production.svc.cluster.local
+            - name: REDIS_FOLLOWER_HOST
+              value: redis-cluster-follower.paylibero-production.svc.cluster.local
+            - name: REDIS_FOLLOWER_ADDITIONAL_HOST
+              value: redis-cluster-follower-additional.paylibero-production.svc.cluster.local
             - name: REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
