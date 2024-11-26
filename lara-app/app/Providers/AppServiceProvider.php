@@ -32,7 +32,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         // Log a warning if we spend more than 1000ms on a single query.
-        DB::listen(function ($query) {
+        /*DB::listen(function ($query) {
             Log::info("Query data", [
                 'time' => $query->time,
                 'sql' => $query->sql
@@ -43,7 +43,7 @@ class AppServiceProvider extends ServiceProvider
                     'sql' => $query->sql
                 ]);
             }
-        });
+        });*/
 
         // Force https
         if($this->app->environment('production') || $this->app->environment('nightly')) {
