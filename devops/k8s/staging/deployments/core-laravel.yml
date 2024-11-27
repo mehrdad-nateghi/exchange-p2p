@@ -91,7 +91,11 @@ spec:
                   key: authorization-code-token
             - name: FRONTEND_URL_AFTER_PAYMENT
               value: https://nightly.paylibero.ir/dashboard/trades
-
+            - name: FINNOTECH_AUTHORIZATION_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: finno-tech
+                  key: authorization-token
             # SANCTUM--------------------------------------
             - name: SANCTUM_STATEFUL_DOMAINS
               value: staging.paylibero.ir,admin.staging.paylibero.ir,staging.paylibero.de,admin.staging.paylibero.de,staging.paylibero.net,admin.staging.paylibero.net
@@ -214,7 +218,11 @@ spec:
                   key: authorization-code-token
             - name: FRONTEND_URL_AFTER_PAYMENT
               value: https://nightly.paylibero.ir/dashboard/trades
-
+            - name: FINNOTECH_AUTHORIZATION_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: finno-tech
+                  key: authorization-token
             # SANCTUM--------------------------------------
             - name: SANCTUM_STATEFUL_DOMAINS
               value: staging.paylibero.ir,admin.staging.paylibero.ir,staging.paylibero.de,admin.staging.paylibero.de,staging.paylibero.net,admin.staging.paylibero.net
