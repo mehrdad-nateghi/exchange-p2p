@@ -9,3 +9,7 @@ Route::middleware(['auth:sanctum', 'role:admin'])->name('admins.users.')->prefix
     Route::get('/login-as-user/{user}', LoginAsUserController::class);
     Route::get('/login-as-admin', LoginAsAdminController::class);
 });
+
+Route::middleware(['auth:sanctum'])->name('admins.users.')->prefix('admins/users')->group(function () {
+    Route::get('/login-as-admin', LoginAsAdminController::class);
+});
