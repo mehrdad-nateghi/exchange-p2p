@@ -10,6 +10,8 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Session;
+
 class LoginController extends Controller
 {
     public function __invoke(
@@ -26,8 +28,17 @@ class LoginController extends Controller
 
                 // Check if user has admin role, change cookie
                 if ($user->hasRole(RoleNameEnum::ADMIN->value)) {
+                    // Clear current session
+                    Session::getHandler()->destroy($request->session()->getId());
+
+                    // Set new session config
                     config(['session.cookie' => 'admin_session']);
+
+                    // Start fresh session with new config
+                    $request->session()->migrate(true);
+
                     $request->session()->regenerate();
+                    Auth::login($user);
                 }
 
                 $tokenData = $userService->createToken($user);
