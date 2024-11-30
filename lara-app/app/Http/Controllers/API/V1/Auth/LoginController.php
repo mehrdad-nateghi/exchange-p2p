@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API\V1\Auth;
 
+use App\Enums\RoleNameEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\Auth\LoginRequest;
 use App\Services\API\V1\UserService;
@@ -22,6 +23,13 @@ class LoginController extends Controller
             $credentials = $request->only('email', 'password');
             if (Auth::attempt($credentials)) {
                 $user = Auth::user();
+
+                // Check if user has admin role, change cookie
+                if ($user->hasRole(RoleNameEnum::ADMIN->value)) {
+                    config(['session.cookie' => 'admin_session']);
+                    $request->session()->regenerate();
+                }
+
                 $tokenData = $userService->createToken($user);
                 //$refreshToken = $userService->createRefreshToken($user);
 

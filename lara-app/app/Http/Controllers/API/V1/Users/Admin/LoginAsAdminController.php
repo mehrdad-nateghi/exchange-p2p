@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\API\V1\Users\Admin;
 
+use App\Enums\RoleNameEnum;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Facades\App\Services\Global\HttpResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Redirect;
 
 class LoginAsAdminController extends Controller
 {
@@ -17,9 +17,15 @@ class LoginAsAdminController extends Controller
     ) {
         try {
             if ($adminId = $request->session()->get('admin_id')) {
-                Log::info($adminId);
                 $admin = User::findOrFail($adminId);
+
+                if (!$admin->hasRole(RoleNameEnum::ADMIN->value)) {
+                    HttpResponse::unauthorized();
+                }
+
+                config(['session.cookie' => 'admin_session']); // todo: use const for value
                 Auth::guard('web')->login($admin);
+                $request->session()->regenerate();
                 $request->session()->forget('admin_id');
 
                 return apiResponse()
@@ -33,8 +39,7 @@ class LoginAsAdminController extends Controller
                 ->badRequest()
                 ->getApiResponse();
         } catch (\Throwable $t) {
-            Log::error($t);
-            return internalServerError();
+            HttpResponse::serverError();
         }
     }
 }

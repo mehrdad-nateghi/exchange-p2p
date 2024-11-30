@@ -79,19 +79,28 @@ spec:
               value: https://sandboxapi.finnotech.ir
             - name: FINNOTECH_CLIENT_ID
               value: paylibero
-            - name: FINNOTECH_CLIENT_CREDENTIALS_TOKEN
-              valueFrom:
-                secretKeyRef:
-                  name: finno-tech
-                  key: client-credentials-token
-            - name: FINNOTECH_AUTHORIZATION_CODE_TOKEN
-              valueFrom:
-                secretKeyRef:
-                  name: finno-tech
-                  key: authorization-code-token
             - name: FRONTEND_URL_AFTER_PAYMENT
-              value: https://nightly.paylibero.ir/dashboard/trades
-
+              value: https://paylibero.ir/dashboard/trades
+            - name: FINNOTECH_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: finno-tech
+                  key: client-secret
+            - name: FINNOTECH_NATIONAL_ID
+              valueFrom:
+                secretKeyRef:
+                  name: finno-tech
+                  key: national-id
+            - name: FINNOTECH_AUTHORIZATION_CODE
+              valueFrom:
+                secretKeyRef:
+                  name: finno-tech
+                  key: authorization-code
+            - name: FINNOTECH_AUTHORIZATION_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: finno-tech
+                  key: authorization-token
             # SANCTUM--------------------------------------
             - name: SANCTUM_STATEFUL_DOMAINS
               value: paylibero.ir,admin.paylibero.ir,paylibero.de,admin.paylibero.de,paylibero.net,admin.paylibero.net
@@ -206,19 +215,28 @@ spec:
               value: https://sandboxapi.finnotech.ir
             - name: FINNOTECH_CLIENT_ID
               value: paylibero
-            - name: FINNOTECH_CLIENT_CREDENTIALS_TOKEN
-              valueFrom:
-                secretKeyRef:
-                  name: finno-tech
-                  key: client-credentials-token
-            - name: FINNOTECH_AUTHORIZATION_CODE_TOKEN
-              valueFrom:
-                secretKeyRef:
-                  name: finno-tech
-                  key: authorization-code-token
             - name: FRONTEND_URL_AFTER_PAYMENT
-              value: https://nightly.paylibero.ir/dashboard/trades
-
+              value: https://paylibero.ir/dashboard/trades
+            - name: FINNOTECH_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: finno-tech
+                  key: client-secret
+            - name: FINNOTECH_NATIONAL_ID
+              valueFrom:
+                secretKeyRef:
+                  name: finno-tech
+                  key: national-id
+            - name: FINNOTECH_AUTHORIZATION_CODE
+              valueFrom:
+                secretKeyRef:
+                  name: finno-tech
+                  key: authorization-code
+            - name: FINNOTECH_AUTHORIZATION_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: finno-tech
+                  key: authorization-token
             # SANCTUM--------------------------------------
             - name: SANCTUM_STATEFUL_DOMAINS
               value: paylibero.ir,admin.paylibero.ir,paylibero.de,admin.paylibero.de,paylibero.net,admin.paylibero.net

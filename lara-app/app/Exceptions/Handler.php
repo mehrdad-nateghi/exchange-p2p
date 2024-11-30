@@ -8,7 +8,9 @@ use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use Spatie\Permission\Exceptions\UnauthorizedException;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
@@ -52,6 +54,8 @@ class Handler extends ExceptionHandler
     {
         $this->renderable(function (ModelNotFoundException $e, $request) {
             if (request()->wantsJson() || $request->is('api/*')) {
+                Log::error($e);
+
                 return apiResponse()
                     ->failed()
                     ->message(trans('api-messages.item_not_found'))
@@ -62,6 +66,8 @@ class Handler extends ExceptionHandler
 
         $this->renderable(function (AuthenticationException $e, $request) {
             if (request()->wantsJson() || $request->is('api/*')) {
+                Log::error($e);
+
                 return apiResponse()
                     ->failed()
                     ->message(trans('api-messages.un_authenticated'))
@@ -70,10 +76,11 @@ class Handler extends ExceptionHandler
             }
         });
 
-
         $this->renderable(function (Throwable $e, $request) {
-            if (($e instanceof AccessDeniedHttpException || $e instanceof UnauthorizedException)
+            if (($e instanceof AccessDeniedHttpException || $e instanceof UnauthorizedException || ($e->getStatusCode() == Response::HTTP_UNAUTHORIZED))
                 && (request()->wantsJson() || $request->is('api/*'))) {
+                Log::error($e);
+
                 return apiResponse()
                     ->failed()
                     ->message(trans('api-messages.un_authorized'))
@@ -84,6 +91,8 @@ class Handler extends ExceptionHandler
 
         $this->renderable(function (ValidationException $e, $request) {
             if (request()->wantsJson() || $request->is('api/*')) {
+                Log::error($e);
+
                 return apiResponse()
                     ->failed()
                     ->message($e->getMessage())
@@ -95,6 +104,8 @@ class Handler extends ExceptionHandler
 
         $this->renderable(function (NotFoundHttpException $e, $request) {
             if (request()->wantsJson() || $request->is('api/*')) {
+                Log::error($e);
+
                 return apiResponse()
                     ->failed()
                     ->message(trans('api-messages.requested_link_does_not_exist'))
@@ -103,20 +114,30 @@ class Handler extends ExceptionHandler
             }
         });
 
-        $this->reportable(function (Throwable $t) {
-            if (app()->bound('sentry')) {
-                Log::error($t);
+        $this->reportable(function (Throwable $e) {
+            Log::error($e);
 
-                return apiResponse()
-                    ->failed()
-                    ->serverError()
-                    ->message(trans('api-messages.internal_server_error'))
-                    ->getApiResponse();
-            }
+            return apiResponse()
+                ->failed()
+                ->serverError()
+                ->message(trans('api-messages.internal_server_error'))
+                ->getApiResponse();
         });
 
         $this->reportable(function (\Error $e) {
-            if (app()->bound('sentry')) {
+            Log::error($e);
+
+            return apiResponse()
+                ->failed()
+                ->internalServerError()
+                ->serverError()
+                ->message(trans('api-messages.internal_server_error'))
+                ->getApiResponse();
+
+        });
+
+        $this->renderable(function (Throwable $e, $request) {
+            if ($e instanceof HttpException && $e->getStatusCode() == Response::HTTP_INTERNAL_SERVER_ERROR) {
                 Log::error($e);
 
                 return apiResponse()

@@ -6,7 +6,7 @@ namespace: paylibero-production
 resources:
   - ../base
   - HPAs/core-laravel.yml
-  - HPAs/queue-worker.yml
+  # - HPAs/queue-worker.yml
   - HPAs/pex-app.yml
   - HPAs/pex-admin.yml
   - operators/redis/cluster.yml
