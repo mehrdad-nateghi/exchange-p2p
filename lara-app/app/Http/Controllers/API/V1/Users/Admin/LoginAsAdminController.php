@@ -23,7 +23,9 @@ class LoginAsAdminController extends Controller
                     HttpResponse::unauthorized();
                 }
 
+                config(['session.cookie' => 'admin_session']); // todo: use const for value
                 Auth::guard('web')->login($admin);
+                $request->session()->regenerate();
                 $request->session()->forget('admin_id');
 
                 return apiResponse()
