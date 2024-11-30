@@ -8,6 +8,7 @@ use App\Http\Requests\API\V1\Auth\LoginRequest;
 use App\Services\API\V1\UserService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
@@ -26,19 +27,27 @@ class LoginController extends Controller
             if (Auth::attempt($credentials)) {
                 $user = Auth::user();
 
-                // Check if user has admin role, change cookie
+                // Check if user has admin role, use admin_session cookie
                 if ($user->hasRole(RoleNameEnum::ADMIN->value)) {
-                    // Clear current session
-                    Session::getHandler()->destroy($request->session()->getId());
+                    // Save current session data
+                    $sessionData = session()->all();
 
-                    // Set new session config
+                    // Clear current session
+                    session()->flush();
+
+                    // Change session name for admin
                     config(['session.cookie' => 'admin_session']);
 
-                    // Start fresh session with new config
-                    $request->session()->migrate(true);
+                    // Start new session with admin name
+                    $request->session()->setName('admin_session');
 
+                    // Regenerate session
                     $request->session()->regenerate();
-                    Auth::login($user);
+
+                    // Restore session data
+                    foreach ($sessionData as $key => $value) {
+                        session()->put($key, $value);
+                    }
                 }
 
                 $tokenData = $userService->createToken($user);
