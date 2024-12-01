@@ -129,7 +129,7 @@ class Handler extends ExceptionHandler
 
             return apiResponse()
                 ->failed()
-                ->internalServerError()
+                ->serverError()
                 ->serverError()
                 ->message(trans('api-messages.internal_server_error'))
                 ->getApiResponse();
