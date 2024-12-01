@@ -28,7 +28,7 @@ class LoginController extends Controller
                 $user = Auth::user();
 
                 // Check if user has admin role, use admin_session cookie
-                if ($user->hasRole(RoleNameEnum::ADMIN->value)) {
+                /*if ($user->hasRole(RoleNameEnum::ADMIN->value)) {
                     // Save current session data
                     $sessionData = session()->all();
 
@@ -48,7 +48,7 @@ class LoginController extends Controller
                     foreach ($sessionData as $key => $value) {
                         session()->put($key, $value);
                     }
-                }
+                }*/
 
                 $tokenData = $userService->createToken($user);
                 //$refreshToken = $userService->createRefreshToken($user);
