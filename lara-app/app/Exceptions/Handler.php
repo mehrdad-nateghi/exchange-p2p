@@ -77,7 +77,7 @@ class Handler extends ExceptionHandler
         });
 
         $this->renderable(function (Throwable $e, $request) {
-            if (($e instanceof AccessDeniedHttpException || $e instanceof UnauthorizedException || ($e->getStatusCode() == Response::HTTP_UNAUTHORIZED))
+            if (($e instanceof AccessDeniedHttpException || $e instanceof UnauthorizedException /*|| ($e->getStatusCode() == Response::HTTP_UNAUTHORIZED)*/)
                 && (request()->wantsJson() || $request->is('api/*'))) {
                 Log::error($e);
 
