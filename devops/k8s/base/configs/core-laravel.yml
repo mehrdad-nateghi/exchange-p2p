@@ -30,7 +30,7 @@ data:
   MAIL_FROM_NAME: "Paylibero"
   REDIS_CLIENT: "phpredis"
   REDIS_CLUSTER: "redis"
-  REDIS_HOST: "redis-cluster-leader.paylibero-staging.svc.cluster.local"
+  REDIS_HOST: "redis-cluster-leader"
   REDIS_PASSWORD: "Opstree@1234‍"
   REDIS_PORT: "6379"
   #REDIS_CLIENT: "predis"
