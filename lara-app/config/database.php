@@ -127,7 +127,7 @@ return [
             'default' => [
                 [
                     'host' => env('REDIS_HOST', 'redis-cluster-leader.paylibero-staging.svc.cluster.local'),
-                    'password' => env('REDIS_PASSWORD','Opstree@1234‍'),
+                    'password' => env('REDIS_PASSWORD','Opstree@1234'),
                     'port' => env('REDIS_PORT', 6379),
                     'database' => 0,
                 ]
