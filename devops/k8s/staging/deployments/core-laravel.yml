@@ -47,19 +47,7 @@ spec:
               value: 'false'
 
             # REDIS--------------------------------------
-            - name: REDIS_LEADER_HOST
-              value: redis-cluster-leader.paylibero-staging.svc.cluster.local
-            - name: REDIS_LEADER_ADDITIONAL_HOST
-              value: redis-cluster-leader-additional.paylibero-staging.svc.cluster.local
-            - name: REDIS_FOLLOWER_HOST
-              value: redis-cluster-follower.paylibero-staging.svc.cluster.local
-            - name: REDIS_FOLLOWER_ADDITIONAL_HOST
-              value: redis-cluster-follower-additional.paylibero-staging.svc.cluster.local
-            - name: REDIS_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: redis-secret
-                  key: password
+
 
             # MAIL--------------------------------------
             - name: MAIL_USERNAME
@@ -183,19 +171,7 @@ spec:
               value: 'false'
 
             # REDIS--------------------------------------
-            - name: REDIS_LEADER_HOST
-              value: redis-cluster-leader.paylibero-staging.svc.cluster.local
-            - name: REDIS_LEADER_ADDITIONAL_HOST
-              value: redis-cluster-leader-additional.paylibero-staging.svc.cluster.local
-            - name: REDIS_FOLLOWER_HOST
-              value: redis-cluster-follower.paylibero-staging.svc.cluster.local
-            - name: REDIS_FOLLOWER_ADDITIONAL_HOST
-              value: redis-cluster-follower-additional.paylibero-staging.svc.cluster.local
-            - name: REDIS_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: redis-secret
-                  key: password
+
 
             # MAIL--------------------------------------
             - name: MAIL_USERNAME
