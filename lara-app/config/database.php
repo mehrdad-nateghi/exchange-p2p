@@ -139,12 +139,12 @@ return [
                     'port' => env('REDIS_PORT', 6379),
                     'database' => 0,
                 ],
-                [
+                /*[
                     'host' => env('REDIS_LEADER_ADDITIONAL_HOST'),
                     'password' => env('REDIS_PASSWORD'),
                     'port' => env('REDIS_PORT', 6379),
                     'database' => 0,
-                ],
+                ],*/
                 // Follower nodes
                 [
                     'host' => env('REDIS_FOLLOWER_HOST'),
@@ -152,12 +152,12 @@ return [
                     'port' => env('REDIS_PORT', 6379),
                     'database' => 0,
                 ],
-                [
+                /*[
                     'host' => env('REDIS_FOLLOWER_ADDITIONAL_HOST'),
                     'password' => env('REDIS_PASSWORD'),
                     'port' => env('REDIS_PORT', 6379),
                     'database' => 0,
-                ],
+                ],*/
             ],
         ],
 
