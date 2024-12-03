@@ -125,6 +125,13 @@ return [
 
         'clusters' => [
             'default' => [
+                /*[
+                    'host' => env('REDIS_HOST', 'redis-cluster-leader'),
+                    'password' => env('REDIS_PASSWORD','Opstree@1234'),
+                    'port' => env('REDIS_PORT', 6379),
+                    'database' => 0,
+                ]*/
+
                 // Primary leader nodes
                 [
                     'host' => env('REDIS_LEADER_HOST'),
@@ -132,12 +139,12 @@ return [
                     'port' => env('REDIS_PORT', 6379),
                     'database' => 0,
                 ],
-                [
+                /*[
                     'host' => env('REDIS_LEADER_ADDITIONAL_HOST'),
                     'password' => env('REDIS_PASSWORD'),
                     'port' => env('REDIS_PORT', 6379),
                     'database' => 0,
-                ],
+                ],*/
                 // Follower nodes
                 [
                     'host' => env('REDIS_FOLLOWER_HOST'),
@@ -145,12 +152,12 @@ return [
                     'port' => env('REDIS_PORT', 6379),
                     'database' => 0,
                 ],
-                [
+                /*[
                     'host' => env('REDIS_FOLLOWER_ADDITIONAL_HOST'),
                     'password' => env('REDIS_PASSWORD'),
                     'port' => env('REDIS_PORT', 6379),
                     'database' => 0,
-                ],
+                ],*/
             ],
         ],
 

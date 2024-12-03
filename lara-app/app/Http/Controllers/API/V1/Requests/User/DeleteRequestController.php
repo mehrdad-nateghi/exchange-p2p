@@ -23,13 +23,13 @@ class DeleteRequestController extends Controller
                 'status' => TradeStatusEnum::CANCELED->value,
                 'canceled_at' => now(),
             ]);
-            $request->trades()->delete();
+            //$request->trades()->delete();
 
             // Soft delete the request
             $request->update([
                 'status' => RequestStatusEnum::CANCELED->value,
             ]);
-            $request->delete();
+            //$request->delete();
 
             DB::commit();
 

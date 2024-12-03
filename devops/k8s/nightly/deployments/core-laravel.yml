@@ -48,10 +48,10 @@ spec:
               value: 'false'
 
             # REDIS--------------------------------------
+            - name: REDIS_CLIENT
+              value: phpredis
             - name: REDIS_HOST
               value: redis
-            - name: REDIS_PORT
-              value: '6379'
             - name: REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -180,10 +180,10 @@ spec:
               value: 'false'
 
             # REDIS--------------------------------------
+            - name: REDIS_CLIENT
+              value: phpredis
             - name: REDIS_HOST
               value: redis
-            - name: REDIS_PORT
-              value: '6379'
             - name: REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
