@@ -125,15 +125,15 @@ return [
 
         'clusters' => [
             'default' => [
-                [
-                    'host' => env('REDIS_HOST', 'redis-cluster-leader.paylibero-staging.svc.cluster.local'),
+                /*[
+                    'host' => env('REDIS_HOST', 'redis-cluster-leader'),
                     'password' => env('REDIS_PASSWORD','Opstree@1234'),
                     'port' => env('REDIS_PORT', 6379),
                     'database' => 0,
-                ]
+                ]*/
 
                 // Primary leader nodes
-                /*[
+                [
                     'host' => env('REDIS_LEADER_HOST'),
                     'password' => env('REDIS_PASSWORD'),
                     'port' => env('REDIS_PORT', 6379),
@@ -157,7 +157,7 @@ return [
                     'password' => env('REDIS_PASSWORD'),
                     'port' => env('REDIS_PORT', 6379),
                     'database' => 0,
-                ],*/
+                ],
             ],
         ],
 
