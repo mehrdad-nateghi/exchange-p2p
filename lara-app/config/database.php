@@ -121,50 +121,67 @@ return [
 
     'redis' => [
 
-        'client' => env('phpredis'),
-        'cluster' => env(true),
+        'client' => env('REDIS_CLIENT', 'phpredis'),
+
         'clusters' => [
             'default' => [
+                /*[
+                    'host' => env('REDIS_HOST', 'redis-cluster-leader'),
+                    'password' => env('REDIS_PASSWORD','Opstree@1234'),
+                    'port' => env('REDIS_PORT', 6379),
+                    'database' => 0,
+                ]*/
+
                 // Primary leader nodes
                 [
-                    'host' => env('redis-cluster-leader'),
-                    'password' => env('Opstree@1234'),
-                    'port' => env(6379),
+                    'host' => env('REDIS_LEADER_HOST'),
+                    'password' => env('REDIS_PASSWORD'),
+                    'port' => env('REDIS_PORT', 6379),
                     'database' => 0,
                 ],
-                [
-                    'host' => env('redis-cluster-leader-additional'),
-                    'password' => env('Opstree@1234'),
-                    'port' => env(6379),
+                /*[
+                    'host' => env('REDIS_LEADER_ADDITIONAL_HOST'),
+                    'password' => env('REDIS_PASSWORD'),
+                    'port' => env('REDIS_PORT', 6379),
                     'database' => 0,
-                ],
+                ],*/
                 // Follower nodes
                 [
-                    'host' => env('redis-cluster-follower'),
-                    'password' => env('Opstree@1234'),
-                    'port' => env(6379),
+                    'host' => env('REDIS_FOLLOWER_HOST'),
+                    'password' => env('REDIS_PASSWORD'),
+                    'port' => env('REDIS_PORT', 6379),
                     'database' => 0,
                 ],
-                [
-                    'host' => env('redis-cluster-follower-additional'),
-                    'password' => env('Opstree@1234'),
-                    'port' => env(6379),
+                /*[
+                    'host' => env('REDIS_FOLLOWER_ADDITIONAL_HOST'),
+                    'password' => env('REDIS_PASSWORD'),
+                    'port' => env('REDIS_PORT', 6379),
                     'database' => 0,
-                ],
+                ],*/
             ],
         ],
 
         'options' => [
-            'cluster' => env('redis'),
+            'cluster' => env('REDIS_CLUSTER', 'redis'),
+            'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_') . '_database_'),
+        ],
+
+        'default' => [
+            'url' => env('REDIS_URL'),
+            'host' => env('REDIS_HOST', '127.0.0.1'),
+            'username' => env('REDIS_USERNAME'),
+            'password' => env('REDIS_PASSWORD'),
+            'port' => env('REDIS_PORT', '6379'),
+            'database' => env('REDIS_DB', '0'),
         ],
 
         'cache' => [
-            'url' => env(''),
-            'host' => env('redis-cluster-leader'),
-            'username' => env(''),
-            'password' => env('Opstree@1234'),
-            'port' => env(6379),
-            'database' => env(1),
+            'url' => env('REDIS_URL'),
+            'host' => env('REDIS_HOST', '127.0.0.1'),
+            'username' => env('REDIS_USERNAME'),
+            'password' => env('REDIS_PASSWORD'),
+            'port' => env('REDIS_PORT', '6379'),
+            'database' => env('REDIS_CACHE_DB', '1'),
         ],
 
     ],
