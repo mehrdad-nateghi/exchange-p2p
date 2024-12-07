@@ -9,7 +9,8 @@ resources:
   # - HPAs/queue-worker.yml
   - HPAs/pex-app.yml
   - HPAs/pex-admin.yml
-  - operators/redis/cluster.yml
+  # - operators/redis/cluster.yml
+  - operators/redis/standalone.yml
   - ingresses.yml
 
 patches:
