@@ -22,10 +22,10 @@ spec:
               value: 6LfVge4pAAAAANnXqccl7kEI6sxeXSLYUuDYKeSp
           resources:
             limits:
-              cpu: 500m
-              ephemeral-storage: 200M
-              memory: 1G
+              cpu: '.3'
+              ephemeral-storage: 1Gi
+              memory: .6Gi
             requests:
-              cpu: 500m
-              ephemeral-storage: 200M
-              memory: 1G
+              cpu: '.3'
+              ephemeral-storage: 1Gi
+              memory: .6Gi

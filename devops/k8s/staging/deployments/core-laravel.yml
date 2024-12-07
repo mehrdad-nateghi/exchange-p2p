@@ -51,14 +51,16 @@ spec:
               value: phpredis
             - name: REDIS_CLUSTER
               value: redis
-            - name: REDIS_LEADER_HOST
-              value: redis-cluster-leader
-            - name: REDIS_LEADER_ADDITIONAL_HOST
-              value: redis-cluster-leader-additional
-            - name: REDIS_FOLLOWER_HOST
-              value: redis-cluster-follower
-            - name: REDIS_FOLLOWER_ADDITIONAL_HOST
-              value: redis-cluster-follower-additional
+            - name: REDIS_HOST
+              value: redis-standalone
+            # - name: REDIS_LEADER_HOST
+            #   value: redis-cluster-leader
+            # - name: REDIS_LEADER_ADDITIONAL_HOST
+            #   value: redis-cluster-leader-additional
+            # - name: REDIS_FOLLOWER_HOST
+            #   value: redis-cluster-follower
+            # - name: REDIS_FOLLOWER_ADDITIONAL_HOST
+            #   value: redis-cluster-follower-additional
             - name: REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -139,13 +141,13 @@ spec:
         - name: core-laravel
           resources:
             limits:
-              cpu: '1'
-              ephemeral-storage: 200M
-              memory: 2G
+              cpu: '.3'
+              ephemeral-storage: 1Gi
+              memory: .6Gi
             requests:
-              cpu: '1'
-              ephemeral-storage: 200M
-              memory: 2G
+              cpu: '.3'
+              ephemeral-storage: 1Gi
+              memory: .6Gi
 
           env:
             # APP--------------------------------------
@@ -191,14 +193,16 @@ spec:
               value: phpredis
             - name: REDIS_CLUSTER
               value: redis
-            - name: REDIS_LEADER_HOST
-              value: redis-cluster-leader
-            - name: REDIS_LEADER_ADDITIONAL_HOST
-              value: redis-cluster-leader-additional
-            - name: REDIS_FOLLOWER_HOST
-              value: redis-cluster-follower
-            - name: REDIS_FOLLOWER_ADDITIONAL_HOST
-              value: redis-cluster-follower-additional
+            - name: REDIS_HOST
+              value: redis-standalone
+            # - name: REDIS_LEADER_HOST
+            #   value: redis-cluster-leader
+            # - name: REDIS_LEADER_ADDITIONAL_HOST
+            #   value: redis-cluster-leader-additional
+            # - name: REDIS_FOLLOWER_HOST
+            #   value: redis-cluster-follower
+            # - name: REDIS_FOLLOWER_ADDITIONAL_HOST
+            #   value: redis-cluster-follower-additional
             - name: REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
