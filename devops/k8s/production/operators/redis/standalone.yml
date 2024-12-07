@@ -13,10 +13,10 @@ spec:
     resources:
       requests:
         cpu: 101m
-        memory: 128Mi
+        memory: 256Mi
       limits:
         cpu: 101m
-        memory: 128Mi
+        memory: 256Mi
     redisSecret:
       name: redis-secret
       key: password
@@ -26,11 +26,11 @@ spec:
     imagePullPolicy: Always
     resources:
       requests:
-        cpu: 100m
-        memory: 128Mi
+        cpu: 101m
+        memory: 256Mi
       limits:
-        cpu: 100m
-        memory: 128Mi
+        cpu: 101m
+        memory: 256Mi
   storage:
     volumeClaimTemplate:
       spec:
