@@ -77,7 +77,7 @@ class Handler extends ExceptionHandler
         });
 
         $this->renderable(function (Throwable $e, $request) {
-            if (($e instanceof AccessDeniedHttpException || $e instanceof UnauthorizedException || ($e->getStatusCode() == Response::HTTP_UNAUTHORIZED))
+            if (($e instanceof AccessDeniedHttpException || $e instanceof UnauthorizedException /*|| ($e->getStatusCode() == Response::HTTP_UNAUTHORIZED)*/)
                 && (request()->wantsJson() || $request->is('api/*'))) {
                 Log::error($e);
 
@@ -129,7 +129,7 @@ class Handler extends ExceptionHandler
 
             return apiResponse()
                 ->failed()
-                ->internalServerError()
+                ->serverError()
                 ->serverError()
                 ->message(trans('api-messages.internal_server_error'))
                 ->getApiResponse();

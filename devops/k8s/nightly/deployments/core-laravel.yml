@@ -48,10 +48,10 @@ spec:
               value: 'false'
 
             # REDIS--------------------------------------
+            - name: REDIS_CLIENT
+              value: phpredis
             - name: REDIS_HOST
               value: redis
-            - name: REDIS_PORT
-              value: '6379'
             - name: REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -132,13 +132,13 @@ spec:
         - name: core-laravel
           resources:
             limits:
-              cpu: '.5'
+              cpu: '.3'
               ephemeral-storage: 1Gi
-              memory: 1Gi
+              memory: .6Gi
             requests:
-              cpu: '.5'
+              cpu: '.3'
               ephemeral-storage: 1Gi
-              memory: 1Gi
+              memory: .6Gi
 
           env:
             # APP--------------------------------------
@@ -180,10 +180,10 @@ spec:
               value: 'false'
 
             # REDIS--------------------------------------
+            - name: REDIS_CLIENT
+              value: phpredis
             - name: REDIS_HOST
               value: redis
-            - name: REDIS_PORT
-              value: '6379'
             - name: REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
