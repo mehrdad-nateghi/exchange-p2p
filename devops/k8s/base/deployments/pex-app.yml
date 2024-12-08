@@ -16,7 +16,7 @@ spec:
     metadata:
       labels:
         app: pex-app
-        commit-short-sha: "commit_${DEPLOY_COMMIT_SHORT_SHA}"
+        commit-short-sha: 'commit_${DEPLOY_COMMIT_SHORT_SHA}'
     spec:
       restartPolicy: Always
       imagePullSecrets:
@@ -36,6 +36,9 @@ spec:
 
             - name: NEXT_PUBLIC_AUTH_SESSION_KEY
               value: laravel_session
+
+            - name: NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID
+              value: GTM-K9SKCM27
 
             - name: NEXT_PUBLIC_AUTH_TOKEN
               value: pl-auth-token
