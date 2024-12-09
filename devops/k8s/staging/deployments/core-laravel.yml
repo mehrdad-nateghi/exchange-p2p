@@ -110,8 +110,6 @@ spec:
             # SANCTUM--------------------------------------
             - name: SANCTUM_STATEFUL_DOMAINS
               value: staging.paylibero.ir,admin.staging.paylibero.ir,staging.paylibero.de,admin.staging.paylibero.de,staging.paylibero.net,admin.staging.paylibero.net
-            - name: SESSION_DOMAIN
-              value: staging.paylibero.ir
 
             # AWS--------------------------------------
             - name: AWS_URL
@@ -252,8 +250,6 @@ spec:
             # SANCTUM--------------------------------------
             - name: SANCTUM_STATEFUL_DOMAINS
               value: staging.paylibero.ir,admin.staging.paylibero.ir,staging.paylibero.de,admin.staging.paylibero.de,staging.paylibero.net,admin.staging.paylibero.net
-            - name: SESSION_DOMAIN
-              value: staging.paylibero.ir
 
             # AWS--------------------------------------
             - name: AWS_URL

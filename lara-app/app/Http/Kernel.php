@@ -23,6 +23,7 @@ class Kernel extends HttpKernel
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
         \App\Http\Middleware\CorsMiddleware::class,
         \App\Http\Middleware\ForceJsonResponse::class,
+        \App\Http\Middleware\DynamicSessionDomain::class,
     ];
 
     /**
@@ -74,6 +75,6 @@ class Kernel extends HttpKernel
         'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
         //'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
         //'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
-        
+
     ];
 }
