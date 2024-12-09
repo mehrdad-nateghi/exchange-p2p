@@ -241,6 +241,9 @@ components:
               description: 'Array of bids'
               items:
                 $ref: '#/components/schemas/Bid'
+        user:
+          $ref: '#/components/schemas/User'
+
     GuestRequest:
       type: object
       required:
