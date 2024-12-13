@@ -6,6 +6,8 @@ use App\Interfaces\UserRepositoryInterface;
 use App\Models\VerificationCode;
 use App\Observers\VerificationCodeObserver;
 use App\Repositories\UserRepository;
+use App\Services\SMS\Interface\SMSProviderInterface;
+use App\Services\SMS\Services\Farapayamak\FarapayamakProvider;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\URL;
@@ -21,6 +23,15 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->app->bind(SMSProviderInterface::class, function ($app) {
+            //$provider = config('services.sms.default', 'kavenegar');
+
+            return match('farapayamk') {
+                'farapayamk' => new FarapayamakProvider(),
+                //'ghasedak' => new GhasedakProvider(),
+                default => throw new \Exception('Invalid SMS provider'),
+            };
+        });
 
     }
 

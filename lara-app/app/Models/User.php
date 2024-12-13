@@ -54,13 +54,6 @@ class User extends Authenticatable
 
     public $timestamps = true;
 
-    /*
-    * Get the Notifications for the User
-    */
-    public function notifications()
-    {
-        return $this->hasMany(Notification::class);
-    }
 
     /*
     * Get the AuthenticationLogs for the User
@@ -118,14 +111,6 @@ class User extends Authenticatable
     public function relatedEmails()
     {
         return $this->morphMany(Email::class, 'emailable');
-    }
-
-    /*
-    * Get the Notifications related the User (1 to n user-notification polymorphic relation)
-    */
-    public function relatedNotifications()
-    {
-        return $this->morphMany(Notification::class, 'notifiable');
     }
 
     /**
@@ -260,6 +245,11 @@ class User extends Authenticatable
                 TradeStatusEnum::COMPLETED->value,
             ]
         )->count();
+    }
+
+    public function receivesBroadcastNotificationsOn()
+    {
+        return 'App.Models.User.' . $this->ulid;
     }
 
 }
