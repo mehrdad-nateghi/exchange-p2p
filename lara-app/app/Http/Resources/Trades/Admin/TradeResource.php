@@ -2,8 +2,9 @@
 
 namespace App\Http\Resources\Trades\Admin;
 
-use App\Http\Resources\BidResource;
+use App\Http\Resources\Bids\Admin\BidResource;
 use App\Http\Resources\InvoiceResource;
+use App\Http\Resources\Requests\Admin\RequestResource;
 use App\Http\Resources\TradeStepResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -23,7 +24,12 @@ class TradeResource extends JsonResource
             'deposit_reason' => $this->deposit_reason,
             'deposit_reason_accepted' => $this->deposit_reason_accepted,
             'status' => $this->status->key(),
-            'bid' => new BidResource($this->bid),
+            'bid' => $this->whenLoaded('bid', function () {
+                return new BidResource($this->bid);
+            }),
+            'request' => $this->whenLoaded('request', function () {
+                return new RequestResource($this->request);
+            }),
             'steps' => $this->whenLoaded('tradeSteps', function () {
                 return TradeStepResource::collection($this->tradeSteps);
             }),
