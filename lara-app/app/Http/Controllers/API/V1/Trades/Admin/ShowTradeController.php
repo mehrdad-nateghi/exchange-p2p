@@ -14,7 +14,7 @@ class ShowTradeController extends Controller
         Trade $trade,
     ): JsonResponse {
         try {
-            $resource =  new TradeResource($trade->load('tradeSteps','invoices','bid.user','bid.paymentMethod','request.user'));
+            $resource =  new TradeResource($trade->load('tradeSteps','invoices','bid.user','bid.paymentMethod','request.user','request.paymentMethods'));
 
             return apiResponse()
                 ->message(trans('api-messages.retrieve_success', ['attribute' => trans('api-messages.trade')]))
