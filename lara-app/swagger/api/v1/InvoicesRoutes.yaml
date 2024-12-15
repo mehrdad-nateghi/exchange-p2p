@@ -20,3 +20,20 @@
             schema:
               type: string
             description: The URL to redirect to
+"/admins/invoices/{invoiceID}/transfer-to-seller":
+  post:
+    tags:
+      - invoices
+    summary: "transfer to the seller by invoiceID"
+    description: "This endpoint transfer to the seller."
+    operationId: transferToSeller
+    parameters:
+      - name: invoiceID
+        in: path
+        required: true
+        description: "The ULID of the invoice."
+        schema:
+          type: string
+    responses:
+      '200':
+        description: The Transfer to the seller was successful
