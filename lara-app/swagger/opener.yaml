@@ -316,6 +316,19 @@ components:
           type: string
           format: date-time
           description: 'Last update timestamp'
+        payment_methods:
+          type: object
+          required:
+            - items
+            - pagination
+          properties:
+            pagination:
+              $ref: '#/components/schemas/Pagination'
+            items:
+              type: array
+              description: 'Array of payment method items'
+              items:
+                $ref: '#/components/schemas/PaymentMethod'
     User:
       type: object
       required:
