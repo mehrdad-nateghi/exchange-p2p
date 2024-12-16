@@ -19,11 +19,12 @@ spec:
 
             - name: NEXT_PUBLIC_REACT_APP_SITE_KEY
               value: 6LfVge4pAAAAANnXqccl7kEI6sxeXSLYUuDYKeSp
-          limits:
-            cpu: '.3'
-            ephemeral-storage: 1Gi
-            memory: .6Gi
-          requests:
-            cpu: '.3'
-            ephemeral-storage: 1Gi
-            memory: .6Gi
+          resources:
+            limits:
+              cpu: '.5'
+              ephemeral-storage: 1Gi
+              memory: 1Gi
+            requests:
+              cpu: '.5'
+              ephemeral-storage: 1Gi
+              memory: 1Gi
