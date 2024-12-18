@@ -39,8 +39,7 @@ class VerificationCodeNotification extends Notification implements ShouldQueue
 
     public function toMail($notifiable): VerificationCodeEmail
     {
-        return (new VerificationCodeEmail($this->verificationCode))
-            ->to($this->email);
+        return (new VerificationCodeEmail($this->verificationCode))->to($this->email);
     }
 
     /**

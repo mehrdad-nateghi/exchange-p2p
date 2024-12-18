@@ -1,7 +1,7 @@
 <x-mail::message>
 # Mail Verification
 
-Your mail verification code will expire in 5 minutes.
+سلام
 <h2>{{ $verificationCode }}</h2>
 
 <p style="margin-top: 20px;">Thanks,<br>

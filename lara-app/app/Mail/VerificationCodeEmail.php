@@ -8,6 +8,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class VerificationCodeEmail extends Mailable
 {
@@ -33,7 +34,7 @@ class VerificationCodeEmail extends Mailable
     public function envelope()
     {
         return new Envelope(
-            subject: 'Send Verification Code',
+            subject: sprintf('%s: %s', config('app.name'), $this->verificationCode),
         );
     }
 
@@ -45,9 +46,11 @@ class VerificationCodeEmail extends Mailable
     public function content(): Content
     {
         return new Content(
-            markdown: 'emails.verification-code',
+            markdown: "emails.". app()->getLocale() .".verification-code",
             with: [
-                'verificationCode' => $this->verificationCode
+                'appName' => config('app.name'),
+                'verificationCodeExpirationTimePerMinutes' => config('constants.verification_code_expiration_time_per_minutes'),
+                'verificationCode' => $this->verificationCode,
             ],
         );
     }
