@@ -3,6 +3,7 @@
 namespace App\Notifications;
 
 use App\Services\Notifications\NotificationMessage;
+use Illuminate\Broadcasting\Channel;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -45,16 +46,16 @@ class TestNotification extends Notification
 
     public function toBroadcast($notifiable)
     {
-/*        $channel = $notifiable->receivesBroadcastNotificationsOn();
-        Log::info('toBroadcast called', [
-            'ulid' => $notifiable->ulid,
-            'channel' => $channel
-        ]);*/
-
         return new BroadcastMessage([
             'data' => 'This is a test notification',
             'created_at' => now()->toISOString(),
         ]);
+    }
+
+    // Override the default private channel with a public one
+    public function broadcastOn()
+    {
+        return new Channel('notifications');  // Public channel
     }
 
     public function toArray($notifiable)
