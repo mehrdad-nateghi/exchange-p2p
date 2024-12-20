@@ -8,6 +8,7 @@ use App\Enums\RequestStatusEnum;
 use App\Enums\TradeStatusEnum;
 use App\Enums\UserStatusEnum;
 use App\Models\Legacy\Invoice;
+use App\Services\Notifications\NotificationMessage;
 use App\Traits\Global\Ulid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -15,6 +16,7 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
@@ -42,6 +44,14 @@ class User extends Authenticatable
         'email_verified_at',
         'created_at'
     ];
+
+    /**
+     * Get user's full name
+     */
+    public function getFullNameAttribute(): string
+    {
+        return "{$this->first_name} {$this->last_name}";
+    }
 
     public function getStatusAttribute($value): ?string
     {
@@ -250,6 +260,49 @@ class User extends Authenticatable
     public function receivesBroadcastNotificationsOn()
     {
         return 'App.Models.User.' . $this->ulid;
+    }
+
+    /**
+     * Get formatted notification message
+     */
+    public function getNotificationMessage($notification): string
+    {
+        $notificationMessage = App::make(NotificationMessage::class);
+        return $notificationMessage->retrieve(
+            $notification->data['key'],
+            $notification->data['attributes']
+        )['message'][app()->getLocale()] ?? '';
+    }
+
+    /**
+     * Get all notifications with formatted messages
+     */
+    public function getFormattedNotifications()
+    {
+        return $this->notifications->map(function($notification) {
+            return [
+                'id' => $notification->id,
+                'message' => $this->getNotificationMessage($notification),
+                'created_at' => $notification->created_at,
+                'read_at' => $notification->read_at,
+                'data' => $notification->data
+            ];
+        });
+    }
+
+    /**
+     * Get unread notifications with formatted messages
+     */
+    public function getUnreadFormattedNotifications()
+    {
+        return $this->unreadNotifications->map(function($notification) {
+            return [
+                'id' => $notification->id,
+                'message' => $this->getNotificationMessage($notification),
+                'created_at' => $notification->created_at,
+                'data' => $notification->data
+            ];
+        });
     }
 
 }

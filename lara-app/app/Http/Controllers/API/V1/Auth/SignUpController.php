@@ -2,19 +2,17 @@
 
 namespace App\Http\Controllers\API\V1\Auth;
 
-use App\Data\UserData;
-use App\Data\VerificationCodeData;
 use App\Enums\RoleNameEnum;
 use App\Enums\UserStatusEnum;
 use App\Events\SignUpEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\Auth\SignUpRequest;
+use App\Notifications\SignUpNotification;
 use App\Services\API\V1\EmailNotificationService;
 use App\Services\API\V1\UserService;
 use App\Services\API\V1\VerificationCodeService;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -52,6 +50,9 @@ class SignUpController extends Controller
 
             // Dispatch Events
             SignUpEvent::dispatch($user);
+
+            // Notifications
+            $user->notify(new SignUpNotification());
 
             // Prepare data
             $data = [

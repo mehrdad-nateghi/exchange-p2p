@@ -2,11 +2,12 @@
 
 namespace App\Notifications;
 
+use App\Services\Notifications\NotificationMessage;
 use Illuminate\Bus\Queueable;
+use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use Illuminate\Notifications\Messages\BroadcastMessage;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\App;
 
 class TestNotification extends Notification
 {
@@ -19,9 +20,9 @@ class TestNotification extends Notification
 
     public function toDatabase($notifiable)
     {
-        return [
-            'data' => 'This is a test notification',
-        ];
+        return App::make(NotificationMessage::class)->store('signup_successful', [
+            'app_name' => config('app.name'),
+        ]);
     }
 
     public function toMail($notifiable)
