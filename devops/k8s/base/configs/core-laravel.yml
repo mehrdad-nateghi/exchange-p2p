@@ -5,7 +5,7 @@ metadata:
 data:
   APP_DEBUG: 'false'
   APP_KEY: 'base64:yQhAdFdboNEdYLvoysezy0/gyKxDdwJM9SsqdtCzNhw='
-  APP_NAME: Laravel
+  APP_NAME: Paylibero
   APP_URL: https://core-lara-33e1254e7d-paylibero-nightly.apps.ir-thr-ba1.arvancaas.ir
   CACHE_DRIVER: file
   DB_CONNECTION: mysql
