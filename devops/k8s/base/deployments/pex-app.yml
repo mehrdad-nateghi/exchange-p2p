@@ -35,7 +35,7 @@ spec:
               value: http://core-laravel:8000
 
             - name: NEXT_PUBLIC_AUTH_SESSION_KEY
-              value: laravel_session
+              value: paylibero_session
 
             - name: NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID
               value: GTM-K9SKCM27

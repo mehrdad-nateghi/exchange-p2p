@@ -14,13 +14,14 @@ metadata:
     nginx.ingress.kubernetes.io/proxy-buffer-size: 96k
     nginx.ingress.kubernetes.io/proxy-read-timeout: '1000'
     nginx.ingress.kubernetes.io/proxy-send-timeout: '1000'
-    nginx.ingress.kubernetes.io/auth-type: basic
-    nginx.ingress.kubernetes.io/auth-secret: basic-ingress-auth
-    nginx.ingress.kubernetes.io/auth-realm: 'Authentication Required'
+    # nginx.ingress.kubernetes.io/auth-type: basic
+    # nginx.ingress.kubernetes.io/auth-secret: basic-ingress-auth
+    # nginx.ingress.kubernetes.io/auth-realm: 'Authentication Required'
     #nginx.ingress.kubernetes.io/server-snippet: |
     #  client_header_buffer_size 100k;
     #  large_client_header_buffers 4 100k;
   name: paylibero
+  namespace: paylibero-nightly
 spec:
   ingressClassName: nginx
   rules:
