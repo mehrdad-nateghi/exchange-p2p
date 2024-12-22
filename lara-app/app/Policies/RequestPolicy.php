@@ -58,13 +58,13 @@ class RequestPolicy
     }
 
     /**
-     * Determine whether the user can delete the model.
+     * Determine whether the user can cancel the model.
      *
      * @param  \App\Models\User  $user
      * @param  \App\Models\Request  $request
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(User $user, Request $request)
+    public function cancel(User $user, Request $request)
     {
         return $user->id == $request->user_id;
     }

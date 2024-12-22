@@ -25,6 +25,7 @@ class RequestResource extends JsonResource
             //'user' => new UserResource($this->user),
             'user_role_on_request' => $this->user_role_on_request,
             'payment_methods' => PaymentMethodCollection::make($this->paymentMethods),
+            'canceled_at' => $this->canceled_at,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'deleted_at' => $this->deleted_at,

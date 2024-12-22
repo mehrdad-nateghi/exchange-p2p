@@ -28,6 +28,7 @@ return new class extends Migration
             $table->boolean('deposit_reason_accepted')->default(true);*/
             $table->tinyInteger('type')->index();
             $table->tinyInteger('status')->index();
+            $table->timestamp('canceled_at')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

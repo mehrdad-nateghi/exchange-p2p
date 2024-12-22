@@ -37,6 +37,7 @@ class Request extends Model
         // 'description', todo-mn: need to add it?
         'min_allowed_price',
         'max_allowed_price',
+        'canceled_at',
         /* 'deposit_reason',
          'deposit_reason_accepted'*/
     ];
