@@ -14,6 +14,7 @@ metadata:
     nginx.ingress.kubernetes.io/proxy-buffer-size: 96k
     nginx.ingress.kubernetes.io/proxy-read-timeout: '1000'
     nginx.ingress.kubernetes.io/proxy-send-timeout: '1000'
+    nginx.ingress.kubernetes.io/whitelist-source-range: '83.120.84.249'
     # nginx.ingress.kubernetes.io/auth-type: basic
     # nginx.ingress.kubernetes.io/auth-secret: basic-ingress-auth
     # nginx.ingress.kubernetes.io/auth-realm: 'Authentication Required'
