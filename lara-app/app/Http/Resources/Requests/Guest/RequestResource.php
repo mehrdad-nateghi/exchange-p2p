@@ -30,7 +30,6 @@ class RequestResource extends JsonResource
             'payment_methods' => $this->whenLoaded('paymentMethods', fn() => PaymentMethodCollection::make($this->paymentMethods)),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            //'deleted_at' => $this->deleted_at,
         ];
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Trades\Guest;
 
+use App\Http\Resources\Bids\Guest\BidResource;
 use App\Http\Resources\Requests\Guest\RequestResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -20,7 +21,12 @@ class TradeResource extends JsonResource
             'ulid' => $this->ulid,
             'number' => $this->number,
             'status' => $this->status->key(),
-            'request' => $this->whenLoaded('request', fn() => new RequestResource($this->request)),
+            'bid' => $this->whenLoaded('bid', function () {
+                return new BidResource($this->bid);
+            }),
+            'request' => $this->whenLoaded('request', function () {
+                return new RequestResource($this->request);
+            }),
             'completed_at' => $this->completed_at,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
