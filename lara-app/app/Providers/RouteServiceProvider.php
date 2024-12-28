@@ -43,6 +43,7 @@ class RouteServiceProvider extends ServiceProvider
             'AdminUsersRoutes',
             'AdminFilesRoutes',
             'AdminInvoiceRoutes',
+            'UsersNotificationsRoutes',
         ],
     ];
 

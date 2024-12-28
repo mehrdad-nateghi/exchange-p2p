@@ -16,8 +16,10 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
@@ -285,7 +287,11 @@ class User extends Authenticatable
                 'message' => $this->getNotificationMessage($notification),
                 'created_at' => $notification->created_at,
                 'read_at' => $notification->read_at,
-                'data' => $notification->data
+                'model' => [
+                    'ulid' => $notification->data['model']['ulid'] ?? Str::ulid(),
+                    'name' => $notification->data['model']['name'] ??  Arr::random(['trade','request','bid'])
+                ]
+                //'data' => $notification->data
             ];
         });
     }
@@ -300,7 +306,7 @@ class User extends Authenticatable
                 'id' => $notification->id,
                 'message' => $this->getNotificationMessage($notification),
                 'created_at' => $notification->created_at,
-                'data' => $notification->data
+                //'data' => $notification->data
             ];
         });
     }
