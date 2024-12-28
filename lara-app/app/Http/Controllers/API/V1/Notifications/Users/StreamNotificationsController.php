@@ -23,7 +23,9 @@ class StreamNotificationsController extends Controller
                         foreach ($notifications as $notification) {
                             echo "data: " . json_encode($notification) . "\n\n";
                         }
-                        ob_flush();
+                        if (ob_get_level() > 0) {
+                            ob_flush();
+                        }
                         flush();
                     }
                     sleep(1);
@@ -31,7 +33,9 @@ class StreamNotificationsController extends Controller
 
             } catch (\Throwable $t) {
                 Log::error($t);
-                ob_flush();
+                if (ob_get_level() > 0) {
+                    ob_flush();
+                }
                 flush();
             }
         }, Response::HTTP_OK);
