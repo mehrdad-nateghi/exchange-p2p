@@ -72,6 +72,7 @@ return [
     'pay_invoice' => 'pay invoice',
     'invoice' => 'invoice',
     'success' => 'success',
+    'notification' => 'notification',
     'failed' => 'failed',
     'error' => 'error',
     'deposit_reason' => 'Deposit reason',
