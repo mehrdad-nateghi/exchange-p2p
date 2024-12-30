@@ -4,6 +4,7 @@ namespace App\Policies;
 
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Auth\Access\Response;
 use Illuminate\Notifications\DatabaseNotification;
 
 class NotificationPolicy
@@ -37,17 +38,17 @@ class NotificationPolicy
 //        //
 //    }
 
-//    /**
-//     * Determine whether the user can update the model.
-//     *
-//     * @param  \App\Models\User  $user
-//     * @param  \App\Models\Notification  $notification
-//     * @return \Illuminate\Auth\Access\Response|bool
-//     */
-//    public function update(User $user, Notification $notification)
-//    {
-//        //
-//    }
+    /**
+     * Determine whether the user can update the model.
+     *
+     * @param User $user
+     * @param DatabaseNotification $notification
+     * @return Response|bool
+     */
+    public function update(User $user, DatabaseNotification $notification)
+    {
+        return $notification->notifiable_id === $user->id;
+    }
 //
 //    /**
 //     * Determine whether the user can delete the model.
