@@ -16,11 +16,8 @@ class UpdateNotificationReadAtController extends Controller
         try {
             $notification->markAsRead();
 
-            $resource =  new NotificationResource($notification);
-
             return apiResponse()
-                ->message(trans('api-messages.retrieve_success', ['attribute' => trans('api-messages.notification')]))
-                ->data($resource)
+                ->message(trans('api-messages.update_success', ['attribute' => trans('api-messages.notification')]))
                 ->getApiResponse();
         } catch (\Throwable $t) {
             Log::error($t);
