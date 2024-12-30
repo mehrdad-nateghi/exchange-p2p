@@ -279,9 +279,11 @@ class User extends Authenticatable
     /**
      * Get all notifications with formatted messages
      */
-    public function getFormattedNotifications()
+    public function getFormattedNotifications($notifications = null)
     {
-        return $this->notifications->map(function($notification) {
+        $notifications = $notifications ?? $this->notifications;
+
+        return $notifications->map(function($notification) {
             return [
                 'id' => $notification->id,
                 'message' => $this->getNotificationMessage($notification),
