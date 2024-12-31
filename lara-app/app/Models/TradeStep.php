@@ -15,7 +15,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class TradeStep extends Model
 {
-    use HasFactory,Ulid, Paginatable, SoftDeletes;
+    use HasFactory, Ulid, Paginatable, SoftDeletes;
 
     protected $fillable = ['name', 'description', 'priority', 'owner', 'status', 'duration_minutes', 'expire_at', 'completed_at'];
 
@@ -38,7 +38,7 @@ class TradeStep extends Model
         };*/
 
         // Is Buyer
-        if($owner === TradeStepOwnerEnum::BUYER->key()){
+        if ($owner === TradeStepOwnerEnum::BUYER->key()) {
             return $query->whereNotIn('priority', [4]);
         };
 
@@ -84,5 +84,9 @@ class TradeStep extends Model
         return $this->morphMany(File::class, 'fileable');
     }
 
+    public function isExpired(): bool
+    {
+        return $this->expire_at !== null && $this->expire_at->isPast();
+    }
 
 }

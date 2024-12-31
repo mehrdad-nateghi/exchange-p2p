@@ -12,16 +12,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasManyThrough;
-use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Trade extends Model
 {
-    use HasFactory,Ulid, Paginatable, Number, SoftDeletes;
+    use HasFactory, Ulid, Paginatable, Number, SoftDeletes;
 
-    protected $fillable = ['request_id', 'bid_id', 'status', 'completed_at', 'canceled_at', 'deposit_reason','deposit_reason_accepted'];
+    protected $fillable = ['request_id', 'bid_id', 'status', 'completed_at', 'canceled_at', 'deposit_reason', 'deposit_reason_accepted'];
 
     protected static $prefixNumber = 'TR-';
 
@@ -71,13 +69,33 @@ class Trade extends Model
     public function getStatusByOwner($owner)
     {
         // Is Buyer
-        if($owner === TradeStepOwnerEnum::BUYER->key()){
+        if ($owner === TradeStepOwnerEnum::BUYER->key()) {
             $stepThreeHasDone = $this->tradeSteps()->where('priority', 3)->where('status', TradeStepsStatusEnum::DONE)->exists();
-            if($stepThreeHasDone){
-               return TradeStatusEnum::COMPLETED->key();
+            if ($stepThreeHasDone) {
+                return TradeStatusEnum::COMPLETED->key();
             }
         };
 
         return $this->status->key();
+    }
+
+    public function currentTradeStep()
+    {
+        return $this->tradeSteps()
+            ->where('status', TradeStepsStatusEnum::DOING->value)
+            ->first();
+    }
+
+    public function nextTradeStep()
+    {
+        $currentStep = $this->currentTradeStep();
+
+        if (!$currentStep) {
+            return null;
+        }
+
+        return $this->tradeSteps()
+            ->where('priority', $currentStep->priority + 1)
+            ->first();
     }
 }
