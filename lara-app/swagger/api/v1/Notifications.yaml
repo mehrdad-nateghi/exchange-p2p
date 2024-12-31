@@ -1,0 +1,162 @@
+'/users/notifications/stream':
+  get:
+    tags:
+      - notifications
+    summary: 'Stream notifications in real-time'
+    description: 'Establishes a Server-Sent Events (SSE) connection to receive real-time notifications'
+    operationId: userNotificationsStream
+    responses:
+      '200':
+        description: 'Server-Sent Events stream established successfully'
+        content:
+          text/event-stream:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  description: 'Unique identifier for the notification'
+                  example: '5a05633c-1aff-4bd4-b8b5-35374099092d'
+                message:
+                  type: string
+                  description: 'Notification message content'
+                created_at:
+                  type: string
+                  format: date-time
+                  description: 'Timestamp when the notification was created'
+                  example: '2024-12-29T06:45:58.000000Z'
+                read_at:
+                  type: string
+                  format: date-time
+                  nullable: true
+                  description: 'Timestamp when the notification was read'
+                  example: null
+                model:
+                  type: object
+                  properties:
+                    ulid:
+                      type: string
+                      description: 'Unique identifier for the related model'
+                      example: '01JG8JP6CR1QPQ2VS9Z2XGQ3PB'
+                    name:
+                      type: string
+                      description: 'Name of the related model type'
+                      example: 'request'
+
+'/users/notifications/{id}/read':
+  patch:
+    tags:
+      - notifications
+    summary: 'Mark notification as read'
+    description: 'Marks a specific notification as read by its ID'
+    operationId: markNotificationAsRead
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: 'The UUID of the notification'
+        schema:
+          type: string
+          format: uuid
+          example: 'd0fa4110-dcea-4ff7-a12b-07530dedaf6b'
+    responses:
+      '200':
+        description: 'Notification marked as read successfully'
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/Base200Response'
+                - type: object
+                  required:
+                    - data
+                  properties:
+                    data:
+                      type: boolean
+                      example: true
+
+'/users/notifications':
+  get:
+    tags:
+      - notifications
+    summary: 'Get user notifications'
+    description: 'Retrieve paginated list of notifications with filtering and sorting options'
+    operationId: getUserNotifications
+    parameters:
+      - name: filter[read_status]
+        in: query
+        description: 'Filter notifications by read status'
+        required: false
+        schema:
+          type: string
+          enum: [read, unread]
+          example: read
+      - name: sort
+        in: query
+        description: 'Sort notifications by creation date'
+        required: false
+        schema:
+          type: string
+          enum: [created_at, -created_at]
+          example: -created_at
+      - $ref: '#/components/parameters/pageSize'
+      - $ref: '#/components/parameters/pageNumber'
+    responses:
+      '200':
+        description: 'The notifications were retrieved successfully'
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/Base200Response'
+                - type: object
+                  required:
+                    - data
+                  properties:
+                    data:
+                      type: object
+                      required:
+                        - items
+                        - pagination
+                      properties:
+                        items:
+                          type: array
+                          items:
+                            type: object
+                            required:
+                              - id
+                              - message
+                              - model
+                              - created_at
+                              - read_at
+                            properties:
+                              id:
+                                type: string
+                                format: uuid
+                                example: '825c96fd-3923-4bea-be3a-50fdbc6b05d6'
+                              message:
+                                type: string
+                                example: 'کاربر گرامی\nاز ثبت نام شما سپاسگزاریم! بسیار خوشحالیم که به خانواده Paylibero پیوسته اید.'
+                              model:
+                                type: object
+                                required:
+                                  - ulid
+                                  - name
+                                properties:
+                                  ulid:
+                                    type: string
+                                    example: ''
+                                  name:
+                                    type: string
+                                    example: ''
+                              created_at:
+                                type: string
+                                format: date-time
+                                example: '2024-12-28T09:11:13.000000Z'
+                              read_at:
+                                type: string
+                                format: date-time
+                                nullable: true
+                                example: null
+                        pagination:
+                          $ref: '#/components/schemas/Pagination'
