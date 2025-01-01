@@ -28,7 +28,7 @@ class StreamNotificationsController extends Controller
                         }
                         flush();
                     }
-                    sleep(1);
+                    sleep(10);
                 }
 
             } catch (\Throwable $t) {
