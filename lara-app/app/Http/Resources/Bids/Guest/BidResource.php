@@ -23,12 +23,11 @@ class BidResource extends JsonResource
             'price' => $this->price,
             'is_best_price' => $this->is_best_price,
             'status' => $this->status->key(),
-            'request' => $this->whenLoaded('request', fn() => new RequestResource($this->request)),
+            //'request' => $this->whenLoaded('request', fn() => new RequestResource($this->request)),
             'user' => $this->whenLoaded('user', fn() => new UserResource($this->user)),
             'payment_method' => $this->whenLoaded('paymentMethod', fn() => new PaymentMethodResource($this->paymentMethod)),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            //'deleted_at' => $this->deleted_at
         ];
     }
 }

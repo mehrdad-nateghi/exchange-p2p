@@ -14,7 +14,7 @@ class IndexTradeController extends Controller
     public function __invoke(): JsonResponse
     {
         try {
-            $trades = Trade::with(['request.bids.user'])
+            $trades = Trade::with(['request','bid'])
                 ->whereIn('status', [
                     TradeStatusEnum::PROCESSING->value,
                     TradeStatusEnum::COMPLETED->value,
