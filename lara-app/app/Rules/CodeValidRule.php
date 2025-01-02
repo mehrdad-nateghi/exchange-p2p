@@ -50,6 +50,6 @@ class CodeValidRule implements Rule
      */
     public function message(): string
     {
-        return trans('api-messages.invalid_verification_code');
+        return trans('validation.invalid_verification_code');
     }
 }

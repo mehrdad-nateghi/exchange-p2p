@@ -41,6 +41,6 @@ class VerificationCodeNotExpiredRule implements Rule
      */
     public function message(): string
     {
-        return "You cannot request a new verification code at this time. Please wait for the previous code to expire.";
+        return __('validation.verification_code_not_expired');
     }
 }

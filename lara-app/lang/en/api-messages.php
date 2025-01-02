@@ -24,7 +24,6 @@ return [
     'verification_code_sent_successfully' => 'Verification code sent successfully',
     // Sign Up
     'email_already_verified' => 'This email address has already been verified.',
-    'invalid_verification_code' => 'The verification code provided is invalid.',
     'user_signed_up_successfully' => 'User signed up successfully.',
     // Set Password
     'password_set_successfully' => 'Password has been set successfully.',

@@ -171,4 +171,8 @@ return [
 
     'attributes' => [],
 
+    // Custom validation messages
+    'verification_code_not_expired' => 'در حال حاضر امکان درخواست کد تایید جدید وجود ندارد. لطفا تا منقضی شدن کد قبلی صبر کنید.',
+    'invalid_verification_code' => 'کد تایید وارد شده معتبر نمی‌باشد.',
+
 ];
