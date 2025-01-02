@@ -181,6 +181,8 @@ return [
     'receipt_already_exists' => 'A receipt has already been uploaded for this step. You cannot upload another one.',
     'request_must_have_rial_account' => 'The request must have a rial bank account to allow you to upload a receipt.',
     'request_has_rial_payment_method' => 'A Rial Bank payment method already exists for this request. You cannot add another one.',
+    'payment_method_in_use' => "This payment method cannot be modified or deleted while it's involved in active request.",
+
 
 
 

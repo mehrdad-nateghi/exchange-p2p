@@ -59,6 +59,6 @@ class PaymentMethodIsInUse implements Rule
      */
     public function message()
     {
-        return "This payment method cannot be modified or deleted while it's involved in active request.";
+        return __('validation.payment_method_in_use');
     }
 }
