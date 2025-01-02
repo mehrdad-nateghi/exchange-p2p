@@ -45,7 +45,6 @@ return [
     'price' => 'قیمت',
     'not_valid' => ':attribute انتخاب شده معتبر نیست.',
     'bid_price_gte_min_allowed_price' => 'قیمت پیشنهادی باید حداقل :attribute باشد.',
-    'bid_price_must_between' => 'قیمت پیشنهادی باید بین :min و :max باشد.',
     'bid_price_must_gt' => 'قیمت پیشنهادی باید بیشتر از :price باشد.',
     'daily_rate_range' => 'محدوده نرخ روزانه',
     'payment_failed' => 'پرداخت ناموفق بود.',

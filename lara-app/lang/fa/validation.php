@@ -174,5 +174,9 @@ return [
     // Custom validation messages
     'verification_code_not_expired' => 'در حال حاضر امکان درخواست کد تایید جدید وجود ندارد. لطفا تا منقضی شدن کد قبلی صبر کنید.',
     'invalid_verification_code' => 'کد تایید وارد شده معتبر نمی‌باشد.',
+    'invalid_request' => 'درخواست انتخاب شده نامعتبر است.',
+    'bid_price_must_between' => 'قیمت پیشنهادی باید بین :min و :max باشد.',
+
+
 
 ];

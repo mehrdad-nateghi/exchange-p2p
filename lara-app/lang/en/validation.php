@@ -174,5 +174,9 @@ return [
     // Custom validation messages
     'verification_code_not_expired' => 'You cannot request a new verification code at this time. Please wait for the previous code to expire.',
     'invalid_verification_code' => 'The verification code provided is invalid.',
+    'invalid_request' => 'The selected request is invalid.',
+    'bid_price_must_between' => 'The bid price must between :min and :max.',
+
+
 
 ];
