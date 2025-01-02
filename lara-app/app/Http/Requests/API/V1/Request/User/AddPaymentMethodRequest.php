@@ -71,7 +71,7 @@ class AddPaymentMethodRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'payment_method.in' => 'A Rial Bank payment method already exists for this request. You cannot add another one.',
+            'payment_method.in' => __('validation.request_has_rial_payment_method'),
         ];
     }
 }

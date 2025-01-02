@@ -180,6 +180,8 @@ return [
     'receipt_rejection_time' => 'You can reject the receipt only after 70% of the expiration time has passed.',
     'receipt_already_exists' => 'A receipt has already been uploaded for this step. You cannot upload another one.',
     'request_must_have_rial_account' => 'The request must have a rial bank account to allow you to upload a receipt.',
+    'request_has_rial_payment_method' => 'A Rial Bank payment method already exists for this request. You cannot add another one.',
+
 
 
 
