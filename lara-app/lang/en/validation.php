@@ -176,6 +176,13 @@ return [
     'invalid_verification_code' => 'The verification code provided is invalid.',
     'invalid_request' => 'The selected request is invalid.',
     'bid_price_must_between' => 'The bid price must between :min and :max.',
+    'receipt_already_accepted_by_buyer' => 'This receipt has already been accepted by the buyer and cannot be updated.',
+    'receipt_rejection_time' => 'You can reject the receipt only after 70% of the expiration time has passed.',
+    'receipt_already_exists' => 'A receipt has already been uploaded for this step. You cannot upload another one.',
+    'request_must_have_rial_account' => 'The request must have a rial bank account to allow you to upload a receipt.',
+
+
+
 
 
 

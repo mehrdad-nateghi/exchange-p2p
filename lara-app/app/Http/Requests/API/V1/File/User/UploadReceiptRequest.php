@@ -60,7 +60,7 @@ class UploadReceiptRequest extends FormRequest
                 ->exists();
 
             if ($existingReceipt) {
-                $fail('A receipt has already been uploaded for this step. You cannot upload another one.');
+                $fail(__('validation.receipt_already_exists'));
             }
         };
     }
@@ -82,7 +82,7 @@ class UploadReceiptRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'rial_bank_account.in' =>  'The request must have a rial bank account to allow you to upload a receipt.',
+            'rial_bank_account.in' =>  __('validation.request_must_have_rial_account'),
         ];
     }
 }

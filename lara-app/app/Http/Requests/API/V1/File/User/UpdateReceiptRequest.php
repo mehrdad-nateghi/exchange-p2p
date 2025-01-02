@@ -38,13 +38,13 @@ class UpdateReceiptRequest extends FormRequest
     {
         if($this->file->status === FileStatusEnum::ACCEPT_BY_BUYER->value){
             throw ValidationException::withMessages([
-                'allow_update' => ['This receipt has already been accepted by the buyer and cannot be updated.'],
+                'allow_update' => [__('validation.receipt_already_accepted_by_buyer')],
             ]);
         }
 
         if($this->file->status === FileStatusEnum::REJECT_BY_BUYER->value){
             throw ValidationException::withMessages([
-                'allow_update' => ['This receipt has already been rejected by the buyer and cannot be updated.'],
+                'allow_update' => [__('validation.receipt_already_accepted_by_buyer')],
             ]);
         }
 
@@ -60,7 +60,7 @@ class UpdateReceiptRequest extends FormRequest
             $allowUpdate = $percentageElapsed >= 70 && $now->lessThan($expireAt);
             if (!$allowUpdate) {
                 throw ValidationException::withMessages([
-                    'allow_update' => ['You can reject the receipt only after 70% of the expiration time has passed.'],
+                    'allow_update' => [__('validation.receipt_rejection_time')],
                 ]);
             }
         }
