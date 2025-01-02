@@ -17,33 +17,24 @@ return [
     'un_processable_entity' => 'unAuthenticated',
     'item_not_found' => 'Item Not Found',
     'requested_link_does_not_exist' => 'requested link does not exist',
-
     // Health check
     'system_health_check_passed' => 'System health check passed successfully.',
     'system_health_check_failed' => 'System health check failed.',
-
     // Send verification Code
     'verification_code_sent_successfully' => 'Verification code sent successfully',
-
     // Sign Up
     'email_already_verified' => 'This email address has already been verified.',
     'invalid_verification_code' => 'The verification code provided is invalid.',
     'user_signed_up_successfully' => 'User signed up successfully.',
-
     // Set Password
     'password_set_successfully' => 'Password has been set successfully.',
-
     // Me
     'user_info_retrieved_successfully' => 'User information retrieved successfully.',
-
     // Login
     'user_logged_in_successfully' => 'User logged in successfully',
     'invalid_credentials' => 'Invalid credentials',
-
     // Verify Code
     'code_verified_successfully' => 'Verification code verified successfully',
-
-
     'user' => 'user',
     'user_stats' => 'user stats',
     'request' => 'request',
@@ -60,7 +51,6 @@ return [
     'token_refreshed_successfully' => 'Access token has been successfully refreshed.',
     'logout_successful' => 'You have been successfully logged out.',
     'price' => 'price',
-
     'not_valid' => 'The selected :attribute is invalid.',
     'bid_price_gte_min_allowed_price' => 'The bid price must be at least :attribute.',
     'bid_price_must_between' => 'The bid price must between :min and :max.',
@@ -78,7 +68,6 @@ return [
     'error' => 'error',
     'deposit_reason' => 'Deposit reason',
     'impersonation_success' => 'Successfully impersonating :attribute',
-
     'admin_return_success' => 'Successfully returned to admin account',
     'admin_return_failed' => 'Failed to return to admin account',
     'file' => 'file',
