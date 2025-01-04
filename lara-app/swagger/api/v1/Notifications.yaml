@@ -97,7 +97,7 @@
         required: false
         schema:
           type: string
-          enum: [created_at, -created_at]
+          enum: [created_at, -created_at, read_at]
           example: -created_at
       - $ref: '#/components/parameters/pageSize'
       - $ref: '#/components/parameters/pageNumber'
