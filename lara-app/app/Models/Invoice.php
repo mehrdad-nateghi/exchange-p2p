@@ -22,7 +22,7 @@ class Invoice extends Model
 {
     use HasFactory, Ulid, Paginatable, Number, SoftDeletes;
 
-    protected $fillable = ['user_id', 'amount', 'fee', 'status', 'type'];
+    protected $fillable = ['user_id', 'amount', 'fee', 'status', 'type', 'fee_foreign' ,'fee_foreign_currency_code'];
 
     protected static $prefixNumber = 'IN-';
 

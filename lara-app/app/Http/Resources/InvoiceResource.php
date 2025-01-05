@@ -19,6 +19,8 @@ class InvoiceResource extends JsonResource
             'number' => $this->number,
             'amount' => $this->amount,
             'fee' => $this->fee,
+            'fee_foreign' => $this->fee_foreign,
+            'fee_foreign_currency_code' => $this->fee_foreign_currency_code,
             //'total_payable_amount' => $this->total_payable_amount,
             'status' => $this->status->key(),
             'type' => $this->type->key(),

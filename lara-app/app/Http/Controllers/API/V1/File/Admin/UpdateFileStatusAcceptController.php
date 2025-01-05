@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\V1\File\Admin;
 
 use App\Enums\FileStatusEnum;
+use App\Enums\TradeStatusEnum;
 use App\Enums\TradeStepsStatusEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\File\Admin\UpdateFileStatusAcceptRequest;
@@ -38,6 +39,11 @@ class UpdateFileStatusAcceptController extends Controller
             $nextStep->update([
                 'status' => TradeStepsStatusEnum::DOING->value,
                 'expire_at' => Carbon::now()->addMinutes($nextStep->duration_minutes),
+            ]);
+
+            $trade->update([
+                'status' => TradeStatusEnum::PROCESSING->value,
+                'canceled_at' => null,
             ]);
 
             DB::commit();

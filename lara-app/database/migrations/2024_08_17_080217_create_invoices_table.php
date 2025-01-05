@@ -21,6 +21,8 @@ return new class extends Migration
             $table->morphs('invoiceable');
             $table->decimal('amount', 13, 2);
             $table->decimal('fee', 13, 2)->default(0);
+            $table->decimal('fee_foreign', 13, 2)->default(0);  // Fee in foreign currency
+            $table->string('fee_foreign_currency_code', 3)->default('EUR');  // Currency code (EUR, USD, etc)
             $table->tinyInteger('type');
             $table->tinyInteger('status');
             $table->timestamps();

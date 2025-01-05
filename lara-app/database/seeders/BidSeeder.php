@@ -131,6 +131,7 @@ class BidSeeder extends Seeder
             $amount = $bid->refresh()->price * $request->volume;
             $feePercentage = config('constants.invoice_fee_percentage');
             $fee = round($amount * ($feePercentage / 100), 2);
+            $feeForeign = round($request->volume * ($feePercentage / 100), 2);
 
             $userId = $request->type->value == RequestTypeEnum::BUY->value ? $request->user_id : $bid->user_id;
 
@@ -138,6 +139,7 @@ class BidSeeder extends Seeder
                 'user_id' => $userId,
                 'amount' => $amount,
                 'fee' => $fee,
+                'fee_foreign' => $feeForeign,
                 'status' => InvoiceStatusEnum::PENDING->value,
                 'type' => InvoiceTypeEnum::STEP_ONE_PAY_TOMAN_TO_SYSTEM->value,
             ]);
