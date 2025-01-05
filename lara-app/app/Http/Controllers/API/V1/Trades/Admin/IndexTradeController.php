@@ -21,10 +21,40 @@ class IndexTradeController extends Controller
         //dd($request->all());
         try {
             $trades = QueryBuilder::for(Trade::class)
+                ->with([
+                    'tradeSteps',
+                    'invoices',
+                    'request.user',
+                    'request.paymentMethods',
+                    'bid.user',
+                    'bid.paymentMethod'
+                ])
+                ->select('trades.*')
+                ->allowedFilters([
+                    AllowedFilter::custom('status', new TradeStatusFilter()),
+                    'number'
+                ])
+                ->defaultSort('-created_at')
+                ->allowedSorts('created_at')
+                ->paginateWithDefault();
+            /*
+            $trades = QueryBuilder::for(Trade::class)
                 ->with(['tradeSteps' => function($query) {
                     $query->select('*');
                 }])
                 ->with(['invoices' => function($query) {
+                    $query->select('*');
+                }])
+                ->with(['request.user' => function($query) {
+                    $query->select('*');
+                }])
+                ->with(['request.paymentMethods' => function($query) {
+                    $query->select('*');
+                }])
+                ->with(['bid.user' => function($query) {
+                    $query->select('*');
+                }])
+                ->with(['bid.paymentMethod' => function($query) {
                     $query->select('*');
                 }])
                 ->select([
@@ -36,7 +66,7 @@ class IndexTradeController extends Controller
                 ])
                 ->defaultSort(['-created_at'])
                 ->allowedSorts('created_at')
-                ->paginateWithDefault();
+                ->paginateWithDefault();*/
 
             $trades = new TradeCollection($trades);
 
