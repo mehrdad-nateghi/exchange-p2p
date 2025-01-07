@@ -12,7 +12,7 @@ class TradeStatusFilter implements Filter
 {
     public function __invoke(Builder $query, $value, string $property): void
     {
-        $types = $value === 'active' ? [TradeStatusEnum::PROCESSING->value] : [TradeStatusEnum::COMPLETED->value, TradeStatusEnum::CANCELED->value, TradeStatusEnum::SUSPEND->value];
+        $types = $value === 'active' ? [TradeStatusEnum::PROCESSING->value, TradeStatusEnum::SUSPEND->value] : [TradeStatusEnum::COMPLETED->value, TradeStatusEnum::CANCELED->value];
 
         if ($types) {
             $query->whereIn('trades.status', $types);
