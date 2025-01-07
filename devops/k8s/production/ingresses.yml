@@ -17,6 +17,7 @@ metadata:
     #nginx.ingress.kubernetes.io/server-snippet: |
     #  client_header_buffer_size 100k;
     #  large_client_header_buffers 4 100k;
+    nginx.ingress.kubernetes.io/whitelist-source-range: '194.5.193.35/32'
   name: paylibero
 spec:
   ingressClassName: nginx
