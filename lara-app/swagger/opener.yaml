@@ -624,6 +624,7 @@ components:
         - number
         - amount
         - fee
+        - fee_foreign
         - status
         - type
         - created_at
@@ -636,6 +637,8 @@ components:
         amount:
           type: string
         fee:
+          type: string
+        fee_foreign:
           type: string
         status:
           type: string
