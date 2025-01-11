@@ -19,6 +19,7 @@
     "paylibero",
     "phpmyadmin",
     "RECAPTCHA",
-    "statefulsets"
+    "statefulsets",
+    "Updamus"
   ]
 }
