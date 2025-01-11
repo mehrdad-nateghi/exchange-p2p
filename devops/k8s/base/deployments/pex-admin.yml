@@ -38,7 +38,7 @@ spec:
               value: http://core-laravel:8000
 
             - name: NEXT_PUBLIC_AUTH_SESSION_KEY
-              value: laravel_session
+              value: paylibero_session
           resources: {}
           livenessProbe:
             failureThreshold: 5
