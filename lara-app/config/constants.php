@@ -4,7 +4,7 @@
 return [
     'verification_code_expiration_time_per_minutes' => env('VERIFICATION_CODE_EXPIRATION_TIME_PER_MINUTES', 60),
     'bid_price_plus_latest_bid_price_rial' => env('BID_PRICE_PLUS_LATEST_BID_PRICE_RIAL', 100),
-    'invoice_fee_percentage' => env('INVOICE_FEE_PERCENTAGE', 10),
+    'invoice_fee_percentage' => env('INVOICE_FEE_PERCENTAGE', 0),
 
     'Euro_Daily_Rate' => '54000', // Keep the Euro Daily Rate Value in Toman to Serve in Create Request Process
 
