@@ -160,3 +160,26 @@
                                 example: null
                         pagination:
                           $ref: '#/components/schemas/Pagination'
+
+'/users/notifications/read-all':
+  patch:
+    tags:
+      - notifications
+    summary: 'Mark all notifications as read'
+    description: 'Marks all notifications as read'
+    operationId: markAllNotificationsAsRead
+    responses:
+      '200':
+        description: 'All notifications marked as read successfully'
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/Base200Response'
+                - type: object
+                  required:
+                    - data
+                  properties:
+                    data:
+                      type: object
+                      example: null
