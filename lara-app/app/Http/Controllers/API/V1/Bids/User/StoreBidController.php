@@ -8,6 +8,7 @@ use App\Enums\RequestStatusEnum;
 use App\Enums\RequestTypeEnum;
 use App\Enums\TradeStatusEnum;
 use App\Enums\TradeStepsStatusEnum;
+use App\Events\BidStoredEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\Bid\Users\StoreBidRequest;
 use App\Http\Resources\BidResource;
@@ -37,7 +38,9 @@ class StoreBidController extends Controller
                 'status' => $request->input('status'),
             ]);
 
-            if($request->input('must_accept_bid')){
+            $mustAcceptBid = $request->input('must_accept_bid');
+
+            if($mustAcceptBid){
                 // update bid
                 $bid = $bidService->acceptBid($bid);
 
@@ -47,7 +50,7 @@ class StoreBidController extends Controller
                 ]);
 
                 // create trade
-                $trade = $bid->trades()->create([
+                $trade = $bid->trade()->create([
                     'request_id' => $bid->request_id,
                     'status' => TradeStatusEnum::PROCESSING->value,
                 ]);
@@ -103,7 +106,50 @@ class StoreBidController extends Controller
 
             $resource = new BidResource($bid->refresh());
 
+            event(new BidStoredEvent($bid, $mustAcceptBid));
+
             DB::commit();
+
+            ///// Notifications /////
+//            $requester = $bid->request;
+//            $otherBidders = $bid->otherBidders;
+//            $bidder = $bid->user;
+//
+//            if($request->input('must_accept_bid')){
+//                // Notify Requester
+//                Notification::send(
+//                    $requester,
+//                    new BidAcceptedAutomaticNotification($bid, BidRegisteredNotificationSendToEnum::REQUESTER->value)
+//                );
+//
+//                // Notify Bid Winner
+//                Notification::send(
+//                    $bidder,
+//                    new BidAcceptedAutomaticNotification($bid, BidRegisteredNotificationSendToEnum::BIDDER_WINNER->value)
+//                );
+//
+//                // Notify Other Bidders
+//                if(!empty($otherBidders)){ // if empty? it's the first bid
+//                    Notification::send(
+//                        $otherBidders,
+//                        new BidAcceptedAutomaticNotification($bid, BidRegisteredNotificationSendToEnum::OTHER_BIDDERS->value)
+//                    );
+//                }
+//            }else{
+//                // Notify requester
+//                Notification::send(
+//                    $requester,
+//                    new BidRegisteredNotification($bid, BidRegisteredNotificationSendToEnum::REQUESTER->value)
+//                );
+//
+//                // Notify Other Bidders
+//                if(!empty($otherBidders)){ // if empty? it's the first bid
+//                    Notification::send(
+//                        $otherBidders,
+//                        new BidRegisteredNotification($bid, BidRegisteredNotificationSendToEnum::OTHER_BIDDERS->value)
+//                    );
+//                }
+//            }
 
             return apiResponse()
                 ->message(trans('api-messages.create_success', ['attribute' => trans('api-messages.bid')]))

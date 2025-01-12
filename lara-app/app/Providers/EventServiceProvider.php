@@ -2,8 +2,12 @@
 
 namespace App\Providers;
 
+use App\Events\BidStoredEvent;
+use App\Events\BidAcceptedEvent;
 use App\Events\SignUpEvent;
 use App\Listeners\AssignDefaultPaymentMethodToUserListener;
+use App\Listeners\BidAcceptedByRequesterNotificationsListener;
+use App\Listeners\BidRegisterNotificationsListener;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 class EventServiceProvider extends ServiceProvider
@@ -16,6 +20,14 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         SignUpEvent::class => [
             AssignDefaultPaymentMethodToUserListener::class,
+        ],
+
+        BidStoredEvent::class => [
+            BidRegisterNotificationsListener::class,
+        ],
+
+        BidAcceptedEvent::class => [
+            BidAcceptedByRequesterNotificationsListener::class,
         ],
     ];
 

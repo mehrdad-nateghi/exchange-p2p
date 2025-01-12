@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -37,6 +38,11 @@ class Bid extends Model
     public function request(): BelongsTo
     {
         return $this->belongsTo(Request::class);
+    }
+
+    public function trade(): HasOne
+    {
+        return $this->hasOne(Trade::class);
     }
 
     public function paymentMethod(): BelongsTo
@@ -98,8 +104,35 @@ class Bid extends Model
         return $this->price == $bestPrice;
     }
 
+    // deprecated
     public function trades(): HasMany
     {
         return $this->hasMany(Trade::class);
+    }
+
+    public function getIsFirstBidAttribute()
+    {
+        $firstBid = static::query()
+            ->where('request_id', $this->request_id)
+            ->orderBy('created_at')
+            ->first();
+
+        return $firstBid && $firstBid->id === $this->id;
+    }
+
+    public function getIsNotFirstBidAttribute()
+    {
+        return !$this->is_first_bid;
+    }
+
+    public function getOtherBiddersAttribute()
+    {
+        return static::query()
+            ->where('request_id', $this->request_id)
+            ->where('user_id', '!=', $this->user_id)
+            ->with('user')
+            ->get()
+            ->pluck('user')
+            ->unique();
     }
 }

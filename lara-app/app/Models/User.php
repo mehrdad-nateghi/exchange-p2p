@@ -290,8 +290,8 @@ class User extends Authenticatable
                 'created_at' => $notification->created_at,
                 'read_at' => $notification->read_at,
                 'model' => [
-                    'ulid' => $notification->data['model']['ulid'] ?? Str::ulid(),
-                    'name' => $notification->data['model']['name'] ??  Arr::random(['trade','request','bid'])
+                    'ulid' => $notification->data['model']['ulid'],
+                    'name' => $notification->data['model']['name']
                 ]
                 //'data' => $notification->data
             ];

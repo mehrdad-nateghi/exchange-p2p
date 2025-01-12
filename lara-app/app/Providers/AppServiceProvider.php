@@ -2,17 +2,13 @@
 
 namespace App\Providers;
 
-use App\Interfaces\UserRepositoryInterface;
 use App\Models\VerificationCode;
 use App\Observers\VerificationCodeObserver;
-use App\Repositories\UserRepository;
+use App\Services\Notifications\NotificationMessage;
 use App\Services\SMS\Interface\SMSProviderInterface;
 use App\Services\SMS\Services\Farapayamak\FarapayamakProvider;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
-use Laravel\Passport\Passport;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -33,6 +29,7 @@ class AppServiceProvider extends ServiceProvider
             };
         });
 
+        $this->app->singleton(NotificationMessage::class);
     }
 
     /**

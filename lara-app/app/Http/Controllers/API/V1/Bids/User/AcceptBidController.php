@@ -8,8 +8,9 @@ use App\Enums\RequestStatusEnum;
 use App\Enums\RequestTypeEnum;
 use App\Enums\TradeStatusEnum;
 use App\Enums\TradeStepsStatusEnum;
+use App\Events\BidAcceptedEvent;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\API\V1\Bid\Users\UpdateBidRequest;
+use App\Http\Requests\API\V1\Bid\Users\AcceptBidRequest;
 use App\Http\Resources\BidResource;
 use App\Models\Bid;
 use App\Models\Step;
@@ -19,12 +20,12 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-class UpdateBidController extends Controller
+class AcceptBidController extends Controller
 {
     public function __invoke(
-        UpdateBidRequest $request,
-        Bid $bid,
-        BidService $bidService
+        AcceptBidRequest $request,
+        Bid              $bid,
+        BidService       $bidService
     ): JsonResponse {
 
         try {
@@ -39,7 +40,7 @@ class UpdateBidController extends Controller
             ]);
 
             // create trade
-            $trade = $bid->trades()->create([
+            $trade = $bid->trade()->create([
                 'request_id' => $bid->request_id,
                 'status' => TradeStatusEnum::PROCESSING->value,
             ]);
@@ -97,6 +98,8 @@ class UpdateBidController extends Controller
             $resource = new BidResource($bid);
 
             DB::commit();
+
+            event(new BidAcceptedEvent($bid));
 
             return apiResponse()
                 ->message(trans('api-messages.update_success', ['attribute' => trans('api-messages.bid')]))
