@@ -3,6 +3,7 @@
 namespace App\Notifications;
 
 use App\Enums\NotificationIconsEnum;
+use App\Enums\NotificationKeyNameEnum;
 use App\Enums\NotificationModelNamesEnum;
 use App\Enums\NotificationRecipientTypeEnum;
 use App\Models\Bid;
@@ -52,7 +53,7 @@ class BidRegisteredNotification extends Notification
     private function requesterNotification()
     {
         return app()->make(NotificationMessage::class)->store(
-            'bid_registered_to_requester',
+            NotificationKeyNameEnum::BID_REGISTERED_TO_REQUESTER->value,
             [
                 'request_number' => $this->request->number,
                 'bid_price' => $this->bid->price,
@@ -70,7 +71,7 @@ class BidRegisteredNotification extends Notification
     private function otherBiddersNotification()
     {
         return app()->make(NotificationMessage::class)->store(
-            'bid_registered_to_other_bidders',
+            NotificationKeyNameEnum::BID_REGISTERED_TO_OTHER_BIDDERS->value,
             [
                 'request_number' => $this->request->number,
                 'bid_price' => $this->bid->price,

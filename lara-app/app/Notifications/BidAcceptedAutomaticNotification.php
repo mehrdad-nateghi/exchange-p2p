@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Enums\NotificationKeyNameEnum;
 use App\Enums\NotificationRecipientTypeEnum;
 use App\Enums\NotificationIconsEnum;
 use App\Enums\NotificationModelNamesEnum;
@@ -60,7 +61,7 @@ class BidAcceptedAutomaticNotification extends Notification
     private function requesterNotification()
     {
         return app()->make(NotificationMessage::class)->store(
-            'bid_accepted_automatic_to_requester',
+            NotificationKeyNameEnum::BID_ACCEPTED_AUTOMATIC_TO_REQUESTER->value,
             [
                 'request_number' => $this->request->number,
             ],
@@ -80,7 +81,7 @@ class BidAcceptedAutomaticNotification extends Notification
     private function BidderWinnerNotification()
     {
         return app()->make(NotificationMessage::class)->store(
-            'bid_accepted_automatic_to_bidder',
+            NotificationKeyNameEnum::BID_ACCEPTED_AUTOMATIC_TO_BIDDER->value,
             [
                 'request_number' => $this->request->number,
             ],
@@ -97,7 +98,7 @@ class BidAcceptedAutomaticNotification extends Notification
     private function otherBiddersNotification()
     {
         return app()->make(NotificationMessage::class)->store(
-            'bid_accepted_automatic_to_other_bidders',
+            NotificationKeyNameEnum::BID_ACCEPTED_AUTOMATIC_TO_OTHER_BIDDERS->value,
             [
                 'request_number' => $this->request->number,
                 //'bid_price' => $this->bid->price,

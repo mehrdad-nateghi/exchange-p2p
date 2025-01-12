@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Enums\NotificationKeyNameEnum;
 use App\Mail\SignUpEmail;
 use App\Services\Notifications\NotificationMessage;
 use Illuminate\Bus\Queueable;
@@ -39,7 +40,7 @@ class SignUpNotification extends Notification implements ShouldQueue
 
     public function toDatabase($notifiable)
     {
-        return App::make(NotificationMessage::class)->store('signup_successful', [
+        return App::make(NotificationMessage::class)->store(NotificationKeyNameEnum::SIGNUP_SUCCESSFUL->value, [
             'app_name' => config('app.name'),
         ]);
     }
