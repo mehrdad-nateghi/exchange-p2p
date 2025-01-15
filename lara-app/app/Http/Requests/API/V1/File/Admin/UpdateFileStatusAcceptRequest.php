@@ -24,11 +24,10 @@ class UpdateFileStatusAcceptRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         $fileStatus = $this->file->status->value;
-        $step = $this->file->fileable;
+        $step = $this->file->fileable->trade->currentTradeStep();
 
-        $canUpdate = ($fileStatus === FileStatusEnum::UPLOADED->value && $step->isExpired()
-                || $fileStatus === FileStatusEnum::REJECT_BY_BUYER->value)
-            && $step->status === TradeStepsStatusEnum::DOING->value;
+        $canUpdate = ($fileStatus === FileStatusEnum::UPLOADED->value && $step->isExpired() || $fileStatus === FileStatusEnum::REJECT_BY_BUYER->value) &&
+            $step->status === TradeStepsStatusEnum::DOING->value;
 
         $this->merge([
             'allow_update' => $canUpdate
