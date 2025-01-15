@@ -9,7 +9,6 @@ use Illuminate\Contracts\Validation\Rule;
 class ValidatePriceForBid implements Rule
 {
     private string $errorMessage = '';
-
     protected Request $request;
 
     public function __construct(Request $request)
@@ -17,59 +16,119 @@ class ValidatePriceForBid implements Rule
         $this->request = $request;
     }
 
-    public function passes($attribute, $value)
+    private function getMinPriceDifference(): int
+    {
+        return config('constants.bid_price_plus_latest_bid_price_rial');
+    }
+
+    public function passes($attribute, $value): bool
+    {
+        if (!$this->validateRequest()) {
+            return false;
+        }
+
+        $bidPrice = (int) $value;
+        $requestPrice = (int) $this->request->price;
+
+        // Auto-accept if bid price equals request price
+        if ($bidPrice === $requestPrice) {
+            return true;
+        }
+
+        $latestBid = $this->request->bids()->latest()->first();
+
+        return $this->validateBidPrice($bidPrice, $latestBid);
+    }
+
+    private function validateRequest(): bool
     {
         if (!$this->request) {
             $this->errorMessage = __('validation.invalid_request');
             return false;
         }
+        return true;
+    }
 
-        $latestBid = $this->request->bids()->latest()->first();
-
-        $value = (int) $value;
+    private function validateBidPrice(int $bidPrice, $latestBid): bool
+    {
         $requestPrice = (int) $this->request->price;
         $minAllowedPrice = (int) $this->request->min_allowed_price;
         $maxAllowedPrice = (int) $this->request->max_allowed_price;
         $isBuyRequest = $this->request->type->value === RequestTypeEnum::BUY->value;
 
         if (empty($latestBid)) {
-            if ($isBuyRequest) {
-                // For BUY: First bid should be between request_price and max_allowed_price (exclusive request_price)
-                if ($value < $requestPrice || $value > $maxAllowedPrice) {
-                    $this->errorMessage = __('validation.bid_price_must_between', ['min' => $requestPrice, 'max' => $maxAllowedPrice]);
-                    return false;
-                }
-            } else {
-                // For SELL: First bid should be between min_allowed_price and request_price (exclusive request_price)
-                if ($value > $requestPrice || $value < $minAllowedPrice) {
-                    $this->errorMessage = __('validation.bid_price_must_between', ['min' => $minAllowedPrice, 'max' => $requestPrice]);
-                    return false;
-                }
-            }
+            return $this->validateFirstBid($bidPrice, $requestPrice, $minAllowedPrice, $maxAllowedPrice, $isBuyRequest);
         }
 
-        if (!empty($latestBid)) {
-            if ($isBuyRequest) {
-                $maxPrice = $latestBid->price - config('constants.bid_price_plus_latest_bid_price_rial');
-                // For BUY: New bid must be lower than last bid but higher than request_price
-                if ($value < $requestPrice || $value > $maxPrice) {
-                    $this->errorMessage = __('validation.bid_price_must_between', ['min' => $requestPrice, 'max' => $maxPrice]);
-                    return false;
-                }
-            } else {
-                $minPrice = $latestBid->price + config('constants.bid_price_plus_latest_bid_price_rial');
-                // For SELL: New bid must be higher than last bid but lower than request_price
-                if ($value > $requestPrice || $value < $minPrice) {
-                    $this->errorMessage = __('validation.bid_price_must_between', ['min' => $minPrice, 'max' => $requestPrice]);
-                    return false;
-                }
+        return $this->validateSubsequentBid($bidPrice, $requestPrice, $latestBid, $isBuyRequest);
+    }
+
+    private function validateFirstBid(
+        int $bidPrice,
+        int $requestPrice,
+        int $minAllowedPrice,
+        int $maxAllowedPrice,
+        bool $isBuyRequest
+    ): bool {
+        if ($isBuyRequest) {
+            // BUY: First bid should be lower than max_allowed_price but higher than request_price
+            if ($bidPrice < $requestPrice || $bidPrice > $maxAllowedPrice) {
+                $this->errorMessage = __('validation.bid_price_must_between', [
+                    'min' => $requestPrice,
+                    'max' => $maxAllowedPrice
+                ]);
+                return false;
+            }
+        } else {
+            // SELL: First bid should be higher than min_allowed_price but lower than request_price
+            if ($bidPrice > $requestPrice || $bidPrice < $minAllowedPrice) {
+                $this->errorMessage = __('validation.bid_price_must_between', [
+                    'min' => $minAllowedPrice,
+                    'max' => $requestPrice
+                ]);
+                return false;
             }
         }
-
         return true;
     }
 
-    public function message()
+    private function validateSubsequentBid(
+        int $bidPrice,
+        int $requestPrice,
+            $latestBid,
+        bool $isBuyRequest
+    ): bool {
+        $priceDifference = $this->getMinPriceDifference();
+
+        if ($isBuyRequest) {
+            $maxPrice = $latestBid->price - $priceDifference;
+            // Ensure maxPrice doesn't exceed the valid range
+            $maxPrice = min($maxPrice, $latestBid->price - 1);
+            // BUY: New bid must be lower than last bid but higher than request_price
+            if ($bidPrice < $requestPrice || $bidPrice > $maxPrice) {
+                $this->errorMessage = __('validation.bid_price_must_between', [
+                    'min' => $requestPrice,
+                    'max' => max($requestPrice + 1, $maxPrice)
+                ]);
+                return false;
+            }
+        } else {
+            $minPrice = $latestBid->price + $priceDifference;
+            // Ensure minPrice doesn't go below the valid range
+            $minPrice = max($minPrice, $latestBid->price + 1);
+            // SELL: New bid must be higher than last bid but lower than request_price
+            if ($bidPrice > $requestPrice || $bidPrice < $minPrice) {
+                $this->errorMessage = __('validation.bid_price_must_between', [
+                    'min' => min($requestPrice - 1, $minPrice),
+                    'max' => $requestPrice
+                ]);
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public function message(): string
     {
         return $this->errorMessage;
     }

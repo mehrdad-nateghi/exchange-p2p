@@ -9,45 +9,37 @@ class NotificationMessage
 {
     private array $supportedLocales;
     private string $baseKey = 'database-notifications';
-
-    private string $separator = PHP_EOL; // Using PHP_EOL instead of "\n"
+    private string $separator = PHP_EOL;
 
     public function __construct(array $supportedLocales = ['en', 'fa'])
     {
         $this->supportedLocales = $supportedLocales;
     }
 
-    /**
-     * Store notification data in database
-     */
-    public function store(string $key, array $attributes = []): array
+    public function store(string $key, array $messageAttributes = [], array $info = []): array
     {
-        // Validate the key and attributes before storing
         $this->validateKey($key);
-        $sanitizedAttributes = $this->sanitizeAttributes($attributes);
+        $sanitizedMessageAttributes = $this->sanitizeAttributes($messageAttributes);
 
-        // Validate attributes against template
         foreach ($this->supportedLocales as $locale) {
             $template = trans("{$this->baseKey}.{$key}", [], $locale);
             if ($template !== "{$this->baseKey}.{$key}") {
-                $this->validateAttributes($attributes, $template);
+                $this->validateAttributes($messageAttributes, $template);
                 break;
             }
         }
 
         return [
             'key' => $key,
-            'attributes' => $sanitizedAttributes
+            'attributes' => $sanitizedMessageAttributes,
+            'info' => $info
         ];
     }
 
-    /**
-     * Retrieve and generate full notification message
-     */
-    public function retrieve(string $key, array $attributes = []): array
+    public function retrieve(string $key, array $messageAttributes = [], array $info = []): array
     {
         $messages = [];
-        $sanitizedAttributes = $this->sanitizeAttributes($attributes);
+        $sanitizedMessageAttributes = $this->sanitizeAttributes($messageAttributes);
 
         foreach ($this->supportedLocales as $locale) {
             $translationKey = "{$this->baseKey}.{$key}";
@@ -57,7 +49,7 @@ class NotificationMessage
                 continue;
             }
 
-            $message = trans($translationKey, $sanitizedAttributes, $locale);
+            $message = trans($translationKey, $sanitizedMessageAttributes, $locale);
             $messages[$locale] = is_array($message) ? implode($this->separator, $message) : $message;
         }
 
@@ -67,7 +59,8 @@ class NotificationMessage
 
         return [
             'message' => $messages,
-            'attributes' => $sanitizedAttributes,
+            'attributes' => $sanitizedMessageAttributes,
+            'info' => $info,
             'key' => $key
         ];
     }

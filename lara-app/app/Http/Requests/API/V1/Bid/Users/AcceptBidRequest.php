@@ -4,11 +4,10 @@ namespace App\Http\Requests\API\V1\Bid\Users;
 
 use App\Enums\BidStatusEnum;
 use App\Enums\RequestStatusEnum;
-use App\Rules\AlphaSpace;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class UpdateBidRequest extends FormRequest
+class AcceptBidRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
