@@ -3,14 +3,12 @@
 namespace App\Http\Controllers\API\V1\Public;
 
 use App\Enums\InvoiceStatusEnum;
-use App\Enums\TradeStatusEnum;
 use App\Enums\TradeStepsStatusEnum;
 use App\Enums\TransactionStatusEnum;
+use App\Events\PayTomanToSystemEvent;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\TradeResource;
 use App\Models\Transaction;
 use Carbon\Carbon;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -91,6 +89,8 @@ class GatewayCallbackController extends Controller
                     'expire_at' => Carbon::now()->addMinutes($tradeStepTwo->duration_minutes),
                 ]);
             }
+
+            event(new PayTomanToSystemEvent($trade->refresh(), $invoice->refresh()));
 
             DB::commit();
 

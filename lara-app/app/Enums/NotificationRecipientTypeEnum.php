@@ -10,4 +10,6 @@ enum NotificationRecipientTypeEnum: string{
     case REQUESTER = 'requester';
     case BIDDER_WINNER = 'bidder_winner';
     case OTHER_BIDDERS = 'other_bidders';
+    case BUYER = 'buyer';
+    case SELLER = 'seller';
 }

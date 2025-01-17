@@ -4,10 +4,12 @@ namespace App\Providers;
 
 use App\Events\BidStoredEvent;
 use App\Events\BidAcceptedEvent;
+use App\Events\PayTomanToSystemEvent;
 use App\Events\SignUpEvent;
 use App\Listeners\AssignDefaultPaymentMethodToUserListener;
 use App\Listeners\BidAcceptedByRequesterNotificationsListener;
 use App\Listeners\BidRegisterNotificationsListener;
+use App\Listeners\PayTomanToSystemNotificationsListener;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 class EventServiceProvider extends ServiceProvider
@@ -28,6 +30,10 @@ class EventServiceProvider extends ServiceProvider
 
         BidAcceptedEvent::class => [
             BidAcceptedByRequesterNotificationsListener::class,
+        ],
+
+        PayTomanToSystemEvent::class => [
+            PayTomanToSystemNotificationsListener::class,
         ],
     ];
 

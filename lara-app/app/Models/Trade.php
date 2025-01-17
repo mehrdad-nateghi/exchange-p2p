@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\RequestTypeEnum;
 use App\Enums\TradeStatusEnum;
 use App\Enums\TradeStepOwnerEnum;
 use App\Enums\TradeStepsStatusEnum;
@@ -97,5 +98,19 @@ class Trade extends Model
         return $this->tradeSteps()
             ->where('priority', $currentStep->priority + 1)
             ->first();
+    }
+
+    public function getSellerUserAttribute()
+    {
+        $request = $this->request;
+        $bid = $this->bid;
+        return $request->type->value === RequestTypeEnum::SELL->value ? $request->user : $bid->user;
+    }
+
+    public function getBuyerUserAttribute()
+    {
+        $request = $this->request;
+        $bid = $this->bid;
+        return $request->type->value === RequestTypeEnum::BUY->value ? $request->user : $bid->user;
     }
 }
