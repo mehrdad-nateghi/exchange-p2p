@@ -3,13 +3,11 @@
 namespace App\Http\Controllers\API\V1\File\User;
 
 use App\Enums\TradeStepsStatusEnum;
+use App\Events\UploadReceiptEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\File\User\UploadReceiptRequest;
-use App\Http\Requests\API\V1\Request\User\StoreRequestRequest;
-use App\Http\Resources\RequestResource;
 use App\Http\Resources\TradeStepResource;
 use App\Models\TradeStep;
-use App\Services\API\V1\RequestService;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
@@ -57,6 +55,8 @@ class UploadReceiptController extends Controller
 
             $tradeStep->load('files.user');
             $resource =  new TradeStepResource($tradeStep);
+
+            event(new UploadReceiptEvent($trade->refresh()));
 
             DB::commit();
 

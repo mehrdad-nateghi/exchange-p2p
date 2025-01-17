@@ -17,4 +17,5 @@ enum NotificationKeyNameEnum: string{
     case SIGNUP_SUCCESSFUL = 'signup_successful';
     case PAY_TOMAN_TO_SYSTEM_TO_SELLER = 'pay_toman_to_system_to_seller';
     case PAY_TOMAN_TO_SYSTEM_TO_BUYER = 'pay_toman_to_system_to_buyer';
+    case UPLOAD_RECEIPT_TO_BUYER = 'upload_receipt_to_buyer';
 }

@@ -7,12 +7,14 @@
 */
 
 use App\Events\PayTomanToSystemEvent;
+use App\Events\UploadReceiptEvent;
 use App\Http\Controllers\API\V1\Public\DailyRateRangeController;
 use App\Http\Controllers\API\V1\Public\GatewayCallbackController;
 use App\Http\Controllers\API\V1\Public\HealthCheckController;
 use App\Http\Controllers\API\V1\Public\MeTestController;
 use App\Http\Resources\Notifications\User\NotificationCollection;
 use App\Models\Invoice;
+use App\Models\Trade;
 use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Notifications\Notification;
 
@@ -23,6 +25,10 @@ Route::name('global.')->group(function () {
     Route::get('/gateway/callback',GatewayCallbackController::class)->name('gateway.callback');
 
     /*Route::get('/v1/test',function (){
+
+        $trade = Trade::find(1);
+        event(new UploadReceiptEvent($trade->refresh()));
+
 
         $notifications = DatabaseNotification::query()->get();
 

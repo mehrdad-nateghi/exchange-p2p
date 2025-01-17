@@ -51,5 +51,10 @@ return [
     NotificationKeyNameEnum::PAY_TOMAN_TO_SYSTEM_TO_SELLER->value => [
         'title' => 'صورتحساب معامله شماره :trade_number',
         'message' => 'صورتحساب واریز ارزی شما آماده پرداخت است. لطفاً جهت تکمیل فرآیند روی این اعلان کلیک کنید.'
+    ],
+
+    NotificationKeyNameEnum::UPLOAD_RECEIPT_TO_BUYER->value => [
+        'title' => 'بررسی واریز ارزی معامله شماره :trade_number',
+        'message' => 'فروشنده مبلغ :request_volume یورو به حساب شما واریز کرده است. لطفا حساب خود را بررسی و صحت آن را در زمان باقی مانده تایید نمایید.'
     ]
 ];
