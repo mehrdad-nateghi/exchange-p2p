@@ -18,4 +18,7 @@ enum NotificationKeyNameEnum: string{
     case PAY_TOMAN_TO_SYSTEM_TO_SELLER = 'pay_toman_to_system_to_seller';
     case PAY_TOMAN_TO_SYSTEM_TO_BUYER = 'pay_toman_to_system_to_buyer';
     case UPLOAD_RECEIPT_TO_BUYER = 'upload_receipt_to_buyer';
+
+    case ACCEPT_RECEIPT_BY_BUYER = 'accept_receipt_by_buyer';
+    case REJECT_RECEIPT_BY_BUYER = 'reject_receipt_by_buyer';
 }

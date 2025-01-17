@@ -3,11 +3,9 @@
 namespace App\Http\Controllers\API\V1\File\User;
 
 use App\Enums\FileStatusEnum;
-use App\Enums\InvoiceStatusEnum;
-use App\Enums\InvoiceTypeEnum;
-use App\Enums\RequestTypeEnum;
 use App\Enums\TradeStatusEnum;
 use App\Enums\TradeStepsStatusEnum;
+use App\Events\UpdateReceiptByBuyerEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\File\User\UpdateReceiptRequest;
 use App\Http\Resources\TradeStepResource;
@@ -53,6 +51,9 @@ class UpdateReceiptController extends Controller
                     'status' => TradeStepsStatusEnum::DOING->value,
                     'expire_at' => Carbon::now()->addMinutes($nextStep->duration_minutes),
                 ]);
+
+                event(new UpdateReceiptByBuyerEvent($trade->refresh(), FileStatusEnum::ACCEPT_BY_BUYER->value));
+
             }
 
             // Reject
@@ -60,6 +61,8 @@ class UpdateReceiptController extends Controller
                 $trade->update([
                     'status' => TradeStatusEnum::SUSPEND->value
                 ]);
+
+                event(new UpdateReceiptByBuyerEvent($trade->refresh(), FileStatusEnum::REJECT_BY_BUYER->value));
             }
 
             $step->load('files.user');

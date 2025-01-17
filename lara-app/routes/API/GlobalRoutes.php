@@ -6,7 +6,9 @@
 |--------------------------------------------------------------------------
 */
 
+use App\Enums\FileStatusEnum;
 use App\Events\PayTomanToSystemEvent;
+use App\Events\UpdateReceiptByBuyerEvent;
 use App\Events\UploadReceiptEvent;
 use App\Http\Controllers\API\V1\Public\DailyRateRangeController;
 use App\Http\Controllers\API\V1\Public\GatewayCallbackController;
@@ -24,10 +26,15 @@ Route::name('global.')->group(function () {
     Route::get('/daily-rate-range',DailyRateRangeController::class)->name('daily.rate.range');
     Route::get('/gateway/callback',GatewayCallbackController::class)->name('gateway.callback');
 
-    /*Route::get('/v1/test',function (){
-
+    Route::get('/v1/test',function (){
         $trade = Trade::find(1);
-        event(new UploadReceiptEvent($trade->refresh()));
+
+        event(new UpdateReceiptByBuyerEvent($trade->refresh(), FileStatusEnum::ACCEPT_BY_BUYER->value));
+
+        event(new UpdateReceiptByBuyerEvent($trade->refresh(), FileStatusEnum::REJECT_BY_BUYER->value));
+
+
+        //event(new UploadReceiptEvent($trade->refresh()));
 
 
         $notifications = DatabaseNotification::query()->get();
@@ -44,5 +51,5 @@ Route::name('global.')->group(function () {
 
         event(new PayTomanToSystemEvent($trade->refresh(), $invoice->refresh()));
 
-    })->name('test');*/
+    })->name('test');
 });

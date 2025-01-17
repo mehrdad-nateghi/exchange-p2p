@@ -56,5 +56,15 @@ return [
     NotificationKeyNameEnum::UPLOAD_RECEIPT_TO_BUYER->value => [
         'title' => 'بررسی واریز ارزی معامله شماره :trade_number',
         'message' => 'فروشنده مبلغ :request_volume یورو به حساب شما واریز کرده است. لطفا حساب خود را بررسی و صحت آن را در زمان باقی مانده تایید نمایید.'
-    ]
+    ],
+
+    NotificationKeyNameEnum::ACCEPT_RECEIPT_BY_BUYER->value => [
+        'title' => 'تائید واریز ارزی معامله شماره :trade_number',
+        'message' => 'خریدار، واریز ارزی شما را تایید کرد. بعد از تسویه شما را مطلع میکنیم.'
+    ],
+
+    NotificationKeyNameEnum::REJECT_RECEIPT_BY_BUYER->value => [
+        'title' => 'عدم تائید واریز ارزی معامله شماره :trade_number',
+        'message' => 'خریدار، واریز ارزی شما را تایید نکرد. معامله جهت بررسی به کارشناس مربوطه ارجاع داده شد.'
+    ],
 ];
