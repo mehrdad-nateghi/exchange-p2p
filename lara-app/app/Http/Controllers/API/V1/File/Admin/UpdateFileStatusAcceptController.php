@@ -27,8 +27,8 @@ class UpdateFileStatusAcceptController extends Controller
                 'status' => FileStatusEnum::ACCEPT_BY_ADMIN->value,
             ]);
 
-            $currentStep = $file->fileable;
-            $trade = $currentStep->trade;
+            $trade = $file->fileable->trade;
+            $currentStep = $trade->currentTradeStep();
             $nextStep = $trade->nextTradeStep();
 
             $currentStep->update([
