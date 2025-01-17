@@ -16,10 +16,8 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
@@ -265,6 +263,18 @@ class User extends Authenticatable
     }
 
     /**
+     * Get formatted notification title
+     */
+    public function getNotificationTitle($notification): string
+    {
+        $notificationMessage = App::make(NotificationMessage::class);
+        return $notificationMessage->retrieve(
+            $notification->data['key'],
+            $notification->data['attributes']
+        )['title'][app()->getLocale()] ?? '';
+    }
+
+    /**
      * Get formatted notification message
      */
     public function getNotificationMessage($notification): string
@@ -286,6 +296,7 @@ class User extends Authenticatable
         return $notifications->map(function($notification) {
             return [
                 'id' => $notification->id,
+                'title' => $this->getNotificationTitle($notification),
                 'message' => $this->getNotificationMessage($notification),
                 'created_at' => $notification->created_at,
                 'read_at' => $notification->read_at,
@@ -293,7 +304,6 @@ class User extends Authenticatable
                     'ulid' => $notification->data['model']['ulid'],
                     'name' => $notification->data['model']['name']
                 ]
-                //'data' => $notification->data
             ];
         });
     }
@@ -306,9 +316,9 @@ class User extends Authenticatable
         return $this->unreadNotifications->map(function($notification) {
             return [
                 'id' => $notification->id,
+                'title' => $this->getNotificationTitle($notification),
                 'message' => $this->getNotificationMessage($notification),
                 'created_at' => $notification->created_at,
-                //'data' => $notification->data
             ];
         });
     }

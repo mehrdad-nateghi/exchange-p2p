@@ -22,9 +22,13 @@ class NotificationMessage
         $sanitizedMessageAttributes = $this->sanitizeAttributes($messageAttributes);
 
         foreach ($this->supportedLocales as $locale) {
-            $template = trans("{$this->baseKey}.{$key}", [], $locale);
-            if ($template !== "{$this->baseKey}.{$key}") {
-                $this->validateAttributes($messageAttributes, $template);
+            $titleTemplate = trans("{$this->baseKey}.{$key}.title", [], $locale);
+            $messageTemplate = trans("{$this->baseKey}.{$key}.message", [], $locale);
+
+            if ($titleTemplate !== "{$this->baseKey}.{$key}.title" &&
+                $messageTemplate !== "{$this->baseKey}.{$key}.message") {
+
+                $this->validateAttributesForTemplate($messageAttributes, $titleTemplate, $messageTemplate);
                 break;
             }
         }
@@ -38,26 +42,34 @@ class NotificationMessage
 
     public function retrieve(string $key, array $messageAttributes = [], array $info = []): array
     {
+        $titles = [];
         $messages = [];
         $sanitizedMessageAttributes = $this->sanitizeAttributes($messageAttributes);
 
         foreach ($this->supportedLocales as $locale) {
-            $translationKey = "{$this->baseKey}.{$key}";
-            $template = trans($translationKey, [], $locale);
+            $titleKey = "{$this->baseKey}.{$key}.title";
+            $messageKey = "{$this->baseKey}.{$key}.message";
 
-            if ($template === $translationKey) {
+            $titleTemplate = trans($titleKey, [], $locale);
+            $messageTemplate = trans($messageKey, [], $locale);
+
+            if ($titleTemplate === $titleKey || $messageTemplate === $messageKey) {
                 continue;
             }
 
-            $message = trans($translationKey, $sanitizedMessageAttributes, $locale);
+            $title = trans($titleKey, $sanitizedMessageAttributes, $locale);
+            $message = trans($messageKey, $sanitizedMessageAttributes, $locale);
+
+            $titles[$locale] = is_array($title) ? implode($this->separator, $title) : $title;
             $messages[$locale] = is_array($message) ? implode($this->separator, $message) : $message;
         }
 
-        if (empty($messages)) {
+        if (empty($messages) || empty($titles)) {
             throw new InvalidArgumentException("No valid translations found for key: {$key}");
         }
 
         return [
+            'title' => $titles,
             'message' => $messages,
             'attributes' => $sanitizedMessageAttributes,
             'info' => $info,
@@ -70,13 +82,15 @@ class NotificationMessage
         $invalidLocales = [];
 
         foreach ($this->supportedLocales as $locale) {
-            $translationKey = "{$this->baseKey}.{$key}";
+            $titleKey = "{$this->baseKey}.{$key}.title";
+            $messageKey = "{$this->baseKey}.{$key}.message";
 
             // Force specific locale, don't allow fallback
-            $translation = Lang::get($translationKey, [], $locale, false);
+            $titleTranslation = Lang::get($titleKey, [], $locale, false);
+            $messageTranslation = Lang::get($messageKey, [], $locale, false);
 
-            // Check if translation doesn't exist or isn't an array with required elements
-            if ($translation === $translationKey || !is_array($translation) || !isset($translation[0]) || !isset($translation[1])) {
+            // Check if translations exist
+            if ($titleTranslation === $titleKey || $messageTranslation === $messageKey) {
                 $invalidLocales[] = $locale;
             }
         }
@@ -88,22 +102,32 @@ class NotificationMessage
         }
     }
 
-    private function validateAttributes(array $attributes, $template): void
+    private function validateAttributesForTemplate(array $attributes, $titleTemplate, $messageTemplate): void
     {
-        // Extract placeholders from the template
-        $placeholders = $this->extractPlaceholders($template);
+        // Get placeholders from both title and message
+        $titlePlaceholders = $this->extractPlaceholders($titleTemplate);
+        $messagePlaceholders = $this->extractPlaceholders($messageTemplate);
+        $allPlaceholders = array_unique(array_merge($titlePlaceholders, $messagePlaceholders));
 
-        // Check for required placeholders
-        foreach ($placeholders as $placeholder) {
-            if (!array_key_exists($placeholder, $attributes)) {
-                throw new InvalidArgumentException("Missing required attribute: {$placeholder}");
-            }
+        // If there are no placeholders, but attributes were provided
+        if (empty($allPlaceholders) && !empty($attributes)) {
+            throw new InvalidArgumentException("No placeholders in templates, but attributes were provided");
         }
 
-        // Check for extra attributes
-        foreach (array_keys($attributes) as $key) {
-            if (!in_array($key, $placeholders)) {
-                throw new InvalidArgumentException("Unexpected attribute: {$key}");
+        // If there are placeholders, validate the attributes
+        if (!empty($allPlaceholders)) {
+            // Check for required placeholders
+            foreach ($allPlaceholders as $placeholder) {
+                if (!array_key_exists($placeholder, $attributes)) {
+                    throw new InvalidArgumentException("Missing required attribute: {$placeholder}");
+                }
+            }
+
+            // Check for extra attributes
+            foreach (array_keys($attributes) as $key) {
+                if (!in_array($key, $allPlaceholders)) {
+                    throw new InvalidArgumentException("Unexpected attribute: {$key}");
+                }
             }
         }
     }
@@ -113,14 +137,12 @@ class NotificationMessage
         $placeholders = [];
 
         if (is_array($template)) {
-            // If template is array, extract from all lines
             foreach ($template as $line) {
                 if (is_string($line)) {
                     $placeholders = array_merge($placeholders, $this->findPlaceholders($line));
                 }
             }
         } elseif (is_string($template)) {
-            // If template is string, extract from single line
             $placeholders = $this->findPlaceholders($template);
         }
 
