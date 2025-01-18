@@ -8,6 +8,7 @@ use App\Enums\PaymentMethodTypeEnum;
 use App\Enums\TradeStepsStatusEnum;
 use App\Enums\TransactionProviderEnum;
 use App\Enums\TransactionStatusEnum;
+use App\Events\TransferToSellerEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\Invoice\Admin\TransferToSellerRequest;
 use App\Http\Requests\API\V1\Invoice\User\PayInvoiceRequest;
@@ -83,6 +84,8 @@ class TransferToSellerController extends Controller
                 ]);
 
                 $resource = new InvoiceResource($invoice->refresh());
+
+                event(new TransferToSellerEvent($invoice->refresh()));
 
                 DB::commit();
 

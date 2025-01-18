@@ -21,4 +21,6 @@ enum NotificationKeyNameEnum: string{
 
     case ACCEPT_RECEIPT_BY_BUYER = 'accept_receipt_by_buyer';
     case REJECT_RECEIPT_BY_BUYER = 'reject_receipt_by_buyer';
+
+    case TRANSFER_TO_SELLER_TO_SELLER = 'transfer_to_seller_to_seller';
 }

@@ -8,6 +8,7 @@
 
 use App\Enums\FileStatusEnum;
 use App\Events\PayTomanToSystemEvent;
+use App\Events\TransferToSellerEvent;
 use App\Events\UpdateReceiptByBuyerEvent;
 use App\Events\UploadReceiptEvent;
 use App\Http\Controllers\API\V1\Public\DailyRateRangeController;
@@ -27,11 +28,13 @@ Route::name('global.')->group(function () {
     Route::get('/gateway/callback',GatewayCallbackController::class)->name('gateway.callback');
 
     Route::get('/v1/test',function (){
-        $trade = Trade::find(1);
+        //$trade = Trade::find(1);
+        $invoice = Invoice::find(1);
 
-        event(new UpdateReceiptByBuyerEvent($trade->refresh(), FileStatusEnum::ACCEPT_BY_BUYER->value));
+        event(new TransferToSellerEvent($invoice->refresh()));
 
-        event(new UpdateReceiptByBuyerEvent($trade->refresh(), FileStatusEnum::REJECT_BY_BUYER->value));
+//        event(new UpdateReceiptByBuyerEvent($trade->refresh(), FileStatusEnum::ACCEPT_BY_BUYER->value));
+//        event(new UpdateReceiptByBuyerEvent($trade->refresh(), FileStatusEnum::REJECT_BY_BUYER->value));
 
 
         //event(new UploadReceiptEvent($trade->refresh()));

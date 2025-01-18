@@ -67,4 +67,9 @@ return [
         'title' => 'عدم تائید واریز ارزی معامله شماره :trade_number',
         'message' => 'خریدار، واریز ارزی شما را تایید نکرد. معامله جهت بررسی به کارشناس مربوطه ارجاع داده شد.'
     ],
+
+    NotificationKeyNameEnum::TRANSFER_TO_SELLER_TO_SELLER->value => [
+        'title' => 'پرداخت ریالی سیستم بابت معامله شماره :trade_number',
+        'message' => 'مبلغ :invoice_amount تومان از طرف :app_name به حساب شما واریز شد.'
+    ],
 ];

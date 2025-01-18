@@ -6,12 +6,14 @@ use App\Events\BidStoredEvent;
 use App\Events\BidAcceptedEvent;
 use App\Events\PayTomanToSystemEvent;
 use App\Events\SignUpEvent;
+use App\Events\TransferToSellerEvent;
 use App\Events\UpdateReceiptByBuyerEvent;
 use App\Events\UploadReceiptEvent;
 use App\Listeners\AssignDefaultPaymentMethodToUserListener;
 use App\Listeners\BidAcceptedByRequesterNotificationsListener;
 use App\Listeners\BidRegisterNotificationsListener;
 use App\Listeners\PayTomanToSystemNotificationsListener;
+use App\Listeners\TransferToSellerNotificationsListener;
 use App\Listeners\UpdateReceiptByBuyerNotificationsListener;
 use App\Listeners\UploadReceiptNotificationsListener;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -47,6 +49,12 @@ class EventServiceProvider extends ServiceProvider
         UpdateReceiptByBuyerEvent::class => [
             UpdateReceiptByBuyerNotificationsListener::class,
         ],
+
+        TransferToSellerEvent::class => [
+            TransferToSellerNotificationsListener::class,
+        ],
+
+
 
 
 

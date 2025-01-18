@@ -47,6 +47,11 @@ class Invoice extends Model
         return $this->amount + $this->fee;
     }
 
+    protected function getPayableAmountToSellerAttribute()
+    {
+        return $this->amount - $this->fee;
+    }
+
     protected $casts = [
         'status' => InvoiceStatusEnum::class,
         'type' => InvoiceTypeEnum::class,
