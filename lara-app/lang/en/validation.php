@@ -169,7 +169,11 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+        'old_password' => "Old password",
+        'new_password' => "New password",
+        'new_password_confirmation' => "New password confirmation",
+    ],
 
     // Custom validation messages
     'verification_code_not_expired' => 'You cannot request a new verification code at this time. Please wait for the previous code to expire.',
@@ -183,6 +187,7 @@ return [
     'request_has_rial_payment_method' => 'A Rial Bank payment method already exists for this request. You cannot add another one.',
     'payment_method_in_use' => "This payment method cannot be modified or deleted while it's involved in active request.",
     'no_unread_notifications' => "You don't have any unread notifications",
+    "curren_password_incorrect" => "Current password is incorrect.",
 
 
 

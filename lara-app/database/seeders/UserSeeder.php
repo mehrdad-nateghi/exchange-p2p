@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
 {
-    private const DEFAULT_PASSWORD = '123456';
+    private const DEFAULT_PASSWORD = '12345678';
     private const USER_TYPES = [
         'buy-bidder', 'sell-bidder',
         'buy-requester', 'sell-requester',

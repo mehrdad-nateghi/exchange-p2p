@@ -169,7 +169,11 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+        'old_password' => "رمزعبور قبلی",
+        'new_password' => "رمزعبور جدید",
+        'new_password_confirmation' => "تائید رمزعبور جدید",
+    ],
 
     // Custom validation messages
     'verification_code_not_expired' => 'در حال حاضر امکان درخواست کد تایید جدید وجود ندارد. لطفا تا منقضی شدن کد قبلی صبر کنید.',
@@ -183,6 +187,7 @@ return [
     'request_has_rial_payment_method' => 'یک روش پرداخت بانکی ریالی برای این درخواست قبلاً ثبت شده است. شما نمی‌توانید روش دیگری اضافه کنید.',
     'payment_method_in_use' => 'این روش پرداخت در حال استفاده در یک درخواست فعال است و قابل ویرایش یا حذف نمی‌باشد.',
     'no_unread_notifications' => "شما هیچ اعلان نخوانده‌ای ندارید",
+    "curren_password_incorrect" => "رمزعبور قبلی اشتباه است",
 
 
 
