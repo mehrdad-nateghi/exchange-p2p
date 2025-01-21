@@ -6,9 +6,9 @@ namespace: paylibero-nightly
 resources:
   - ../base
 
-  - config/mysql.yml
   - deployments/phpmyadmin.yml
   - services/phpmyadmin.yml
+  - config/mysql.yml
 
   - deployments/pex-storybook.yml
   - services/pex-storybook.yml
