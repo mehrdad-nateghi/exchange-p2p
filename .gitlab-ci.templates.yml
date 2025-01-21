@@ -55,7 +55,8 @@ variables:
   # for envsubst to not replace the value of $MYSQL_ROOT_PASSWORD so that probes would succeed.
   - export MYSQL_ROOT_PASSWORD='$MYSQL_ROOT_PASSWORD'
   - which envsubst || (apt-get update && apt-get install -y gettext)
-  - kubectl kustomize devops/k8s/${ENVIRONMENT_NAME} | envsubst | kubectl apply --record -f -
+  - kubectl kustomize devops/k8s/${ENVIRONMENT_NAME} | envsubst | tee /tmp/manifest.yaml
+  - kubectl apply --record -f /tmp/manifest.yaml
   # kubectl wait has issues for now. it is being under consideration in Arvan.
   # - kubectl wait --for=condition=available --timeout=200s deployment/${SERVICE_NAME}
 
