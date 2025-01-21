@@ -55,9 +55,18 @@ variables:
   # for envsubst to not replace the value of $MYSQL_ROOT_PASSWORD so that probes would succeed.
   - export MYSQL_ROOT_PASSWORD='$MYSQL_ROOT_PASSWORD'
   - which envsubst || (apt-get update && apt-get install -y gettext)
-  - rm -f /tmp/manifest.yaml
-  - kubectl kustomize devops/k8s/${ENVIRONMENT_NAME} | envsubst | tee /tmp/manifest.yaml
-  - kubectl apply --record -f /tmp/manifest.yaml
+  - |
+    # Generate manifest with all resources
+    kubectl kustomize devops/k8s/${ENVIRONMENT_NAME} | envsubst > /tmp/manifest.yaml
+
+    # Apply ConfigMaps first
+    kubectl apply --record -f <(cat /tmp/manifest.yaml | grep -A999 "kind: ConfigMap" | grep -B999 -m1 "^---" || cat /tmp/manifest.yaml | grep -A999 "kind: ConfigMap")
+
+    # Apply Services
+    kubectl apply --record -f <(cat /tmp/manifest.yaml | grep -A999 "kind: Service" | grep -B999 -m1 "^---" || cat /tmp/manifest.yaml | grep -A999 "kind: Service")
+
+    # Apply Deployments and other resources
+    kubectl apply --record -f /tmp/manifest.yaml
   # kubectl wait has issues for now. it is being under consideration in Arvan.
   # - kubectl wait --for=condition=available --timeout=200s deployment/${SERVICE_NAME}
 

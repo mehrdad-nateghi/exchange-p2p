@@ -1,7 +1,7 @@
 '/users/notifications/stream':
   get:
     tags:
-      - notifications
+      - Notifications
     summary: 'Stream notifications in real-time'
     description: 'Establishes a Server-Sent Events (SSE) connection to receive real-time notifications'
     operationId: userNotificationsStream
@@ -12,41 +12,69 @@
           text/event-stream:
             schema:
               type: object
+              required:
+                - status
+                - code
+                - message
+                - data
               properties:
-                id:
+                status:
                   type: string
-                  description: 'Unique identifier for the notification'
-                  example: '5a05633c-1aff-4bd4-b8b5-35374099092d'
+                  example: 'success'
+                code:
+                  type: integer
+                  example: 200
                 message:
                   type: string
-                  description: 'Notification message content'
-                created_at:
-                  type: string
-                  format: date-time
-                  description: 'Timestamp when the notification was created'
-                  example: '2024-12-29T06:45:58.000000Z'
-                read_at:
-                  type: string
-                  format: date-time
-                  nullable: true
-                  description: 'Timestamp when the notification was read'
-                  example: null
-                model:
+                  example: 'اعلان‌ها با موفقیت دریافت شد.'
+                data:
                   type: object
                   properties:
-                    ulid:
+                    id:
                       type: string
-                      description: 'Unique identifier for the related model'
-                      example: '01JG8JP6CR1QPQ2VS9Z2XGQ3PB'
-                    name:
+                      format: uuid
+                      example: 'ee4a9e35-b6b6-4630-81ff-33d2f60212e9'
+                    title:
                       type: string
-                      description: 'Name of the related model type'
-                      example: 'request'
+                      example: 'کاربر گرامی'
+                    message:
+                      type: string
+                      example: 'از ثبت نام شما سپاسگزاریم! بسیار خوشحالیم که به خانواده Laravel پیوسته اید.'
+                    info:
+                      type: object
+                      required:
+                        - icon
+                        - model
+                      properties:
+                        icon:
+                          type: string
+                          example: ''
+                        model:
+                          type: object
+                          required:
+                            - ulid
+                            - name
+                          properties:
+                            ulid:
+                              type: string
+                              example: ''
+                            name:
+                              type: string
+                              example: ''
+                    created_at:
+                      type: string
+                      format: date-time
+                      example: '2025-01-19T15:21:31.000000Z'
+                    read_at:
+                      type: string
+                      format: date-time
+                      nullable: true
+                      example: null
 
 '/users/notifications/{id}/read':
   patch:
     tags:
-      - notifications
+      - Notifications
     summary: 'Mark notification as read'
     description: 'Marks a specific notification as read by its ID'
     operationId: markNotificationAsRead
@@ -78,7 +106,7 @@
 '/users/notifications':
   get:
     tags:
-      - notifications
+      - Notifications
     summary: 'Get user notifications'
     description: 'Retrieve paginated list of notifications with filtering and sorting options'
     operationId: getUserNotifications
@@ -107,36 +135,60 @@
         content:
           application/json:
             schema:
-              allOf:
-                - $ref: '#/components/schemas/Base200Response'
-                - type: object
+              type: object
+              required:
+                - status
+                - code
+                - message
+                - data
+              properties:
+                status:
+                  type: string
+                  example: 'success'
+                code:
+                  type: integer
+                  example: 200
+                message:
+                  type: string
+                  example: 'اعلان‌ها با موفقیت دریافت شد.'
+                data:
+                  type: object
                   required:
-                    - data
+                    - items
+                    - pagination
                   properties:
-                    data:
-                      type: object
-                      required:
-                        - items
-                        - pagination
-                      properties:
-                        items:
-                          type: array
-                          items:
+                    items:
+                      type: array
+                      items:
+                        type: object
+                        required:
+                          - id
+                          - title
+                          - message
+                          - info
+                          - created_at
+                          - read_at
+                        properties:
+                          id:
+                            type: string
+                            format: uuid
+                            example: 'ee4a9e35-b6b6-4630-81ff-33d2f60212e9'
+                          title:
+                            type: string
+                            example: 'کاربر گرامی'
+                          message:
+                            type: string
+                            example: 'از ثبت نام شما سپاسگزاریم! بسیار خوشحالیم که به خانواده Laravel پیوسته اید.'
+                          info:
                             type: object
                             required:
-                              - id
-                              - message
+                              - icon
                               - model
-                              - created_at
-                              - read_at
                             properties:
-                              id:
+                              icon:
                                 type: string
-                                format: uuid
-                                example: '825c96fd-3923-4bea-be3a-50fdbc6b05d6'
-                              message:
-                                type: string
-                                example: 'کاربر گرامی\nاز ثبت نام شما سپاسگزاریم! بسیار خوشحالیم که به خانواده Paylibero پیوسته اید.'
+                                enum: [info, request, trade]
+                                example: 'info'
                               model:
                                 type: object
                                 required:
@@ -148,23 +200,72 @@
                                     example: ''
                                   name:
                                     type: string
-                                    example: ''
-                              created_at:
-                                type: string
-                                format: date-time
-                                example: '2024-12-28T09:11:13.000000Z'
-                              read_at:
-                                type: string
-                                format: date-time
-                                nullable: true
-                                example: null
-                        pagination:
-                          $ref: '#/components/schemas/Pagination'
+                                    enum: [request, trade, '']
+                                    example: 'request'
+                          created_at:
+                            type: string
+                            format: date-time
+                            example: '2025-01-19T15:21:31.000000Z'
+                          read_at:
+                            type: string
+                            format: date-time
+                            nullable: true
+                            example: null
+                    pagination:
+                      type: object
+                      required:
+                        - current_page
+                        - first_page_url
+                        - from
+                        - last_page
+                        - last_page_url
+                        - next_page_url
+                        - path
+                        - per_page
+                        - prev_page_url
+                        - to
+                        - total
+                      properties:
+                        current_page:
+                          type: integer
+                          example: 1
+                        first_page_url:
+                          type: string
+                          example: 'http://localhost:8000/api/v1/users/notifications?sort=-created_at&page=1'
+                        from:
+                          type: integer
+                          example: 1
+                        last_page:
+                          type: integer
+                          example: 1
+                        last_page_url:
+                          type: string
+                          example: 'http://localhost:8000/api/v1/users/notifications?sort=-created_at&page=1'
+                        next_page_url:
+                          type: string
+                          nullable: true
+                          example: null
+                        path:
+                          type: string
+                          example: 'http://localhost:8000/api/v1/users/notifications'
+                        per_page:
+                          type: integer
+                          example: 15
+                        prev_page_url:
+                          type: string
+                          nullable: true
+                          example: null
+                        to:
+                          type: integer
+                          example: 1
+                        total:
+                          type: integer
+                          example: 1
 
 '/users/notifications/read-all':
   patch:
     tags:
-      - notifications
+      - Notifications
     summary: 'Mark all notifications as read'
     description: 'Marks all notifications as read'
     operationId: markAllNotificationsAsRead
