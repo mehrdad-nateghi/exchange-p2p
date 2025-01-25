@@ -161,3 +161,19 @@
                   properties:
                     data:
                       $ref: "#/components/schemas/File"
+"/admins/files/{fileID}/accept":
+  patch:
+    summary: Update status a file by ID
+    description: Update status a file by ID
+    operationId: acceptFile
+    tags:
+      - Files
+    parameters:
+      - name: fileID
+        in: path
+        required: true
+        schema:
+          type: string
+    responses:
+      "200":
+        $ref: "#/components/schemas/Base200Response"
