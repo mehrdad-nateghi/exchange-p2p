@@ -385,6 +385,64 @@ components:
                 type: string
                 format: date-time
                 example: '2024-05-15T06:56:46+00:00'
+    UserBid:
+      type: object
+      required:
+        - ulid
+        - number
+        - price
+        - is_best_price
+        - status
+        - request
+        - created_at
+        - deleted_at
+        - rejected_at
+        - updated_at
+      properties:
+        ulid:
+          type: string
+          description: 'Unique identifier for the request'
+          example: '01J25YP7C2MTHAXNREE7FNPY85'
+        number:
+          type: string
+          description: 'Number of the bid'
+          example: 'BI-564311'
+        price:
+          type: string
+          description: 'Price of the bid'
+          example: '59193.00'
+        is_best_price:
+          type: boolean
+          description: 'indicates that the bid has highest price or not'
+        status:
+          type: string
+          enum: ['registered', 'accepted', 'rejected']
+          description: 'Status of the request'
+          example: 'registered'
+        created_at:
+          type: string
+          format: date-time
+          description: 'Creation timestamp'
+          example: '2024-07-07T06:38:04.000000Z'
+        deleted_at:
+          type: string
+          format: date-time
+          description: 'deleted timestamp'
+          example: '2024-07-07T06:38:04.000000Z'
+        rejected_at:
+          type: string
+          format: date-time
+          description: 'rejected timestamp'
+          example: '2024-07-07T06:38:04.000000Z'
+        updated_at:
+          type: string
+          format: date-time
+          description: 'Last update timestamp'
+          example: '2024-07-07T06:38:04.000000Z'
+        request:
+          $ref: '#/components/schemas/Request'
+        payment_method:
+          $ref: '#/components/schemas/PaymentMethod'
     Bid:
       type: object
       required:

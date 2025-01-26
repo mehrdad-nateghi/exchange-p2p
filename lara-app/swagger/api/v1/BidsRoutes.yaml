@@ -47,7 +47,7 @@
                           type: array
                           description: 'Array of bids items'
                           items:
-                            $ref: '#/components/schemas/Bid'
+                            $ref: '#/components/schemas/UserBid'
   post:
     tags:
       - bids
@@ -86,7 +86,7 @@
                     - data
                   properties:
                     data:
-                      $ref: '#/components/schemas/Bid'
+                      $ref: '#/components/schemas/UserBid'
 
 '/users/bids/{bidId}':
   patch:
@@ -115,7 +115,7 @@
                     - data
                   properties:
                     data:
-                      $ref: '#/components/schemas/Bid'
+                      $ref: '#/components/schemas/UserBid'
 
 '/requests/{requestId}/bids':
   get:
