@@ -6,6 +6,13 @@ RUN docker-php-ext-install pdo pdo_mysql bcmath
 RUN pecl install redis
 RUN docker-php-ext-enable redis
 
+# Install Xdebug
+RUN pecl install xdebug \
+    && docker-php-ext-enable xdebug
+
+# Copy Xdebug configuration
+COPY dockerfiles/xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+
 WORKDIR /var/www
 
 # Install composer
