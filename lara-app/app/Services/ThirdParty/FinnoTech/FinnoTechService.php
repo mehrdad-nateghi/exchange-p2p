@@ -25,11 +25,11 @@ class FinnoTechService
 
     public function withAuthorizationCode(): self
     {
-        if(!app()->environment('local')){
+        /*if(!app()->environment('local')){
             $this->token = config('finnotech.authorization_token');
             return $this;
-        }
-        $this->token = FinnoTechTokenService::getAuthorizationCodeTokenToken();
+        }*/
+        $this->token = FinnoTechTokenService::getAuthorizationToken();
         return $this;
     }
 

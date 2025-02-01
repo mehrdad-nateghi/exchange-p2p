@@ -29,6 +29,7 @@ Route::name('global.')->group(function () {
     Route::get('/gateway/callback',GatewayCallbackController::class)->name('gateway.callback');
 
     Route::get('/v1/test',function (FinnoTechService  $finnoTechService){
+        //$data = $finnoTechService->withAuthorizationCode();
         $data = $finnoTechService->withClientCredentials()->getCardToIban('5041721019784678');
         return response()->json($data);
     })->name('test');

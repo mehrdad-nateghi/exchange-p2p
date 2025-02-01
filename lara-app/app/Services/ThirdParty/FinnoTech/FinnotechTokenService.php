@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
-class FinnotechTokenService
+class FinnoTechTokenService
 {
     private const CLIENT_CREDENTIALS_CACHE_KEY = 'finnotech_client_credentials_token';
     private const AUTHORIZATION_CODE_TOKEN_CACHE_KEY = 'finnotech_authorization_code_token';
@@ -58,34 +58,34 @@ class FinnotechTokenService
     /**
      * Get a valid authorization token for a specific national ID
      */
-    public static function getAuthorizationToken(string $nationalId): ?string
+    public static function getAuthorizationToken(): ?string
     {
         try {
             // Step 1: Try to get from cache first
-            $cachedToken = self::getAuthorizationTokenFromCache($nationalId);
+            $cachedToken = self::getAuthorizationTokenFromCache();
             if ($cachedToken) {
                 Log::info('Finnotech authorization token found in cache', [
-                    'national_id' => $nationalId,
+                    'national_id' => config('finnotech.national_id'),
                     'expires_in' => $cachedToken->getRemainingTime()
                 ]);
                 return $cachedToken->access_token;
             }
 
             // Step 2: If not in cache, try to get from database
-            $dbToken = self::getAuthorizationTokenFromDatabase($nationalId);
+            $dbToken = self::getAuthorizationTokenFromDatabase();
             if ($dbToken) {
-                Log::info('Finnotech authorization token found in database', [
+                /*Log::info('Finnotech authorization token found in database', [
                     'national_id' => $nationalId,
                     'expires_in' => $dbToken->getRemainingTime()
-                ]);
+                ]);*/
                 self::storeTokenInCache($dbToken);
                 return $dbToken->access_token;
             }
 
             // Step 3: If no valid token exists, get a new one
-            Log::info('Getting new Finnotech authorization token', [
+            /*Log::info('Getting new Finnotech authorization token', [
                 'national_id' => $nationalId
-            ]);
+            ]);*/
             return self::getNewAuthorizationToken();
 
         } catch (\Throwable $t) {
@@ -118,9 +118,9 @@ class FinnotechTokenService
         return $token;
     }
 
-    private static function getAuthorizationTokenFromCache(string $nationalId): ?FinnotechToken
+    private static function getAuthorizationTokenFromCache(): ?FinnotechToken
     {
-        $cacheKey = self::AUTHORIZATION_CODE_TOKEN_CACHE_KEY . $nationalId;
+        $cacheKey = self::AUTHORIZATION_CODE_TOKEN_CACHE_KEY;
 
         if (!Cache::has($cacheKey)) {
             return null;
@@ -160,11 +160,11 @@ class FinnotechTokenService
         return $token;
     }
 
-    private static function getAuthorizationTokenFromDatabase(string $nationalId): ?FinnotechToken
+    private static function getAuthorizationTokenFromDatabase(): ?FinnotechToken
     {
         $token = FinnotechToken::query()
             ->authorizationCode()
-            ->where('national_id', $nationalId)
+            //->where('national_id', $nationalId)
             ->valid()
             ->latest()
             ->first();
@@ -205,10 +205,17 @@ class FinnotechTokenService
 
     private static function getNewAuthorizationToken(): ?string
     {
+        $authorizationCode = config('finnotech.authorization_code');
+
         $response = self::makeTokenRequest([
             'grant_type' => 'authorization_code',
+            'code' => $authorizationCode,
+            'bank' => '062', // Ayandeh
+            'redirect_uri' => 'https://paylibero.ir'
+
+            /*'grant_type' => 'authorization_code',
             'nid' => config('finnotech.national_id'),
-            'scopes' => config('finnotech.scopes')
+            'scopes' => config('finnotech.scopes')*/
         ]);
 
         if (!$response || $response['status'] !== 'DONE') {
@@ -292,22 +299,19 @@ class FinnotechTokenService
 
     private static function storeTokenInCache(FinnotechToken $token): void
     {
-        $a = $token->token_type;
-        $b = FinnotechTokenTypeEnum::CLIENT_CREDENTIALS->value;
         $cacheKey = $token->token_type->value === FinnotechTokenTypeEnum::CLIENT_CREDENTIALS->value
             ? self::CLIENT_CREDENTIALS_CACHE_KEY
-            //: self::AUTHORIZATION_CODE_TOKEN_CACHE_KEY . $token->national_id;
             : self::AUTHORIZATION_CODE_TOKEN_CACHE_KEY;
 
         $cacheDuration = Carbon::now()->diffInSeconds($token->expires_at);
 
         // Debug the actual cache key
-        Log::info('Cache storage details', [
+        /*Log::info('Cache storage details', [
             'original_key' => $cacheKey,
             'full_cache_key' => Cache::getPrefix() . $cacheKey,
             'cache_prefix' => Cache::getPrefix(),
             'duration' => $cacheDuration
-        ]);
+        ]);*/
 
         Cache::put($cacheKey, $token->ulid, $cacheDuration);
     }
