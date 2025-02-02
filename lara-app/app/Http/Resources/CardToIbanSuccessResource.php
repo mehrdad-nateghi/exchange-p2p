@@ -21,7 +21,7 @@ class CardToIbanSuccessResource extends JsonResource
             "card" => $result['card'],
             "deposit" => $result['deposit'],
             "bank_name" => $result['bankName'],
-            "deposit_description" => $result['depositDescription'],
+            //"deposit_description" => $result['depositDescription'],
             "deposit_owners" => $result['depositOwners']
         ];
     }
