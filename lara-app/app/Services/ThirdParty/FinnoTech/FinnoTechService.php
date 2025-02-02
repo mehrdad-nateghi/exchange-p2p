@@ -45,6 +45,14 @@ class FinnoTechService
             $response = Http::withToken($this->token)
                 ->get($this->baseUrl . $endpoint, $queryParams);
 
+            // Method 1: Using Laravel's Log facade
+            Log::info('API Response', [
+                'url' => $this->baseUrl . $endpoint,
+                'status' => $response->status(),
+                'body' => $response->json(),
+                'headers' => $response->headers()
+            ]);
+
             return $response->json();
         } catch (\Throwable $t) {
             Log::error('FinnoTech CardToIban Error: ' . $t->getMessage());
