@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
-class FinnoTechTokenService
+class FinnotechTokenService
 {
     private const CLIENT_CREDENTIALS_CACHE_KEY = 'finnotech_client_credentials_token';
     private const AUTHORIZATION_CODE_TOKEN_CACHE_KEY = 'finnotech_authorization_code_token';
