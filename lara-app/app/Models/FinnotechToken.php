@@ -53,11 +53,6 @@ class FinnotechToken extends Model
      */
     public function needsRefresh(): bool
     {
-        $a = $this->expires_at
-            ->subMinutes(FinnotechTokenService::TOKEN_REFRESH_BUFFER_MINUTES)
-            ->isPast();
-
-        $b = $this->expires_at;
         return $this->expires_at
             ->subMinutes(FinnotechTokenService::TOKEN_REFRESH_BUFFER_MINUTES)
             ->isPast();

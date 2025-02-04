@@ -9,7 +9,8 @@ class FinnoTechService
 {
     private string $baseUrl;
     private string $clientId;
-    public ?string $token = null;
+    public ?string $clientCredentialsToken = null; // todo: change to private
+    public ?string $authorizationToken = null; // todo: change to private
 
     public function __construct()
     {
@@ -19,7 +20,7 @@ class FinnoTechService
 
     public function withClientCredentials(): self
     {
-        $this->token = FinnoTechTokenService::getClientCredentialsToken();
+        $this->clientCredentialsToken = FinnoTechTokenService::getClientCredentialsToken();
         return $this;
     }
 
@@ -29,7 +30,7 @@ class FinnoTechService
             $this->token = config('finnotech.authorization_token');
             return $this;
         }*/
-        $this->token = FinnoTechTokenService::getAuthorizationToken();
+        $this->authorizationToken = FinnoTechTokenService::getAuthorizationToken();
         return $this;
     }
 
@@ -42,7 +43,7 @@ class FinnoTechService
                 'card' => $card,
             ];
 
-            $response = Http::withToken($this->token)
+            $response = Http::withToken($this->clientCredentialsToken)
                 ->get($this->baseUrl . $endpoint, $queryParams);
 
             // Method 1: Using Laravel's Log facade
@@ -67,7 +68,7 @@ class FinnoTechService
 
             $url = $this->baseUrl . $endpoint . '?' . http_build_query($queryParams);
 
-            $response = Http::withToken($this->token)
+            $response = Http::withToken($this->authorizationToken)
                 ->withHeaders([
                     'Content-Type' => 'application/json',
                     'Accept' => 'application/json',

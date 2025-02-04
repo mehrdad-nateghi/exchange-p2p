@@ -15,8 +15,8 @@ class FinnoTechTokenService
     private const AUTHORIZATION_CODE_TOKEN_CACHE_KEY = 'finnotech_authorization_code_token';
 
     public const TOKEN_REFRESH_BUFFER_MINUTES = 60;
-    private const TOKEN_LIFETIME_DAYS = 10;
-    private const TOKEN_LIFETIME_MILLISECONDS = 864000000; // 10 days
+    //private const TOKEN_LIFETIME_DAYS = 10;
+    //private const TOKEN_LIFETIME_MILLISECONDS = 864000000; // 10 days
 
     /**
      * Get a valid client credentials token
@@ -65,7 +65,6 @@ class FinnoTechTokenService
             $cachedToken = self::getTokenFromCache(self::AUTHORIZATION_CODE_TOKEN_CACHE_KEY);
             if ($cachedToken) {
                 Log::info('Finnotech authorization token found in cache', [
-                    'national_id' => config('finnotech.national_id'),
                     'expires_in' => $cachedToken->getRemainingTime()
                 ]);
                 return $cachedToken->access_token;
@@ -90,7 +89,6 @@ class FinnoTechTokenService
 
         } catch (\Throwable $t) {
             Log::error('Finnotech Authorization Token Error: ' . $t->getMessage(), [
-               // 'national_id' => $nationalId,
                 'exception' => $t
             ]);
             return null;
@@ -264,9 +262,6 @@ class FinnoTechTokenService
             'ulid' => $token->ulid
         ]);
 
-        $b = $token->token_type;
-        $a = $token->token_type->name;
-
         $response = self::makeTokenRequest([
             'grant_type' => 'refresh_token',
             'refresh_token' => $token->refresh_token,
@@ -343,8 +338,8 @@ class FinnoTechTokenService
     private static function makeTokenRequest(array $params): ?array
     {
         $baseUrl = config('finnotech.base_url');
-        $c = config('finnotech.client_id');
-        $d = config('finnotech.client_secret');
+        /*$c = config('finnotech.client_id');
+        $d = config('finnotech.client_secret');*/
 
         $authString = base64_encode(
             config('finnotech.client_id') . ':' . config('finnotech.client_secret')
@@ -356,7 +351,7 @@ class FinnoTechTokenService
                 'Authorization' => "Basic {$authString}"
             ])->post($baseUrl . '/dev/v2/oauth2/token', $params);
 
-            $a = $response->body();
+            //$a = $response->body();
             if (!$response->successful()) {
                 Log::error('Finnotech API Error', [
                     'status' => $response->status(),

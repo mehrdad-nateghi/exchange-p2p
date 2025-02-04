@@ -38,7 +38,7 @@ return new class extends Migration
             $table->integer('refresh_count')->default(0)->comment('Number of times this token has been refreshed');
 
             // Optional: Additional tracking fields
-            $table->json('last_usage')->nullable()->comment('Track when and where token was last used');
+            //$table->json('last_usage')->nullable()->comment('Track when and where token was last used');
             $table->json('metadata')->nullable()->comment('Any additional token metadata');
 
             $table->timestamps();

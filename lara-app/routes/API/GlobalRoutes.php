@@ -32,7 +32,8 @@ Route::name('global.')->group(function () {
         $data = $finnoTechService->withAuthorizationCode();
         $cardToIban = $finnoTechService->withClientCredentials()->getCardToIban('5041721019784678');
         return response()->json([
-                'auth_token' => $data->token,
+                'auth_token' => $data->authorizationToken,
+                'credential_token' => $data->clientCredentialsToken,
                 'cardToIban' => $cardToIban
             ]
         );
