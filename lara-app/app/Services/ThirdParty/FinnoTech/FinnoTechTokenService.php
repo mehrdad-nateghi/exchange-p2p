@@ -25,7 +25,7 @@ class FinnoTechTokenService
     {
         try {
             // Step 1: Try to get from cache first
-            $cachedToken = self::getClientCredentialsTokenFromCache();
+            $cachedToken = self::getTokenFromCache(self::CLIENT_CREDENTIALS_CACHE_KEY);
             if ($cachedToken) {
                 Log::info('Finnotech client credentials token found in cache', [
                     'expires_in' => $cachedToken->getRemainingTime()
@@ -62,7 +62,7 @@ class FinnoTechTokenService
     {
         try {
             // Step 1: Try to get from cache first
-            $cachedToken = self::getAuthorizationTokenFromCache();
+            $cachedToken = self::getTokenFromCache(self::AUTHORIZATION_CODE_TOKEN_CACHE_KEY);
             if ($cachedToken) {
                 Log::info('Finnotech authorization token found in cache', [
                     'national_id' => config('finnotech.national_id'),
@@ -90,7 +90,7 @@ class FinnoTechTokenService
 
         } catch (\Throwable $t) {
             Log::error('Finnotech Authorization Token Error: ' . $t->getMessage(), [
-                'national_id' => $nationalId,
+               // 'national_id' => $nationalId,
                 'exception' => $t
             ]);
             return null;
@@ -122,6 +122,27 @@ class FinnoTechTokenService
     {
         $cacheKey = self::AUTHORIZATION_CODE_TOKEN_CACHE_KEY;
 
+        if (!Cache::has($cacheKey)) {
+            return null;
+        }
+
+        $tokenUlid = Cache::get($cacheKey);
+        $token = FinnotechToken::where('ulid', $tokenUlid)->first();
+
+        if (!$token) {
+            Cache::forget($cacheKey);
+            return null;
+        }
+
+        if ($token->needsRefresh()) {
+            return self::refreshToken($token);
+        }
+
+        return $token;
+    }
+
+    private static function getTokenFromCache(string $cacheKey): ?FinnotechToken
+    {
         if (!Cache::has($cacheKey)) {
             return null;
         }
@@ -210,6 +231,7 @@ class FinnoTechTokenService
         $response = self::makeTokenRequest([
             'grant_type' => 'authorization_code',
             'code' => $authorizationCode,
+            //'code' => '8la7pwvXiQiFKrkM',
             'bank' => '062', // Ayandeh
             'redirect_uri' => 'https://paylibero.ir'
 
@@ -217,6 +239,7 @@ class FinnoTechTokenService
             'nid' => config('finnotech.national_id'),
             'scopes' => config('finnotech.scopes')*/
         ]);
+
 
         if (!$response || $response['status'] !== 'DONE') {
             Log::error('Failed to get new authorization token', [
@@ -275,6 +298,7 @@ class FinnoTechTokenService
             'refresh_token' => $tokenData['refreshToken'] ?? null,
             'scopes' => $tokenData['scopes'] ?? [],
             'national_id' => config('finnotech.national_id'),
+            'bank_code' => $tokenData['bank'] ?? null,
             'lifetime' => $tokenData['lifeTime'],
             'expires_at' => $expiresAt,
             'is_active' => true,

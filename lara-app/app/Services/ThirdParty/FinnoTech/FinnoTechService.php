@@ -9,7 +9,7 @@ class FinnoTechService
 {
     private string $baseUrl;
     private string $clientId;
-    private ?string $token = null;
+    public ?string $token = null;
 
     public function __construct()
     {
