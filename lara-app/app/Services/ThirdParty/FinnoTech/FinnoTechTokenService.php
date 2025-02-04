@@ -242,10 +242,10 @@ class FinnoTechTokenService
 
 
         if (!$response || $response['status'] !== 'DONE') {
-            Log::error('Failed to get new authorization token', [
+            /*Log::error('Failed to get new authorization token', [
                 'national_id' => $nationalId,
                 'response' => $response ?? 'null'
-            ]);
+            ]);*/
             return null;
         }
 
