@@ -9,7 +9,5 @@ enum TransactionProviderEnum: int{
     use EnumTrait;
 
     case FINNOTECH = 1;
-
-    // Internal Operations
-    //case WALLET = 'wallet';
+    case DIRECT_DEPOSIT = 2;
 }

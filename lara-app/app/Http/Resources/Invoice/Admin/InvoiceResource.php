@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Invoice\Admin;
 
+use App\Http\Resources\Transaction\Admin\TransactionResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class InvoiceResource extends JsonResource
@@ -23,6 +24,9 @@ class InvoiceResource extends JsonResource
             'fee_foreign_currency_code' => $this->fee_foreign_currency_code,
             'status' => $this->status->key(),
             'type' => $this->type->key(),
+            'transactions' => $this->whenLoaded('transactions',
+                fn() => TransactionResource::collection($this->transactions)
+            ),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

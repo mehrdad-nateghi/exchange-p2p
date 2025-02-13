@@ -62,5 +62,7 @@ return [
 
     'admin_return_success' => 'بازگشت به حساب ادمین با موفقیت انجام شد',
     'admin_return_failed' => 'بازگشت به حساب ادمین با شکست مواجه شد',
-    'file' => 'فایل'
+    'file' => 'فایل',
+    'transaction' => 'تراکنش',
+
 ];

@@ -23,7 +23,7 @@ class IndexTradeController extends Controller
             $trades = QueryBuilder::for(Trade::class)
                 ->with([
                     'tradeSteps',
-                    'invoices',
+                    'invoices.transactions',
                     'request.user',
                     'request.paymentMethods',
                     'bid.user',

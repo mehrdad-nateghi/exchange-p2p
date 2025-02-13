@@ -173,6 +173,8 @@ return [
         'old_password' => "Old password",
         'new_password' => "New password",
         'new_password_confirmation' => "New password confirmation",
+        'ref_id' => "Ref ID",
+        'amount' => "Amount",
     ],
 
     // Custom validation messages
@@ -188,13 +190,6 @@ return [
     'payment_method_in_use' => "This payment method cannot be modified or deleted while it's involved in active request.",
     'no_unread_notifications' => "You don't have any unread notifications",
     "curren_password_incorrect" => "Current password is incorrect.",
-
-
-
-
-
-
-
-
-
+    "invoice_status_must_be_pending" => "The invoice must be in 'pending' status.",
+    "invoice_type_must_be_pay_toman_to_system" => "The invoice type must be 'step one pay toman to system'.",
 ];

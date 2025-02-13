@@ -173,6 +173,8 @@ return [
         'old_password' => "رمزعبور قبلی",
         'new_password' => "رمزعبور جدید",
         'new_password_confirmation' => "تائید رمزعبور جدید",
+        'ref_id' => "کد رهگیری",
+        'amount' => "مبلغ",
     ],
 
     // Custom validation messages
@@ -188,6 +190,9 @@ return [
     'payment_method_in_use' => 'این روش پرداخت در حال استفاده در یک درخواست فعال است و قابل ویرایش یا حذف نمی‌باشد.',
     'no_unread_notifications' => "شما هیچ اعلان نخوانده‌ای ندارید",
     "curren_password_incorrect" => "رمزعبور قبلی اشتباه است",
+    "invoice_status_must_be_pending" => "فاکتور باید در وضعیت انتظار باشد",
+    "invoice_type_must_be_pay_toman_to_system" => "فاکتور باید از نوع پرداخت تومان به سیستم باشد",
+
 
 
 

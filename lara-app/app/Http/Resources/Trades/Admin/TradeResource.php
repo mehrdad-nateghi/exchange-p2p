@@ -3,9 +3,9 @@
 namespace App\Http\Resources\Trades\Admin;
 
 use App\Http\Resources\Bids\Admin\BidResource;
-use App\Http\Resources\InvoiceResource;
+use App\Http\Resources\Invoice\Admin\InvoiceResource;
 use App\Http\Resources\Requests\Admin\RequestResource;
-use App\Http\Resources\TradeStepResource;
+use App\Http\Resources\TradeSteps\Admin\TradeStepResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class TradeResource extends JsonResource

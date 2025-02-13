@@ -69,4 +69,5 @@ return [
     'admin_return_success' => 'Successfully returned to admin account',
     'admin_return_failed' => 'Failed to return to admin account',
     'file' => 'file',
+    'transaction' => 'transaction',
 ];
