@@ -1,4 +1,4 @@
-"/users/third-party/finnotech/card-info":
+'/users/third-party/finnotech/card-info':
   get:
     tags:
       - finnotech
@@ -13,13 +13,13 @@
         schema:
           type: string
     responses:
-      "200":
+      '200':
         description: The Card to IBAN was retrieved successfully
         content:
           application/json:
             schema:
               allOf:
-                - $ref: "#/components/schemas/Base200Response"
+                - $ref: '#/components/schemas/Base200Response'
                 - type: object
                   properties:
                     data:
@@ -30,27 +30,23 @@
                         - card
                         - deposit
                         - bank_name
-                        - deposit_description
                         - deposit_owners
                       properties:
                         trackId:
                           type: string
-                          example: "6cfaff97-aa46-481a-8be9-058698eab943"
+                          example: '6cfaff97-aa46-481a-8be9-058698eab943'
                         iban:
                           type: string
-                          example: "IR150150000000002901136012"
+                          example: 'IR150150000000002901136012'
                         card:
                           type: string
-                          example: "6219861019874687"
+                          example: '6219861019874687'
                         deposit:
                           type: string
-                          example: "2901136012"
+                          example: '2901136012'
                         bank_name:
                           type: string
-                          example: "آینده"
-                        deposit_description:
-                          type: string
-                          example: "حساب فعال است"
+                          example: 'آینده'
                         deposit_owners:
                           type: string
-                          example: "سحر قاسمی"
+                          example: 'سحر قاسمی'
