@@ -192,6 +192,8 @@ return [
     "curren_password_incorrect" => "رمزعبور قبلی اشتباه است",
     "invoice_status_must_be_pending" => "فاکتور باید در وضعیت انتظار باشد",
     "invoice_type_must_be_pay_toman_to_system" => "فاکتور باید از نوع پرداخت تومان به سیستم باشد",
+    'insufficient_transaction_amount' => 'مجموع مبلغ تراکنش‌های تکمیل شده (:amount) کمتر از مبلغ قابل پرداخت (:min) می‌باشد. لطفاً از تکمیل تمامی پرداخت‌ها اطمینان حاصل فرمایید.',
+
 
 
 

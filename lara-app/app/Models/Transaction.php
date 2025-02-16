@@ -37,4 +37,10 @@ class Transaction extends Model
         return $this->morphTo();
     }
 
+    public function scopeCompleted($query)
+    {
+        return $query->where('status', TransactionStatusEnum::COMPLETED->value);
+
+    }
+
 }

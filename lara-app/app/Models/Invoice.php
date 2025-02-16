@@ -2,20 +2,18 @@
 
 namespace App\Models;
 
-use App\Enums\BidStatusEnum;
 use App\Enums\InvoiceStatusEnum;
 use App\Enums\InvoiceTypeEnum;
-use App\Enums\RequestTypeEnum;
 use App\Traits\Global\Number;
 use App\Traits\Global\Paginatable;
 use App\Traits\Global\Ulid;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Support\Facades\Auth;
 
 class Invoice extends Model
@@ -75,6 +73,11 @@ class Invoice extends Model
     public function scopeFilterByOwner($query)
     {
         return $query->where('user_id', Auth::id());
+    }
+
+    public function getPayedTransactionsAmountAttribute()
+    {
+        return $this->transactions()->completed()->sum('amount');
     }
 
     /*public function setFeeAttribute($value)

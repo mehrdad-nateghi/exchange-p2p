@@ -192,4 +192,6 @@ return [
     "curren_password_incorrect" => "Current password is incorrect.",
     "invoice_status_must_be_pending" => "The invoice must be in 'pending' status.",
     "invoice_type_must_be_pay_toman_to_system" => "The invoice type must be 'step one pay toman to system'.",
+    'insufficient_transaction_amount' => 'The total amount of completed transactions (:amount) is less than the required payment amount (:min). Please ensure all payments are completed.',
+
 ];
