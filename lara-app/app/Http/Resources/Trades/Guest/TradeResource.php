@@ -27,6 +27,7 @@ class TradeResource extends JsonResource
             'request' => $this->whenLoaded('request', function () {
                 return new RequestResource($this->request);
             }),
+            'has_expired_steps' => $this->hasExpiredSteps(),
             'completed_at' => $this->completed_at,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,

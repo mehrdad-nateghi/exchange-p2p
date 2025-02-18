@@ -9,6 +9,7 @@ use App\Enums\TradeStepsStatusEnum;
 use App\Traits\Global\Number;
 use App\Traits\Global\Paginatable;
 use App\Traits\Global\Ulid;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -113,4 +114,13 @@ class Trade extends Model
         $bid = $this->bid;
         return $request->type->value === RequestTypeEnum::BUY->value ? $request->user : $bid->user;
     }
+
+    public function hasExpiredSteps(): bool
+    {
+        return $this->tradeSteps()
+            ->whereNotNull('expire_at')
+            ->where('expire_at', '<', Carbon::now())
+            ->exists();
+    }
+
 }
