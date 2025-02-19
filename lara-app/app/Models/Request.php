@@ -106,6 +106,28 @@ class Request extends Model
         return null;
     }
 
+    public function scopeOngoing($query)
+    {
+        return $query->whereIn('status', [
+            RequestStatusEnum::PENDING->value,
+            RequestStatusEnum::PROCESSING->value,
+            RequestStatusEnum::TRADING->value
+        ]);
+    }
+
+    public static function getOngoingForUser($userId = null)
+    {
+        $userId = $userId ?? Auth::id();
+
+        return self::where('user_id', $userId)
+            ->ongoing()
+            /*->orWhereHas('bids', function ($query) use ($userId) {
+                $query->where('user_id', $userId)
+                    ->where('status', BidStatusEnum::ACCEPTED);
+            })*/
+            ->latest();
+    }
+
     /*public function getSellerUserAttribute()
     {
         return $this->is_user_seller ? $this->user : $this->bid->user;

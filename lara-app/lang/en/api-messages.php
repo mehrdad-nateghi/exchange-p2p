@@ -35,7 +35,7 @@ return [
     // Verify Code
     'code_verified_successfully' => 'Verification code verified successfully',
     'user' => 'user',
-    'user_stats' => 'user stats',
+    'user_stats' => 'user statistics',
     'request' => 'request',
     'requests' => 'requests',
     'bid' => 'bid',

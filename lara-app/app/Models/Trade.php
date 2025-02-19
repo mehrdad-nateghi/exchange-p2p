@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 
 class Trade extends Model
 {
@@ -121,6 +122,28 @@ class Trade extends Model
             ->whereNotNull('expire_at')
             ->where('expire_at', '<', Carbon::now())
             ->exists();
+    }
+
+    public function scopeOngoing($query)
+    {
+        return $query->whereIn('status', [
+            TradeStatusEnum::PROCESSING->value,
+            //TradeStatusEnum::SUSPEND->value
+        ]);
+    }
+
+    public static function getOngoingForUser($userId = null)
+    {
+        $userId = $userId ?? Auth::id();
+
+        return self::whereHas('request', function ($query) use ($userId) {
+            $query->where('user_id', $userId);
+        })
+            ->orWhereHas('bid', function ($query) use ($userId) {
+                $query->where('user_id', $userId);
+            })
+            ->ongoing()
+            ->latest();
     }
 
 }
