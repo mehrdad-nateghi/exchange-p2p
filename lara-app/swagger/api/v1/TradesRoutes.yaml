@@ -1,4 +1,4 @@
-"/trades":
+'/trades':
   get:
     tags:
       - trades
@@ -6,8 +6,8 @@
     description: Get a list of trades
     operationId: getAllTrades
     parameters:
-      - $ref: "#/components/parameters/pageSize"
-      - $ref: "#/components/parameters/pageNumber"
+      - $ref: '#/components/parameters/pageSize'
+      - $ref: '#/components/parameters/pageNumber'
       - name: filter[type]
         in: query
         description: Filter trades by type (buy or sell)
@@ -21,13 +21,13 @@
           type: string
           enum: [pending, processing, trading, canceled]
     responses:
-      "200":
+      '200':
         description: Successful response
         content:
           application/json:
             schema:
               allOf:
-                - $ref: "#/components/schemas/Base200Response"
+                - $ref: '#/components/schemas/Base200Response'
                 - type: object
                   required:
                     - data
@@ -41,11 +41,10 @@
                         items:
                           type: array
                           items:
-                            $ref: "#/components/schemas/Trade"
+                            $ref: '#/components/schemas/Trade'
                         pagination:
-                          $ref: "#/components/schemas/Pagination"
-
-"/users/trades":
+                          $ref: '#/components/schemas/Pagination'
+'/users/trades':
   get:
     tags:
       - trades
@@ -65,16 +64,16 @@
         schema:
           type: string
           enum: [created_at, -created_at]
-      - $ref: "#/components/parameters/pageSize"
-      - $ref: "#/components/parameters/pageNumber"
+      - $ref: '#/components/parameters/pageSize'
+      - $ref: '#/components/parameters/pageNumber'
     responses:
-      "200":
+      '200':
         description: Successful response
         content:
           application/json:
             schema:
               allOf:
-                - $ref: "#/components/schemas/Base200Response"
+                - $ref: '#/components/schemas/Base200Response'
                 - type: object
                   required:
                     - data
@@ -88,11 +87,10 @@
                         items:
                           type: array
                           items:
-                            $ref: "#/components/schemas/UserTrade"
+                            $ref: '#/components/schemas/UserTrade'
                         pagination:
-                          $ref: "#/components/schemas/Pagination"
-
-"/users/trades/{trade}":
+                          $ref: '#/components/schemas/Pagination'
+'/users/trades/{trade}':
   get:
     tags:
       - trades
@@ -104,30 +102,30 @@
         in: path
         required: true
     responses:
-      "200":
-        description: "The user trade was retrieved successfully."
+      '200':
+        description: 'The user trade was retrieved successfully.'
         content:
           application/json:
             schema:
               allOf:
-                - $ref: "#/components/schemas/Base200Response"
+                - $ref: '#/components/schemas/Base200Response'
                 - type: object
                   required:
                     - data
                   properties:
                     data:
-                      $ref: "#/components/schemas/UserTrade"
+                      $ref: '#/components/schemas/UserTrade'
   patch:
     tags:
       - trades
-    summary: "update deposit reason of the trade by ULID"
-    description: "This endpoint update deposit reason of the trade by ULID."
+    summary: 'update deposit reason of the trade by ULID'
+    description: 'This endpoint update deposit reason of the trade by ULID.'
     operationId: updateDepositReason
     parameters:
       - name: trade
         in: path
         required: true
-        description: "The ULID of the trade."
+        description: 'The ULID of the trade.'
         schema:
           type: string
     requestBody:
@@ -141,22 +139,22 @@
             properties:
               deposit_reason:
                 type: string
-                description: "the reason of the deposit"
+                description: 'the reason of the deposit'
     responses:
-      "200":
-        description: "The deposit reason was updated successfully."
+      '200':
+        description: 'The deposit reason was updated successfully.'
         content:
           application/json:
             schema:
               allOf:
-                - $ref: "#/components/schemas/Base200Response"
+                - $ref: '#/components/schemas/Base200Response'
                 - type: object
                   required:
                     - data
                   properties:
                     data:
-                      $ref: "#/components/schemas/UserTrade"
-"/admins/trades":
+                      $ref: '#/components/schemas/UserTrade'
+'/admins/trades':
   get:
     tags:
       - trades
@@ -176,16 +174,16 @@
         schema:
           type: string
           enum: [created_at, -created_at]
-      - $ref: "#/components/parameters/pageSize"
-      - $ref: "#/components/parameters/pageNumber"
+      - $ref: '#/components/parameters/pageSize'
+      - $ref: '#/components/parameters/pageNumber'
     responses:
-      "200":
+      '200':
         description: Successful response
         content:
           application/json:
             schema:
               allOf:
-                - $ref: "#/components/schemas/Base200Response"
+                - $ref: '#/components/schemas/Base200Response'
                 - type: object
                   required:
                     - data
@@ -199,10 +197,10 @@
                         items:
                           type: array
                           items:
-                            $ref: "#/components/schemas/AdminTrade"
+                            $ref: '#/components/schemas/AdminTrade'
                         pagination:
-                          $ref: "#/components/schemas/Pagination"
-"/admins/trades/{trade}":
+                          $ref: '#/components/schemas/Pagination'
+'/admins/trades/{trade}':
   get:
     tags:
       - trades
@@ -214,80 +212,80 @@
         in: path
         required: true
     responses:
-      "200":
-        description: "The user trade was retrieved successfully."
+      '200':
+        description: 'The user trade was retrieved successfully.'
         content:
           application/json:
             schema:
               allOf:
-                - $ref: "#/components/schemas/Base200Response"
+                - $ref: '#/components/schemas/Base200Response'
                 - type: object
                   required:
                     - data
                   properties:
                     data:
-                      $ref: "#/components/schemas/AdminTrade"
-"/admins/trades/{trade}/cancel":
+                      $ref: '#/components/schemas/AdminTrade'
+'/admins/trades/{trade}/cancel':
   patch:
     tags:
       - trades
-    summary: "Update Trade Status"
-    description: "This endpoint updates a trade status."
+    summary: 'Update Trade Status'
+    description: 'This endpoint updates a trade status.'
     operationId: updateTradeStatus
     parameters:
       - name: trade
         in: path
-        description: "The ULID of trade"
+        description: 'The ULID of trade'
         required: true
         schema:
           type: string
     responses:
-      "200":
-        description: "The trade Status was updated successfully."
+      '200':
+        description: 'The trade Status was updated successfully.'
         content:
           application/json:
             schema:
               allOf:
-                - $ref: "#/components/schemas/Base200Response"
+                - $ref: '#/components/schemas/Base200Response'
                 - type: object
                   required:
                     - data
                   properties:
                     data:
-                      $ref: "#/components/schemas/AdminTrade"
-"/admins/trade-steps/{trade}/increase-expire-at":
+                      $ref: '#/components/schemas/AdminTrade'
+'/admins/trade-steps/{trade}/increase-expire-at':
   patch:
     tags:
       - trades
-    summary: "Increase the expiration time of a trade step"
-    description: "Partially update the expiration time of a specific trade step by increasing it. The number of hours to increase is optional."
+    summary: 'Increase the expiration time of a trade step'
+    description: 'Partially update the expiration time of a specific trade step by increasing it. The number of hours to increase is optional.'
     operationId: increaseExpireAt
     parameters:
       - name: trade
         in: path
-        description: "The ULID of trade"
+        description: 'The ULID of trade'
         required: true
         schema:
           type: string
       - name: hours
         in: query
-        description: "Number of hours to increase the expiration time. If not provided, a default value is applied."
+        description: 'Number of hours to increase the expiration time. If not provided, a default value is applied.'
         required: false
         schema:
           type: number
           minimum: 1
           example: 44
     responses:
-      "200":
-        description: "The expiration time of a trade step was updated successfully."
+      '200':
+        description: 'The expiration time of a trade step was updated successfully.'
         content:
           application/json:
             schema:
               allOf:
-                - $ref: "#/components/schemas/Base200Response"
+                - $ref: '#/components/schemas/Base200Response'
                 - type: object
                   required:
                     - data
                   properties:
                     data:
-                      $ref: "#/components/schemas/AdminTrade"
+                      $ref: '#/components/schemas/AdminTrade'
