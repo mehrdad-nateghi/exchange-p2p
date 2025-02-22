@@ -35,6 +35,6 @@ class AlphaSpace implements Rule
      */
     public function message()
     {
-        return 'The :attribute must only contain letters and spaces';
+        return trans('validation.contains_alpha_space');
     }
 }
