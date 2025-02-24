@@ -22,7 +22,7 @@ class TransactionResource extends JsonResource
             'ref_id' => $this->ref_id,
             'amount' => $this->amount,
             'currency' => $this->currency,
-            'provider' => $this->provider->key(),
+            'provider' => $this->provider?->key(),
             'status' => $this->status->key(),
             'metadata' => $this->metadata,
             // Related resources
