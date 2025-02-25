@@ -61,6 +61,33 @@ class FinnoTechService
         }
     }
 
+    public function getBanksInfo(?string $trackId = null): array
+    {
+        try {
+            $endpoint = "/facility/v2/clients/{$this->clientId}/banksInfo";
+            $queryParams = [];
+            if ($trackId) {
+                $queryParams['trackId'] = $trackId;
+            }
+
+            $response = Http::withToken($this->clientCredentialsToken)
+                ->get($this->baseUrl . $endpoint, $queryParams);
+
+            // Method 1: Using Laravel's Log facade
+            Log::info('API Response', [
+                'url' => $this->baseUrl . $endpoint,
+                'status' => $response->status(),
+                'body' => $response->json(),
+                'headers' => $response->headers()
+            ]);
+
+            return $response->json();
+        } catch (\Throwable $t) {
+            Log::error('FinnoTech BanksInfo Error: ' . $t->getMessage());
+            throw $t;
+        }
+    }
+
     public function transferTo(array $queryParams, array $bodyParams): array
     {
         try {

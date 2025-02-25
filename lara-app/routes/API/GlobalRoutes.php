@@ -23,15 +23,19 @@ use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Notifications\Notification;
 
 Route::name('global.')->group(function () {
-    Route::get('/health',HealthCheckController::class)->name('health.check');
-    Route::get('/me-test',MeTestController::class)->name('me.test');
-    Route::get('/daily-rate-range',DailyRateRangeController::class)->name('daily.rate.range');
-    Route::get('/gateway/callback',GatewayCallbackController::class)->name('gateway.callback');
-
-    Route::get('/v1/test',function (FinnoTechService  $finnoTechService){
+    Route::get('/health', HealthCheckController::class)->name('health.check');
+    Route::get('/me-test', MeTestController::class)->name('me.test');
+    Route::get('/daily-rate-range', DailyRateRangeController::class)->name('daily.rate.range');
+    Route::get('/gateway/callback', GatewayCallbackController::class)->name('gateway.callback');
+    Route::get('/v1/banks-info', function (FinnoTechService  $finnoTechService) {
+        $banksInfo = $finnoTechService->withClientCredentials()->getBanksInfo();
+        return response()->json($banksInfo);
+    })->name('banks-info');
+    Route::get('/v1/test', function (FinnoTechService  $finnoTechService) {
         $data = $finnoTechService->withAuthorizationCode();
         $cardToIban = $finnoTechService->withClientCredentials()->getCardToIban('5041721019784678');
-        return response()->json([
+        return response()->json(
+            [
                 'auth_token' => $data->authorizationToken,
                 'credential_token' => $data->clientCredentialsToken,
                 'cardToIban' => $cardToIban
