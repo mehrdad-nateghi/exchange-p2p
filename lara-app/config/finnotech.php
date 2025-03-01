@@ -6,7 +6,7 @@ return [
     'national_id' => env('FINNOTECH_NATIONAL_ID'),
     'base_url' => env('FINNOTECH_BASE_URL'),
     'authorization_code' => env('FINNOTECH_AUTHORIZATION_CODE'),
-    'credentials_token_scopes' => "facility:card-to-iban:get",
+    'credentials_token_scopes' => array("facility:cc-bank-info:get", "facility:card-to-iban:get", "kyc:iban-owner-verification:get", "kyc:iban-owner-birthdate-verification:get"),
     //'credentials_token_scopes' => env('FINNOTECH_CREDENTIALS_TOKEN_SCOPES'),
     //'authorization_token' => env('FINNOTECH_AUTHORIZATION_TOKEN'),
 ];
