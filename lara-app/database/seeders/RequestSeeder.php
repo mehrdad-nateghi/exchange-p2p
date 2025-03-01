@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\DB;
 
 class RequestSeeder extends Seeder
 {
-    private const REQUESTS_PER_TYPE = 3;
+    private const REQUESTS_PER_TYPE = 1000;
     private const REQUEST_TYPES = [RequestTypeEnum::BUY->value, RequestTypeEnum::SELL->value];
 
     const PRICE_BOUNDS = [
