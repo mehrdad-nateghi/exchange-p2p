@@ -63,7 +63,7 @@ class _FinnoTechTokenService
             ])->post($baseUrl . '/dev/v2/oauth2/token', [
                 'grant_type' => 'client_credentials',
                 'nid' => $nid,
-                'scopes' => 'facility:card-to-iban:get' // Adjust scopes: a,b,c
+                'scopes' => config('finnotech.credentials_token_scopes') // Adjust scopes: a,b,c
             ]);
 
             $a = $response->json();
@@ -105,7 +105,7 @@ class _FinnoTechTokenService
         // Create Basic Auth string
         $authString = self::getBase64_encode($clientId, $clientSecret);
 
-        Log::info('refreshAndCacheAuthorizationCodeToken',[
+        Log::info('refreshAndCacheAuthorizationCodeToken', [
             'client_id' => $clientId,
             'client_secret' => $clientSecret,
             'authorization_code' => $authorizationCode,
@@ -124,7 +124,7 @@ class _FinnoTechTokenService
                 'redirect_uri' => 'https://paylibero.ir'
             ]);
 
-            Log::info('response',[
+            Log::info('response', [
                 'response' => $response->json(),
             ]);
 

@@ -46,7 +46,6 @@ class FinnoTechTokenService
             // Step 3: If no valid token exists, get a new one
             Log::info('Getting new Finnotech client credentials token');
             return self::getNewClientCredentialsToken();
-
         } catch (\Throwable $t) {
             Log::error('Finnotech Client Credentials Token Error: ' . $t->getMessage(), [
                 'exception' => $t
@@ -86,7 +85,6 @@ class FinnoTechTokenService
                 'national_id' => $nationalId
             ]);*/
             return self::getNewAuthorizationToken();
-
         } catch (\Throwable $t) {
             Log::error('Finnotech Authorization Token Error: ' . $t->getMessage(), [
                 'exception' => $t
@@ -361,7 +359,6 @@ class FinnoTechTokenService
             }
 
             return $response->json();
-
         } catch (\Throwable $t) {
             Log::error('Finnotech API Request Error: ' . $t->getMessage());
             return null;
