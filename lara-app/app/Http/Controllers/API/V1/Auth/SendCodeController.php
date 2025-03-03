@@ -7,6 +7,7 @@ use App\Enums\VerificationCodeTypeEnum;
 use App\Enums\VerificationCodeViaEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\Auth\SendCodeRequest;
+use App\Notifications\VerificationCodeNotification;
 use App\Services\API\V1\EmailNotificationService;
 use App\Services\API\V1\VerificationCodeService;
 use Illuminate\Http\JsonResponse;
@@ -37,8 +38,8 @@ class SendCodeController extends Controller
 
             $verificationCode = $verificationCodeService->store($data);
 
-            // send code via email
-            $emailNotificationService->verificationCode($verificationCode,$code);
+            // send code via email or mobile
+            $verificationCode->notify(new VerificationCodeNotification($verificationCode->to, $verificationCode->via->value, $code));
 
             DB::commit();
 

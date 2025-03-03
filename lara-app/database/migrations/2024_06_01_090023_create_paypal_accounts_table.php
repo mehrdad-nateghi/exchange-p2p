@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->ulid('ulid')->index();
             $table->string('holder_name',50);
-            $table->string('email');
+            $table->string('email')->nullable();
             $table->boolean('is_active')->default(false);
             $table->timestamps();
             $table->softDeletes();

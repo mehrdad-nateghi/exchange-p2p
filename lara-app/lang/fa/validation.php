@@ -175,6 +175,10 @@ return [
         'new_password_confirmation' => "تائید رمزعبور جدید",
         'ref_id' => "کد رهگیری",
         'amount' => "مبلغ",
+        'email' => 'ایمیل',
+        'mobile' => 'شماره موبایل',
+        'type' => 'نوع',
+        'password' => 'رمز عبور',
     ],
 
     // Custom validation messages

@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Enums\VerificationCodeTypeEnum;
+use App\Enums\VerificationCodeViaEnum;
 use App\Traits\Global\Ulid;
 use App\Traits\VerificationCode\Scopes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -19,6 +21,8 @@ class VerificationCode extends Model
     ];
 
     protected $casts = [
+        'via' => VerificationCodeViaEnum::class,
+        'type' => VerificationCodeTypeEnum::class,
         'expired_at' => 'datetime',
     ];
 }

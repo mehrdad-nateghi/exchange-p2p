@@ -23,7 +23,8 @@ class LoginController extends Controller
         try {
             DB::beginTransaction();
 
-            $credentials = $request->only('email', 'password');
+            //$credentials = $request->only('email', 'password');
+            $credentials = $request->getCredentials();
             if (Auth::attempt($credentials)) {
                 $user = Auth::user();
 

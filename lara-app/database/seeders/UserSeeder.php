@@ -63,6 +63,7 @@ class UserSeeder extends Seeder
             'first_name' => "$type first name",
             'last_name' => "$type last name",
             'email' => "$type@paylibero.com",
+            'mobile' => "09131234" . rand(100,999),
             'password' => Hash::make(self::DEFAULT_PASSWORD),
             'email_verified_at' => Carbon::now(),
         ]);

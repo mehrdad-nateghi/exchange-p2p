@@ -175,6 +175,11 @@ return [
         'new_password_confirmation' => "New password confirmation",
         'ref_id' => "Ref ID",
         'amount' => "Amount",
+        'email' => 'Email',
+        'mobile' => 'Mobile',
+        'type' => 'Type',
+        'password' => 'Password',
+
     ],
 
     // Custom validation messages

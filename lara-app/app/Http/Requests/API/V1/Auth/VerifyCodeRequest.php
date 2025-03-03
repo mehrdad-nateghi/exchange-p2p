@@ -6,6 +6,7 @@ use App\Enums\VerificationCodeTypeEnum;
 use App\Enums\VerificationCodeViaEnum;
 use App\Rules\CodeValid;
 use App\Rules\CodeValidRule;
+use App\Rules\VerificationCodeNotExpiredRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -35,14 +36,37 @@ class VerifyCodeRequest extends FormRequest
         return [
             'code' => ['required','string',new CodeValidRule($to, $via, $type)],
             'to' => [
+                'bail',
                 'required',
-                Rule::when($via === VerificationCodeViaEnum::EMAIL->value,fn() => [
-                    'email:filter',
-                    'exists:users,email'
-                ])
+                'exists:verification_codes,to',
+                Rule::when(
+                    $via === VerificationCodeViaEnum::EMAIL->value,
+                    fn() => [
+                        'email:filter',
+                    ]
+                ),
+                Rule::when(
+                    $via === VerificationCodeViaEnum::MOBILE->value,
+                    fn() => [
+                        'ir_mobile:zero',
+                    ]
+                ),
             ],
-            'via' => ['required',Rule::In(VerificationCodeViaEnum::EMAIL->value)],
-            'type' => ['required',Rule::In(VerificationCodeTypeEnum::RESET_PASSWORD->value)],
+            'via' => ['required', Rule::in([
+                VerificationCodeViaEnum::EMAIL->value,
+                VerificationCodeViaEnum::MOBILE->value
+            ])],
+            'type' => ['required',Rule::enum(VerificationCodeTypeEnum::class)],
+
+//            'to' => [
+//                'required',
+//                Rule::when($via === VerificationCodeViaEnum::EMAIL->value,fn() => [
+//                    'email:filter',
+//                    'exists:users,email'
+//                ]),
+//            ],
+//            'via' => ['required',Rule::In(VerificationCodeViaEnum::EMAIL->value)],
+//            'type' => ['required',Rule::In(VerificationCodeTypeEnum::RESET_PASSWORD->value)],
         ];
     }
 }

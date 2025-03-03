@@ -117,3 +117,28 @@ if (!function_exists('generateUniqueNumber')) {
         return $number;
     }
 }
+/////////////////////////////////////////////////////
+if (!function_exists('localizedMessage')) {
+    /**
+     * Get a localized message with variable replacements
+     *
+     * @param string $key The translation key path (e.g., 'sms.verification-code')
+     * @param array $props Associative array of properties to replace
+     * @param string|null $locale Optional locale (defaults to current app locale)
+     * @return string The translated and processed message
+     */
+    function localizedMessage(string $key, array $props = [], ?string $locale = null): string
+    {
+        $locale = $locale ?? app()->getLocale();
+
+        // Get the translated message
+        $message = trans($key, [], $locale);
+
+        // Replace all properties in the message
+        foreach ($props as $propKey => $propValue) {
+            $message = str_replace(":{$propKey}", $propValue, $message);
+        }
+
+        return $message;
+    }
+}

@@ -3,10 +3,13 @@
 namespace App\Providers;
 
 use App\Models\VerificationCode;
+use App\Notifications\Channels\SMSChannel;
 use App\Observers\VerificationCodeObserver;
 use App\Services\Notifications\NotificationMessage;
 use App\Services\SMS\Interface\SMSProviderInterface;
 use App\Services\SMS\Services\Farapayamak\FarapayamakProvider;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 
@@ -19,17 +22,18 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->app->singleton(NotificationMessage::class);
+
         $this->app->bind(SMSProviderInterface::class, function ($app) {
             //$provider = config('services.sms.default', 'kavenegar');
 
-            return match('farapayamk') {
-                'farapayamk' => new FarapayamakProvider(),
+            return match('farapayamak') {
+                'farapayamak' => new FarapayamakProvider(),
                 //'ghasedak' => new GhasedakProvider(),
                 default => throw new \Exception('Invalid SMS provider'),
             };
         });
 
-        $this->app->singleton(NotificationMessage::class);
     }
 
     /**
@@ -58,8 +62,18 @@ class AppServiceProvider extends ServiceProvider
             URL::forceScheme('https');
         }
 
+        /*Notification::extend('sms', function ($app) {
+            Log::info('SMS channel extended and registered');
+            return $app->make(SMSChannel::class);
+        });*/
+
         // Register Observers
         VerificationCode::observe(VerificationCodeObserver::class);
+
+        // REPLACE the existing channel registration with this
+        /*Notification::extend('sms', function ($app) {
+            return $app->make(SMSChannel::class);
+        });*/
 
         //Passport::loadKeysFrom(storage_path('oauth'));
     }

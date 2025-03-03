@@ -3,6 +3,8 @@
 namespace App\Enums;
 
 enum VerificationCodeTypeEnum: int{
-    case SET_PASSWORD = 1;
-    case RESET_PASSWORD = 2;
+    case VERIFICATION_EMAIL = 1;
+    case VERIFICATION_MOBILE = 2;
+    //case SET_PASSWORD = 2;
+    //case RESET_PASSWORD = 3;
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API\V1\Auth;
 
+use App\Enums\VerificationCodeViaEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\Auth\VerifyCodeRequest;
 use App\Services\API\V1\UserService;
@@ -23,7 +24,12 @@ class VerifyCodeController extends Controller
             $validated = $request->validated();
 
             // Find user
-            $user = $userService->findBy('email', $validated['to']);
+            $user = null;
+            if($validated['via'] === VerificationCodeViaEnum::EMAIL->value){
+                $user = $userService->findBy('email', $validated['to']);
+            }elseif ($validated['via'] === VerificationCodeViaEnum::MOBILE->value){
+                $user = $userService->findBy('mobile', $validated['to']);
+            }
 
             // Log in the user after successful verification code
             $userService->authenticateUser($user);

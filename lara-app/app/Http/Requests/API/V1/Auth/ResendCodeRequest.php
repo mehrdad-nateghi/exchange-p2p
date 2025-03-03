@@ -42,9 +42,39 @@ class ResendCodeRequest extends FormRequest
                         new VerificationCodeNotExpiredRule($via, $type),
                     ]
                 ),
+                Rule::when(
+                    $via === VerificationCodeViaEnum::MOBILE->value,
+                    fn() => [
+                        'ir_mobile:zero',
+                        new VerificationCodeNotExpiredRule($via, $type),
+                    ]
+                ),
             ],
-            'via' => ['required', Rule::in([VerificationCodeViaEnum::EMAIL->value])],
+            'via' => ['required', Rule::in([
+                VerificationCodeViaEnum::EMAIL->value,
+                VerificationCodeViaEnum::MOBILE->value
+            ])],
             'type' => ['required',Rule::enum(VerificationCodeTypeEnum::class)],
         ];
+    }
+
+    /**
+     * Get custom attributes for validator errors.
+     *
+     * @return array<string, string>
+     */
+    public function attributes(): array
+    {
+        $via = $this->request->getInt('via');
+
+        if ($via === VerificationCodeViaEnum::EMAIL->value) {
+            return [
+                'to' => trans('validation.attributes.email'),
+            ];
+        } else {
+            return [
+                'to' => trans('validation.attributes.mobile'),
+            ];
+        }
     }
 }

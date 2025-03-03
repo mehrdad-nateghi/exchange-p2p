@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Notifications;
+namespace App\Notifications\Channels;
 
 use App\Services\SMS\Interface\SMSProviderInterface;
 use Illuminate\Notifications\Notification;
@@ -17,6 +17,11 @@ class SMSChannel
 
     public function send($notifiable, Notification $notification)
     {
+        Log::info('SMSChannel send method called', [
+            'notifiable' => get_class($notifiable),
+            'notification' => get_class($notification)
+        ]);
+
         if (!method_exists($notification, 'toSMS')) {
             throw new \Exception('toSMS method not found in notification class');
         }

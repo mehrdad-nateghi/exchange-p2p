@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Enums\VerificationCodeViaEnum;
 use App\Models\VerificationCode;
 use Carbon\Carbon;
 
@@ -23,8 +24,11 @@ class VerificationCodeObserver
      */
     public function creating(VerificationCode $verificationCode): void
     {
-        //$verificationCode->code = generateVerificationCode();
-        $verificationCode->expired_at = Carbon::now()->addMinutes(config('constants.verification_code_expiration_time_per_minutes'));
+        $configKey = $verificationCode->via->value === VerificationCodeViaEnum::EMAIL->value
+            ? 'constants.email_verification_code_expiration_time_per_minutes'
+            : 'constants.mobile_verification_code_expiration_time_per_minutes';
+
+        $verificationCode->expired_at = Carbon::now()->addMinutes(config($configKey));
     }
 
     /**

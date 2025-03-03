@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Notifications\Channels\SMSChannel;
 use App\Services\Notifications\NotificationMessage;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Bus\Queueable;
@@ -9,6 +10,7 @@ use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Log;
 
 class TestNotification extends Notification
 {

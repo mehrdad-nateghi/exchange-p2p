@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\V1\Auth;
 
 use App\Enums\RoleNameEnum;
 use App\Enums\UserStatusEnum;
+use App\Enums\VerificationCodeViaEnum;
 use App\Events\SignUpEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\Auth\SignUpRequest;
@@ -28,14 +29,10 @@ class SignUpController extends Controller
 
             DB::beginTransaction();
 
-            $validated = $request->validated();
+            $userData = $request->getUserData();
 
             // Create user
-            $user = $userService->create([
-                'email' => $validated['to'],
-                'email_verified_at' => Carbon::now(),
-                'status' => UserStatusEnum::ACTIVE->value,
-            ]);
+            $user = $userService->create($userData);
 
             // Assign applicant role to user
             $userService->assignRoleToUser($user, RoleNameEnum::APPLICANT->value);

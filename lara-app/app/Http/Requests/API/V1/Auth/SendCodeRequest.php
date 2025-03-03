@@ -28,31 +28,69 @@ class SendCodeRequest extends FormRequest
      */
     public function rules(): array
     {
-
         $via = $this->request->getInt('via');
-        $type = $this->request->getInt('type');
 
         return [
-            'to' => [
-                'bail',
+            'to' => $this->getToRules($via),
+            'type' => $this->getTypeRules($via),
+            'via' => [
                 'required',
-                Rule::when(
-                    $via === VerificationCodeViaEnum::EMAIL->value,
-                    fn() => [
-                        'email:filter',
-                        new VerificationCodeNotExpiredRule($via, $type),
-                    ]
-                ),
-                Rule::when(
-                    $type === VerificationCodeTypeEnum::SET_PASSWORD->value,
-                    fn() => [
-                        'unique:users,email',
-                    ]
-                ),
+                Rule::in([
+                    VerificationCodeViaEnum::EMAIL->value,
+                    VerificationCodeViaEnum::MOBILE->value
+                ])
             ],
-            'via' => ['required', Rule::in([VerificationCodeViaEnum::EMAIL->value])],
-            'type' => ['required',Rule::enum(VerificationCodeTypeEnum::class)],
-            'g-recaptcha-response' => ['required',new GoogleReCaptchaV3ValidationRule('send-code')],
+            'g-recaptcha-response' => ['required', new GoogleReCaptchaV3ValidationRule('send-code')],
+        ];
+    }
+
+    private function getTypeRules(int $via): array
+    {
+        $typeMap = [
+            VerificationCodeViaEnum::EMAIL->value => VerificationCodeTypeEnum::VERIFICATION_EMAIL->value,
+            VerificationCodeViaEnum::MOBILE->value => VerificationCodeTypeEnum::VERIFICATION_MOBILE->value,
+        ];
+
+        return [
+            'required',
+            Rule::in([$typeMap[$via] ?? null])
+        ];
+    }
+
+    private function getToRules(int $via): array
+    {
+        $type = $this->request->getInt('type');
+
+        $rules = [
+            'bail',
+            'required',
+            //new VerificationCodeNotExpiredRule($via, $type)
+        ];
+
+        if ($via === VerificationCodeViaEnum::EMAIL->value) {
+            $rules[] = 'email:filter';
+            $rules[] = 'unique:users,email';
+        } elseif ($via === VerificationCodeViaEnum::MOBILE->value) {
+            $rules[] = 'ir_mobile:zero';
+            $rules[] = 'unique:users,mobile';
+        }
+
+        return $rules;
+    }
+
+    /**
+     * Get custom attributes for validator errors.
+     *
+     * @return array<string, string>
+     */
+    public function attributes(): array
+    {
+        $via = $this->request->getInt('via');
+
+        return [
+            'to' => $via === VerificationCodeViaEnum::EMAIL->value
+                ? trans('validation.attributes.email')
+                : trans('validation.attributes.mobile'),
         ];
     }
 }

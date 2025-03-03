@@ -49,7 +49,7 @@ class VerificationCodeEmail extends Mailable
             markdown: "emails.". app()->getLocale() .".verification-code",
             with: [
                 'appName' => config('app.name'),
-                'verificationCodeExpirationTimePerMinutes' => config('constants.verification_code_expiration_time_per_minutes'),
+                'verificationCodeExpirationTimePerMinutes' => config('constants.email_verification_code_expiration_time_per_minutes'),
                 'verificationCode' => $this->verificationCode,
             ],
         );
