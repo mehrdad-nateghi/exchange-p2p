@@ -4,7 +4,7 @@ namespace App\Http\Requests\API\V1\Auth;
 
 use App\Enums\VerificationCodeTypeEnum;
 use App\Enums\VerificationCodeViaEnum;
-use App\Rules\VerificationCodeNotExpiredRule;
+use App\Rules\CanSendCodeRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -35,18 +35,17 @@ class ResendCodeRequest extends FormRequest
                 'bail',
                 'required',
                 'exists:verification_codes,to',
+                new CanSendCodeRule($via, $type), // Use the default cooldown from config
                 Rule::when(
                     $via === VerificationCodeViaEnum::EMAIL->value,
                     fn() => [
                         'email:filter',
-                        new VerificationCodeNotExpiredRule($via, $type),
                     ]
                 ),
                 Rule::when(
                     $via === VerificationCodeViaEnum::MOBILE->value,
                     fn() => [
                         'ir_mobile:zero',
-                        new VerificationCodeNotExpiredRule($via, $type),
                     ]
                 ),
             ],

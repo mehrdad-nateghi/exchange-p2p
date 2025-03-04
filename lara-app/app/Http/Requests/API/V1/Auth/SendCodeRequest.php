@@ -4,7 +4,7 @@ namespace App\Http\Requests\API\V1\Auth;
 
 use App\Enums\VerificationCodeTypeEnum;
 use App\Enums\VerificationCodeViaEnum;
-use App\Rules\VerificationCodeNotExpiredRule;
+use App\Rules\CanSendCodeRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use TimeHunter\LaravelGoogleReCaptchaV3\Validations\GoogleReCaptchaV3ValidationRule;
@@ -29,9 +29,10 @@ class SendCodeRequest extends FormRequest
     public function rules(): array
     {
         $via = $this->request->getInt('via');
+        $type = $this->request->getInt('type');
 
         return [
-            'to' => $this->getToRules($via),
+            'to' => $this->getToRules($via, $type),
             'type' => $this->getTypeRules($via),
             'via' => [
                 'required',
@@ -57,14 +58,12 @@ class SendCodeRequest extends FormRequest
         ];
     }
 
-    private function getToRules(int $via): array
+    private function getToRules(int $via, int $type): array
     {
-        $type = $this->request->getInt('type');
-
         $rules = [
             'bail',
             'required',
-            //new VerificationCodeNotExpiredRule($via, $type)
+            new CanSendCodeRule($via, $type), // Use the default cooldown from config
         ];
 
         if ($via === VerificationCodeViaEnum::EMAIL->value) {

@@ -4,6 +4,7 @@
 return [
     'email_verification_code_expiration_time_per_minutes' => env('EMAIL_VERIFICATION_CODE_EXPIRATION_TIME_PER_MINUTES', 10),
     'mobile_verification_code_expiration_time_per_minutes' => env('MOBILE_VERIFICATION_CODE_EXPIRATION_TIME_PER_MINUTES', 2),
+    'verification_code_cooldown_minutes' => env('VERIFICATION_CODE_COOLDOWN_MINUTES', 2),
     'bid_price_plus_latest_bid_price_rial' => env('BID_PRICE_PLUS_LATEST_BID_PRICE_RIAL', 100),
     'invoice_fee_percentage' => env('INVOICE_FEE_PERCENTAGE', 0),
 
