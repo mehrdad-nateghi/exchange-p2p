@@ -200,4 +200,6 @@ return [
     'insufficient_transaction_amount' => 'The total amount of completed transactions (:amount) is less than the required payment amount (:min). Please ensure all payments are completed.',
     'contains_alpha_space' => 'The :attribute must only contain letters and spaces',
     'can_send_code' => 'Please wait at least :minutes minutes between verification code requests.',
+    'mobile_ownership_verified' => 'Mobile belongs to the user',
+    'mobile_ownership_invalid' => 'Mobile does not belong to the user',
 ];

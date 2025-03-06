@@ -199,4 +199,6 @@ return [
     'insufficient_transaction_amount' => 'مجموع مبلغ تراکنش‌های تکمیل شده (:amount) کمتر از مبلغ قابل پرداخت (:min) می‌باشد. لطفاً از تکمیل تمامی پرداخت‌ها اطمینان حاصل فرمایید.',
     'contains_alpha_space' => ':attribute باید فقط شامل حروف و فاصله باشد',
     'can_send_code' => 'لطفا حداقل :minutes دقیقه بین درخواست‌های کد تایید صبر کنید.',
+    'mobile_ownership_verified' => 'موبایل متعلق به کاربر می باشد',
+    'mobile_ownership_invalid' => 'موبایل متعلق به کاربر نمی باشد',
 ];

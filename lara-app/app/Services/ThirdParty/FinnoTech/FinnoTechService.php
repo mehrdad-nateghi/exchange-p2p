@@ -34,13 +34,41 @@ class FinnoTechService
         return $this;
     }
 
-    public function getCardToIban(string $card): array
+    public function getCardToIban(string $card): array|null
     {
         try {
             $endpoint = "/facility/v2/clients/{$this->clientId}/cardToIban";
             $queryParams = [
                 'version' => '2',
                 'card' => $card,
+            ];
+
+            $response = Http::withToken($this->clientCredentialsToken)
+                ->get($this->baseUrl . $endpoint, $queryParams);
+
+            // Method 1: Using Laravel's Log facade
+            Log::info('API Response', [
+                'url' => $this->baseUrl . $endpoint,
+                'status' => $response->status(),
+                'body' => $response->json(),
+                'headers' => $response->headers()
+            ]);
+
+            return $response->json();
+        } catch (\Throwable $t) {
+            Log::error('FinnoTech CardToIban Error: ' . $t->getMessage());
+            throw $t;
+        }
+    }
+
+    public function verifyMobileOwnership(string $mobile, string $nationalCode): array
+    {
+        try {
+            $endpoint = "/facility/v2/clients/{$this->clientId}/shahkar/verify";
+
+            $queryParams = [
+                'mobile' => $mobile,
+                'nationalCode' => $nationalCode,
             ];
 
             $response = Http::withToken($this->clientCredentialsToken)

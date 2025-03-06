@@ -40,10 +40,12 @@ class User extends Authenticatable
         'last_name',
         'email',
         'mobile',
+        'national_code',
         'password',
         'status',
         'email_verified_at',
         'mobile_verified_at',
+        'mobile_ownership_verified_at',
         'created_at'
     ];
 
