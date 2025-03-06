@@ -3,13 +3,11 @@
 namespace App\Providers;
 
 use App\Models\VerificationCode;
-use App\Notifications\Channels\SMSChannel;
 use App\Observers\VerificationCodeObserver;
 use App\Services\Notifications\NotificationMessage;
 use App\Services\SMS\Interface\SMSProviderInterface;
 use App\Services\SMS\Services\Farapayamak\FarapayamakProvider;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Notification;
+use App\Services\SMS\SmsMessage;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 
@@ -23,13 +21,13 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton(NotificationMessage::class);
+        $this->app->singleton(SmsMessage::class);
 
         $this->app->bind(SMSProviderInterface::class, function ($app) {
-            //$provider = config('services.sms.default', 'kavenegar');
+            $provider = config('services.sms.default', 'farapayamak');
 
-            return match('farapayamak') {
+            return match($provider) {
                 'farapayamak' => new FarapayamakProvider(),
-                //'ghasedak' => new GhasedakProvider(),
                 default => throw new \Exception('Invalid SMS provider'),
             };
         });

@@ -21,6 +21,7 @@ use App\Models\Trade;
 use App\Services\ThirdParty\FinnoTech\FinnoTechService;
 use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\Facades\Http;
 
 Route::name('global.')->group(function () {
     Route::get('/health', HealthCheckController::class)->name('health.check');
@@ -32,6 +33,26 @@ Route::name('global.')->group(function () {
         return response()->json($banksInfo);
     })->name('banks-info');
     Route::get('/v1/test', function (FinnoTechService  $finnoTechService) {
+
+//        $params = [
+//            'username' => 'paylibero',
+//            'password' => '2#y$qOU4!p87wInH',
+//            'from' => '9982001523',
+//            'to' => '09132424577',
+//            'text' => 'Hi'
+//        ];
+//
+//        $response = Http::timeout(10)
+//            ->withoutVerifying()
+//            ->retry(1, 3000)
+//            ->post('https://rest.payamak-panel.com/api/SendSMS/SendSMS', $params);
+//
+//        $response_body = $response?->body();
+//        $status_code = $response?->status();
+//
+//        dd($response_body, $status_code);
+
+
         $data = $finnoTechService->withAuthorizationCode();
         $cardToIban = $finnoTechService->withClientCredentials()->getCardToIban('5041721019784678');
         return response()->json(

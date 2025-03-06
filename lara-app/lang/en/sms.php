@@ -1,5 +1,13 @@
 <?php
 
+use App\Enums\SMSKeyNameEnum;
+
 return [
-    'send_verification_code' => "کد: :verification_code"
+    SMSKeyNameEnum::SEND_VERIFICATION_CODE->value => [
+        'پی‌لیبرو',
+        'کد تائید: :verification_code',
+        'www.paylibero.ir',
+        '',
+        'لغو 11'
+    ],
 ];

@@ -106,6 +106,23 @@ spec:
             - name: SANCTUM_STATEFUL_DOMAINS
               value: nightly.paylibero.ir,admin.nightly.paylibero.ir,nightly.paylibero.de,admin.nightly.paylibero.de,nightly.paylibero.net,admin.nightly.paylibero.net
 
+            # FARAPAYAMAK--------------------------------------
+            - name: FARAPAYAMAK_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: farapayamak
+                  key: username
+            - name: FARAPAYAMAK_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: farapayamak
+                  key: password
+            - name: FARAPAYAMAK_FROM
+              valueFrom:
+                secretKeyRef:
+                  name: farapayamak
+                  key: from
+
             # AWS--------------------------------------
             - name: AWS_URL
               value: https://files-nightly.paylibero.ir/
@@ -239,6 +256,23 @@ spec:
             # SANCTUM--------------------------------------
             - name: SANCTUM_STATEFUL_DOMAINS
               value: nightly.paylibero.ir,admin.nightly.paylibero.ir,nightly.paylibero.de,admin.nightly.paylibero.de,nightly.paylibero.net,admin.nightly.paylibero.net
+
+            # FARAPAYAMAK--------------------------------------
+            - name: FARAPAYAMAK_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: farapayamak
+                  key: username
+            - name: FARAPAYAMAK_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: farapayamak
+                  key: password
+            - name: FARAPAYAMAK_FROM
+              valueFrom:
+                secretKeyRef:
+                  name: farapayamak
+                  key: from
 
             # AWS--------------------------------------
             - name: AWS_URL

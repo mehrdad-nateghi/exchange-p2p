@@ -31,4 +31,13 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'sms' => [
+        'default' => env('SMS_PROVIDER', 'farapayamak'),
+        'farapayamak' => [
+            'username' => env('FARAPAYAMAK_USERNAME'),
+            'password' => env('FARAPAYAMAK_PASSWORD'),
+            'from' => env('FARAPAYAMAK_FROM'),
+        ],
+    ],
+
 ];

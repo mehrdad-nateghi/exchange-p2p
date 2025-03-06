@@ -2,13 +2,15 @@
 
 namespace App\Notifications;
 
+use App\Enums\SMSKeyNameEnum;
 use App\Enums\VerificationCodeViaEnum;
 use App\Mail\VerificationCodeEmail;
 use App\Notifications\Channels\SMSChannel;
-use App\Services\Localization\LocalizationService;
+use App\Services\SMS\SmsMessage;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\Facades\App;
 
 
 class VerificationCodeNotification extends Notification implements ShouldQueue
@@ -49,10 +51,12 @@ class VerificationCodeNotification extends Notification implements ShouldQueue
 
     public function toSMS($notifiable)
     {
+        $message = App::make(SmsMessage::class)->get(SMSKeyNameEnum::SEND_VERIFICATION_CODE->value, [
+            'verification_code' => $this->verificationCode,
+        ]);
+
         return [
-            'message' => trans('sms.send_verification_code', [
-                'verification_code' => $this->verificationCode,
-            ]),
+            'message' => $message,
             'to' => $this->to,
         ];
     }

@@ -115,6 +115,23 @@ spec:
             - name: SANCTUM_STATEFUL_DOMAINS
               value: staging.paylibero.ir,admin.staging.paylibero.ir,staging.paylibero.de,admin.staging.paylibero.de,staging.paylibero.net,admin.staging.paylibero.net
 
+            # FARAPAYAMAK--------------------------------------
+            - name: FARAPAYAMAK_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: farapayamak
+                  key: username
+            - name: FARAPAYAMAK_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: farapayamak
+                  key: password
+            - name: FARAPAYAMAK_FROM
+              valueFrom:
+                secretKeyRef:
+                  name: farapayamak
+                  key: from
+
             # AWS--------------------------------------
             - name: AWS_URL
               value: https://files-staging.paylibero.ir/
@@ -258,6 +275,23 @@ spec:
             # SANCTUM--------------------------------------
             - name: SANCTUM_STATEFUL_DOMAINS
               value: staging.paylibero.ir,admin.staging.paylibero.ir,staging.paylibero.de,admin.staging.paylibero.de,staging.paylibero.net,admin.staging.paylibero.net
+
+            # FARAPAYAMAK--------------------------------------
+            - name: FARAPAYAMAK_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: farapayamak
+                  key: username
+            - name: FARAPAYAMAK_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: farapayamak
+                  key: password
+            - name: FARAPAYAMAK_FROM
+              valueFrom:
+                secretKeyRef:
+                  name: farapayamak
+                  key: from
 
             # AWS--------------------------------------
             - name: AWS_URL
