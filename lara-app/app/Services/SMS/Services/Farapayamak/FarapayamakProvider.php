@@ -143,6 +143,7 @@ class FarapayamakProvider implements SMSProviderInterface
         try {
             // Log request data with masked password
             $logData = $data;
+
             /*if (isset($logData['password'])) {
                 $logData['password'] = substr($logData['password'], 0, 1) . '***';
             }*/
