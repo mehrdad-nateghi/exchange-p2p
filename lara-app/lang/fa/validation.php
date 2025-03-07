@@ -201,4 +201,7 @@ return [
     'can_send_code' => 'لطفا حداقل :minutes دقیقه بین درخواست‌های کد تایید صبر کنید.',
     'mobile_ownership_verified' => 'موبایل متعلق به کاربر می باشد',
     'mobile_ownership_invalid' => 'موبایل متعلق به کاربر نمی باشد',
+    'card_number_ownership_verified' => 'کارت متعلق به کاربر می باشد',
+    'card_number_ownership_invalid' => 'کارت متعلق به کاربر نمی باشد',
+    'card_number_is_inactive' => 'کارت غیرفعال است',
 ];

@@ -20,7 +20,7 @@ class CardToIbanController extends Controller
         try {
             $data = $finnoTechService->withClientCredentials()->getCardToIban($request->input('card'));
 
-            if ($data['status'] === FinnoTechResponseStatusEnum::DONE->value) { // Adjust condition based on actual API response
+            if ($finnoTechService->isCardValid($data)) {
                 return apiResponse()
                     ->message(trans('api-messages.retrieve_success', ['attribute' => trans('api-messages.card_to_iban')]))
                     ->data(new CardToIbanSuccessResource($data))

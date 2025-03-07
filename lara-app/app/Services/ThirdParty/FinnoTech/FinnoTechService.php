@@ -2,6 +2,7 @@
 
 namespace App\Services\ThirdParty\FinnoTech;
 
+use App\Enums\FinnoTechResponseStatusEnum;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
@@ -47,7 +48,7 @@ class FinnoTechService
                 ->get($this->baseUrl . $endpoint, $queryParams);
 
             // Method 1: Using Laravel's Log facade
-            Log::info('API Response', [
+            Log::info('API Response getCardToIban', [
                 'url' => $this->baseUrl . $endpoint,
                 'status' => $response->status(),
                 'body' => $response->json(),
@@ -60,6 +61,8 @@ class FinnoTechService
             throw $t;
         }
     }
+
+
 
     public function verifyMobileOwnership(string $mobile, string $nationalCode): array
     {
@@ -75,7 +78,35 @@ class FinnoTechService
                 ->get($this->baseUrl . $endpoint, $queryParams);
 
             // Method 1: Using Laravel's Log facade
-            Log::info('API Response', [
+            Log::info('API Response verifyMobileOwnership', [
+                'url' => $this->baseUrl . $endpoint,
+                'status' => $response->status(),
+                'body' => $response->json(),
+                'headers' => $response->headers()
+            ]);
+
+            return $response->json();
+        } catch (\Throwable $t) {
+            Log::error('FinnoTech CardToIban Error: ' . $t->getMessage());
+            throw $t;
+        }
+    }
+
+    public function verifyIbanOwnership(string $iban, string $nationalCode): array
+    {
+        try {
+            $endpoint = "/facility/v2/clients/{$this->clientId}/ibanOwnerVerification";
+
+            $queryParams = [
+                'iban' => $iban,
+                'nid' => $nationalCode,
+            ];
+
+            $response = Http::withToken($this->clientCredentialsToken)
+                ->get($this->baseUrl . $endpoint, $queryParams);
+
+            // Method 1: Using Laravel's Log facade
+            Log::info('API Response verifyIbanOwnership', [
                 'url' => $this->baseUrl . $endpoint,
                 'status' => $response->status(),
                 'body' => $response->json(),
@@ -102,7 +133,7 @@ class FinnoTechService
                 ->get($this->baseUrl . $endpoint, $queryParams);
 
             // Method 1: Using Laravel's Log facade
-            Log::info('API Response', [
+            Log::info('API Response getBanksInfo', [
                 'url' => $this->baseUrl . $endpoint,
                 'status' => $response->status(),
                 'body' => $response->json(),
@@ -130,10 +161,39 @@ class FinnoTechService
                 ])
                 ->post($url, $bodyParams);
 
+            Log::info('API Response transferTo', [
+                'url' => $this->baseUrl . $endpoint,
+                'status' => $response->status(),
+                'body' => $response->json(),
+                'headers' => $response->headers()
+            ]);
+
             return $response->json();
         } catch (\Throwable $t) {
             Log::error('FinnoTech TransferTo Error: ' . $t->getMessage());
             throw $t;
         }
+    }
+
+    /**
+     * Check if the card is active based on API response
+     *
+     * @param array $data The response data from FinnoTech
+     * @return bool
+     */
+    public function isCardValid(array $data): bool
+    {
+        return $data['status'] === FinnoTechResponseStatusEnum::DONE->value
+            && in_array($data['result']['depositStatus'], ["02", "03"]);
+    }
+
+    public function isMobileValid(array $data): bool
+    {
+        return $data['status'] === FinnoTechResponseStatusEnum::DONE->value && $data['result']['isValid'];
+    }
+
+    public function isIbanValid(array $data): bool
+    {
+        return $data['status'] === FinnoTechResponseStatusEnum::DONE->value && $data['result']['isValid'] === 'yes';
     }
 }

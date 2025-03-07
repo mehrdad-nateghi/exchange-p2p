@@ -202,4 +202,7 @@ return [
     'can_send_code' => 'Please wait at least :minutes minutes between verification code requests.',
     'mobile_ownership_verified' => 'Mobile belongs to the user',
     'mobile_ownership_invalid' => 'Mobile does not belong to the user',
+    'card_number_ownership_verified' => 'Card number belongs to the user',
+    'card_number_ownership_invalid' => 'Card number does not belong to the user',
+    'card_number_is_inactive' => 'Card number is inactive',
 ];
