@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('card_number', 50);
             $table->string('iban', 50)->nullable();
             $table->string('account_no', 50)->nullable();
+            $table->string('bank_code', 6)->nullable(); // Bank identifier
             $table->boolean('is_active')->default(false);
             $table->timestamps();
             $table->softDeletes();

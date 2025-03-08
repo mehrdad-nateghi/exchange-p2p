@@ -54,6 +54,12 @@ class StorePaymentMethodRequest extends FormRequest
                 'unique:rial_bank_accounts,account_no'
             ],
 
+            'bank_code' => [
+                'bail',
+                'string',
+                'required_if:type,' . PaymentMethodTypeEnum::RIAL_BANK->value,
+            ],
+
             // FOREIGN ACCOUNTS
             'bic' => [
                 'bail',

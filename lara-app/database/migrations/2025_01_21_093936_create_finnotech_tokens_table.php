@@ -27,7 +27,7 @@ return new class extends Migration
             // Token metadata
             $table->json('scopes')->nullable(); // Token permissions
             $table->string('national_id', 20)->nullable()->index(); // National ID
-            $table->string('bank_code', 6)->nullable()->index(); // Bank identifier
+            $table->string('bank_code', 6)->nullable(); // Bank identifier
 
             // Token lifetime management
             $table->unsignedBigInteger('lifetime')->comment('Token lifetime in milliseconds');

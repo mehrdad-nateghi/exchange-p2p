@@ -19,6 +19,7 @@ class RialBankAccount extends Model
         'card_number',
         'iban',
         'account_no',
+        'bank_code',
         'is_active',
     ];
 

@@ -23,6 +23,7 @@ class RialBankAccountResource extends JsonResource
             'card_number' => $this->card_number,
             'iban' => $this->iban,
             'account_no' => $this->account_no,
+            'bank_code' => $this->bank_code,
             'icon' => $this->icon,
             'is_active' => $this->is_active,
             'created_at' => $this->created_at,

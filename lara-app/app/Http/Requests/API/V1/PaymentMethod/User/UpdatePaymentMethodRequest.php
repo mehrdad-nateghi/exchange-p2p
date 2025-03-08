@@ -58,6 +58,12 @@ class UpdatePaymentMethodRequest extends FormRequest
                 'unique:rial_bank_accounts,account_no,' . $paymentMethodId
             ],
 
+            'bank_code' => [
+                'bail',
+                'nullable',
+                'string',
+            ],
+
             // FOREIGN ACCOUNTS
             'bic' => [
                 'bail',
