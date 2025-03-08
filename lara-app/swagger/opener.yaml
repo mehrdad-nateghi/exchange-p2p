@@ -3,6 +3,7 @@ info:
   version: 1.0.0
   title: PayLibero API
   description: description...
+paths: {}
 components:
   schemas:
     Base200Response:
@@ -687,6 +688,7 @@ components:
         - amount
         - fee
         - fee_foreign
+        - transactions
         - status
         - type
         - created_at
@@ -707,12 +709,79 @@ components:
           enum: [pending, paid, canceled]
         type:
           type: string
+        transactions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Transaction'
         created_at:
           type: string
           format: date-time
         updated_at:
           type: string
           format: date-time
+    Transaction:
+      type: object
+      required:
+        - ulid
+        - track_id
+        - ref_id
+        - amount
+        - currency
+        - provider
+        - status
+        - created_at
+        - updated_at
+      properties:
+        ulid:
+          type: string
+          description: 'Unique identifier for the transaction'
+          example: '01JKZDY06TFB9DYZARA1K0T5VP'
+        track_id:
+          type: string
+          description: 'Tracking identifier for the transaction'
+          example: '2764460778'
+        ref_id:
+          type: string
+          description: 'Reference identifier for the transaction'
+          example: '123456789'
+        amount:
+          type: string
+          description: 'Transaction amount'
+          example: '1200355.00'
+        currency:
+          type: string
+          description: 'Currency code for the transaction'
+          example: 'IRT'
+        provider:
+          type: string
+          description: 'Payment provider used for the transaction'
+          example: 'direct_deposit'
+        status:
+          type: string
+          enum: ['pending', 'completed', 'failed', 'canceled']
+          description: 'Status of the transaction'
+          example: 'completed'
+        metadata:
+          type: object
+          nullable: true
+          description: 'Additional metadata for the transaction'
+          example: null
+        created_at:
+          type: string
+          format: date-time
+          description: 'Creation timestamp'
+          example: '2025-02-13T10:33:35.000000Z'
+        updated_at:
+          type: string
+          format: date-time
+          description: 'Last update timestamp'
+          example: '2025-02-13T10:33:35.000000Z'
+        deleted_at:
+          type: string
+          format: date-time
+          nullable: true
+          description: 'Deletion timestamp'
+          example: null
     File:
       type: object
       required:

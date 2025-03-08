@@ -44,6 +44,7 @@
                             $ref: '#/components/schemas/Trade'
                         pagination:
                           $ref: '#/components/schemas/Pagination'
+
 '/users/trades':
   get:
     tags:
@@ -90,6 +91,7 @@
                             $ref: '#/components/schemas/UserTrade'
                         pagination:
                           $ref: '#/components/schemas/Pagination'
+
 '/users/trades/{trade}':
   get:
     tags:
@@ -154,6 +156,7 @@
                   properties:
                     data:
                       $ref: '#/components/schemas/UserTrade'
+
 '/admins/trades':
   get:
     tags:
@@ -200,6 +203,7 @@
                             $ref: '#/components/schemas/AdminTrade'
                         pagination:
                           $ref: '#/components/schemas/Pagination'
+
 '/admins/trades/{trade}':
   get:
     tags:
@@ -225,6 +229,7 @@
                   properties:
                     data:
                       $ref: '#/components/schemas/AdminTrade'
+
 '/admins/trades/{trade}/cancel':
   patch:
     tags:
@@ -253,6 +258,7 @@
                   properties:
                     data:
                       $ref: '#/components/schemas/AdminTrade'
+
 '/admins/trade-steps/{trade}/increase-expire-at':
   patch:
     tags:
