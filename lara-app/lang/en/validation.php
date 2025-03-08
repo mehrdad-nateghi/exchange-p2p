@@ -205,4 +205,5 @@ return [
     'card_number_ownership_verified' => 'Card number belongs to the user',
     'card_number_ownership_invalid' => 'Card number does not belong to the user',
     'card_number_is_inactive' => 'Card number is inactive',
+    'iranian_national_code_is_invalid' => 'The :attribute is not a valid Iranian national code.',
 ];

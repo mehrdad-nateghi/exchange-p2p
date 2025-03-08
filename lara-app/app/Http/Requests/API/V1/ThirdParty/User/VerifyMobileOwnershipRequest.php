@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\API\V1\ThirdParty\User;
 
+use App\Rules\IranianNationalCode;
 use Illuminate\Foundation\Http\FormRequest;
 
 class VerifyMobileOwnershipRequest extends FormRequest
@@ -25,7 +26,7 @@ class VerifyMobileOwnershipRequest extends FormRequest
     {
         return [
             'mobile' => ['required', 'ir_mobile:zero', 'exists:users,mobile'],
-            'national_code' => ['required', 'ir_national_id'],
+            'national_code' => ['required', new IranianNationalCode],
         ];
     }
 }

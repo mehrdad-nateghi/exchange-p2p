@@ -204,4 +204,5 @@ return [
     'card_number_ownership_verified' => 'کارت متعلق به کاربر می باشد',
     'card_number_ownership_invalid' => 'کارت متعلق به کاربر نمی باشد',
     'card_number_is_inactive' => 'کارت غیرفعال است',
+    'iranian_national_code_is_invalid' => 'کد ملی وارد شده معتبر نمی‌باشد.',
 ];
