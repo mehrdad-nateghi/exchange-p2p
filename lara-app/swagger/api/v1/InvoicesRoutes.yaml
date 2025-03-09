@@ -1,39 +1,108 @@
-"/users/invoices/{invoiceID}/pay":
+'/users/invoices/{invoiceID}/pay':
   get:
     tags:
       - invoices
-    summary: "pay the invoice by invoiceID"
-    description: "This endpoint redirect user to payment page."
+    summary: 'pay the invoice by invoiceID'
+    description: 'This endpoint redirect user to payment page.'
     operationId: redirectToPaymentRoute
     parameters:
       - name: invoiceID
         in: path
         required: true
-        description: "The ULID of the invoice."
+        description: 'The ULID of the invoice.'
         schema:
           type: string
     responses:
-      "302":
+      '302':
         description: Redirect to the payment page
         headers:
           Location:
             schema:
               type: string
             description: The URL to redirect to
-"/admins/invoices/{invoiceID}/transfer-to-seller":
+'/admins/invoices/{invoiceID}/transfer-to-seller':
   post:
     tags:
       - invoices
-    summary: "transfer to the seller by invoiceID"
-    description: "This endpoint transfer to the seller."
+    summary: 'transfer to the seller by invoiceID'
+    description: 'This endpoint transfer to the seller.'
     operationId: transferToSeller
     parameters:
       - name: invoiceID
         in: path
         required: true
-        description: "The ULID of the invoice."
+        description: 'The ULID of the invoice.'
         schema:
           type: string
     responses:
       '200':
         description: The Transfer to the seller was successful
+
+'/admins/invoices/{invoiceID}/transactions':
+  post:
+    tags:
+      - invoices
+    summary: 'Add transaction to an invoice'
+    description: 'This endpoint adds a new transaction to the specified invoice.'
+    operationId: addInvoiceTransaction
+    parameters:
+      - name: invoiceID
+        in: path
+        required: true
+        description: 'The ULID of the invoice.'
+        schema:
+          type: string
+    requestBody:
+      required: true
+      content:
+        application/x-www-form-urlencoded:
+          schema:
+            type: object
+            required:
+              - ref_id
+              - amount
+            properties:
+              ref_id:
+                type: string
+                description: 'Transaction reference ID/tracking code (کد رهگیری)'
+              amount:
+                type: string
+                description: 'Transaction amount in Tomans (به تومان)'
+    responses:
+      '200':
+        description: 'transaction is accepted successfully.'
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/Base200Response'
+                - type: object
+                  required:
+                    - data
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/Invoice'
+
+'/admins/invoices/{invoiceID}/pay':
+  patch:
+    tags:
+      - invoices
+    summary: 'Mark an invoice as paid'
+    description: 'This endpoint marks the specified invoice as paid by an admin.'
+    operationId: markInvoiceAsPaid
+    parameters:
+      - name: invoiceID
+        in: path
+        required: true
+        description: 'The ULID of the invoice.'
+        schema:
+          type: string
+    responses:
+      '200':
+        description: 'Invoice successfully marked as paid'
+      '400':
+        description: 'Bad request - invalid parameters'
+      '404':
+        description: 'Invoice not found'
+      '403':
+        description: 'Unauthorized access'
