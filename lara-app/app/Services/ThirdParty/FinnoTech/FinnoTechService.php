@@ -45,6 +45,7 @@ class FinnoTechService
             ];
 
             $response = Http::withToken($this->clientCredentialsToken)
+                ->retry(3, 9000)
                 ->get($this->baseUrl . $endpoint, $queryParams);
 
             // Method 1: Using Laravel's Log facade
@@ -75,6 +76,7 @@ class FinnoTechService
             ];
 
             $response = Http::withToken($this->clientCredentialsToken)
+                ->retry(3, 9000)
                 ->get($this->baseUrl . $endpoint, $queryParams);
 
             // Method 1: Using Laravel's Log facade
@@ -103,6 +105,7 @@ class FinnoTechService
             ];
 
             $response = Http::withToken($this->clientCredentialsToken)
+                ->retry(3, 9000)
                 ->get($this->baseUrl . $endpoint, $queryParams);
 
             // Method 1: Using Laravel's Log facade
@@ -130,6 +133,7 @@ class FinnoTechService
             }
 
             $response = Http::withToken($this->clientCredentialsToken)
+                ->retry(3, 9000)
                 ->get($this->baseUrl . $endpoint, $queryParams);
 
             // Method 1: Using Laravel's Log facade
@@ -155,6 +159,7 @@ class FinnoTechService
             $url = $this->baseUrl . $endpoint . '?' . http_build_query($queryParams);
 
             $response = Http::withToken($this->authorizationToken)
+                ->retry(3, 9000)
                 ->withHeaders([
                     'Content-Type' => 'application/json',
                     'Accept' => 'application/json',
