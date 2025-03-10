@@ -64,9 +64,10 @@ class FarapayamakProvider implements SMSProviderInterface
             // Format the phone number
             $to = $this->formatPhoneNumber($to);
 
-            // Process message for multi-line support
-            // Farapayamak uses \n for line breaks in SMS
-            //$message = str_replace(["\r\n", "\r"], "\n", $message);
+            // IMPORTANT: Explicitly handle encoding for Persian/Arabic text
+            // Convert to UTF-8 if needed and normalize line breaks
+            $message = $this->normalizeMessageEncoding($message);
+
 
             // Get fresh credentials to avoid serialization issues
             $credentials = $this->getCredentials();
@@ -93,7 +94,9 @@ class FarapayamakProvider implements SMSProviderInterface
                 'payload' => $logPayload,
                 'password_length' => strlen($payload['password']),
                 'message_lines' => $lineCount,
-                'message_length' => strlen($message)
+                'message_length' => strlen($message),
+                'message_hex' => bin2hex($message),
+                'message_length_strlen' => mb_strlen($message, 'UTF-8')
             ]);
 
             // Send the request
@@ -150,17 +153,24 @@ class FarapayamakProvider implements SMSProviderInterface
 
             Log::debug('Farapayamak request', [
                 'url' => $this->endpoint,
-                'data' => $logData
+                'data' => $logData,
+                'text_sample' => mb_substr($data['text'], 0, 20, 'UTF-8') . '...',
+                'text_hex' => bin2hex(mb_substr($data['text'], 0, 20, 'UTF-8'))
             ]);
 
             $response = Http::timeout(10)
                 ->withoutVerifying()
                 ->retry(3, 1000)
+                ->withHeaders([
+                    'Content-Type' => 'application/x-www-form-urlencoded; charset=utf-8',
+                    'Accept' => 'application/json'
+                ])
                 ->post($this->endpoint, $data);
 
             Log::debug('Farapayamak response', [
                 'status' => $response->status(),
-                'body' => $response->body()
+                'body' => $response->body(),
+                'parsed_json' => $response->json()
             ]);
 
             if ($response->failed()) {
@@ -224,5 +234,22 @@ class FarapayamakProvider implements SMSProviderInterface
         ];
 
         return $errorMessages[$retStatus] ?? "Unknown error code: $retStatus";
+    }
+
+    /**
+     * Normalize message encoding and line breaks for SMS
+     *
+     * @param string $message The message to normalize
+     * @return string The normalized message
+     */
+    protected function normalizeMessageEncoding(string $message): string
+    {
+        // Ensure UTF-8 encoding
+        if (!mb_check_encoding($message, 'UTF-8')) {
+            $message = mb_convert_encoding($message, 'UTF-8', 'auto');
+        }
+
+        // Normalize line breaks to \n (some systems use \r\n)
+        return str_replace(["\r\n", "\r"], "\n", $message);
     }
 }

@@ -28,44 +28,49 @@ class SmsMessage
     public function get(string $key, array $attributes = [], ?string $locale = null): string
     {
         $locale = $locale ?? app()->getLocale();
-        
+
         // Sanitize attributes to prevent injection
         $sanitizedAttributes = $this->sanitizeAttributes($attributes);
-        
+
         // Get the message template
         $messageKey = "{$this->baseKey}.{$key}";
         $messageTemplate = trans($messageKey, [], $locale);
-        
+
         // Check if the message exists
         if ($messageTemplate === $messageKey) {
             // Try to find it in any supported locale as fallback
             foreach ($this->supportedLocales as $supportedLocale) {
                 if ($supportedLocale === $locale) continue;
-                
+
                 $fallbackTemplate = trans($messageKey, [], $supportedLocale);
                 if ($fallbackTemplate !== $messageKey) {
                     $messageTemplate = $fallbackTemplate;
                     break;
                 }
             }
-            
+
             // If still not found, throw an exception
             if ($messageTemplate === $messageKey) {
                 throw new InvalidArgumentException("SMS message key not found: {$key}");
             }
         }
-        
+
         // Replace the attributes in the message
         $message = trans($messageKey, $sanitizedAttributes, $locale);
-        
+
         // Handle array messages (for multi-line messages)
         if (is_array($message)) {
             $message = implode($this->separator, $message);
         }
-        
+
+        // IMPORTANT: Ensure proper UTF-8 encoding for Persian/Arabic text
+        if (!mb_check_encoding($message, 'UTF-8')) {
+            $message = mb_convert_encoding($message, 'UTF-8', 'auto');
+        }
+
         return $message;
     }
-    
+
     /**
      * Sanitize the attributes to prevent injection
      *
@@ -81,4 +86,4 @@ class SmsMessage
             return $value;
         }, $attributes);
     }
-} 
+}
