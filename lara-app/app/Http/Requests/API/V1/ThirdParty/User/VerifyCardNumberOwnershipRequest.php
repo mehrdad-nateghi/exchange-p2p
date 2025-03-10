@@ -33,7 +33,7 @@ class VerifyCardNumberOwnershipRequest extends FormRequest
             'national_code' => [
                 'required',
                 'ir_national_code',
-                'unique:users,national_code'
+                'exists:users,national_code'
             ]
         ];
     }

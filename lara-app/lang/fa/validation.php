@@ -199,10 +199,5 @@ return [
     'insufficient_transaction_amount' => 'مجموع مبلغ تراکنش‌های تکمیل شده (:amount) کمتر از مبلغ قابل پرداخت (:min) می‌باشد. لطفاً از تکمیل تمامی پرداخت‌ها اطمینان حاصل فرمایید.',
     'contains_alpha_space' => ':attribute باید فقط شامل حروف و فاصله باشد',
     'can_send_code' => 'لطفا حداقل :minutes دقیقه بین درخواست‌های کد تایید صبر کنید.',
-    'mobile_ownership_verified' => 'موبایل متعلق به کاربر می باشد',
-    'mobile_ownership_invalid' => 'موبایل متعلق به کاربر نمی باشد',
-    'card_number_ownership_verified' => 'کارت متعلق به کاربر می باشد',
-    'card_number_ownership_invalid' => 'کارت متعلق به کاربر نمی باشد',
-    'card_number_is_inactive' => 'کارت غیرفعال است',
     'iranian_national_code_is_invalid' => 'کد ملی وارد شده معتبر نمی‌باشد.',
 ];
