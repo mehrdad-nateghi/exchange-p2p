@@ -158,12 +158,22 @@ class FarapayamakProvider implements SMSProviderInterface
                 'text_hex' => bin2hex(mb_substr($data['text'], 0, 20, 'UTF-8'))
             ]);
 
-            $response = Http::timeout(10)
+            /*$response = Http::timeout(10)
                 ->withoutVerifying()
                 ->retry(3, 1000)
                 ->acceptJson()
                 ->asJson()
-                ->post($this->endpoint, $data);
+                ->post($this->endpoint, $data);*/
+
+            $response = Http::timeout(10)
+                ->withoutVerifying()
+                ->retry(3, 1000)
+                ->acceptJson()
+                ->withHeaders([
+                    'Content-Type' => 'application/json',
+                ])
+                ->withBody(json_encode($data), 'application/json')
+                ->post($this->endpoint);
 
             Log::debug('Farapayamak response', [
                 'status' => $response->status(),

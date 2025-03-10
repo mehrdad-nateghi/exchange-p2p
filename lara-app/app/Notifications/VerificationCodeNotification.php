@@ -13,9 +13,9 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\App;
 
 
-class VerificationCodeNotification extends Notification implements ShouldQueue
+class VerificationCodeNotification extends Notification /*implements ShouldQueue*/
 {
-    use Queueable;
+    //use Queueable;
     private string $to;
     private string $verificationCode;
     private int $via;
