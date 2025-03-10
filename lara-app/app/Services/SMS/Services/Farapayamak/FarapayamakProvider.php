@@ -162,8 +162,8 @@ class FarapayamakProvider implements SMSProviderInterface
                 ->withoutVerifying()
                 ->retry(3, 1000)
                 ->withHeaders([
-                    'Content-Type' => 'application/x-www-form-urlencoded; charset=utf-8',
-                    'Accept' => 'application/json'
+                    "Content-Type" => "application/json; charset=utf-8",
+                    'Accept' => 'application/json',
                 ])
                 ->post($this->endpoint, $data);
 
