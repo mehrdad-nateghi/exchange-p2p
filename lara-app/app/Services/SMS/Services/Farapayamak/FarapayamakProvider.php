@@ -161,10 +161,8 @@ class FarapayamakProvider implements SMSProviderInterface
             $response = Http::timeout(10)
                 ->withoutVerifying()
                 ->retry(3, 1000)
-                ->withHeaders([
-                    "Content-Type" => "application/json; charset=utf-8",
-                    'Accept' => 'application/json',
-                ])
+                ->acceptJson()
+                ->asJson()
                 ->post($this->endpoint, $data);
 
             Log::debug('Farapayamak response', [
