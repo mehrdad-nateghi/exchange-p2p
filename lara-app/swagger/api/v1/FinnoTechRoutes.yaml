@@ -28,10 +28,14 @@
                         - trackId
                         - iban
                         - card
+                        - bank_code
                         - deposit
                         - bank_name
                         - deposit_owners
                       properties:
+                        bank_code:
+                          type: string
+                          example: '070'
                         trackId:
                           type: string
                           example: '6cfaff97-aa46-481a-8be9-058698eab943'
