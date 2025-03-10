@@ -24,7 +24,7 @@ class VerifyCardNumberOwnershipController extends Controller
             $cardToIbanData = $finnoTechService->withClientCredentials()->getCardToIban($cardNumber);
 
             if ($finnoTechService->isCardValid($cardToIbanData)) {
-                $verifyIbanOwnershipData = $finnoTechService->withClientCredentials()->verifyIbanOwnership($cardToIbanData['IBAN'], $nationalCode);
+                $verifyIbanOwnershipData = $finnoTechService->withClientCredentials()->verifyIbanOwnership($cardToIbanData['result']['IBAN'], $nationalCode);
 
                 if($finnoTechService->isIbanValid($verifyIbanOwnershipData)) {
                     return apiResponse()
