@@ -97,7 +97,7 @@ class FinnoTechService
     public function verifyIbanOwnership(string $iban, string $nationalCode): array
     {
         try {
-            $endpoint = "/facility/v2/clients/{$this->clientId}/ibanOwnerVerification";
+            $endpoint = "/kyc/v2/clients/{$this->clientId}/ibanOwnerVerification";
 
             $queryParams = [
                 'iban' => $iban,
@@ -118,7 +118,7 @@ class FinnoTechService
 
             return $response->json();
         } catch (\Throwable $t) {
-            Log::error('FinnoTech CardToIban Error: ' . $t->getMessage());
+            Log::error('FinnoTech verifyIbanOwnership Error: ' . $t->getMessage());
             throw $t;
         }
     }
