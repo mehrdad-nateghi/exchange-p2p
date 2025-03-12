@@ -23,6 +23,12 @@ class VerifyCardNumberOwnershipController extends Controller
             $cardNumber = $request->input('card_number');
             $cardToIbanData = $finnoTechService->withClientCredentials()->getCardToIban($cardNumber);
 
+            Log::info('Resp VerifyCardNumberOwnershipController', [
+                'cardToIbanData' => $cardToIbanData,
+                'cardNumber' => $cardNumber,
+                'nationalCode' => $nationalCode,
+            ]);
+
             if ($finnoTechService->isCardValid($cardToIbanData)) {
                 $verifyIbanOwnershipData = $finnoTechService->withClientCredentials()->verifyIbanOwnership($cardToIbanData['result']['IBAN'], $nationalCode);
 
