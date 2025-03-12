@@ -103,6 +103,9 @@ components:
             - created_at
             - updated_at
           properties:
+            bank_code:
+              type: string
+              example: '070'
             type:
               type: string
               enum:
