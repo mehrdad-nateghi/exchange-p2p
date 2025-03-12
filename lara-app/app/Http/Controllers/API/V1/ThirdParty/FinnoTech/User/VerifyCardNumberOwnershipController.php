@@ -25,6 +25,8 @@ class VerifyCardNumberOwnershipController extends Controller
 
             Log::info('Resp VerifyCardNumberOwnershipController', [
                 'cardToIbanData' => $cardToIbanData,
+                'result' => $cardToIbanData['result'],
+                'IBAN' => $cardToIbanData['result']['IBAN'],
                 'cardNumber' => $cardNumber,
                 'nationalCode' => $nationalCode,
             ]);
